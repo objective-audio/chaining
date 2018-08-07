@@ -8,12 +8,20 @@
 
 /* Begin PBXBuildFile section */
 		B608F04021193F23000A17BD /* chaining_test_mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = B608F03F21193F23000A17BD /* chaining_test_mac.mm */; };
+		B608F09A21193F7F000A17BD /* yas_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B608F09821193F7E000A17BD /* yas_base.cpp */; };
+		B608F09E21193F93000A17BD /* yas_protocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B608F09C21193F93000A17BD /* yas_protocol.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B608F03C21193F23000A17BD /* chaining_test_mac.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chaining_test_mac.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B608F03F21193F23000A17BD /* chaining_test_mac.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = chaining_test_mac.mm; sourceTree = "<group>"; };
 		B608F04121193F23000A17BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B608F09721193F7E000A17BD /* yas_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_base.h; sourceTree = "<group>"; };
+		B608F09821193F7E000A17BD /* yas_base.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_base.cpp; sourceTree = "<group>"; };
+		B608F09921193F7E000A17BD /* yas_base_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_base_private.h; sourceTree = "<group>"; };
+		B608F09B21193F93000A17BD /* yas_protocol_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_protocol_private.h; sourceTree = "<group>"; };
+		B608F09C21193F93000A17BD /* yas_protocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_protocol.cpp; sourceTree = "<group>"; };
+		B608F09D21193F93000A17BD /* yas_protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_protocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -30,6 +38,7 @@
 		B608F03121193EF9000A17BD = {
 			isa = PBXGroup;
 			children = (
+				B608F04521193F65000A17BD /* cpp_utils */,
 				B608F03E21193F23000A17BD /* chaining_test_mac */,
 				B608F03D21193F23000A17BD /* Products */,
 			);
@@ -50,6 +59,20 @@
 				B608F04121193F23000A17BD /* Info.plist */,
 			);
 			path = chaining_test_mac;
+			sourceTree = "<group>";
+		};
+		B608F04521193F65000A17BD /* cpp_utils */ = {
+			isa = PBXGroup;
+			children = (
+				B608F09921193F7E000A17BD /* yas_base_private.h */,
+				B608F09821193F7E000A17BD /* yas_base.cpp */,
+				B608F09721193F7E000A17BD /* yas_base.h */,
+				B608F09B21193F93000A17BD /* yas_protocol_private.h */,
+				B608F09C21193F93000A17BD /* yas_protocol.cpp */,
+				B608F09D21193F93000A17BD /* yas_protocol.h */,
+			);
+			name = cpp_utils;
+			path = ../submodules/cpp_utils/cpp_utils;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -117,7 +140,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B608F09A21193F7F000A17BD /* yas_base.cpp in Sources */,
 				B608F04021193F23000A17BD /* chaining_test_mac.mm in Sources */,
+				B608F09E21193F93000A17BD /* yas_protocol.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
