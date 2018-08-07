@@ -3,6 +3,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import "yas_chaining.h"
 
 @interface chaining_test_mac : XCTestCase
 
