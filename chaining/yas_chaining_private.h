@@ -8,7 +8,6 @@
 #include <unordered_map>
 #include <vector>
 #include "yas_fast_each.h"
-#include "yas_timer.h"
 
 namespace yas::chaining {
 
