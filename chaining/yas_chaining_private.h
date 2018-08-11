@@ -207,8 +207,8 @@ void input<T>::input_value(T const &value) {
 
 template <typename T>
 template <bool Syncable>
-node<T, T, T, Syncable> input<T>::begin() {
-    return node<T, T, T, Syncable>(*this);
+chain<T, T, T, Syncable> input<T>::begin() {
+    return chain<T, T, T, Syncable>(*this);
 }
 
 template <typename T>
@@ -267,7 +267,7 @@ struct sender_base<T>::impl : base::impl, sender_chainable<T>::impl {
     }
 
     template <bool Syncable>
-    node<T, T, T, Syncable> begin(sender_base<T> &sender) {
+    chain<T, T, T, Syncable> begin(sender_base<T> &sender) {
         chaining::input<T> input{to_weak(sender)};
         this->inputs.insert(std::make_pair(input.identifier(), to_weak(input)));
         return input.template begin<Syncable>();
@@ -339,7 +339,7 @@ void notifier<T>::notify(T const &value) {
 }
 
 template <typename T>
-node<T, T, T, false> notifier<T>::chain() {
+chain<T, T, T, false> notifier<T>::chain() {
     return this->template impl_ptr<impl>()->template begin<false>(*this);
 }
 
@@ -409,7 +409,7 @@ void fetcher<T>::fetch() const {
 }
 
 template <typename T>
-chaining::node<T, T, T, true> fetcher<T>::chain() {
+chaining::chain<T, T, T, true> fetcher<T>::chain() {
     return this->template impl_ptr<impl>()->template begin<true>(*this);
 }
 
@@ -502,7 +502,7 @@ void holder<T>::set_value(T value) {
 }
 
 template <typename T>
-node<T, T, T, true> holder<T>::chain() {
+chain<T, T, T, true> holder<T>::chain() {
     return this->template impl_ptr<impl>()->template begin<true>(*this);
 }
 
@@ -511,10 +511,10 @@ receiver<T> &holder<T>::receiver() {
     return this->template impl_ptr<impl>()->receiver();
 }
 
-#pragma mark - node
+#pragma mark - chain
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-struct node<Out, In, Begin, Syncable>::impl : base::impl {
+struct chain<Out, In, Begin, Syncable>::impl : base::impl {
     input<Begin> _input;
     std::function<Out(In const &)> _handler;
 
@@ -523,39 +523,39 @@ struct node<Out, In, Begin, Syncable>::impl : base::impl {
     }
 
     template <typename F>
-    node<return_t<F>, In, Begin, Syncable> to(F &&to_handler) {
-        return chaining::node<return_t<F>, In, Begin, Syncable>(
+    chain<return_t<F>, In, Begin, Syncable> to(F &&to_handler) {
+        return chaining::chain<return_t<F>, In, Begin, Syncable>(
             std::move(this->_input), [to_handler = std::move(to_handler), handler = std::move(this->_handler)](
                                          In const &value) mutable { return to_handler(handler(value)); });
     }
 
     template <typename T = Out, enable_if_tuple_t<T, std::nullptr_t> = nullptr>
-    auto to_tuple(node<Out, In, Begin, Syncable> &node) {
-        return node;
+    auto to_tuple(chain<Out, In, Begin, Syncable> &chain) {
+        return chain;
     }
 
     template <typename T = Out, enable_if_pair_t<T, std::nullptr_t> = nullptr>
-    auto to_tuple(node<Out, In, Begin, Syncable> &node) {
+    auto to_tuple(chain<Out, In, Begin, Syncable> &chain) {
         return this->to([](Out const &pair) { return std::make_tuple(pair.first, pair.second); });
     }
 
     template <typename T = Out, disable_if_tuple_t<T, std::nullptr_t> = nullptr,
               disable_if_pair_t<T, std::nullptr_t> = nullptr>
-    auto to_tuple(node<Out, In, Begin, Syncable> &node) {
+    auto to_tuple(chain<Out, In, Begin, Syncable> &) {
         return this->to([](Out const &value) { return std::make_tuple(value); });
     }
 
     template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable,
               disable_if_tuple_t<SubOut, std::nullptr_t> = nullptr, typename MainOut = Out,
               disable_if_tuple_t<MainOut, std::nullptr_t> = nullptr>
-    auto tuple(node<SubOut, SubIn, SubBegin, SubSyncable> &&sub_node) {
+    auto tuple(chain<SubOut, SubIn, SubBegin, SubSyncable> &&sub_chain) {
         using opt_tuple_t = std::tuple<opt_t<Out>, opt_t<SubOut>>;
 
         chaining::input<Begin> &input = this->_input;
         auto weak_input = to_weak(input);
         std::size_t const next_idx = input.handlers_size() + 1;
 
-        auto sub_imp = sub_node.template impl_ptr<typename node<SubOut, SubIn, SubBegin, SubSyncable>::impl>();
+        auto sub_imp = sub_chain.template impl_ptr<typename chain<SubOut, SubIn, SubBegin, SubSyncable>::impl>();
         auto &sub_input = sub_imp->_input;
 
         sub_input.template push_handler<SubIn>(
@@ -573,16 +573,16 @@ struct node<Out, In, Begin, Syncable>::impl : base::impl {
 
         input.add_sub_input(std::move(sub_input));
 
-        return node<opt_tuple_t, opt_tuple_t, Begin, Syncable | SubSyncable>(
+        return chain<opt_tuple_t, opt_tuple_t, Begin, Syncable | SubSyncable>(
             input, [](opt_tuple_t const &value) { return value; });
     }
 
     template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable>
-    auto combine_pair(chaining::node<Out, In, Begin, Syncable> &node,
-                      chaining::node<SubOut, SubIn, SubBegin, SubSyncable> &&sub_node) {
+    auto combine_pair(chaining::chain<Out, In, Begin, Syncable> &chain,
+                      chaining::chain<SubOut, SubIn, SubBegin, SubSyncable> &&sub_chain) {
         using opt_pair_t = std::pair<opt_t<Out>, opt_t<SubOut>>;
 
-        return node.pair(std::move(sub_node))
+        return chain.pair(std::move(sub_chain))
             .to([opt_pair = opt_pair_t{}](opt_pair_t const &value) mutable {
                 if (value.first) {
                     opt_pair.first = *value.first;
@@ -599,45 +599,45 @@ struct node<Out, In, Begin, Syncable>::impl : base::impl {
     template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable,
               disable_if_tuple_t<SubOut, std::nullptr_t> = nullptr, typename MainOut = Out,
               disable_if_tuple_t<MainOut, std::nullptr_t> = nullptr>
-    auto combine(chaining::node<Out, In, Begin, Syncable> &node,
-                 chaining::node<SubOut, SubIn, SubBegin, SubSyncable> &&sub_node) {
-        return this->combine_pair(node, std::move(sub_node));
+    auto combine(chaining::chain<Out, In, Begin, Syncable> &chain,
+                 chaining::chain<SubOut, SubIn, SubBegin, SubSyncable> &&sub_chain) {
+        return this->combine_pair(chain, std::move(sub_chain));
     }
 
     template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable,
               enable_if_tuple_t<SubOut, std::nullptr_t> = nullptr, typename MainOut = Out,
               enable_if_tuple_t<MainOut, std::nullptr_t> = nullptr>
-    auto combine(chaining::node<Out, In, Begin, Syncable> &node,
-                 chaining::node<SubOut, SubIn, SubBegin, SubSyncable> &&sub_node) {
-        return this->combine_pair(node, std::move(sub_node)).to([](std::pair<Out, SubOut> const &pair) {
+    auto combine(chaining::chain<Out, In, Begin, Syncable> &chain,
+                 chaining::chain<SubOut, SubIn, SubBegin, SubSyncable> &&sub_chain) {
+        return this->combine_pair(chain, std::move(sub_chain)).to([](std::pair<Out, SubOut> const &pair) {
             return std::tuple_cat(static_cast<typename std::remove_const<Out>::type>(pair.first),
                                   static_cast<typename std::remove_const<SubOut>::type>(pair.second));
         });
     }
 
     template <std::size_t N, typename T, typename TupleOut = Out, enable_if_tuple_t<TupleOut, std::nullptr_t> = nullptr>
-    auto receive(chaining::node<Out, In, Begin, Syncable> &node, receiver<T> &receiver) {
-        return node.perform([output = receiver.chainable().make_output()](Out const &value) mutable {
+    auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
+        return chain.perform([output = receiver.chainable().make_output()](Out const &value) mutable {
             output.output_value(std::get<N>(value));
         });
     }
 
     template <std::size_t N, typename T, typename ArrayOut = Out, enable_if_array_t<ArrayOut, std::nullptr_t> = nullptr>
-    auto receive(chaining::node<Out, In, Begin, Syncable> &node, receiver<T> &receiver) {
-        return node.perform([output = receiver.chainable().make_output()](Out const &value) mutable {
+    auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
+        return chain.perform([output = receiver.chainable().make_output()](Out const &value) mutable {
             output.output_value(std::get<N>(value));
         });
     }
 
     template <std::size_t N, typename T, typename NonOut = Out, disable_if_tuple_t<NonOut, std::nullptr_t> = nullptr,
               disable_if_array_t<NonOut, std::nullptr_t> = nullptr>
-    auto receive(chaining::node<Out, In, Begin, Syncable> &node, receiver<T> &receiver) {
-        return node.perform(
+    auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
+        return chain.perform(
             [output = receiver.chainable().make_output()](Out const &value) mutable { output.output_value(value); });
     }
 
     template <typename T, std::size_t N>
-    auto receive(chaining::node<Out, In, Begin, Syncable> &node, std::array<receiver<T>, N> &receivers) {
+    auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, std::array<receiver<T>, N> &receivers) {
         std::vector<chaining::output<T>> outputs;
         outputs.reserve(N);
 
@@ -647,7 +647,7 @@ struct node<Out, In, Begin, Syncable>::impl : base::impl {
             outputs.emplace_back(receivers.at(idx).chainable().make_output());
         }
 
-        return node.perform([outputs = std::move(outputs)](Out const &values) mutable {
+        return chain.perform([outputs = std::move(outputs)](Out const &values) mutable {
             auto each = make_fast_each(N);
             while (yas_each_next(each)) {
                 auto const &idx = yas_each_index(each);
@@ -657,7 +657,7 @@ struct node<Out, In, Begin, Syncable>::impl : base::impl {
     }
 
     template <typename T>
-    auto receive(chaining::node<Out, In, Begin, Syncable> &node, std::vector<receiver<T>> &receivers) {
+    auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, std::vector<receiver<T>> &receivers) {
         std::size_t const count = receivers.size();
 
         std::vector<chaining::output<T>> outputs;
@@ -669,7 +669,7 @@ struct node<Out, In, Begin, Syncable>::impl : base::impl {
             outputs.emplace_back(receivers.at(idx).chainable().make_output());
         }
 
-        return node.perform([outputs = std::move(outputs)](Out const &values) mutable {
+        return chain.perform([outputs = std::move(outputs)](Out const &values) mutable {
             std::size_t const count = std::min(values.size(), outputs.size());
             auto each = make_fast_each(count);
             while (yas_each_next(each)) {
@@ -698,24 +698,24 @@ struct node<Out, In, Begin, Syncable>::impl : base::impl {
 };
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-node<Out, In, Begin, Syncable>::node(input<Begin> input)
-    : node(std::move(input), [](Begin const &value) { return value; }) {
+chain<Out, In, Begin, Syncable>::chain(input<Begin> input)
+    : chain(std::move(input), [](Begin const &value) { return value; }) {
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-node<Out, In, Begin, Syncable>::node(input<Begin> input, std::function<Out(In const &)> handler)
+chain<Out, In, Begin, Syncable>::chain(input<Begin> input, std::function<Out(In const &)> handler)
     : base(std::make_shared<impl>(std::move(input), std::move(handler))) {
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-node<Out, In, Begin, Syncable>::node(std::nullptr_t) : base(nullptr) {
+chain<Out, In, Begin, Syncable>::chain(std::nullptr_t) : base(nullptr) {
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-node<Out, In, Begin, Syncable>::~node() = default;
+chain<Out, In, Begin, Syncable>::~chain() = default;
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-auto node<Out, In, Begin, Syncable>::normalize() {
+auto chain<Out, In, Begin, Syncable>::normalize() {
     auto imp = impl_ptr<impl>();
     chaining::input<Begin> &input = imp->_input;
     auto weak_input = to_weak(input);
@@ -728,13 +728,13 @@ auto node<Out, In, Begin, Syncable>::normalize() {
         }
     });
 
-    return node<Out, Out, Begin, Syncable>(input, [](Out const &value) { return value; });
+    return chain<Out, Out, Begin, Syncable>(input, [](Out const &value) { return value; });
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-auto node<Out, In, Begin, Syncable>::perform(std::function<void(Out const &)> perform_handler) {
+auto chain<Out, In, Begin, Syncable>::perform(std::function<void(Out const &)> perform_handler) {
     auto imp = impl_ptr<impl>();
-    return node<Out, In, Begin, Syncable>(
+    return chain<Out, In, Begin, Syncable>(
         std::move(imp->_input),
         [perform_handler = std::move(perform_handler), handler = std::move(imp->_handler)](In const &value) {
             Out result = handler(value);
@@ -745,37 +745,37 @@ auto node<Out, In, Begin, Syncable>::perform(std::function<void(Out const &)> pe
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <std::size_t N, typename T>
-auto node<Out, In, Begin, Syncable>::receive(receiver<T> &receiver) {
+auto chain<Out, In, Begin, Syncable>::receive(receiver<T> &receiver) {
     return impl_ptr<impl>()->template receive<N>(*this, receiver);
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename T, std::size_t N>
-auto node<Out, In, Begin, Syncable>::receive(std::array<receiver<T>, N> receivers) {
+auto chain<Out, In, Begin, Syncable>::receive(std::array<receiver<T>, N> receivers) {
     return impl_ptr<impl>()->template receive<T, N>(*this, receivers);
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename T>
-auto node<Out, In, Begin, Syncable>::receive(std::vector<receiver<T>> receivers) {
+auto chain<Out, In, Begin, Syncable>::receive(std::vector<receiver<T>> receivers) {
     return impl_ptr<impl>()->template receive<T>(*this, receivers);
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename T>
-[[nodiscard]] auto node<Out, In, Begin, Syncable>::receive(std::initializer_list<receiver<T>> receivers) {
+[[nodiscard]] auto chain<Out, In, Begin, Syncable>::receive(std::initializer_list<receiver<T>> receivers) {
     std::vector<receiver<T>> vector{receivers};
     return impl_ptr<impl>()->template receive<T>(*this, vector);
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-auto node<Out, In, Begin, Syncable>::receive_null(receiver<std::nullptr_t> &receiver) {
+auto chain<Out, In, Begin, Syncable>::receive_null(receiver<std::nullptr_t> &receiver) {
     return this->perform(
         [output = receiver.chainable().make_output()](Out const &value) mutable { output.output_value(nullptr); });
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-auto node<Out, In, Begin, Syncable>::guard(std::function<bool(Out const &value)> guarding) {
+auto chain<Out, In, Begin, Syncable>::guard(std::function<bool(Out const &value)> guarding) {
     auto imp = impl_ptr<impl>();
     chaining::input<Begin> &input = imp->_input;
     auto weak_input = to_weak(input);
@@ -791,40 +791,40 @@ auto node<Out, In, Begin, Syncable>::guard(std::function<bool(Out const &value)>
             }
         });
 
-    return node<Out, Out, Begin, Syncable>(input, [](Out const &value) { return value; });
+    return chain<Out, Out, Begin, Syncable>(input, [](Out const &value) { return value; });
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename F>
-auto node<Out, In, Begin, Syncable>::to(F handler) {
+auto chain<Out, In, Begin, Syncable>::to(F handler) {
     return impl_ptr<impl>()->to(std::move(handler));
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename T>
-auto node<Out, In, Begin, Syncable>::to_value(T value) {
+auto chain<Out, In, Begin, Syncable>::to_value(T value) {
     return impl_ptr<impl>()->to([value = std::move(value)](Out const &) { return value; });
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-auto node<Out, In, Begin, Syncable>::to_null() {
+auto chain<Out, In, Begin, Syncable>::to_null() {
     return impl_ptr<impl>()->to([](Out const &) { return nullptr; });
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-auto node<Out, In, Begin, Syncable>::to_tuple() {
+auto chain<Out, In, Begin, Syncable>::to_tuple() {
     return impl_ptr<impl>()->template to_tuple<>(*this);
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename SubIn, typename SubBegin, bool SubSyncable>
-auto node<Out, In, Begin, Syncable>::merge(node<Out, SubIn, SubBegin, SubSyncable> sub_node) {
+auto chain<Out, In, Begin, Syncable>::merge(chain<Out, SubIn, SubBegin, SubSyncable> sub_chain) {
     auto imp = impl_ptr<impl>();
     chaining::input<Begin> &input = imp->_input;
     auto weak_input = to_weak(input);
     std::size_t const next_idx = input.handlers_size() + 1;
 
-    auto sub_imp = sub_node.template impl_ptr<typename node<Out, SubIn, SubBegin, SubSyncable>::impl>();
+    auto sub_imp = sub_chain.template impl_ptr<typename chain<Out, SubIn, SubBegin, SubSyncable>::impl>();
     auto &sub_input = sub_imp->_input;
 
     sub_input.template push_handler<SubIn>(
@@ -842,12 +842,12 @@ auto node<Out, In, Begin, Syncable>::merge(node<Out, SubIn, SubBegin, SubSyncabl
 
     input.add_sub_input(std::move(sub_input));
 
-    return node<Out, Out, Begin, Syncable | SubSyncable>(input, [](Out const &value) { return value; });
+    return chain<Out, Out, Begin, Syncable | SubSyncable>(input, [](Out const &value) { return value; });
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable>
-auto node<Out, In, Begin, Syncable>::pair(node<SubOut, SubIn, SubBegin, SubSyncable> sub_node) {
+auto chain<Out, In, Begin, Syncable>::pair(chain<SubOut, SubIn, SubBegin, SubSyncable> sub_chain) {
     using opt_pair_t = std::pair<opt_t<Out>, opt_t<SubOut>>;
 
     auto imp = impl_ptr<impl>();
@@ -855,7 +855,7 @@ auto node<Out, In, Begin, Syncable>::pair(node<SubOut, SubIn, SubBegin, SubSynca
     auto weak_input = to_weak(input);
     std::size_t const next_idx = input.handlers_size() + 1;
 
-    auto sub_imp = sub_node.template impl_ptr<typename node<SubOut, SubIn, SubBegin, SubSyncable>::impl>();
+    auto sub_imp = sub_chain.template impl_ptr<typename chain<SubOut, SubIn, SubBegin, SubSyncable>::impl>();
     auto &sub_input = sub_imp->_input;
 
     sub_input.template push_handler<SubIn>(
@@ -873,23 +873,23 @@ auto node<Out, In, Begin, Syncable>::pair(node<SubOut, SubIn, SubBegin, SubSynca
 
     input.add_sub_input(std::move(sub_input));
 
-    return node<opt_pair_t, opt_pair_t, Begin, Syncable | SubSyncable>(input,
-                                                                       [](opt_pair_t const &value) { return value; });
+    return chain<opt_pair_t, opt_pair_t, Begin, Syncable | SubSyncable>(input,
+                                                                        [](opt_pair_t const &value) { return value; });
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable>
-auto node<Out, In, Begin, Syncable>::combine(node<SubOut, SubIn, SubBegin, SubSyncable> sub_node) {
-    return impl_ptr<impl>()->combine(*this, std::move(sub_node));
+auto chain<Out, In, Begin, Syncable>::combine(chain<SubOut, SubIn, SubBegin, SubSyncable> sub_chain) {
+    return impl_ptr<impl>()->combine(*this, std::move(sub_chain));
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-typed_observer<Begin> node<Out, In, Begin, Syncable>::end() {
+typed_observer<Begin> chain<Out, In, Begin, Syncable>::end() {
     return impl_ptr<impl>()->end();
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-typed_observer<Begin> node<Out, In, Begin, Syncable>::sync() {
+typed_observer<Begin> chain<Out, In, Begin, Syncable>::sync() {
     return impl_ptr<impl>()->sync();
 }
 }  // namespace yas::chaining

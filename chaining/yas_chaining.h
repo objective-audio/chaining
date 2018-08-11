@@ -51,7 +51,7 @@ struct notifier : sender_base<T> {
 
     void notify(T const &);
 
-    [[nodiscard]] node<T, T, T, false> chain();
+    [[nodiscard]] chain<T, T, T, false> chain();
 
     [[nodiscard]] receiver<T> &receiver();
 
@@ -68,7 +68,7 @@ struct fetcher : sender_base<T> {
 
     void fetch() const;
 
-    [[nodiscard]] node<T, T, T, true> chain();
+    [[nodiscard]] chain<T, T, T, true> chain();
 
     [[nodiscard]] receiver<> &receiver();
 };
@@ -86,7 +86,7 @@ struct holder : sender_base<T> {
     T &value();
     void set_value(T);
 
-    [[nodiscard]] node<T, T, T, true> chain();
+    [[nodiscard]] chain<T, T, T, true> chain();
 
     [[nodiscard]] receiver<T> &receiver();
 };
@@ -121,15 +121,15 @@ struct typed_observer : observer {
 };
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-struct node : base {
+struct chain : base {
     class impl;
 
-    node(input<Begin>);
+    chain(input<Begin>);
     // private
-    node(input<Begin>, std::function<Out(In const &)>);
-    node(std::nullptr_t);
+    chain(input<Begin>, std::function<Out(In const &)>);
+    chain(std::nullptr_t);
 
-    ~node() final;
+    ~chain() final;
 
     [[nodiscard]] auto normalize();
 
@@ -155,20 +155,20 @@ struct node : base {
     [[nodiscard]] auto to_tuple();
 
     template <typename SubIn, typename SubBegin, bool SubSyncable>
-    [[nodiscard]] auto merge(node<Out, SubIn, SubBegin, SubSyncable>);
+    [[nodiscard]] auto merge(chain<Out, SubIn, SubBegin, SubSyncable>);
 
     template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable>
-    [[nodiscard]] auto pair(node<SubOut, SubIn, SubBegin, SubSyncable>);
+    [[nodiscard]] auto pair(chain<SubOut, SubIn, SubBegin, SubSyncable>);
 
     template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable>
-    [[nodiscard]] auto combine(node<SubOut, SubIn, SubBegin, SubSyncable>);
+    [[nodiscard]] auto combine(chain<SubOut, SubIn, SubBegin, SubSyncable>);
 
     [[nodiscard]] typed_observer<Begin> end();
     [[nodiscard]] typed_observer<Begin> sync();
 };
 
 template <typename T, bool Syncable>
-using node_t = node<T, T, T, Syncable>;
+using chain_t = chain<T, T, T, Syncable>;
 }  // namespace yas::chaining
 
 #include "yas_chaining_private.h"

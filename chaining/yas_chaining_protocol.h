@@ -9,7 +9,7 @@
 
 namespace yas::chaining {
 template <typename Out, typename In, typename Begin, bool Syncable>
-class node;
+class chain;
 template <typename T>
 class sender_base;
 template <typename T>
@@ -67,7 +67,7 @@ struct input : input_base {
     void input_value(T const &);
 
     template <bool Syncable>
-    [[nodiscard]] node<T, T, T, Syncable> begin();
+    [[nodiscard]] chain<T, T, T, Syncable> begin();
 
     template <typename P>
     void push_handler(std::function<void(P const &)>);
