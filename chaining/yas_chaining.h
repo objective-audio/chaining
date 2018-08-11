@@ -12,20 +12,6 @@
 #include "yas_types.h"
 
 namespace yas::chaining {
-template <typename T>
-struct sender_base : base {
-    class impl;
-
-    sender_base(std::nullptr_t);
-
-    [[nodiscard]] sender_chainable<T> chainable();
-
-   protected:
-    sender_base(std::shared_ptr<impl> &&);
-
-   private:
-    sender_chainable<T> _chainable = nullptr;
-};
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 struct chain : base {

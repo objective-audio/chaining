@@ -5,6 +5,7 @@
 #pragma once
 
 #include "yas_chaining.h"
+#include "yas_chaining_sender.h"
 
 namespace yas::chaining {
 template <typename T>
