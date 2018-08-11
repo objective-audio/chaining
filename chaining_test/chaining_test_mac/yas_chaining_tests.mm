@@ -4,9 +4,7 @@
 
 #import <XCTest/XCTest.h>
 #import <string>
-#import "yas_chaining_chain.h"
-#import "yas_chaining_fetcher.h"
-#import "yas_chaining_notifier.h"
+#import "yas_chaining.h"
 
 using namespace yas;
 
