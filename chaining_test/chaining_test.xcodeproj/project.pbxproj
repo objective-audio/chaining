@@ -110,22 +110,22 @@
 		B608F09F21193FD1000A17BD /* chaining */ = {
 			isa = PBXGroup;
 			children = (
+				B608F0A321193FD1000A17BD /* yas_chaining_chain.h */,
+				B6530875211ECBB000D2C655 /* yas_chaining_fetcher_private.h */,
+				B6530874211ECBA500D2C655 /* yas_chaining_fetcher.h */,
 				B6530873211EC6F100D2C655 /* yas_chaining_holder_private.h */,
 				B6530872211EC6E200D2C655 /* yas_chaining_holder.h */,
+				B6530877211ECCC600D2C655 /* yas_chaining_notifier_private.h */,
+				B6530876211ECCBB00D2C655 /* yas_chaining_notifier.h */,
+				B6530879211ED27D00D2C655 /* yas_chaining_observer_private.h */,
+				B6530878211ED27200D2C655 /* yas_chaining_observer.h */,
 				B608F0A021193FD1000A17BD /* yas_chaining_private.h */,
 				B608F0A121193FD1000A17BD /* yas_chaining_protocol.h */,
-				B608F0A221193FD1000A17BD /* yas_chaining_utils.h */,
-				B608F0A321193FD1000A17BD /* yas_chaining_chain.h */,
-				B6530874211ECBA500D2C655 /* yas_chaining_fetcher.h */,
-				B6530875211ECBB000D2C655 /* yas_chaining_fetcher_private.h */,
-				B6530876211ECCBB00D2C655 /* yas_chaining_notifier.h */,
-				B6530877211ECCC600D2C655 /* yas_chaining_notifier_private.h */,
-				B6530878211ED27200D2C655 /* yas_chaining_observer.h */,
-				B6530879211ED27D00D2C655 /* yas_chaining_observer_private.h */,
-				B653087A211EFA4200D2C655 /* yas_chaining_receiver.h */,
 				B653087B211EFA4E00D2C655 /* yas_chaining_receiver_private.h */,
-				B653087C211EFC9B00D2C655 /* yas_chaining_sender.h */,
+				B653087A211EFA4200D2C655 /* yas_chaining_receiver.h */,
 				B653087D211EFCA800D2C655 /* yas_chaining_sender_private.h */,
+				B653087C211EFC9B00D2C655 /* yas_chaining_sender.h */,
+				B608F0A221193FD1000A17BD /* yas_chaining_utils.h */,
 				B6530880211F062700D2C655 /* yas_chaining.h */,
 			);
 			name = chaining;
@@ -135,12 +135,12 @@
 		B608F0AC211940A0000A17BD /* chaining_test_mac */ = {
 			isa = PBXGroup;
 			children = (
+				B608F0AF211940A0000A17BD /* Info.plist */,
 				B67438C0211E6BCF0015E7D6 /* yas_chaining_tests.mm */,
+				B67438BC211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm */,
 				B67438C1211E6BCF0015E7D6 /* yas_fetcher_tests.mm */,
 				B67438BD211E6BCF0015E7D6 /* yas_holder_tests.mm */,
 				B67438BF211E6BCF0015E7D6 /* yas_notifier_tests.mm */,
-				B67438BC211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm */,
-				B608F0AF211940A0000A17BD /* Info.plist */,
 			);
 			path = chaining_test_mac;
 			sourceTree = "<group>";
