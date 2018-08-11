@@ -73,24 +73,6 @@ struct fetcher : sender_base<T> {
     [[nodiscard]] receiver<> &receiver();
 };
 
-template <typename T>
-struct holder : sender_base<T> {
-    class impl;
-
-    holder(T);
-    holder(std::nullptr_t);
-
-    ~holder() final;
-
-    T const &value() const;
-    T &value();
-    void set_value(T);
-
-    [[nodiscard]] chain<T, T, T, true> chain();
-
-    [[nodiscard]] receiver<T> &receiver();
-};
-
 struct observer : base {
     struct impl : base::impl {
         virtual void sync() = 0;
