@@ -112,21 +112,21 @@ template <typename Begin>
 struct typed_observer : observer {
     class impl;
 
-    typed_observer(input<Begin>);
+    typed_observer(joint<Begin>);
     typed_observer(std::nullptr_t);
 
     ~typed_observer() final;
 
-    [[nodiscard]] chaining::input<Begin> &input();
+    [[nodiscard]] chaining::joint<Begin> &input();
 };
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 struct chain : base {
     class impl;
 
-    chain(input<Begin>);
+    chain(joint<Begin>);
     // private
-    chain(input<Begin>, std::function<Out(In const &)>);
+    chain(joint<Begin>, std::function<Out(In const &)>);
     chain(std::nullptr_t);
 
     ~chain() final;

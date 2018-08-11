@@ -39,15 +39,15 @@ struct receiver_chainable : protocol {
     output<T> make_output();
 };
 
-struct input_base : base {
+struct joint_base : base {
     struct impl : base::impl {
         virtual void sync() = 0;
     };
 
-    input_base(std::shared_ptr<impl> &&ptr) : base(std::move(ptr)) {
+    joint_base(std::shared_ptr<impl> &&ptr) : base(std::move(ptr)) {
     }
 
-    input_base(std::nullptr_t) : base(nullptr) {
+    joint_base(std::nullptr_t) : base(nullptr) {
     }
 
     void sync() {
@@ -56,13 +56,13 @@ struct input_base : base {
 };
 
 template <typename T>
-struct input : input_base {
+struct joint : joint_base {
     class impl;
 
-    input(weak<sender_base<T>>);
-    input(std::nullptr_t);
+    joint(weak<sender_base<T>>);
+    joint(std::nullptr_t);
 
-    ~input() final;
+    ~joint() final;
 
     void input_value(T const &);
 
@@ -74,7 +74,7 @@ struct input : input_base {
     std::size_t handlers_size() const;
     template <typename P>
     std::function<void(P const &)> const &handler(std::size_t const) const;
-    void add_sub_input(input_base sub_input);
+    void add_sub_input(joint_base sub_input);
 };
 
 template <typename T>
