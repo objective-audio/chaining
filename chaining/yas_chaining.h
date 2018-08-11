@@ -117,7 +117,7 @@ struct typed_observer : observer {
 
     ~typed_observer() final;
 
-    [[nodiscard]] chaining::joint<Begin> &input();
+    [[nodiscard]] chaining::joint<Begin> &joint();
 };
 
 template <typename Out, typename In, typename Begin, bool Syncable>

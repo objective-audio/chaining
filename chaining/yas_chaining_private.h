@@ -107,7 +107,7 @@ chaining::receiver_chainable<T> chaining::receiver<T>::chainable() {
 
 template <typename Begin>
 struct typed_observer<Begin>::impl : observer::impl {
-    impl(chaining::joint<Begin> &&input) : _joint(std::move(input)) {
+    impl(chaining::joint<Begin> &&joint) : _joint(std::move(joint)) {
     }
 
     void sync() override {
@@ -118,8 +118,8 @@ struct typed_observer<Begin>::impl : observer::impl {
 };
 
 template <typename Begin>
-typed_observer<Begin>::typed_observer(chaining::joint<Begin> input)
-    : observer(std::make_shared<impl>(std::move(input))) {
+typed_observer<Begin>::typed_observer(chaining::joint<Begin> joint)
+    : observer(std::make_shared<impl>(std::move(joint))) {
 }
 
 template <typename Begin>
@@ -130,11 +130,11 @@ template <typename Begin>
 typed_observer<Begin>::~typed_observer() = default;
 
 template <typename Begin>
-chaining::joint<Begin> &typed_observer<Begin>::input() {
+chaining::joint<Begin> &typed_observer<Begin>::joint() {
     return impl_ptr<impl>()->_joint;
 }
 
-#pragma mark - input
+#pragma mark - joint
 
 template <typename T>
 struct joint<T>::impl : joint_base::impl {
@@ -173,7 +173,7 @@ struct joint<T>::impl : joint_base::impl {
         return this->_handlers.size();
     }
 
-    void add_sub_input(joint_base &&sub_joint) {
+    void add_sub_joint(joint_base &&sub_joint) {
         this->_sub_joints.emplace_back(std::move(sub_joint));
     }
 
@@ -194,7 +194,7 @@ template <typename T>
 joint<T>::~joint() {
     if (impl_ptr() && impl_ptr().unique()) {
         if (auto sender = impl_ptr<impl>()->_weak_sender.lock()) {
-            sender.chainable().erase_input(this->identifier());
+            sender.chainable().erase_joint(this->identifier());
         }
         impl_ptr().reset();
     }
@@ -229,8 +229,8 @@ std::function<void(P const &)> const &joint<T>::handler(std::size_t const idx) c
 }
 
 template <typename T>
-void joint<T>::add_sub_input(joint_base sug_input) {
-    impl_ptr<impl>()->add_sub_input(std::move(sug_input));
+void joint<T>::add_sub_joint(joint_base sub_joint) {
+    impl_ptr<impl>()->add_sub_joint(std::move(sub_joint));
 }
 
 #pragma mark - sender_chainable
@@ -244,8 +244,8 @@ sender_chainable<T>::sender_chainable(std::nullptr_t) : protocol(nullptr) {
 }
 
 template <typename T>
-void sender_chainable<T>::erase_input(std::uintptr_t const key) {
-    impl_ptr<impl>()->erase_input(key);
+void sender_chainable<T>::erase_joint(std::uintptr_t const key) {
+    impl_ptr<impl>()->erase_joint(key);
 }
 
 template <typename T>
@@ -257,10 +257,10 @@ void sender_chainable<T>::sync(std::uintptr_t const key) {
 
 template <typename T>
 struct sender_base<T>::impl : base::impl, sender_chainable<T>::impl {
-    std::unordered_map<std::uintptr_t, weak<joint<T>>> inputs;
+    std::unordered_map<std::uintptr_t, weak<joint<T>>> joints;
 
-    void erase_input(std::uintptr_t const key) override {
-        this->inputs.erase(key);
+    void erase_joint(std::uintptr_t const key) override {
+        this->joints.erase(key);
     }
 
     void sync(std::uintptr_t const key) override {
@@ -268,9 +268,9 @@ struct sender_base<T>::impl : base::impl, sender_chainable<T>::impl {
 
     template <bool Syncable>
     chain<T, T, T, Syncable> begin(sender_base<T> &sender) {
-        chaining::joint<T> input{to_weak(sender)};
-        this->inputs.insert(std::make_pair(input.identifier(), to_weak(input)));
-        return input.template begin<Syncable>();
+        chaining::joint<T> joint{to_weak(sender)};
+        this->joints.insert(std::make_pair(joint.identifier(), to_weak(joint)));
+        return joint.template begin<Syncable>();
     }
 };
 
@@ -296,9 +296,9 @@ template <typename T>
 struct notifier<T>::impl : sender_base<T>::impl {
     void send_value(T const &value) {
         if (auto lock = std::unique_lock<std::mutex>(this->_send_mutex, std::try_to_lock); lock.owns_lock()) {
-            for (auto &pair : this->inputs) {
-                if (auto input = pair.second.lock()) {
-                    input.input_value(value);
+            for (auto &pair : this->joints) {
+                if (auto joint = pair.second.lock()) {
+                    joint.input_value(value);
                 }
             }
         }
@@ -359,8 +359,8 @@ struct fetcher<T>::impl : sender_base<T>::impl {
 
     void sync(std::uintptr_t const key) override {
         if (auto value = this->_sync_handler()) {
-            if (auto input = this->inputs.at(key).lock()) {
-                input.input_value(*value);
+            if (auto joint = this->joints.at(key).lock()) {
+                joint.input_value(*value);
             }
         }
     }
@@ -368,9 +368,9 @@ struct fetcher<T>::impl : sender_base<T>::impl {
     void sync() {
         if (auto lock = std::unique_lock<std::mutex>(this->_sync_mutex, std::try_to_lock); lock.owns_lock()) {
             if (auto value = this->_sync_handler()) {
-                for (auto &pair : this->inputs) {
-                    if (auto input = pair.second.lock()) {
-                        input.input_value(*value);
+                for (auto &pair : this->joints) {
+                    if (auto joint = pair.second.lock()) {
+                        joint.input_value(*value);
                     }
                 }
             }
@@ -434,9 +434,9 @@ struct holder<T>::impl : sender_base<T>::impl {
             if (this->_value != value) {
                 this->_value = std::move(value);
 
-                for (auto &pair : this->inputs) {
-                    if (auto input = pair.second.lock()) {
-                        input.input_value(this->_value);
+                for (auto &pair : this->joints) {
+                    if (auto joint = pair.second.lock()) {
+                        joint.input_value(this->_value);
                     }
                 }
             }
@@ -444,8 +444,8 @@ struct holder<T>::impl : sender_base<T>::impl {
     }
 
     void sync(std::uintptr_t const key) override {
-        if (auto input = this->inputs.at(key).lock()) {
-            input.input_value(this->_value);
+        if (auto joint = this->joints.at(key).lock()) {
+            joint.input_value(this->_value);
         }
     }
 
@@ -518,8 +518,8 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
     joint<Begin> _joint;
     std::function<Out(In const &)> _handler;
 
-    impl(joint<Begin> &&input, std::function<Out(In const &)> &&handler)
-        : _joint(std::move(input)), _handler(std::move(handler)) {
+    impl(joint<Begin> &&joint, std::function<Out(In const &)> &&handler)
+        : _joint(std::move(joint)), _handler(std::move(handler)) {
     }
 
     template <typename F>
@@ -560,18 +560,18 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
 
         sub_joint.template push_handler<SubIn>(
             [handler = sub_imp->_handler, weak_joint, next_idx](SubIn const &value) mutable {
-                if (auto input = weak_joint.lock()) {
-                    input.template handler<opt_tuple_t>(next_idx)(opt_tuple_t(nullopt, handler(value)));
+                if (auto joint = weak_joint.lock()) {
+                    joint.template handler<opt_tuple_t>(next_idx)(opt_tuple_t(nullopt, handler(value)));
                 }
             });
 
         joint.template push_handler<In>([handler = this->_handler, weak_joint, next_idx](In const &value) mutable {
-            if (auto input = weak_joint.lock()) {
-                input.template handler<opt_tuple_t>(next_idx)(opt_tuple_t(handler(value), nullopt));
+            if (auto joint = weak_joint.lock()) {
+                joint.template handler<opt_tuple_t>(next_idx)(opt_tuple_t(handler(value), nullopt));
             }
         });
 
-        joint.add_sub_input(std::move(sub_joint));
+        joint.add_sub_joint(std::move(sub_joint));
 
         return chain<opt_tuple_t, opt_tuple_t, Begin, Syncable | SubSyncable>(
             joint, [](opt_tuple_t const &value) { return value; });
@@ -698,13 +698,13 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
 };
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-chain<Out, In, Begin, Syncable>::chain(joint<Begin> input)
-    : chain(std::move(input), [](Begin const &value) { return value; }) {
+chain<Out, In, Begin, Syncable>::chain(joint<Begin> joint)
+    : chain(std::move(joint), [](Begin const &value) { return value; }) {
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-chain<Out, In, Begin, Syncable>::chain(joint<Begin> input, std::function<Out(In const &)> handler)
-    : base(std::make_shared<impl>(std::move(input), std::move(handler))) {
+chain<Out, In, Begin, Syncable>::chain(joint<Begin> joint, std::function<Out(In const &)> handler)
+    : base(std::make_shared<impl>(std::move(joint), std::move(handler))) {
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
@@ -717,18 +717,18 @@ chain<Out, In, Begin, Syncable>::~chain() = default;
 template <typename Out, typename In, typename Begin, bool Syncable>
 auto chain<Out, In, Begin, Syncable>::normalize() {
     auto imp = impl_ptr<impl>();
-    chaining::joint<Begin> &input = imp->_joint;
-    auto weak_joint = to_weak(input);
-    std::size_t const next_idx = input.handlers_size() + 1;
+    chaining::joint<Begin> &joint = imp->_joint;
+    auto weak_joint = to_weak(joint);
+    std::size_t const next_idx = joint.handlers_size() + 1;
 
-    input.template push_handler<In>([handler = imp->_handler, weak_joint, next_idx](In const &value) mutable {
+    joint.template push_handler<In>([handler = imp->_handler, weak_joint, next_idx](In const &value) mutable {
         auto const result = handler(value);
-        if (auto input = weak_joint.lock()) {
-            input.template handler<Out>(next_idx)(result);
+        if (auto joint = weak_joint.lock()) {
+            joint.template handler<Out>(next_idx)(result);
         }
     });
 
-    return chain<Out, Out, Begin, Syncable>(input, [](Out const &value) { return value; });
+    return chain<Out, Out, Begin, Syncable>(joint, [](Out const &value) { return value; });
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
@@ -785,8 +785,8 @@ auto chain<Out, In, Begin, Syncable>::guard(std::function<bool(Out const &value)
         [handler = imp->_handler, weak_joint, next_idx, filter_handler = std::move(guarding)](In const &value) mutable {
             auto const result = handler(value);
             if (filter_handler(result)) {
-                if (auto input = weak_joint.lock()) {
-                    input.template handler<Out>(next_idx)(result);
+                if (auto joint = weak_joint.lock()) {
+                    joint.template handler<Out>(next_idx)(result);
                 }
             }
         });
@@ -829,18 +829,18 @@ auto chain<Out, In, Begin, Syncable>::merge(chain<Out, SubIn, SubBegin, SubSynca
 
     sub_joint.template push_handler<SubIn>(
         [handler = sub_imp->_handler, weak_joint, next_idx](SubIn const &value) mutable {
-            if (auto input = weak_joint.lock()) {
-                input.template handler<Out>(next_idx)(handler(value));
+            if (auto joint = weak_joint.lock()) {
+                joint.template handler<Out>(next_idx)(handler(value));
             }
         });
 
     joint.template push_handler<In>([handler = imp->_handler, weak_joint, next_idx](In const &value) mutable {
-        if (auto input = weak_joint.lock()) {
-            input.template handler<Out>(next_idx)(handler(value));
+        if (auto joint = weak_joint.lock()) {
+            joint.template handler<Out>(next_idx)(handler(value));
         }
     });
 
-    joint.add_sub_input(std::move(sub_joint));
+    joint.add_sub_joint(std::move(sub_joint));
 
     return chain<Out, Out, Begin, Syncable | SubSyncable>(joint, [](Out const &value) { return value; });
 }
@@ -860,18 +860,18 @@ auto chain<Out, In, Begin, Syncable>::pair(chain<SubOut, SubIn, SubBegin, SubSyn
 
     sub_joint.template push_handler<SubIn>(
         [handler = sub_imp->_handler, weak_joint, next_idx](SubIn const &value) mutable {
-            if (auto input = weak_joint.lock()) {
-                input.template handler<opt_pair_t>(next_idx)(opt_pair_t{nullopt, handler(value)});
+            if (auto joint = weak_joint.lock()) {
+                joint.template handler<opt_pair_t>(next_idx)(opt_pair_t{nullopt, handler(value)});
             }
         });
 
     joint.template push_handler<In>([handler = imp->_handler, weak_joint, next_idx](In const &value) mutable {
-        if (auto input = weak_joint.lock()) {
-            input.template handler<opt_pair_t>(next_idx)(opt_pair_t(handler(value), nullopt));
+        if (auto joint = weak_joint.lock()) {
+            joint.template handler<opt_pair_t>(next_idx)(opt_pair_t(handler(value), nullopt));
         }
     });
 
-    joint.add_sub_input(std::move(sub_joint));
+    joint.add_sub_joint(std::move(sub_joint));
 
     return chain<opt_pair_t, opt_pair_t, Begin, Syncable | SubSyncable>(joint,
                                                                         [](opt_pair_t const &value) { return value; });
