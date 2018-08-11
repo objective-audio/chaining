@@ -43,6 +43,8 @@
 		B6530875211ECBB000D2C655 /* yas_chaining_fetcher_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher_private.h; sourceTree = "<group>"; };
 		B6530876211ECCBB00D2C655 /* yas_chaining_notifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_notifier.h; sourceTree = "<group>"; };
 		B6530877211ECCC600D2C655 /* yas_chaining_notifier_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_notifier_private.h; sourceTree = "<group>"; };
+		B6530878211ED27200D2C655 /* yas_chaining_observer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_observer.h; sourceTree = "<group>"; };
+		B6530879211ED27D00D2C655 /* yas_chaining_observer_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_observer_private.h; sourceTree = "<group>"; };
 		B67438BC211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_chaining_utils_tests.mm; sourceTree = "<group>"; };
 		B67438BD211E6BCF0015E7D6 /* yas_holder_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_holder_tests.mm; sourceTree = "<group>"; };
 		B67438BF211E6BCF0015E7D6 /* yas_notifier_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_notifier_tests.mm; sourceTree = "<group>"; };
@@ -113,6 +115,8 @@
 				B6530875211ECBB000D2C655 /* yas_chaining_fetcher_private.h */,
 				B6530876211ECCBB00D2C655 /* yas_chaining_notifier.h */,
 				B6530877211ECCC600D2C655 /* yas_chaining_notifier_private.h */,
+				B6530878211ED27200D2C655 /* yas_chaining_observer.h */,
+				B6530879211ED27D00D2C655 /* yas_chaining_observer_private.h */,
 			);
 			name = chaining;
 			path = ../chaining;

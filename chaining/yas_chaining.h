@@ -6,7 +6,7 @@
 
 #include <functional>
 #include "yas_any.h"
-#include "yas_chaining_protocol.h"
+#include "yas_chaining_observer.h"
 #include "yas_type_traits.h"
 #include "yas_types.h"
 
@@ -40,35 +40,6 @@ struct sender_base : base {
 
    private:
     sender_chainable<T> _chainable = nullptr;
-};
-
-struct observer : base {
-    struct impl : base::impl {
-        virtual void sync() = 0;
-    };
-
-    observer(std::nullptr_t) : base(nullptr) {
-    }
-
-    void sync() {
-        impl_ptr<impl>()->sync();
-    }
-
-   protected:
-    observer(std::shared_ptr<impl> &&impl) : base(std::move(impl)) {
-    }
-};
-
-template <typename Begin>
-struct typed_observer : observer {
-    class impl;
-
-    typed_observer(joint<Begin>);
-    typed_observer(std::nullptr_t);
-
-    ~typed_observer() final;
-
-    [[nodiscard]] chaining::joint<Begin> &joint();
 };
 
 template <typename Out, typename In, typename Begin, bool Syncable>
