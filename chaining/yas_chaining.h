@@ -42,23 +42,6 @@ struct sender_base : base {
     sender_chainable<T> _chainable = nullptr;
 };
 
-template <typename T>
-struct notifier : sender_base<T> {
-    class impl;
-
-    notifier();
-    notifier(std::nullptr_t);
-
-    void notify(T const &);
-
-    [[nodiscard]] chain<T, T, T, false> chain();
-
-    [[nodiscard]] receiver<T> &receiver();
-
-   protected:
-    notifier(std::shared_ptr<impl> &&);
-};
-
 struct observer : base {
     struct impl : base::impl {
         virtual void sync() = 0;
