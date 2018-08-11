@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B608F0AE211940A0000A17BD /* chaining_test_mac.mm in Sources */ = {isa = PBXBuildFile; fileRef = B608F0AD211940A0000A17BD /* chaining_test_mac.mm */; };
 		B608F0B621194162000A17BD /* yas_any.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B608F0B421194162000A17BD /* yas_any.cpp */; };
 		B67438C2211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BC211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm */; };
 		B67438C3211E6BCF0015E7D6 /* yas_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BD211E6BCF0015E7D6 /* yas_holder_tests.mm */; };
@@ -33,7 +32,6 @@
 		B608F0A521194005000A17BD /* yas_fast_each_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_fast_each_private.h; sourceTree = "<group>"; };
 		B608F0A621194014000A17BD /* yas_type_traits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_type_traits.h; sourceTree = "<group>"; };
 		B608F0AB211940A0000A17BD /* chaining_test_mac.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chaining_test_mac.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B608F0AD211940A0000A17BD /* chaining_test_mac.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = chaining_test_mac.mm; sourceTree = "<group>"; };
 		B608F0AF211940A0000A17BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B608F0B321194162000A17BD /* yas_any_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_any_private.h; sourceTree = "<group>"; };
 		B608F0B421194162000A17BD /* yas_any.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_any.cpp; sourceTree = "<group>"; };
@@ -111,7 +109,6 @@
 		B608F0AC211940A0000A17BD /* chaining_test_mac */ = {
 			isa = PBXGroup;
 			children = (
-				B608F0AD211940A0000A17BD /* chaining_test_mac.mm */,
 				B67438C0211E6BCF0015E7D6 /* yas_chaining_tests.mm */,
 				B67438C1211E6BCF0015E7D6 /* yas_fetcher_tests.mm */,
 				B67438BD211E6BCF0015E7D6 /* yas_holder_tests.mm */,
@@ -205,7 +202,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				B608F0B621194162000A17BD /* yas_any.cpp in Sources */,
-				B608F0AE211940A0000A17BD /* chaining_test_mac.mm in Sources */,
 				B67438C2211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm in Sources */,
 				B67438C6211E6BCF0015E7D6 /* yas_chaining_tests.mm in Sources */,
 				B67438C8211E6C8C0015E7D6 /* yas_base.cpp in Sources */,
