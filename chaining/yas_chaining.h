@@ -59,20 +59,6 @@ struct notifier : sender_base<T> {
     notifier(std::shared_ptr<impl> &&);
 };
 
-template <typename T>
-struct fetcher : sender_base<T> {
-    class impl;
-
-    fetcher(std::function<opt_t<T>(void)>);
-    fetcher(std::nullptr_t);
-
-    void fetch() const;
-
-    [[nodiscard]] chain<T, T, T, true> chain();
-
-    [[nodiscard]] receiver<> &receiver();
-};
-
 struct observer : base {
     struct impl : base::impl {
         virtual void sync() = 0;
