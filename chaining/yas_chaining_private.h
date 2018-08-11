@@ -143,7 +143,7 @@ struct joint<T>::impl : joint_base::impl {
     impl(weak<sender_base<T>> &&weak_sender) : _weak_sender(std::move(weak_sender)) {
     }
 
-    void send_value(T const &value) {
+    void call_first(T const &value) {
         if (this->_handlers.size() > 0) {
             this->_handlers.front().template get<std::function<void(T const &)>>()(value);
         } else {
@@ -201,8 +201,8 @@ joint<T>::~joint() {
 }
 
 template <typename T>
-void joint<T>::input_value(T const &value) {
-    impl_ptr<impl>()->send_value(value);
+void joint<T>::call_first(T const &value) {
+    impl_ptr<impl>()->call_first(value);
 }
 
 template <typename T>
@@ -298,7 +298,7 @@ struct notifier<T>::impl : sender_base<T>::impl {
         if (auto lock = std::unique_lock<std::mutex>(this->_send_mutex, std::try_to_lock); lock.owns_lock()) {
             for (auto &pair : this->joints) {
                 if (auto joint = pair.second.lock()) {
-                    joint.input_value(value);
+                    joint.call_first(value);
                 }
             }
         }
@@ -360,7 +360,7 @@ struct fetcher<T>::impl : sender_base<T>::impl {
     void sync(std::uintptr_t const key) override {
         if (auto value = this->_sync_handler()) {
             if (auto joint = this->joints.at(key).lock()) {
-                joint.input_value(*value);
+                joint.call_first(*value);
             }
         }
     }
@@ -370,7 +370,7 @@ struct fetcher<T>::impl : sender_base<T>::impl {
             if (auto value = this->_sync_handler()) {
                 for (auto &pair : this->joints) {
                     if (auto joint = pair.second.lock()) {
-                        joint.input_value(*value);
+                        joint.call_first(*value);
                     }
                 }
             }
@@ -436,7 +436,7 @@ struct holder<T>::impl : sender_base<T>::impl {
 
                 for (auto &pair : this->joints) {
                     if (auto joint = pair.second.lock()) {
-                        joint.input_value(this->_value);
+                        joint.call_first(this->_value);
                     }
                 }
             }
@@ -445,7 +445,7 @@ struct holder<T>::impl : sender_base<T>::impl {
 
     void sync(std::uintptr_t const key) override {
         if (auto joint = this->joints.at(key).lock()) {
-            joint.input_value(this->_value);
+            joint.call_first(this->_value);
         }
     }
 

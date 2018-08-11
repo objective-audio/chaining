@@ -64,7 +64,7 @@ struct joint : joint_base {
 
     ~joint() final;
 
-    void input_value(T const &);
+    void call_first(T const &);
 
     template <bool Syncable>
     [[nodiscard]] chain<T, T, T, Syncable> begin();
