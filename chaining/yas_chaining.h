@@ -7,26 +7,11 @@
 #include <functional>
 #include "yas_any.h"
 #include "yas_chaining_observer.h"
+#include "yas_chaining_receiver.h"
 #include "yas_type_traits.h"
 #include "yas_types.h"
 
 namespace yas::chaining {
-template <typename T = std::nullptr_t>
-struct receiver : base {
-    class impl;
-
-    receiver(std::function<void(T const &)>);
-    receiver(std::function<void(void)>);
-    receiver(std::nullptr_t);
-
-    ~receiver() final;
-
-    [[nodiscard]] receiver_chainable<T> chainable();
-
-   private:
-    receiver_chainable<T> _chainable = nullptr;
-};
-
 template <typename T>
 struct sender_base : base {
     class impl;

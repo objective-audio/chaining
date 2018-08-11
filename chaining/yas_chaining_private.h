@@ -60,49 +60,6 @@ output<T> receiver_chainable<T>::make_output() {
     return impl_ptr<impl>()->make_output();
 }
 
-#pragma mark - chaining::receiver
-
-template <typename T>
-struct chaining::receiver<T>::impl : base::impl, chaining::receiver_chainable<T>::impl {
-    std::function<void(T const &)> handler;
-
-    impl(std::function<void(T const &)> &&handler) : handler(std::move(handler)) {
-    }
-
-    void receive_value(T const &value) override {
-        this->handler(value);
-    }
-
-    output<T> make_output() override {
-        return output<T>{to_weak(cast<chaining::receiver<T>>())};
-    }
-};
-
-template <typename T>
-chaining::receiver<T>::receiver(std::function<void(T const &)> handler)
-    : base(std::make_shared<impl>(std::move(handler))) {
-}
-
-template <typename T>
-chaining::receiver<T>::receiver(std::function<void(void)> handler)
-    : receiver([handler = std::move(handler)](auto const &) { handler(); }) {
-}
-
-template <typename T>
-chaining::receiver<T>::receiver(std::nullptr_t) : base(nullptr) {
-}
-
-template <typename T>
-chaining::receiver<T>::~receiver() = default;
-
-template <typename T>
-chaining::receiver_chainable<T> chaining::receiver<T>::chainable() {
-    if (!this->_chainable) {
-        this->_chainable = chaining::receiver_chainable<T>{impl_ptr<typename chaining::receiver_chainable<T>::impl>()};
-    }
-    return this->_chainable;
-}
-
 #pragma mark - sender_chainable
 
 template <typename T>
