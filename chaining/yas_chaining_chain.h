@@ -64,4 +64,4 @@ template <typename T, bool Syncable>
 using chain_t = chain<T, T, T, Syncable>;
 }  // namespace yas::chaining
 
-#include "yas_chaining_private.h"
+#include "yas_chaining_chain_private.h"
