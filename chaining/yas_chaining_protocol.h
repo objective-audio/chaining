@@ -91,3 +91,5 @@ struct sender_chainable : protocol {
     void sync(std::uintptr_t const);
 };
 }  // namespace yas::chaining
+
+#include "yas_chaining_output_private.h"
