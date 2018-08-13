@@ -10,7 +10,7 @@
 #include "yas_chaining_observer.h"
 #include "yas_chaining_receiver.h"
 #include "yas_chaining_receiver_protocol_private.h"
-#include "yas_chaining_sender_chainable_private.h"
+#include "yas_chaining_sender_protocol_private.h"
 #include "yas_fast_each.h"
 #include "yas_types.h"
 

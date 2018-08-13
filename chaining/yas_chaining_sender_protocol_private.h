@@ -1,5 +1,5 @@
 //
-//  yas_chaining_sender_chainable_private.h
+//  yas_chaining_sender_protocol_private.h
 //
 
 #pragma once

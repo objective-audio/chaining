@@ -4,4 +4,4 @@
 
 #pragma once
 
-#include "yas_chaining_sender_chainable.h"
+#include "yas_chaining_sender_protocol.h"

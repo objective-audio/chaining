@@ -22,4 +22,4 @@ struct sender_chainable : protocol {
 };
 }  // namespace yas::chaining
 
-#include "yas_chaining_sender_chainable_private.h"
+#include "yas_chaining_sender_protocol_private.h"
