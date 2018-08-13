@@ -7,6 +7,9 @@
 #include "yas_base.h"
 
 namespace yas::chaining {
+template <typename T>
+class sender_base;
+
 struct joint_base : base {
     struct impl : base::impl {
         virtual void sync() = 0;

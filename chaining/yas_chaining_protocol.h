@@ -11,8 +11,6 @@ namespace yas::chaining {
 template <typename Out, typename In, typename Begin, bool Syncable>
 class chain;
 template <typename T>
-class sender_base;
-template <typename T>
 class receiver;
 
 template <typename T>
