@@ -4,21 +4,12 @@
 
 #pragma once
 
+#include "yas_chaining_output.h"
 #include "yas_protocol.h"
 
 namespace yas::chaining {
 template <typename T>
 class receiver;
-
-template <typename T>
-struct output : base {
-    class impl;
-
-    output(weak<receiver<T>>);
-    output(std::nullptr_t);
-
-    void output_value(T const &);
-};
 
 template <typename T>
 struct receiver_chainable : protocol {
