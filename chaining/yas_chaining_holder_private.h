@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <mutex>
+
 namespace yas::chaining {
 template <typename T>
 struct holder<T>::impl : sender_base<T>::impl {
