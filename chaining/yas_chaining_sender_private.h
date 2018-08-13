@@ -4,7 +4,13 @@
 
 #pragma once
 
+#include <unordered_map>
+#include "yas_chaining_joint.h"
+
 namespace yas::chaining {
+template <typename Out, typename In, typename Begin, bool Syncable>
+class chain;
+
 template <typename T>
 struct sender_base<T>::impl : base::impl, sender_chainable<T>::impl {
     std::unordered_map<std::uintptr_t, weak<joint<T>>> joints;

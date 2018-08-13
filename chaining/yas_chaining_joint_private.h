@@ -4,6 +4,9 @@
 
 #pragma once
 
+#include <vector>
+#include "yas_any.h"
+
 namespace yas::chaining {
 template <typename T>
 struct joint<T>::impl : joint_base::impl {

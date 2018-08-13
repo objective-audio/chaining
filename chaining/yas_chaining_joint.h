@@ -9,6 +9,8 @@
 namespace yas::chaining {
 template <typename T>
 class sender_base;
+template <typename Out, typename In, typename Begin, bool Syncable>
+class chain;
 
 struct joint_base : base {
     struct impl : base::impl {

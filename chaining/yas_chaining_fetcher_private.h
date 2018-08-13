@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "yas_chaining_chain.h"
+
 namespace yas::chaining {
 template <typename T>
 struct fetcher<T>::impl : sender_base<T>::impl {
