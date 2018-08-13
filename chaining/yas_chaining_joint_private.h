@@ -5,8 +5,6 @@
 #pragma once
 
 namespace yas::chaining {
-#pragma mark - joint
-
 template <typename T>
 struct joint<T>::impl : joint_base::impl {
     weak<sender_base<T>> _weak_sender;

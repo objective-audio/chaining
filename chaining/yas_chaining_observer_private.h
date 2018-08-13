@@ -6,7 +6,7 @@
 
 #include <vector>
 #include "yas_any.h"
-#include "yas_chaining_joint_private.h"
+#include "yas_chaining_joint.h"
 
 namespace yas::chaining {
 template <typename Begin>
