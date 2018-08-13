@@ -8,29 +8,10 @@
 #include <unordered_map>
 #include <vector>
 #include "yas_chaining_receiver_chainable_private.h"
+#include "yas_chaining_sender_chainable_private.h"
 #include "yas_fast_each.h"
 
 namespace yas::chaining {
-
-#pragma mark - sender_chainable
-
-template <typename T>
-sender_chainable<T>::sender_chainable(std::shared_ptr<impl> impl) : protocol(std::move(impl)) {
-}
-
-template <typename T>
-sender_chainable<T>::sender_chainable(std::nullptr_t) : protocol(nullptr) {
-}
-
-template <typename T>
-void sender_chainable<T>::erase_joint(std::uintptr_t const key) {
-    impl_ptr<impl>()->erase_joint(key);
-}
-
-template <typename T>
-void sender_chainable<T>::sync(std::uintptr_t const key) {
-    impl_ptr<impl>()->sync(key);
-}
 
 #pragma mark - chain
 
