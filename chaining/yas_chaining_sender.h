@@ -5,9 +5,11 @@
 #pragma once
 
 #include "yas_base.h"
-#include "yas_chaining_sender_protocol.h"
 
 namespace yas::chaining {
+template <typename T>
+class sender_chainable;
+
 template <typename T>
 struct sender_base : base {
     class impl;

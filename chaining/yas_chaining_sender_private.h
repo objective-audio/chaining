@@ -6,6 +6,7 @@
 
 #include <unordered_map>
 #include "yas_chaining_joint.h"
+#include "yas_chaining_sender_protocol.h"
 
 namespace yas::chaining {
 template <typename Out, typename In, typename Begin, bool Syncable>
