@@ -10,6 +10,7 @@
 #include "yas_chaining_receiver_chainable_private.h"
 #include "yas_chaining_sender_chainable_private.h"
 #include "yas_fast_each.h"
+#include "yas_types.h"
 
 namespace yas::chaining {
 template <typename Out, typename In, typename Begin, bool Syncable>
