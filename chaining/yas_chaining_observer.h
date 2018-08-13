@@ -4,9 +4,12 @@
 
 #pragma once
 
-#include "yas_chaining_sender_protocol.h"
+#include "yas_base.h"
 
 namespace yas::chaining {
+template <typename T>
+class joint;
+
 struct observer : base {
     struct impl : base::impl {
         virtual void sync() = 0;
