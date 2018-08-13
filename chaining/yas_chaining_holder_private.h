@@ -5,6 +5,7 @@
 #pragma once
 
 #include <mutex>
+#include "yas_chaining_chain.h"
 
 namespace yas::chaining {
 template <typename T>
