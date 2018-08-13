@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "yas_chaining_protocol.h"
+#include "yas_chaining_sender_protocol.h"
 
 namespace yas::chaining {
 struct observer : base {
