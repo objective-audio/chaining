@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include "yas_chaining_receiver_chainable.h"
+
 namespace yas::chaining {
 template <typename T>
 struct chaining::receiver<T>::impl : base::impl, chaining::receiver_chainable<T>::impl {

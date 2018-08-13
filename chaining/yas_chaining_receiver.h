@@ -7,6 +7,9 @@
 #include "yas_base.h"
 
 namespace yas::chaining {
+template <typename T>
+struct receiver_chainable;
+
 template <typename T = std::nullptr_t>
 struct receiver : base {
     class impl;
