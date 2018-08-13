@@ -7,7 +7,6 @@
 #include <functional>
 #include "yas_chaining_observer.h"
 #include "yas_chaining_receiver.h"
-#include "yas_type_traits.h"
 
 namespace yas::chaining {
 
