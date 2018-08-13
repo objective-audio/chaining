@@ -35,4 +35,4 @@ struct receiver_chainable : protocol {
 };
 }  // namespace yas::chaining
 
-#include "yas_chaining_receiver_chainable_private.h"
+#include "yas_chaining_receiver_protocol_private.h"
