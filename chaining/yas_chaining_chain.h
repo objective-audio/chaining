@@ -5,10 +5,15 @@
 #pragma once
 
 #include <functional>
-#include "yas_chaining_observer.h"
-#include "yas_chaining_receiver.h"
+#include "yas_base.h"
 
 namespace yas::chaining {
+template <typename Begin>
+struct typed_observer;
+template <typename T>
+struct receiver;
+template <typename T>
+struct joint;
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 struct chain : base {
