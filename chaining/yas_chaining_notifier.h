@@ -4,10 +4,14 @@
 
 #pragma once
 
-#include "yas_chaining_chain.h"
 #include "yas_chaining_sender.h"
 
 namespace yas::chaining {
+template <typename Out, typename In, typename Begin, bool Syncable>
+struct chain;
+template <typename T>
+struct receiver;
+
 template <typename T>
 struct notifier : sender_base<T> {
     class impl;
