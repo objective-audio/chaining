@@ -12,9 +12,6 @@
 #include "yas_fast_each.h"
 
 namespace yas::chaining {
-
-#pragma mark - chain
-
 template <typename Out, typename In, typename Begin, bool Syncable>
 struct chain<Out, In, Begin, Syncable>::impl : base::impl {
     joint<Begin> _joint;
