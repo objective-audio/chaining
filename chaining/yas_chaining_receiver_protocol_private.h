@@ -17,9 +17,4 @@ template <typename T>
 void receiver_chainable<T>::receive_value(T const &value) {
     impl_ptr<impl>()->receive_value(value);
 }
-
-template <typename T>
-output<T> receiver_chainable<T>::make_output() {
-    return impl_ptr<impl>()->make_output();
-}
 }  // namespace yas::chaining

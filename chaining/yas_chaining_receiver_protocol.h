@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include "yas_chaining_output.h"
 #include "yas_protocol.h"
 
 namespace yas::chaining {
@@ -14,7 +13,6 @@ class receiver;
 template <typename T>
 struct receiver_chainable : protocol {
     struct impl : protocol::impl {
-        virtual output<T> make_output() = 0;
         virtual void receive_value(T const &) = 0;
     };
 
@@ -22,7 +20,6 @@ struct receiver_chainable : protocol {
     receiver_chainable(std::nullptr_t);
 
     void receive_value(T const &);
-    output<T> make_output();
 };
 }  // namespace yas::chaining
 

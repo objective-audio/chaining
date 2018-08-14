@@ -17,10 +17,6 @@ struct chaining::receiver<T>::impl : base::impl, chaining::receiver_chainable<T>
     void receive_value(T const &value) override {
         this->handler(value);
     }
-
-    output<T> make_output() override {
-        return output<T>{to_weak(cast<chaining::receiver<T>>())};
-    }
 };
 
 template <typename T>

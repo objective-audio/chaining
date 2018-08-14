@@ -115,7 +115,7 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
 
     template <std::size_t N, typename T, typename TupleOut = Out, enable_if_tuple_t<TupleOut, std::nullptr_t> = nullptr>
     auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
-        return chain.perform([weak_receiver = to_weak(receiver)](Out const &value) mutable {
+        return chain.perform([weak_receiver = to_weak(receiver)](Out const &value) {
             if (chaining::receiver<T> receiver = weak_receiver.lock()) {
                 receiver.chainable().receive_value(std::get<N>(value));
             }
@@ -124,34 +124,41 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
 
     template <std::size_t N, typename T, typename ArrayOut = Out, enable_if_array_t<ArrayOut, std::nullptr_t> = nullptr>
     auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
-        return chain.perform([output = receiver.chainable().make_output()](Out const &value) mutable {
-            output.output_value(std::get<N>(value));
+        return chain.perform([weak_receiver = to_weak(receiver)](Out const &value) {
+            if (chaining::receiver<T> receiver = weak_receiver.lock()) {
+                receiver.chainable().receive_value(std::get<N>(value));
+            }
         });
     }
 
     template <std::size_t N, typename T, typename NonOut = Out, disable_if_tuple_t<NonOut, std::nullptr_t> = nullptr,
               disable_if_array_t<NonOut, std::nullptr_t> = nullptr>
     auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
-        return chain.perform(
-            [output = receiver.chainable().make_output()](Out const &value) mutable { output.output_value(value); });
+        return chain.perform([weak_receiver = to_weak(receiver)](Out const &value) {
+            if (chaining::receiver<T> receiver = weak_receiver.lock()) {
+                receiver.chainable().receive_value(value);
+            }
+        });
     }
 
     template <typename T, std::size_t N>
     auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, std::array<receiver<T>, N> &receivers) {
-        std::vector<chaining::output<T>> outputs;
-        outputs.reserve(N);
+        std::vector<weak<chaining::receiver<T>>> weak_receivers;
+        weak_receivers.reserve(N);
 
         auto each = make_fast_each(N);
         while (yas_each_next(each)) {
             auto const &idx = yas_each_index(each);
-            outputs.emplace_back(receivers.at(idx).chainable().make_output());
+            weak_receivers.emplace_back(to_weak(receivers.at(idx)));
         }
 
-        return chain.perform([outputs = std::move(outputs)](Out const &values) mutable {
+        return chain.perform([weak_receivers = std::move(weak_receivers)](Out const &values) mutable {
             auto each = make_fast_each(N);
             while (yas_each_next(each)) {
                 auto const &idx = yas_each_index(each);
-                outputs.at(idx).output_value(values.at(idx));
+                if (chaining::receiver<T> receiver = weak_receivers.at(idx).lock()) {
+                    receiver.chainable().receive_value(values.at(idx));
+                }
             }
         });
     }
@@ -160,21 +167,23 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
     auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, std::vector<receiver<T>> &receivers) {
         std::size_t const count = receivers.size();
 
-        std::vector<chaining::output<T>> outputs;
-        outputs.reserve(count);
+        std::vector<weak<chaining::receiver<T>>> weak_receivers;
+        weak_receivers.reserve(count);
 
         auto each = make_fast_each(count);
         while (yas_each_next(each)) {
             auto const &idx = yas_each_index(each);
-            outputs.emplace_back(receivers.at(idx).chainable().make_output());
+            weak_receivers.emplace_back(to_weak(receivers.at(idx)));
         }
 
-        return chain.perform([outputs = std::move(outputs)](Out const &values) mutable {
-            std::size_t const count = std::min(values.size(), outputs.size());
+        return chain.perform([weak_receivers = std::move(weak_receivers)](Out const &values) {
+            std::size_t const count = std::min(values.size(), weak_receivers.size());
             auto each = make_fast_each(count);
             while (yas_each_next(each)) {
                 auto const &idx = yas_each_index(each);
-                outputs.at(idx).output_value(values.at(idx));
+                if (chaining::receiver<T> receiver = weak_receivers.at(idx).lock()) {
+                    receiver.chainable().receive_value(values.at(idx));
+                }
             }
         });
     }
@@ -269,9 +278,12 @@ template <typename T>
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-auto chain<Out, In, Begin, Syncable>::receive_null(receiver<std::nullptr_t> &receiver) {
-    return this->perform(
-        [output = receiver.chainable().make_output()](Out const &value) mutable { output.output_value(nullptr); });
+auto chain<Out, In, Begin, Syncable>::receive_null(receiver<> &receiver) {
+    return this->perform([weak_receiver = to_weak(receiver)](Out const &value) {
+        if (chaining::receiver<> receiver = weak_receiver.lock()) {
+            receiver.chainable().receive_value(nullptr);
+        }
+    });
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
