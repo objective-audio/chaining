@@ -23,7 +23,7 @@ struct fetcher<T>::impl : sender_base<T>::impl {
         }
     }
 
-    void sync() {
+    void broadcast() {
         if (auto lock = std::unique_lock<std::mutex>(this->_sync_mutex, std::try_to_lock); lock.owns_lock()) {
             if (auto value = this->_sync_handler()) {
                 for (auto &pair : this->joints) {
@@ -63,7 +63,7 @@ fetcher<T>::fetcher(std::nullptr_t) : sender_base<T>(nullptr) {
 
 template <typename T>
 void fetcher<T>::fetch() const {
-    this->template impl_ptr<impl>()->sync();
+    this->template impl_ptr<impl>()->broadcast();
 }
 
 template <typename T>
