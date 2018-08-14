@@ -10,7 +10,7 @@
 namespace yas::chaining {
 template <typename T>
 struct notifier<T>::impl : sender_base<T>::impl {
-    void send_value(T const &value) {
+    void locked_send_value(T const &value) {
         if (auto lock = std::unique_lock<std::mutex>(this->_send_mutex, std::try_to_lock); lock.owns_lock()) {
             for (auto &pair : this->joints) {
                 if (auto joint = pair.second.lock()) {
@@ -51,7 +51,7 @@ notifier<T>::notifier(std::nullptr_t) : sender_base<T>(nullptr) {
 
 template <typename T>
 void notifier<T>::notify(T const &value) {
-    this->template impl_ptr<impl>()->send_value(value);
+    this->template impl_ptr<impl>()->locked_send_value(value);
 }
 
 template <typename T>
