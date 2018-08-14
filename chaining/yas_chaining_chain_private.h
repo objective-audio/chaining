@@ -241,7 +241,8 @@ auto chain<Out, In, Begin, Syncable>::normalize() {
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-auto chain<Out, In, Begin, Syncable>::perform(std::function<void(Out const &)> perform_handler) {
+chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::perform(
+    std::function<void(Out const &)> perform_handler) {
     auto imp = impl_ptr<impl>();
     return chain<Out, In, Begin, Syncable>(
         std::move(imp->_joint),
@@ -254,31 +255,31 @@ auto chain<Out, In, Begin, Syncable>::perform(std::function<void(Out const &)> p
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <std::size_t N, typename T>
-auto chain<Out, In, Begin, Syncable>::receive(receiver<T> &receiver) {
+chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::receive(receiver<T> &receiver) {
     return impl_ptr<impl>()->template receive<N>(*this, receiver);
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename T, std::size_t N>
-auto chain<Out, In, Begin, Syncable>::receive(std::array<receiver<T>, N> receivers) {
+chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::receive(std::array<receiver<T>, N> receivers) {
     return impl_ptr<impl>()->template receive<T, N>(*this, receivers);
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename T>
-auto chain<Out, In, Begin, Syncable>::receive(std::vector<receiver<T>> receivers) {
+chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::receive(std::vector<receiver<T>> receivers) {
     return impl_ptr<impl>()->template receive<T>(*this, receivers);
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename T>
-[[nodiscard]] auto chain<Out, In, Begin, Syncable>::receive(std::initializer_list<receiver<T>> receivers) {
+chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::receive(std::initializer_list<receiver<T>> receivers) {
     std::vector<receiver<T>> vector{receivers};
     return impl_ptr<impl>()->template receive<T>(*this, vector);
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-auto chain<Out, In, Begin, Syncable>::receive_null(receiver<> &receiver) {
+chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::receive_null(receiver<> &receiver) {
     return this->perform([weak_receiver = to_weak(receiver)](Out const &value) {
         if (chaining::receiver<> receiver = weak_receiver.lock()) {
             receiver.chainable().receive_value(nullptr);
