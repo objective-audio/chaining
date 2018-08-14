@@ -115,8 +115,10 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
 
     template <std::size_t N, typename T, typename TupleOut = Out, enable_if_tuple_t<TupleOut, std::nullptr_t> = nullptr>
     auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
-        return chain.perform([output = receiver.chainable().make_output()](Out const &value) mutable {
-            output.output_value(std::get<N>(value));
+        return chain.perform([weak_receiver = to_weak(receiver)](Out const &value) mutable {
+            if (chaining::receiver<T> receiver = weak_receiver.lock()) {
+                receiver.chainable().receive_value(std::get<N>(value));
+            }
         });
     }
 
