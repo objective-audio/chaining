@@ -40,7 +40,7 @@ struct fetcher<T>::impl : sender_base<T>::impl {
             this->_receiver =
                 chaining::receiver<>{[weak_fetcher = to_weak(this->template cast<chaining::fetcher<T>>())] {
                     if (auto fetcher = weak_fetcher.lock()) {
-                        fetcher.fetch();
+                        fetcher.broadcast();
                     }
                 }};
         }
@@ -62,7 +62,7 @@ fetcher<T>::fetcher(std::nullptr_t) : sender_base<T>(nullptr) {
 }
 
 template <typename T>
-void fetcher<T>::fetch() const {
+void fetcher<T>::broadcast() const {
     this->template impl_ptr<impl>()->broadcast();
 }
 

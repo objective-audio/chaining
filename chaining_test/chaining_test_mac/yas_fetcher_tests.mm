@@ -35,7 +35,7 @@ using namespace yas;
 
     sending = 2;
 
-    fetcher.fetch();
+    fetcher.broadcast();
 
     XCTAssertEqual(notified, 2);
 }

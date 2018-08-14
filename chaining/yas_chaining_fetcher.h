@@ -19,7 +19,7 @@ struct fetcher : sender_base<T> {
     fetcher(std::function<opt_t<T>(void)>);
     fetcher(std::nullptr_t);
 
-    void fetch() const;
+    void broadcast() const;
 
     [[nodiscard]] chain<T, T, T, true> chain();
 
