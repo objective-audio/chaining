@@ -332,7 +332,8 @@ auto chain<Out, In, Begin, Syncable>::to_tuple() {
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename SubIn, typename SubBegin, bool SubSyncable>
-auto chain<Out, In, Begin, Syncable>::merge(chain<Out, SubIn, SubBegin, SubSyncable> sub_chain) {
+chain<Out, Out, Begin, Syncable | SubSyncable> chain<Out, In, Begin, Syncable>::merge(
+    chain<Out, SubIn, SubBegin, SubSyncable> sub_chain) {
     auto imp = impl_ptr<impl>();
     chaining::joint<Begin> &joint = imp->_joint;
     auto weak_joint = to_weak(joint);

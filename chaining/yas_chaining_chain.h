@@ -50,7 +50,7 @@ struct chain : base {
     [[nodiscard]] auto to_tuple();
 
     template <typename SubIn, typename SubBegin, bool SubSyncable>
-    [[nodiscard]] auto merge(chain<Out, SubIn, SubBegin, SubSyncable>);
+    [[nodiscard]] chain<Out, Out, Begin, Syncable | SubSyncable> merge(chain<Out, SubIn, SubBegin, SubSyncable>);
 
     template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable>
     [[nodiscard]] auto pair(chain<SubOut, SubIn, SubBegin, SubSyncable>);
