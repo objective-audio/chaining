@@ -79,8 +79,8 @@ void joint<T>::call_first(T const &value) {
 
 template <typename T>
 template <bool Syncable>
-chain<T, T, T, Syncable> joint<T>::begin() {
-    return chain<T, T, T, Syncable>(*this);
+chain<T, T, T, Syncable> joint<T>::chain() {
+    return chaining::chain<T, T, T, Syncable>(*this);
 }
 
 template <typename T>

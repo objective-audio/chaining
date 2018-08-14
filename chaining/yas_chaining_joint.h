@@ -40,7 +40,7 @@ struct joint : joint_base {
     void call_first(T const &);
 
     template <bool Syncable>
-    [[nodiscard]] chain<T, T, T, Syncable> begin();
+    [[nodiscard]] chain<T, T, T, Syncable> chain();
 
     template <typename P>
     void push_handler(std::function<void(P const &)>);
