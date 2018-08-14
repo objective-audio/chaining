@@ -17,7 +17,7 @@ struct holder<T>::impl : sender_base<T>::impl {
         return this->_value;
     }
 
-    void set_value(T &&value) {
+    void locked_set_value(T &&value) {
         if (auto lock = std::unique_lock<std::mutex>(this->_set_mutex, std::try_to_lock); lock.owns_lock()) {
             if (this->_value != value) {
                 this->_value = std::move(value);
@@ -40,9 +40,9 @@ struct holder<T>::impl : sender_base<T>::impl {
     chaining::receiver<T> &receiver() {
         if (!this->_receiver) {
             this->_receiver = chaining::receiver<T>{
-                [weak_property = to_weak(this->template cast<chaining::holder<T>>())](T const &value) {
-                    if (auto property = weak_property.lock()) {
-                        property.set_value(value);
+                [weak_holder = to_weak(this->template cast<chaining::holder<T>>())](T const &value) {
+                    if (auto holder = weak_holder.lock()) {
+                        holder.set_value(value);
                     }
                 }};
         }
@@ -86,7 +86,7 @@ T &holder<T>::value() {
 
 template <typename T>
 void holder<T>::set_value(T value) {
-    this->template impl_ptr<impl>()->set_value(std::move(value));
+    this->template impl_ptr<impl>()->locked_set_value(std::move(value));
 }
 
 template <typename T>
