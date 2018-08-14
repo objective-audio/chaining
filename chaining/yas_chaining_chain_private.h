@@ -287,7 +287,8 @@ auto chain<Out, In, Begin, Syncable>::receive_null(receiver<> &receiver) {
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-auto chain<Out, In, Begin, Syncable>::guard(std::function<bool(Out const &value)> guarding) {
+chain<Out, Out, Begin, Syncable> chain<Out, In, Begin, Syncable>::guard(
+    std::function<bool(Out const &value)> guarding) {
     auto imp = impl_ptr<impl>();
     chaining::joint<Begin> &joint = imp->_joint;
     auto weak_joint = to_weak(joint);

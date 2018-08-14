@@ -40,7 +40,7 @@ struct chain : base {
     [[nodiscard]] auto receive(std::initializer_list<receiver<T>>);
     [[nodiscard]] auto receive_null(receiver<std::nullptr_t> &);
 
-    [[nodiscard]] auto guard(std::function<bool(Out const &)>);
+    [[nodiscard]] chain<Out, Out, Begin, Syncable> guard(std::function<bool(Out const &)>);
 
     template <typename F>
     [[nodiscard]] auto to(F);
