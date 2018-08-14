@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		B60813052123195500D86603 /* yas_to_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B60813042123195500D86603 /* yas_to_tests.mm */; };
 		B6081307212319CB00D86603 /* yas_sync_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6081306212319CB00D86603 /* yas_sync_tests.mm */; };
+		B608130921231A5000D86603 /* yas_receiver_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B608130821231A5000D86603 /* yas_receiver_tests.mm */; };
 		B608F0B621194162000A17BD /* yas_any.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B608F0B421194162000A17BD /* yas_any.cpp */; };
 		B67438C2211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BC211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm */; };
 		B67438C3211E6BCF0015E7D6 /* yas_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BD211E6BCF0015E7D6 /* yas_holder_tests.mm */; };
@@ -22,6 +23,7 @@
 /* Begin PBXFileReference section */
 		B60813042123195500D86603 /* yas_to_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_to_tests.mm; sourceTree = "<group>"; };
 		B6081306212319CB00D86603 /* yas_sync_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_sync_tests.mm; sourceTree = "<group>"; };
+		B608130821231A5000D86603 /* yas_receiver_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_receiver_tests.mm; sourceTree = "<group>"; };
 		B608F09721193F7E000A17BD /* yas_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_base.h; sourceTree = "<group>"; };
 		B608F09821193F7E000A17BD /* yas_base.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_base.cpp; sourceTree = "<group>"; };
 		B608F09921193F7E000A17BD /* yas_base_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_base_private.h; sourceTree = "<group>"; };
@@ -151,6 +153,7 @@
 			children = (
 				B608F0AF211940A0000A17BD /* Info.plist */,
 				B67438C0211E6BCF0015E7D6 /* yas_chain_tests.mm */,
+				B608130821231A5000D86603 /* yas_receiver_tests.mm */,
 				B60813042123195500D86603 /* yas_to_tests.mm */,
 				B6081306212319CB00D86603 /* yas_sync_tests.mm */,
 				B67438BC211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm */,
@@ -253,6 +256,7 @@
 				B67438C7211E6BCF0015E7D6 /* yas_fetcher_tests.mm in Sources */,
 				B67438C9211E6C900015E7D6 /* yas_protocol.cpp in Sources */,
 				B60813052123195500D86603 /* yas_to_tests.mm in Sources */,
+				B608130921231A5000D86603 /* yas_receiver_tests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
