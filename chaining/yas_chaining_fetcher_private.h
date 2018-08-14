@@ -10,13 +10,13 @@
 namespace yas::chaining {
 template <typename T>
 struct fetcher<T>::impl : sender_base<T>::impl {
-    std::function<opt_t<T>(void)> _sync_handler;
+    std::function<opt_t<T>(void)> _fetching_handler;
 
-    impl(std::function<opt_t<T>(void)> &&handler) : _sync_handler(std::move(handler)) {
+    impl(std::function<opt_t<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {
     }
 
     void sync(std::uintptr_t const key) override {
-        if (auto value = this->_sync_handler()) {
+        if (auto value = this->_fetching_handler()) {
             if (auto joint = this->joints.at(key).lock()) {
                 joint.call_first(*value);
             }
@@ -25,7 +25,7 @@ struct fetcher<T>::impl : sender_base<T>::impl {
 
     void broadcast() {
         if (auto lock = std::unique_lock<std::mutex>(this->_sync_mutex, std::try_to_lock); lock.owns_lock()) {
-            if (auto value = this->_sync_handler()) {
+            if (auto value = this->_fetching_handler()) {
                 for (auto &pair : this->joints) {
                     if (auto joint = pair.second.lock()) {
                         joint.call_first(*value);
