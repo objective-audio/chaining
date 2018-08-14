@@ -23,13 +23,13 @@ struct joint<T>::impl : joint_base::impl {
         }
     }
 
-    void sync() override {
+    void broadcast() override {
         if (auto sender = this->_weak_sender.lock()) {
             sender.chainable().sync(this->identifier());
         }
 
         for (auto &sub_joint : this->_sub_joints) {
-            sub_joint.sync();
+            sub_joint.broadcast();
         }
     }
 

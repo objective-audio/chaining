@@ -14,7 +14,7 @@ class chain;
 
 struct joint_base : base {
     struct impl : base::impl {
-        virtual void sync() = 0;
+        virtual void broadcast() = 0;
     };
 
     joint_base(std::shared_ptr<impl> &&ptr) : base(std::move(ptr)) {
@@ -23,8 +23,8 @@ struct joint_base : base {
     joint_base(std::nullptr_t) : base(nullptr) {
     }
 
-    void sync() {
-        impl_ptr<impl>()->sync();
+    void broadcast() {
+        impl_ptr<impl>()->broadcast();
     }
 };
 

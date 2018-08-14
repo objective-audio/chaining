@@ -15,7 +15,7 @@ struct typed_observer<Begin>::impl : observer::impl {
     }
 
     void sync() override {
-        this->_joint.sync();
+        this->_joint.broadcast();
     }
 
     chaining::joint<Begin> _joint;
