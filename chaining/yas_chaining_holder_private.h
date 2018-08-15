@@ -91,7 +91,7 @@ void holder<T>::set_value(T value) {
 
 template <typename T>
 chain<T, T, T, true> holder<T>::chain() {
-    return this->template impl_ptr<impl>()->template begin<true>(*this);
+    return this->template impl_ptr<impl>()->template chain<true>(*this);
 }
 
 template <typename T>

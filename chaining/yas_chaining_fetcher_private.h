@@ -68,7 +68,7 @@ void fetcher<T>::broadcast() const {
 
 template <typename T>
 chaining::chain<T, T, T, true> fetcher<T>::chain() {
-    return this->template impl_ptr<impl>()->template begin<true>(*this);
+    return this->template impl_ptr<impl>()->template chain<true>(*this);
 }
 
 template <typename T>

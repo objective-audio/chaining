@@ -56,7 +56,7 @@ void notifier<T>::notify(T const &value) {
 
 template <typename T>
 chain<T, T, T, false> notifier<T>::chain() {
-    return this->template impl_ptr<impl>()->template begin<false>(*this);
+    return this->template impl_ptr<impl>()->template chain<false>(*this);
 }
 
 template <typename T>

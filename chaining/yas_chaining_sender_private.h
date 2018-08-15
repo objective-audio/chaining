@@ -24,7 +24,7 @@ struct sender_base<T>::impl : base::impl, sender_chainable<T>::impl {
     }
 
     template <bool Syncable>
-    chain<T, T, T, Syncable> begin(sender_base<T> &sender) {
+    chain<T, T, T, Syncable> chain(sender_base<T> &sender) {
         chaining::joint<T> joint{to_weak(sender)};
         this->joints.insert(std::make_pair(joint.identifier(), to_weak(joint)));
         return joint.template chain<Syncable>();
