@@ -28,13 +28,13 @@ struct any_observer : base {
 };
 
 template <typename Begin>
-struct typed_observer : any_observer {
+struct observer : any_observer {
     class impl;
 
-    typed_observer(joint<Begin>);
-    typed_observer(std::nullptr_t);
+    observer(joint<Begin>);
+    observer(std::nullptr_t);
 
-    ~typed_observer() final;
+    ~observer() final;
 
     [[nodiscard]] chaining::joint<Begin> &joint();
 };

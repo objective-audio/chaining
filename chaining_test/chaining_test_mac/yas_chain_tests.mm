@@ -147,7 +147,7 @@ using namespace yas;
 
     std::string received = "";
 
-    chaining::typed_observer<int> observer =
+    chaining::observer<int> observer =
         normalized_chain.perform([&received](std::string const &value) { received = value; }).end();
 
     notifier.notify(10);

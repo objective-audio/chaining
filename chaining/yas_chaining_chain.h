@@ -9,7 +9,7 @@
 
 namespace yas::chaining {
 template <typename Begin>
-struct typed_observer;
+struct observer;
 template <typename T>
 struct receiver;
 template <typename T>
@@ -58,8 +58,8 @@ struct chain : base {
     template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable>
     [[nodiscard]] auto combine(chain<SubOut, SubIn, SubBegin, SubSyncable>);
 
-    [[nodiscard]] typed_observer<Begin> end();
-    [[nodiscard]] typed_observer<Begin> sync();
+    [[nodiscard]] observer<Begin> end();
+    [[nodiscard]] observer<Begin> sync();
 };
 
 template <typename T, bool Syncable>

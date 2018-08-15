@@ -188,16 +188,16 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
         });
     }
 
-    chaining::typed_observer<Begin> _end() {
+    chaining::observer<Begin> _end() {
         this->_joint.template push_handler<In>([handler = this->_handler](In const &value) { handler(value); });
-        return typed_observer<Begin>(this->_joint);
+        return observer<Begin>(this->_joint);
     }
 
-    chaining::typed_observer<Begin> end() {
+    chaining::observer<Begin> end() {
         return this->_end();
     }
 
-    chaining::typed_observer<Begin> broadcast() {
+    chaining::observer<Begin> broadcast() {
         static_assert(Syncable, "Syncable must be true.");
 
         auto observer = this->_end();
@@ -399,12 +399,12 @@ auto chain<Out, In, Begin, Syncable>::combine(chain<SubOut, SubIn, SubBegin, Sub
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-typed_observer<Begin> chain<Out, In, Begin, Syncable>::end() {
+observer<Begin> chain<Out, In, Begin, Syncable>::end() {
     return impl_ptr<impl>()->end();
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-typed_observer<Begin> chain<Out, In, Begin, Syncable>::sync() {
+observer<Begin> chain<Out, In, Begin, Syncable>::sync() {
     return impl_ptr<impl>()->broadcast();
 }
 }  // namespace yas::chaining

@@ -10,7 +10,7 @@
 
 namespace yas::chaining {
 template <typename Begin>
-struct typed_observer<Begin>::impl : any_observer::impl {
+struct observer<Begin>::impl : any_observer::impl {
     impl(chaining::joint<Begin> &&joint) : _joint(std::move(joint)) {
     }
 
@@ -22,19 +22,18 @@ struct typed_observer<Begin>::impl : any_observer::impl {
 };
 
 template <typename Begin>
-typed_observer<Begin>::typed_observer(chaining::joint<Begin> joint)
-    : any_observer(std::make_shared<impl>(std::move(joint))) {
+observer<Begin>::observer(chaining::joint<Begin> joint) : any_observer(std::make_shared<impl>(std::move(joint))) {
 }
 
 template <typename Begin>
-typed_observer<Begin>::typed_observer(std::nullptr_t) : any_observer(nullptr) {
+observer<Begin>::observer(std::nullptr_t) : any_observer(nullptr) {
 }
 
 template <typename Begin>
-typed_observer<Begin>::~typed_observer() = default;
+observer<Begin>::~observer() = default;
 
 template <typename Begin>
-chaining::joint<Begin> &typed_observer<Begin>::joint() {
+chaining::joint<Begin> &observer<Begin>::joint() {
     return impl_ptr<impl>()->_joint;
 }
 }  // namespace yas::chaining
