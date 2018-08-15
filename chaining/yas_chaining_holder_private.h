@@ -21,20 +21,13 @@ struct holder<T>::impl : sender_base<T>::impl {
         if (auto lock = std::unique_lock<std::mutex>(this->_set_mutex, std::try_to_lock); lock.owns_lock()) {
             if (this->_value != value) {
                 this->_value = std::move(value);
-
-                for (auto &pair : this->joints) {
-                    if (auto joint = pair.second.lock()) {
-                        joint.call_first(this->_value);
-                    }
-                }
+                this->broadcast(this->_value);
             }
         }
     }
 
     void sync(std::uintptr_t const key) override {
-        if (auto joint = this->joints.at(key).lock()) {
-            joint.call_first(this->_value);
-        }
+        this->send_value_to_target(this->_value, key);
     }
 
     chaining::receiver<T> &receiver() {

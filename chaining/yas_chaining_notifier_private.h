@@ -12,11 +12,7 @@ template <typename T>
 struct notifier<T>::impl : sender_base<T>::impl {
     void locked_send_value(T const &value) {
         if (auto lock = std::unique_lock<std::mutex>(this->_send_mutex, std::try_to_lock); lock.owns_lock()) {
-            for (auto &pair : this->joints) {
-                if (auto joint = pair.second.lock()) {
-                    joint.call_first(value);
-                }
-            }
+            this->broadcast(value);
         }
     }
 

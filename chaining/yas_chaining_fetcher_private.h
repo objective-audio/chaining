@@ -17,20 +17,14 @@ struct fetcher<T>::impl : sender_base<T>::impl {
 
     void sync(std::uintptr_t const key) override {
         if (auto value = this->_fetching_handler()) {
-            if (auto joint = this->joints.at(key).lock()) {
-                joint.call_first(*value);
-            }
+            this->send_value_to_target(*value, key);
         }
     }
 
-    void broadcast() {
+    void locked_broadcast() {
         if (auto lock = std::unique_lock<std::mutex>(this->_sync_mutex, std::try_to_lock); lock.owns_lock()) {
             if (auto value = this->_fetching_handler()) {
-                for (auto &pair : this->joints) {
-                    if (auto joint = pair.second.lock()) {
-                        joint.call_first(*value);
-                    }
-                }
+                this->broadcast(*value);
             }
         }
     }
@@ -63,7 +57,7 @@ fetcher<T>::fetcher(std::nullptr_t) : sender_base<T>(nullptr) {
 
 template <typename T>
 void fetcher<T>::broadcast() const {
-    this->template impl_ptr<impl>()->broadcast();
+    this->template impl_ptr<impl>()->locked_broadcast();
 }
 
 template <typename T>

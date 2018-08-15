@@ -4,9 +4,10 @@
 
 #pragma once
 
-#include <unordered_map>
+#include <vector>
 #include "yas_chaining_joint.h"
 #include "yas_chaining_sender_protocol.h"
+#include "yas_stl_utils.h"
 
 namespace yas::chaining {
 template <typename Out, typename In, typename Begin, bool Syncable>
@@ -14,10 +15,26 @@ class chain;
 
 template <typename T>
 struct sender_base<T>::impl : base::impl, sender_chainable<T>::impl {
-    std::unordered_map<std::uintptr_t, weak<joint<T>>> joints;
+    void broadcast(T const &value) override {
+        for (weak<joint<T>> const &weak_joint : this->_joints) {
+            if (joint<T> joint = weak_joint.lock()) {
+                joint.call_first(value);
+            }
+        }
+    }
+
+    void send_value_to_target(T const &value, std::uintptr_t const key) override {
+        for (weak<joint<T>> const &weak_joint : this->_joints) {
+            if (weak_joint.identifier() == key) {
+                if (joint<T> joint = weak_joint.lock()) {
+                    joint.call_first(value);
+                }
+            }
+        }
+    }
 
     void erase_joint(std::uintptr_t const key) override {
-        this->joints.erase(key);
+        erase_if(this->_joints, [key](auto const &weak_joint) { return weak_joint.identifier() == key; });
     }
 
     void sync(std::uintptr_t const key) override {
@@ -26,9 +43,12 @@ struct sender_base<T>::impl : base::impl, sender_chainable<T>::impl {
     template <bool Syncable>
     chain<T, T, T, Syncable> chain(sender_base<T> &sender) {
         chaining::joint<T> joint{to_weak(sender)};
-        this->joints.insert(std::make_pair(joint.identifier(), to_weak(joint)));
+        this->_joints.emplace_back(to_weak(joint));
         return joint.template chain<Syncable>();
     }
+
+   private:
+    std::vector<weak<joint<T>>> _joints;
 };
 
 template <typename T>
