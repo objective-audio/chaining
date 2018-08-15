@@ -14,7 +14,7 @@ struct observer<Begin>::impl : any_observer::impl {
     impl(chaining::joint<Begin> &&joint) : _joint(std::move(joint)) {
     }
 
-    void sync() override {
+    void broadcast() override {
         this->_joint.broadcast();
     }
 

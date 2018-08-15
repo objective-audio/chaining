@@ -201,7 +201,7 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
         static_assert(Syncable, "Syncable must be true.");
 
         auto observer = this->_end();
-        observer.sync();
+        observer.broadcast();
         return observer;
     }
 };

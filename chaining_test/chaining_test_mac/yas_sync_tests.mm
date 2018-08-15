@@ -27,7 +27,7 @@ using namespace yas;
     int received = -1;
 
     auto chain = fetcher.chain().perform([&received](int const &value) { received = value; }).end();
-    chain.sync();
+    chain.broadcast();
 
     XCTAssertEqual(received, 100);
 }
@@ -38,7 +38,7 @@ using namespace yas;
     int received = -1;
 
     chaining::any_observer chain = fetcher.chain().perform([&received](int const &value) { received = value; }).end();
-    chain.sync();
+    chain.broadcast();
 
     XCTAssertEqual(received, 100);
 }
@@ -52,7 +52,7 @@ using namespace yas;
     auto chain1 = fetcher.chain().perform([&received1](int const &value) { received1 = value; }).end();
     auto chain2 = fetcher.chain().perform([&received2](int const &value) { received2 = value; }).end();
 
-    chain1.sync();
+    chain1.broadcast();
 
     XCTAssertEqual(received1, 100);
     XCTAssertEqual(received2, -1);

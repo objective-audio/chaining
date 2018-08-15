@@ -12,14 +12,14 @@ class joint;
 
 struct any_observer : base {
     struct impl : base::impl {
-        virtual void sync() = 0;
+        virtual void broadcast() = 0;
     };
 
     any_observer(std::nullptr_t) : base(nullptr) {
     }
 
-    void sync() {
-        impl_ptr<impl>()->sync();
+    void broadcast() {
+        impl_ptr<impl>()->broadcast();
     }
 
    protected:
