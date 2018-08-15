@@ -39,4 +39,28 @@ using namespace yas::chaining;
     XCTAssertEqual(received, 1);
 }
 
+- (void)test_invalidate_with_sub_joints {
+    holder<int> main_holder{1};
+    holder<int> sub_holder{2};
+
+    int received = 0;
+
+    any_observer observer = main_holder.chain()
+                                .merge(sub_holder.chain())
+                                .perform([&received](int const &value) { received = value; })
+                                .sync();
+
+    XCTAssertEqual(received, 2);
+
+    observer.invalidate();
+
+    main_holder.set_value(3);
+
+    XCTAssertEqual(received, 2);
+
+    sub_holder.set_value(4);
+
+    XCTAssertEqual(received, 2);
+}
+
 @end
