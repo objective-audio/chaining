@@ -13,6 +13,7 @@ class joint;
 struct any_observer : base {
     struct impl : base::impl {
         virtual void broadcast() = 0;
+        virtual void invalidate() = 0;
     };
 
     any_observer(std::nullptr_t) : base(nullptr) {
@@ -20,6 +21,10 @@ struct any_observer : base {
 
     void broadcast() {
         impl_ptr<impl>()->broadcast();
+    }
+
+    void invalidate() {
+        impl_ptr<impl>()->invalidate();
     }
 
    protected:

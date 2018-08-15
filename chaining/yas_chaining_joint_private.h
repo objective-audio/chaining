@@ -23,6 +23,20 @@ struct joint<T>::impl : joint_base::impl {
         }
     }
 
+    void invalidate() override {
+        for (joint_base &sub_joint : this->_sub_joints) {
+            sub_joint.invalidate();
+        }
+
+        if (sender_base<T> sender = this->_weak_sender.lock()) {
+            sender.chainable().erase_joint(this->identifier());
+        }
+
+        this->_weak_sender = nullptr;
+        this->_handlers.clear();
+        this->_sub_joints.clear();
+    }
+
     void broadcast() override {
         if (auto sender = this->_weak_sender.lock()) {
             sender.chainable().sync(this->identifier());
@@ -75,6 +89,11 @@ joint<T>::~joint() {
 template <typename T>
 void joint<T>::call_first(T const &value) {
     impl_ptr<impl>()->call_first(value);
+}
+
+template <typename T>
+void joint<T>::invalidate() {
+    impl_ptr<impl>()->invalidate();
 }
 
 template <typename T>

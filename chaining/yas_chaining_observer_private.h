@@ -18,6 +18,10 @@ struct observer<Begin>::impl : any_observer::impl {
         this->_joint.broadcast();
     }
 
+    void invalidate() override {
+        this->_joint.invalidate();
+    }
+
     chaining::joint<Begin> _joint;
 };
 
