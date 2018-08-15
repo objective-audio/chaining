@@ -13,7 +13,7 @@ template <typename T>
 class receiver;
 
 template <typename T>
-struct holder : sender_base<T> {
+struct holder : sender<T> {
     class impl;
 
     holder(T);

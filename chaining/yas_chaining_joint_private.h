@@ -10,9 +10,9 @@
 namespace yas::chaining {
 template <typename T>
 struct joint<T>::impl : any_joint::impl {
-    weak<sender_base<T>> _weak_sender;
+    weak<sender<T>> _weak_sender;
 
-    impl(weak<sender_base<T>> &&weak_sender) : _weak_sender(std::move(weak_sender)) {
+    impl(weak<sender<T>> &&weak_sender) : _weak_sender(std::move(weak_sender)) {
     }
 
     void call_first(T const &value) {
@@ -28,7 +28,7 @@ struct joint<T>::impl : any_joint::impl {
             sub_joint.invalidate();
         }
 
-        if (sender_base<T> sender = this->_weak_sender.lock()) {
+        if (sender<T> sender = this->_weak_sender.lock()) {
             sender.chainable().erase_joint(this->identifier());
         }
 
@@ -69,7 +69,7 @@ struct joint<T>::impl : any_joint::impl {
 };
 
 template <typename T>
-joint<T>::joint(weak<sender_base<T>> weak_sender) : any_joint(std::make_shared<impl>(std::move(weak_sender))) {
+joint<T>::joint(weak<sender<T>> weak_sender) : any_joint(std::make_shared<impl>(std::move(weak_sender))) {
 }
 
 template <typename T>

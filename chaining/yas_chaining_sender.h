@@ -11,15 +11,15 @@ template <typename T>
 class sender_chainable;
 
 template <typename T>
-struct sender_base : base {
+struct sender : base {
     class impl;
 
-    sender_base(std::nullptr_t);
+    sender(std::nullptr_t);
 
     [[nodiscard]] sender_chainable<T> chainable();
 
    protected:
-    sender_base(std::shared_ptr<impl> &&);
+    sender(std::shared_ptr<impl> &&);
 
    private:
     sender_chainable<T> _chainable = nullptr;

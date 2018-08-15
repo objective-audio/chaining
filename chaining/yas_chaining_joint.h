@@ -8,7 +8,7 @@
 
 namespace yas::chaining {
 template <typename T>
-class sender_base;
+class sender;
 template <typename Out, typename In, typename Begin, bool Syncable>
 class chain;
 
@@ -37,7 +37,7 @@ template <typename T>
 struct joint : any_joint {
     class impl;
 
-    joint(weak<sender_base<T>>);
+    joint(weak<sender<T>>);
     joint(std::nullptr_t);
 
     ~joint() final;

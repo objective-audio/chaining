@@ -9,7 +9,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct fetcher<T>::impl : sender_base<T>::impl {
+struct fetcher<T>::impl : sender<T>::impl {
     std::function<opt_t<T>(void)> _fetching_handler;
 
     impl(std::function<opt_t<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {
@@ -47,12 +47,11 @@ struct fetcher<T>::impl : sender_base<T>::impl {
 };
 
 template <typename T>
-fetcher<T>::fetcher(std::function<opt_t<T>(void)> handler)
-    : sender_base<T>(std::make_shared<impl>(std::move(handler))) {
+fetcher<T>::fetcher(std::function<opt_t<T>(void)> handler) : sender<T>(std::make_shared<impl>(std::move(handler))) {
 }
 
 template <typename T>
-fetcher<T>::fetcher(std::nullptr_t) : sender_base<T>(nullptr) {
+fetcher<T>::fetcher(std::nullptr_t) : sender<T>(nullptr) {
 }
 
 template <typename T>

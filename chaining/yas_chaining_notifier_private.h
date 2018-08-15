@@ -9,7 +9,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct notifier<T>::impl : sender_base<T>::impl {
+struct notifier<T>::impl : sender<T>::impl {
     void locked_send_value(T const &value) {
         if (auto lock = std::unique_lock<std::mutex>(this->_send_mutex, std::try_to_lock); lock.owns_lock()) {
             this->broadcast(value);
@@ -34,15 +34,15 @@ struct notifier<T>::impl : sender_base<T>::impl {
 };
 
 template <typename T>
-notifier<T>::notifier() : sender_base<T>(std::make_shared<impl>()) {
+notifier<T>::notifier() : sender<T>(std::make_shared<impl>()) {
 }
 
 template <typename T>
-notifier<T>::notifier(std::shared_ptr<impl> &&impl) : sender_base<T>(std::move(impl)) {
+notifier<T>::notifier(std::shared_ptr<impl> &&impl) : sender<T>(std::move(impl)) {
 }
 
 template <typename T>
-notifier<T>::notifier(std::nullptr_t) : sender_base<T>(nullptr) {
+notifier<T>::notifier(std::nullptr_t) : sender<T>(nullptr) {
 }
 
 template <typename T>

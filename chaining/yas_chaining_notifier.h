@@ -13,7 +13,7 @@ template <typename T>
 struct receiver;
 
 template <typename T>
-struct notifier : sender_base<T> {
+struct notifier : sender<T> {
     class impl;
 
     notifier();

@@ -14,7 +14,7 @@ template <typename Out, typename In, typename Begin, bool Syncable>
 class chain;
 
 template <typename T>
-struct sender_base<T>::impl : base::impl, sender_chainable<T>::impl {
+struct sender<T>::impl : base::impl, sender_chainable<T>::impl {
     void broadcast(T const &value) override {
         for (weak<joint<T>> const &weak_joint : this->_joints) {
             if (joint<T> joint = weak_joint.lock()) {
@@ -41,7 +41,7 @@ struct sender_base<T>::impl : base::impl, sender_chainable<T>::impl {
     }
 
     template <bool Syncable>
-    chain<T, T, T, Syncable> chain(sender_base<T> &sender) {
+    chain<T, T, T, Syncable> chain(sender<T> &sender) {
         chaining::joint<T> joint{to_weak(sender)};
         this->_joints.emplace_back(to_weak(joint));
         return joint.template chain<Syncable>();
@@ -52,15 +52,15 @@ struct sender_base<T>::impl : base::impl, sender_chainable<T>::impl {
 };
 
 template <typename T>
-sender_base<T>::sender_base(std::shared_ptr<impl> &&impl) : base(std::move(impl)) {
+sender<T>::sender(std::shared_ptr<impl> &&impl) : base(std::move(impl)) {
 }
 
 template <typename T>
-sender_base<T>::sender_base(std::nullptr_t) : base(nullptr) {
+sender<T>::sender(std::nullptr_t) : base(nullptr) {
 }
 
 template <typename T>
-sender_chainable<T> sender_base<T>::chainable() {
+sender_chainable<T> sender<T>::chainable() {
     if (!this->_chainable) {
         this->_chainable = sender_chainable<T>{impl_ptr<typename sender_chainable<T>::impl>()};
     }
