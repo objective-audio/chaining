@@ -18,6 +18,7 @@
 		B67438C7211E6BCF0015E7D6 /* yas_fetcher_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438C1211E6BCF0015E7D6 /* yas_fetcher_tests.mm */; };
 		B67438C8211E6C8C0015E7D6 /* yas_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B608F09821193F7E000A17BD /* yas_base.cpp */; };
 		B67438C9211E6C900015E7D6 /* yas_protocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B608F09C21193F93000A17BD /* yas_protocol.cpp */; };
+		B6B154872123CC9C0051026A /* yas_observer_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6B154862123CC9C0051026A /* yas_observer_tests.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -66,6 +67,7 @@
 		B67438C0211E6BCF0015E7D6 /* yas_chain_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_chain_tests.mm; sourceTree = "<group>"; };
 		B67438C1211E6BCF0015E7D6 /* yas_fetcher_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_fetcher_tests.mm; sourceTree = "<group>"; };
 		B6A5A1F3212117D500F86C29 /* yas_chaining_sender_protocol_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender_protocol_private.h; sourceTree = "<group>"; };
+		B6B154862123CC9C0051026A /* yas_observer_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observer_tests.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -160,6 +162,7 @@
 				B67438C1211E6BCF0015E7D6 /* yas_fetcher_tests.mm */,
 				B67438BD211E6BCF0015E7D6 /* yas_holder_tests.mm */,
 				B67438BF211E6BCF0015E7D6 /* yas_notifier_tests.mm */,
+				B6B154862123CC9C0051026A /* yas_observer_tests.mm */,
 			);
 			path = chaining_test_mac;
 			sourceTree = "<group>";
@@ -255,6 +258,7 @@
 				B67438C5211E6BCF0015E7D6 /* yas_notifier_tests.mm in Sources */,
 				B67438C7211E6BCF0015E7D6 /* yas_fetcher_tests.mm in Sources */,
 				B67438C9211E6C900015E7D6 /* yas_protocol.cpp in Sources */,
+				B6B154872123CC9C0051026A /* yas_observer_tests.mm in Sources */,
 				B60813052123195500D86603 /* yas_to_tests.mm in Sources */,
 				B608130921231A5000D86603 /* yas_receiver_tests.mm in Sources */,
 			);
