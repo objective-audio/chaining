@@ -63,4 +63,10 @@ using namespace yas::chaining;
     XCTAssertEqual(received, 2);
 }
 
+- (void)test_create_any_observer_with_null {
+    any_observer observer{nullptr};
+
+    XCTAssertFalse(observer);
+}
+
 @end
