@@ -44,7 +44,7 @@ using namespace yas;
     chaining::receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
     std::array<chaining::receiver<int>, 2> receivers{receiver0, receiver1};
 
-    chaining::observer chain = notifier.chain().receive(receivers).end();
+    chaining::any_observer chain = notifier.chain().receive(receivers).end();
 
     notifier.notify(std::array<int, 2>{10, 20});
 
@@ -60,7 +60,7 @@ using namespace yas;
     chaining::receiver<int> receiver0{[&received0](int const &value) { received0 = value; }};
     chaining::receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
 
-    chaining::observer chain = notifier.chain().receive<0>(receiver0).receive<1>(receiver1).end();
+    chaining::any_observer chain = notifier.chain().receive<0>(receiver0).receive<1>(receiver1).end();
 
     notifier.notify(std::array<int, 2>{10, 20});
 
@@ -77,7 +77,7 @@ using namespace yas;
     chaining::receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
     std::vector<chaining::receiver<int>> receivers{receiver0, receiver1};
 
-    chaining::observer chain = notifier.chain().receive(receivers).end();
+    chaining::any_observer chain = notifier.chain().receive(receivers).end();
 
     notifier.notify(std::vector<int>{30, 40});
 
@@ -93,7 +93,7 @@ using namespace yas;
     chaining::receiver<int> receiver0{[&received0](int const &value) { received0 = value; }};
     chaining::receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
 
-    chaining::observer chain = notifier.chain().receive({receiver0, receiver1}).end();
+    chaining::any_observer chain = notifier.chain().receive({receiver0, receiver1}).end();
 
     notifier.notify(std::vector<int>{50, 60});
 

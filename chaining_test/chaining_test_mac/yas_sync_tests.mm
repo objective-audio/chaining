@@ -37,7 +37,7 @@ using namespace yas;
 
     int received = -1;
 
-    chaining::observer chain = fetcher.chain().perform([&received](int const &value) { received = value; }).end();
+    chaining::any_observer chain = fetcher.chain().perform([&received](int const &value) { received = value; }).end();
     chain.sync();
 
     XCTAssertEqual(received, 100);

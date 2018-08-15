@@ -10,12 +10,12 @@ namespace yas::chaining {
 template <typename T>
 class joint;
 
-struct observer : base {
+struct any_observer : base {
     struct impl : base::impl {
         virtual void sync() = 0;
     };
 
-    observer(std::nullptr_t) : base(nullptr) {
+    any_observer(std::nullptr_t) : base(nullptr) {
     }
 
     void sync() {
@@ -23,12 +23,12 @@ struct observer : base {
     }
 
    protected:
-    observer(std::shared_ptr<impl> &&impl) : base(std::move(impl)) {
+    any_observer(std::shared_ptr<impl> &&impl) : base(std::move(impl)) {
     }
 };
 
 template <typename Begin>
-struct typed_observer : observer {
+struct typed_observer : any_observer {
     class impl;
 
     typed_observer(joint<Begin>);
