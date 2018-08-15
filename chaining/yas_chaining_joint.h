@@ -12,16 +12,16 @@ class sender_base;
 template <typename Out, typename In, typename Begin, bool Syncable>
 class chain;
 
-struct joint_base : base {
+struct any_joint : base {
     struct impl : base::impl {
         virtual void broadcast() = 0;
         virtual void invalidate() = 0;
     };
 
-    joint_base(std::shared_ptr<impl> &&ptr) : base(std::move(ptr)) {
+    any_joint(std::shared_ptr<impl> &&ptr) : base(std::move(ptr)) {
     }
 
-    joint_base(std::nullptr_t) : base(nullptr) {
+    any_joint(std::nullptr_t) : base(nullptr) {
     }
 
     void broadcast() {
@@ -34,7 +34,7 @@ struct joint_base : base {
 };
 
 template <typename T>
-struct joint : joint_base {
+struct joint : any_joint {
     class impl;
 
     joint(weak<sender_base<T>>);
@@ -53,7 +53,7 @@ struct joint : joint_base {
     std::size_t handlers_size() const;
     template <typename P>
     std::function<void(P const &)> const &handler(std::size_t const) const;
-    void add_sub_joint(joint_base);
+    void add_sub_joint(any_joint);
 };
 }  // namespace yas::chaining
 

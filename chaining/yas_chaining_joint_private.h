@@ -9,7 +9,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct joint<T>::impl : joint_base::impl {
+struct joint<T>::impl : any_joint::impl {
     weak<sender_base<T>> _weak_sender;
 
     impl(weak<sender_base<T>> &&weak_sender) : _weak_sender(std::move(weak_sender)) {
@@ -24,7 +24,7 @@ struct joint<T>::impl : joint_base::impl {
     }
 
     void invalidate() override {
-        for (joint_base &sub_joint : this->_sub_joints) {
+        for (any_joint &sub_joint : this->_sub_joints) {
             sub_joint.invalidate();
         }
 
@@ -59,21 +59,21 @@ struct joint<T>::impl : joint_base::impl {
         return this->_handlers.size();
     }
 
-    void add_sub_joint(joint_base &&sub_joint) {
+    void add_sub_joint(any_joint &&sub_joint) {
         this->_sub_joints.emplace_back(std::move(sub_joint));
     }
 
    private:
     std::vector<yas::any> _handlers;
-    std::vector<joint_base> _sub_joints;
+    std::vector<any_joint> _sub_joints;
 };
 
 template <typename T>
-joint<T>::joint(weak<sender_base<T>> weak_sender) : joint_base(std::make_shared<impl>(std::move(weak_sender))) {
+joint<T>::joint(weak<sender_base<T>> weak_sender) : any_joint(std::make_shared<impl>(std::move(weak_sender))) {
 }
 
 template <typename T>
-joint<T>::joint(std::nullptr_t) : joint_base(nullptr) {
+joint<T>::joint(std::nullptr_t) : any_joint(nullptr) {
 }
 
 template <typename T>
@@ -120,7 +120,7 @@ std::function<void(P const &)> const &joint<T>::handler(std::size_t const idx) c
 }
 
 template <typename T>
-void joint<T>::add_sub_joint(joint_base sub_joint) {
+void joint<T>::add_sub_joint(any_joint sub_joint) {
     impl_ptr<impl>()->add_sub_joint(std::move(sub_joint));
 }
 }  // namespace yas::chaining
