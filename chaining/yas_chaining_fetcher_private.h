@@ -21,11 +21,9 @@ struct fetcher<T>::impl : sender<T>::impl {
         }
     }
 
-    void locked_broadcast() {
-        if (auto lock = std::unique_lock<std::mutex>(this->_sync_mutex, std::try_to_lock); lock.owns_lock()) {
-            if (auto value = this->_fetching_handler()) {
-                this->broadcast(*value);
-            }
+    void _broadcast() {
+        if (auto value = this->_fetching_handler()) {
+            this->broadcast(*value);
         }
     }
 
@@ -42,7 +40,6 @@ struct fetcher<T>::impl : sender<T>::impl {
     }
 
    private:
-    std::mutex _sync_mutex;
     chaining::receiver<> _receiver{nullptr};
 };
 
@@ -56,7 +53,7 @@ fetcher<T>::fetcher(std::nullptr_t) : sender<T>(nullptr) {
 
 template <typename T>
 void fetcher<T>::broadcast() const {
-    this->template impl_ptr<impl>()->locked_broadcast();
+    this->template impl_ptr<impl>()->_broadcast();
 }
 
 template <typename T>
