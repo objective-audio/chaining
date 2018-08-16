@@ -21,6 +21,10 @@ struct fetcher<T>::impl : sender<T>::impl {
         }
     }
 
+    opt_t<T> fetched_value() {
+        return this->_fetching_handler();
+    }
+
     void _broadcast() {
         if (auto value = this->_fetching_handler()) {
             this->broadcast(*value);
@@ -49,6 +53,11 @@ fetcher<T>::fetcher(std::function<opt_t<T>(void)> handler) : sender<T>(std::make
 
 template <typename T>
 fetcher<T>::fetcher(std::nullptr_t) : sender<T>(nullptr) {
+}
+
+template <typename T>
+opt_t<T> fetcher<T>::fetched_value() const {
+    return this->template impl_ptr<impl>()->fetched_value();
 }
 
 template <typename T>
