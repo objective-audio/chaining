@@ -15,9 +15,9 @@ struct fetcher<T>::impl : sender<T>::impl {
     impl(std::function<opt_t<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {
     }
 
-    void sync(std::uintptr_t const key) override {
+    void fetch_for(any_joint const &joint) override {
         if (auto value = this->_fetching_handler()) {
-            this->send_value_to_target(*value, key);
+            this->send_value_to_target(*value, joint.identifier());
         }
     }
 

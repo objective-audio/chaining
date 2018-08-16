@@ -39,7 +39,7 @@ struct joint<T>::impl : any_joint::impl {
 
     void broadcast() override {
         if (auto sender = this->_weak_sender.lock()) {
-            sender.chainable().sync(this->identifier());
+            sender.chainable().fetch_for(cast<joint<T>>());
         }
 
         for (auto &sub_joint : this->_sub_joints) {

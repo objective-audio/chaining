@@ -37,7 +37,7 @@ struct sender<T>::impl : base::impl, sender_chainable<T>::impl {
         erase_if(this->_joints, [key](auto const &weak_joint) { return weak_joint.identifier() == key; });
     }
 
-    void sync(std::uintptr_t const key) override {
+    void fetch_for(any_joint const &joint) override {
     }
 
     template <bool Syncable>

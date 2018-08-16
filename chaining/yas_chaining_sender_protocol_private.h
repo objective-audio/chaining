@@ -29,7 +29,7 @@ void sender_chainable<T>::erase_joint(std::uintptr_t const key) {
 }
 
 template <typename T>
-void sender_chainable<T>::sync(std::uintptr_t const key) {
-    impl_ptr<impl>()->sync(key);
+void sender_chainable<T>::fetch_for(any_joint const &joint) {
+    impl_ptr<impl>()->fetch_for(joint);
 }
 }  // namespace yas::chaining

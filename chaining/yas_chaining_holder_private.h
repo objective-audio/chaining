@@ -26,8 +26,8 @@ struct holder<T>::impl : sender<T>::impl {
         }
     }
 
-    void sync(std::uintptr_t const key) override {
-        this->send_value_to_target(this->_value, key);
+    void fetch_for(any_joint const &joint) override {
+        this->send_value_to_target(this->_value, joint.identifier());
     }
 
     chaining::receiver<T> &receiver() {
