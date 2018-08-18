@@ -45,6 +45,22 @@ using namespace yas::chaining;
 }
 
 - (void)test_remove_observer {
+    holder<int> holder{1};
+    int received = 0;
+
+    observer_pool pool;
+
+    any_observer observer = holder.chain().perform([&received](int const &value) { received = value; }).sync();
+
+    pool.add_observer(observer);
+
+    XCTAssertEqual(received, 1);
+
+    pool.remove_observer(observer);
+
+    holder.set_value(2);
+
+    XCTAssertEqual(received, 1);
 }
 
 - (void)test_invalidate {

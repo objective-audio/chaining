@@ -17,8 +17,9 @@ struct observer_pool::impl : base::impl {
         this->_observers.emplace(observer.identifier(), std::move(observer));
     }
 
-    void remove_observer(any_observer const &observer) {
+    void remove_observer(any_observer &observer) {
         if (this->_observers.count(observer.identifier())) {
+            observer.invalidate();
             this->_observers.erase(observer.identifier());
         }
     }
@@ -45,7 +46,7 @@ void observer_pool::add_observer(any_observer observer) {
     impl_ptr<impl>()->add_observer(std::move(observer));
 }
 
-void observer_pool::remove_observer(any_observer const &observer) {
+void observer_pool::remove_observer(any_observer &observer) {
     impl_ptr<impl>()->remove_observer(observer);
 }
 

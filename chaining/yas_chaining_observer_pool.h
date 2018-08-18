@@ -14,7 +14,7 @@ struct observer_pool : base {
     observer_pool(std::nullptr_t);
 
     void add_observer(any_observer);
-    void remove_observer(any_observer const &);
+    void remove_observer(any_observer &);
 
     void invalidate();
 };
