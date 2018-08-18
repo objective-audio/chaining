@@ -24,15 +24,24 @@ using namespace yas::chaining;
 }
 
 - (void)test_add_observer {
-    observer_pool pool;
-
     holder<int> holder{1};
-
     int received = 0;
 
-    pool.add_observer(holder.chain().perform([&received](int const &value) { received = value; }).sync());
+    {
+        observer_pool pool;
 
-    XCTAssertEqual(received, 1);
+        pool.add_observer(holder.chain().perform([&received](int const &value) { received = value; }).sync());
+
+        XCTAssertEqual(received, 1);
+
+        holder.set_value(2);
+
+        XCTAssertEqual(received, 2);
+    }
+
+    holder.set_value(3);
+
+    XCTAssertEqual(received, 2);
 }
 
 - (void)test_remove_observer {
