@@ -13,6 +13,7 @@
 		B608F0B621194162000A17BD /* yas_any.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B608F0B421194162000A17BD /* yas_any.cpp */; };
 		B61643E32123EDFB002A182F /* yas_stl_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61643E02123EDFB002A182F /* yas_stl_utils.cpp */; };
 		B61643E62127C22C002A182F /* yas_chaining_any_observer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61643E42127C22C002A182F /* yas_chaining_any_observer.cpp */; };
+		B61643E92127C3FB002A182F /* yas_chaining_observer_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61643E72127C3FB002A182F /* yas_chaining_observer_pool.cpp */; };
 		B67438C2211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BC211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm */; };
 		B67438C3211E6BCF0015E7D6 /* yas_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BD211E6BCF0015E7D6 /* yas_holder_tests.mm */; };
 		B67438C5211E6BCF0015E7D6 /* yas_notifier_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BF211E6BCF0015E7D6 /* yas_notifier_tests.mm */; };
@@ -50,6 +51,8 @@
 		B61643E22123EDFB002A182F /* yas_stl_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_stl_utils.h; sourceTree = "<group>"; };
 		B61643E42127C22C002A182F /* yas_chaining_any_observer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_any_observer.cpp; sourceTree = "<group>"; };
 		B61643E52127C22C002A182F /* yas_chaining_any_observer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_any_observer.h; sourceTree = "<group>"; };
+		B61643E72127C3FB002A182F /* yas_chaining_observer_pool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_observer_pool.cpp; sourceTree = "<group>"; };
+		B61643E82127C3FB002A182F /* yas_chaining_observer_pool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_observer_pool.h; sourceTree = "<group>"; };
 		B6530872211EC6E200D2C655 /* yas_chaining_holder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_holder.h; sourceTree = "<group>"; };
 		B6530873211EC6F100D2C655 /* yas_chaining_holder_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_holder_private.h; sourceTree = "<group>"; };
 		B6530874211ECBA500D2C655 /* yas_chaining_fetcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher.h; sourceTree = "<group>"; };
@@ -133,6 +136,8 @@
 		B608F09F21193FD1000A17BD /* chaining */ = {
 			isa = PBXGroup;
 			children = (
+				B61643E42127C22C002A182F /* yas_chaining_any_observer.cpp */,
+				B61643E52127C22C002A182F /* yas_chaining_any_observer.h */,
 				B608F0A021193FD1000A17BD /* yas_chaining_chain_private.h */,
 				B608F0A321193FD1000A17BD /* yas_chaining_chain.h */,
 				B6530875211ECBB000D2C655 /* yas_chaining_fetcher_private.h */,
@@ -143,10 +148,10 @@
 				B6530886212120B300D2C655 /* yas_chaining_joint.h */,
 				B6530877211ECCC600D2C655 /* yas_chaining_notifier_private.h */,
 				B6530876211ECCBB00D2C655 /* yas_chaining_notifier.h */,
+				B61643E72127C3FB002A182F /* yas_chaining_observer_pool.cpp */,
+				B61643E82127C3FB002A182F /* yas_chaining_observer_pool.h */,
 				B6530879211ED27D00D2C655 /* yas_chaining_observer_private.h */,
 				B6530878211ED27200D2C655 /* yas_chaining_observer.h */,
-				B61643E42127C22C002A182F /* yas_chaining_any_observer.cpp */,
-				B61643E52127C22C002A182F /* yas_chaining_any_observer.h */,
 				B653087B211EFA4E00D2C655 /* yas_chaining_receiver_private.h */,
 				B6530884212027F800D2C655 /* yas_chaining_receiver_protocol_private.h */,
 				B6530888212131D600D2C655 /* yas_chaining_receiver_protocol.h */,
@@ -262,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B608F0B621194162000A17BD /* yas_any.cpp in Sources */,
+				B61643E92127C3FB002A182F /* yas_chaining_observer_pool.cpp in Sources */,
 				B67438C2211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm in Sources */,
 				B61643E32123EDFB002A182F /* yas_stl_utils.cpp in Sources */,
 				B67438C6211E6BCF0015E7D6 /* yas_chain_tests.mm in Sources */,
