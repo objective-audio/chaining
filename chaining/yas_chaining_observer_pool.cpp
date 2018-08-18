@@ -9,6 +9,10 @@ using namespace yas;
 using namespace yas::chaining;
 
 struct observer_pool::impl : base::impl {
+    ~impl() {
+        this->invalidate();
+    }
+
     void add_observer(any_observer &&observer) {
         this->_observers.emplace(observer.identifier(), std::move(observer));
     }
