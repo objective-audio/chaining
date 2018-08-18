@@ -97,12 +97,6 @@ void joint<T>::invalidate() {
 }
 
 template <typename T>
-template <bool Syncable>
-chain<T, T, T, Syncable> joint<T>::chain() {
-    return chaining::chain<T, T, T, Syncable>(*this);
-}
-
-template <typename T>
 template <typename P>
 void joint<T>::push_handler(std::function<void(P const &)> handler) {
     impl_ptr<impl>()->push_handler(std::move(handler));

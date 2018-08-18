@@ -45,9 +45,6 @@ struct joint : any_joint {
     void call_first(T const &);
     void invalidate();
 
-    template <bool Syncable>
-    [[nodiscard]] chain<T, T, T, Syncable> chain();
-
     template <typename P>
     void push_handler(std::function<void(P const &)>);
     std::size_t handlers_size() const;

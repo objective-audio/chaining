@@ -44,7 +44,7 @@ struct sender<T>::impl : base::impl, sender_chainable<T>::impl {
     chain<T, T, T, Syncable> chain(sender<T> &sender) {
         chaining::joint<T> joint{to_weak(sender)};
         this->_joints.emplace_back(to_weak(joint));
-        return joint.template chain<Syncable>();
+        return chaining::chain<T, T, T, Syncable>{std::move(joint)};
     }
 
    private:
