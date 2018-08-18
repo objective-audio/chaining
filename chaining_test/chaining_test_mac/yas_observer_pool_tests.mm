@@ -23,6 +23,12 @@ using namespace yas::chaining;
     [super tearDown];
 }
 
+- (void)test_create_with_null {
+    observer_pool pool{nullptr};
+
+    XCTAssertFalse(pool);
+}
+
 - (void)test_add_observer {
     holder<int> holder{1};
     int received = 0;
@@ -64,6 +70,20 @@ using namespace yas::chaining;
 }
 
 - (void)test_invalidate {
+    holder<int> holder{1};
+    int received = 0;
+
+    observer_pool pool;
+
+    pool.add_observer(holder.chain().perform([&received](int const &value) { received = value; }).sync());
+
+    XCTAssertEqual(received, 1);
+
+    pool.invalidate();
+
+    holder.set_value(2);
+
+    XCTAssertEqual(received, 1);
 }
 
 @end
