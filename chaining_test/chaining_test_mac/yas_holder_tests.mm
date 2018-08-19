@@ -99,4 +99,17 @@ using namespace yas::chaining;
     XCTAssertTrue(holder1a != holder2);
 }
 
+- (void)test_cast_immutable {
+    holder<int> holder{1};
+    immutable_holder<int> immutable = holder;
+
+    XCTAssertEqual(immutable.value(), 1);
+
+    int received = 0;
+
+    any_observer observer = immutable.chain().perform([&received](int const &value) { received = value; }).sync();
+
+    XCTAssertEqual(received, 1);
+}
+
 @end
