@@ -61,11 +61,15 @@ immutable_holder<T>::immutable_holder(std::shared_ptr<impl> &&impl) : sender<T>(
 }
 
 template <typename T>
-holder<T>::holder(T value) : sender<T>(std::make_shared<immutable_impl>(std::move(value))) {
+immutable_holder<T>::immutable_holder(std::nullptr_t) : sender<T>(nullptr) {
 }
 
 template <typename T>
-holder<T>::holder(std::nullptr_t) : sender<T>(nullptr) {
+holder<T>::holder(T value) : immutable_holder<T>(std::make_shared<immutable_impl>(std::move(value))) {
+}
+
+template <typename T>
+holder<T>::holder(std::nullptr_t) : immutable_holder<T>(nullptr) {
 }
 
 template <typename T>

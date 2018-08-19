@@ -18,10 +18,11 @@ struct immutable_holder : sender<T> {
 
    protected:
     immutable_holder(std::shared_ptr<impl> &&);
+    immutable_holder(std::nullptr_t);
 };
 
 template <typename T>
-struct holder : sender<T> {
+struct holder : immutable_holder<T> {
     holder(T);
     holder(std::nullptr_t);
 
