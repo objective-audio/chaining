@@ -9,7 +9,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct holder<T>::impl : sender<T>::impl {
+struct immutable_holder<T>::impl : sender<T>::impl {
     impl(T &&value) : _value(std::move(value)) {
     }
 
@@ -43,7 +43,7 @@ struct holder<T>::impl : sender<T>::impl {
     }
 
     virtual bool is_equal(std::shared_ptr<base::impl> const &rhs) const override {
-        if (auto rhs_impl = std::dynamic_pointer_cast<typename holder<T>::impl>(rhs)) {
+        if (auto rhs_impl = std::dynamic_pointer_cast<typename immutable_holder<T>::impl>(rhs)) {
             return this->_value == rhs_impl->_value;
         } else {
             return false;
@@ -57,7 +57,11 @@ struct holder<T>::impl : sender<T>::impl {
 };
 
 template <typename T>
-holder<T>::holder(T value) : sender<T>(std::make_shared<impl>(std::move(value))) {
+immutable_holder<T>::immutable_holder(std::shared_ptr<impl> &&impl) : sender<T>(std::move(impl)) {
+}
+
+template <typename T>
+holder<T>::holder(T value) : sender<T>(std::make_shared<immutable_impl>(std::move(value))) {
 }
 
 template <typename T>
@@ -69,26 +73,26 @@ holder<T>::~holder() = default;
 
 template <typename T>
 T const &holder<T>::value() const {
-    return this->template impl_ptr<impl>()->value();
+    return this->template impl_ptr<immutable_impl>()->value();
 }
 
 template <typename T>
 T &holder<T>::value() {
-    return this->template impl_ptr<impl>()->value();
+    return this->template impl_ptr<immutable_impl>()->value();
 }
 
 template <typename T>
 void holder<T>::set_value(T value) {
-    this->template impl_ptr<impl>()->locked_set_value(std::move(value));
+    this->template impl_ptr<immutable_impl>()->locked_set_value(std::move(value));
 }
 
 template <typename T>
 chain<T, T, T, true> holder<T>::chain() {
-    return this->template impl_ptr<impl>()->template chain<true>(*this);
+    return this->template impl_ptr<immutable_impl>()->template chain<true>(*this);
 }
 
 template <typename T>
 receiver<T> &holder<T>::receiver() {
-    return this->template impl_ptr<impl>()->receiver();
+    return this->template impl_ptr<immutable_impl>()->receiver();
 }
 }  // namespace yas::chaining
