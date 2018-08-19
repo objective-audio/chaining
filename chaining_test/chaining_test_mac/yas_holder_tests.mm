@@ -7,6 +7,7 @@
 #import "yas_chaining_notifier.h"
 
 using namespace yas;
+using namespace yas::chaining;
 
 @interface yas_flow_holder_tests : XCTestCase
 
@@ -23,7 +24,7 @@ using namespace yas;
 }
 
 - (void)test_getter_setter {
-    chaining::holder<int> holder{1};
+    holder<int> holder{1};
 
     XCTAssertEqual(holder.value(), 1);
 
@@ -33,7 +34,7 @@ using namespace yas;
 }
 
 - (void)test_chain {
-    chaining::holder<int> holder{10};
+    holder<int> holder{10};
 
     int received = -1;
 
@@ -47,8 +48,8 @@ using namespace yas;
 }
 
 - (void)test_receive {
-    chaining::holder<int> holder{100};
-    chaining::notifier<int> notifier;
+    holder<int> holder{100};
+    notifier<int> notifier;
 
     auto flow = notifier.chain().receive(holder.receiver()).end();
 
@@ -60,8 +61,8 @@ using namespace yas;
 }
 
 - (void)test_recursive_flow {
-    chaining::holder<int> holder1{123};
-    chaining::holder<int> holder2{456};
+    holder<int> holder1{123};
+    holder<int> holder2{456};
 
     auto flow1 = holder1.chain().receive(holder2.receiver()).sync();
 
@@ -85,9 +86,9 @@ using namespace yas;
 }
 
 - (void)test_is_equal {
-    chaining::holder<int> holder1a{1};
-    chaining::holder<int> holder1b{1};
-    chaining::holder<int> holder2{2};
+    holder<int> holder1a{1};
+    holder<int> holder1b{1};
+    holder<int> holder2{2};
 
     XCTAssertTrue(holder1a == holder1a);
     XCTAssertTrue(holder1a == holder1b);
