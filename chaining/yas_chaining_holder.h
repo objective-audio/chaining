@@ -18,6 +18,8 @@ struct immutable_holder : sender<T> {
 
     T const &value() const;
 
+    [[nodiscard]] chain<T, T, T, true> chain();
+
    protected:
     immutable_holder(std::shared_ptr<impl> &&);
     immutable_holder(std::nullptr_t);
@@ -32,8 +34,6 @@ struct holder : immutable_holder<T> {
 
     T &value();
     void set_value(T);
-
-    [[nodiscard]] chain<T, T, T, true> chain();
 
     [[nodiscard]] receiver<T> &receiver();
 
