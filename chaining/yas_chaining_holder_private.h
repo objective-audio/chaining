@@ -76,8 +76,8 @@ template <typename T>
 holder<T>::~holder() = default;
 
 template <typename T>
-T const &holder<T>::value() const {
-    return this->template impl_ptr<immutable_impl>()->value();
+T const &immutable_holder<T>::value() const {
+    return this->template impl_ptr<impl>()->value();
 }
 
 template <typename T>

@@ -16,6 +16,8 @@ template <typename T>
 struct immutable_holder : sender<T> {
     class impl;
 
+    T const &value() const;
+
    protected:
     immutable_holder(std::shared_ptr<impl> &&);
     immutable_holder(std::nullptr_t);
@@ -28,7 +30,6 @@ struct holder : immutable_holder<T> {
 
     ~holder() final;
 
-    T const &value() const;
     T &value();
     void set_value(T);
 
