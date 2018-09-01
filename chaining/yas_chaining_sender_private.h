@@ -61,9 +61,9 @@ sender<T>::sender(std::nullptr_t) : base(nullptr) {
 
 template <typename T>
 sendable<T> sender<T>::sendable() {
-    if (!this->_chainable) {
-        this->_chainable = chaining::sendable<T>{impl_ptr<typename chaining::sendable<T>::impl>()};
+    if (!this->_sendable) {
+        this->_sendable = chaining::sendable<T>{impl_ptr<typename chaining::sendable<T>::impl>()};
     }
-    return this->_chainable;
+    return this->_sendable;
 }
 }  // namespace yas::chaining

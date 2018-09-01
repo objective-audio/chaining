@@ -22,7 +22,7 @@ struct sender : base {
     sender(std::shared_ptr<impl> &&);
 
    private:
-    chaining::sendable<T> _chainable = nullptr;
+    chaining::sendable<T> _sendable = nullptr;
 };
 }  // namespace yas::chaining
 
