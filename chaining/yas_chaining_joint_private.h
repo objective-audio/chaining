@@ -29,7 +29,7 @@ struct joint<T>::impl : any_joint::impl {
         }
 
         if (sender<T> sender = this->_weak_sender.lock()) {
-            sender.chainable().erase_joint(this->identifier());
+            sender.sendable().erase_joint(this->identifier());
         }
 
         this->_weak_sender = nullptr;
@@ -39,7 +39,7 @@ struct joint<T>::impl : any_joint::impl {
 
     void broadcast() override {
         if (auto sender = this->_weak_sender.lock()) {
-            sender.chainable().fetch_for(cast<joint<T>>());
+            sender.sendable().fetch_for(cast<joint<T>>());
         }
 
         for (auto &sub_joint : this->_sub_joints) {
@@ -80,7 +80,7 @@ template <typename T>
 joint<T>::~joint() {
     if (impl_ptr() && impl_ptr().unique()) {
         if (auto sender = impl_ptr<impl>()->_weak_sender.lock()) {
-            sender.chainable().erase_joint(this->identifier());
+            sender.sendable().erase_joint(this->identifier());
         }
         impl_ptr().reset();
     }

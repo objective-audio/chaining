@@ -8,7 +8,7 @@
 
 namespace yas::chaining {
 template <typename T>
-class sender_chainable;
+class sendable;
 
 template <typename T>
 struct sender : base {
@@ -16,13 +16,13 @@ struct sender : base {
 
     sender(std::nullptr_t);
 
-    [[nodiscard]] sender_chainable<T> chainable();
+    [[nodiscard]] sendable<T> sendable();
 
    protected:
     sender(std::shared_ptr<impl> &&);
 
    private:
-    sender_chainable<T> _chainable = nullptr;
+    chaining::sendable<T> _chainable = nullptr;
 };
 }  // namespace yas::chaining
 

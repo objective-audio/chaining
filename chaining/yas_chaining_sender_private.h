@@ -14,7 +14,7 @@ template <typename Out, typename In, typename Begin, bool Syncable>
 class chain;
 
 template <typename T>
-struct sender<T>::impl : base::impl, sender_chainable<T>::impl {
+struct sender<T>::impl : base::impl, chaining::sendable<T>::impl {
     void broadcast(T const &value) override {
         for (weak<joint<T>> const &weak_joint : this->_joints) {
             if (joint<T> joint = weak_joint.lock()) {
@@ -60,9 +60,9 @@ sender<T>::sender(std::nullptr_t) : base(nullptr) {
 }
 
 template <typename T>
-sender_chainable<T> sender<T>::chainable() {
+sendable<T> sender<T>::sendable() {
     if (!this->_chainable) {
-        this->_chainable = sender_chainable<T>{impl_ptr<typename sender_chainable<T>::impl>()};
+        this->_chainable = chaining::sendable<T>{impl_ptr<typename chaining::sendable<T>::impl>()};
     }
     return this->_chainable;
 }
