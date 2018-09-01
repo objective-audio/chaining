@@ -8,7 +8,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct chaining::receiver<T>::impl : base::impl, chaining::receiver_chainable<T>::impl {
+struct chaining::receiver<T>::impl : base::impl, chaining::receivable<T>::impl {
     std::function<void(T const &)> handler;
 
     impl(std::function<void(T const &)> &&handler) : handler(std::move(handler)) {
@@ -37,9 +37,9 @@ template <typename T>
 chaining::receiver<T>::~receiver() = default;
 
 template <typename T>
-chaining::receiver_chainable<T> chaining::receiver<T>::chainable() {
+chaining::receivable<T> chaining::receiver<T>::chainable() {
     if (!this->_chainable) {
-        this->_chainable = chaining::receiver_chainable<T>{impl_ptr<typename chaining::receiver_chainable<T>::impl>()};
+        this->_chainable = chaining::receivable<T>{impl_ptr<typename chaining::receivable<T>::impl>()};
     }
     return this->_chainable;
 }

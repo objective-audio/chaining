@@ -1,5 +1,5 @@
 //
-//  yas_chaining_receiver_chainable.h
+//  yas_chaining_receiver_protocol.h
 //
 
 #pragma once
@@ -11,13 +11,13 @@ template <typename T>
 class receiver;
 
 template <typename T>
-struct receiver_chainable : protocol {
+struct receivable : protocol {
     struct impl : protocol::impl {
         virtual void receive_value(T const &) = 0;
     };
 
-    explicit receiver_chainable(std::shared_ptr<impl>);
-    receiver_chainable(std::nullptr_t);
+    explicit receivable(std::shared_ptr<impl>);
+    receivable(std::nullptr_t);
 
     void receive_value(T const &);
 };

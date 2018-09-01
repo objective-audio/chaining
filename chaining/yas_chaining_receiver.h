@@ -8,7 +8,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct receiver_chainable;
+struct receivable;
 
 template <typename T = std::nullptr_t>
 struct receiver : base {
@@ -20,10 +20,10 @@ struct receiver : base {
 
     ~receiver() final;
 
-    [[nodiscard]] receiver_chainable<T> chainable();
+    [[nodiscard]] receivable<T> chainable();
 
    private:
-    receiver_chainable<T> _chainable = nullptr;
+    receivable<T> _chainable = nullptr;
 };
 }  // namespace yas::chaining
 
