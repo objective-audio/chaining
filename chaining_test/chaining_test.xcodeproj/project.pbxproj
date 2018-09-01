@@ -55,6 +55,8 @@
 		B61643E72127C3FB002A182F /* yas_chaining_observer_pool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_observer_pool.cpp; sourceTree = "<group>"; };
 		B61643E82127C3FB002A182F /* yas_chaining_observer_pool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_observer_pool.h; sourceTree = "<group>"; };
 		B61643EA2127C7EB002A182F /* yas_observer_pool_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observer_pool_tests.mm; sourceTree = "<group>"; };
+		B61643EC212824DB002A182F /* yas_chaining_fetcher_protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher_protocol.h; sourceTree = "<group>"; };
+		B61643ED212824E8002A182F /* yas_chaining_fetcher_protocol_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher_protocol_private.h; sourceTree = "<group>"; };
 		B6530872211EC6E200D2C655 /* yas_chaining_holder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_holder.h; sourceTree = "<group>"; };
 		B6530873211EC6F100D2C655 /* yas_chaining_holder_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_holder_private.h; sourceTree = "<group>"; };
 		B6530874211ECBA500D2C655 /* yas_chaining_fetcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher.h; sourceTree = "<group>"; };
@@ -143,6 +145,8 @@
 				B608F0A021193FD1000A17BD /* yas_chaining_chain_private.h */,
 				B608F0A321193FD1000A17BD /* yas_chaining_chain.h */,
 				B6530875211ECBB000D2C655 /* yas_chaining_fetcher_private.h */,
+				B61643ED212824E8002A182F /* yas_chaining_fetcher_protocol_private.h */,
+				B61643EC212824DB002A182F /* yas_chaining_fetcher_protocol.h */,
 				B6530874211ECBA500D2C655 /* yas_chaining_fetcher.h */,
 				B6530873211EC6F100D2C655 /* yas_chaining_holder_private.h */,
 				B6530872211EC6E200D2C655 /* yas_chaining_holder.h */,
