@@ -6,10 +6,11 @@
 
 #include <mutex>
 #include "yas_chaining_chain.h"
+#include "yas_chaining_fetcher_protocol_private.h"
 
 namespace yas::chaining {
 template <typename T>
-struct fetcher<T>::impl : sender<T>::impl {
+struct fetcher<T>::impl : sender<T>::impl, fetcher_chainable<T>::impl {
     impl(std::function<opt_t<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {
     }
 
@@ -19,7 +20,7 @@ struct fetcher<T>::impl : sender<T>::impl {
         }
     }
 
-    opt_t<T> fetched_value() {
+    opt_t<T> fetched_value() override {
         return this->_fetching_handler();
     }
 
@@ -72,5 +73,13 @@ chaining::chain<T, T, T, true> fetcher<T>::chain() {
 template <typename T>
 chaining::receiver<> &fetcher<T>::receiver() {
     return this->template impl_ptr<impl>()->receiver();
+}
+
+template <typename T>
+fetcher_chainable<T> fetcher<T>::fetchable() {
+    if (!this->_fetchable) {
+        this->_fetchable = fetcher_chainable<T>{this->template impl_ptr<typename fetcher_chainable<T>::impl>()};
+    }
+    return this->_fetchable;
 }
 }  // namespace yas::chaining

@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "yas_chaining_fetcher_protocol.h"
 #include "yas_chaining_receiver.h"
 #include "yas_chaining_sender.h"
 #include "yas_types.h"
@@ -26,6 +27,11 @@ struct fetcher : sender<T> {
     [[nodiscard]] chain<T, T, T, true> chain();
 
     [[nodiscard]] receiver<> &receiver();
+
+    fetcher_chainable<T> fetchable();
+
+   private:
+    fetcher_chainable<T> _fetchable = nullptr;
 };
 }  // namespace yas::chaining
 
