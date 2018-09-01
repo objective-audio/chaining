@@ -20,10 +20,10 @@ struct receiver : base {
 
     ~receiver() final;
 
-    [[nodiscard]] receivable<T> chainable();
+    [[nodiscard]] receivable<T> receivable();
 
    private:
-    receivable<T> _chainable = nullptr;
+    chaining::receivable<T> _receivable = nullptr;
 };
 }  // namespace yas::chaining
 

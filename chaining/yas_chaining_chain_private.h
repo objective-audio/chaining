@@ -117,7 +117,7 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
     auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
         return chain.perform([weak_receiver = to_weak(receiver)](Out const &value) {
             if (chaining::receiver<T> receiver = weak_receiver.lock()) {
-                receiver.chainable().receive_value(std::get<N>(value));
+                receiver.receivable().receive_value(std::get<N>(value));
             }
         });
     }
@@ -126,7 +126,7 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
     auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
         return chain.perform([weak_receiver = to_weak(receiver)](Out const &value) {
             if (chaining::receiver<T> receiver = weak_receiver.lock()) {
-                receiver.chainable().receive_value(std::get<N>(value));
+                receiver.receivable().receive_value(std::get<N>(value));
             }
         });
     }
@@ -136,7 +136,7 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
     auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
         return chain.perform([weak_receiver = to_weak(receiver)](Out const &value) {
             if (chaining::receiver<T> receiver = weak_receiver.lock()) {
-                receiver.chainable().receive_value(value);
+                receiver.receivable().receive_value(value);
             }
         });
     }
@@ -157,7 +157,7 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
             while (yas_each_next(each)) {
                 auto const &idx = yas_each_index(each);
                 if (chaining::receiver<T> receiver = weak_receivers.at(idx).lock()) {
-                    receiver.chainable().receive_value(values.at(idx));
+                    receiver.receivable().receive_value(values.at(idx));
                 }
             }
         });
@@ -182,7 +182,7 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
             while (yas_each_next(each)) {
                 auto const &idx = yas_each_index(each);
                 if (chaining::receiver<T> receiver = weak_receivers.at(idx).lock()) {
-                    receiver.chainable().receive_value(values.at(idx));
+                    receiver.receivable().receive_value(values.at(idx));
                 }
             }
         });
@@ -282,7 +282,7 @@ template <typename Out, typename In, typename Begin, bool Syncable>
 chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::receive_null(receiver<> &receiver) {
     return this->perform([weak_receiver = to_weak(receiver)](Out const &value) {
         if (chaining::receiver<> receiver = weak_receiver.lock()) {
-            receiver.chainable().receive_value(nullptr);
+            receiver.receivable().receive_value(nullptr);
         }
     });
 }

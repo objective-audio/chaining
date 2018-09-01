@@ -37,10 +37,10 @@ template <typename T>
 chaining::receiver<T>::~receiver() = default;
 
 template <typename T>
-chaining::receivable<T> chaining::receiver<T>::chainable() {
-    if (!this->_chainable) {
-        this->_chainable = chaining::receivable<T>{impl_ptr<typename chaining::receivable<T>::impl>()};
+chaining::receivable<T> chaining::receiver<T>::receivable() {
+    if (!this->_receivable) {
+        this->_receivable = chaining::receivable<T>{impl_ptr<typename chaining::receivable<T>::impl>()};
     }
-    return this->_chainable;
+    return this->_receivable;
 }
 }  // namespace yas::chaining
