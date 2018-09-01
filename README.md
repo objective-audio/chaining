@@ -1,2 +1,2 @@
 # chaining
-Binding valus with method chaining
+Binding values with method chaining
