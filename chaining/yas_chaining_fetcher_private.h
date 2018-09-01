@@ -10,7 +10,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct fetcher<T>::impl : sender<T>::impl, fetcher_chainable<T>::impl {
+struct fetcher<T>::impl : sender<T>::impl, chaining::fetchable<T>::impl {
     impl(std::function<opt_t<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {
     }
 
@@ -76,9 +76,9 @@ chaining::receiver<> &fetcher<T>::receiver() {
 }
 
 template <typename T>
-fetcher_chainable<T> fetcher<T>::fetchable() {
+fetchable<T> fetcher<T>::fetchable() {
     if (!this->_fetchable) {
-        this->_fetchable = fetcher_chainable<T>{this->template impl_ptr<typename fetcher_chainable<T>::impl>()};
+        this->_fetchable = chaining::fetchable<T>{this->template impl_ptr<typename chaining::fetchable<T>::impl>()};
     }
     return this->_fetchable;
 }

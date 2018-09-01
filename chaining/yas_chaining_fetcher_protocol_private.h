@@ -6,15 +6,15 @@
 
 namespace yas::chaining {
 template <typename T>
-fetcher_chainable<T>::fetcher_chainable(std::shared_ptr<impl> impl) : protocol(std::move(impl)) {
+fetchable<T>::fetchable(std::shared_ptr<impl> impl) : protocol(std::move(impl)) {
 }
 
 template <typename T>
-fetcher_chainable<T>::fetcher_chainable(std::nullptr_t) : protocol(nullptr) {
+fetchable<T>::fetchable(std::nullptr_t) : protocol(nullptr) {
 }
 
 template <typename T>
-opt_t<T> fetcher_chainable<T>::fetched_value() {
+opt_t<T> fetchable<T>::fetched_value() {
     return this->template impl_ptr<impl>()->fetched_value();
 }
 }  // namespace yas::chaining

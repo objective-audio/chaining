@@ -28,10 +28,10 @@ struct fetcher : sender<T> {
 
     [[nodiscard]] receiver<> &receiver();
 
-    fetcher_chainable<T> fetchable();
+    fetchable<T> fetchable();
 
    private:
-    fetcher_chainable<T> _fetchable = nullptr;
+    chaining::fetchable<T> _fetchable = nullptr;
 };
 }  // namespace yas::chaining
 

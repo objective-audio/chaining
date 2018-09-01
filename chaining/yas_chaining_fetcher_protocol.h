@@ -9,13 +9,13 @@
 
 namespace yas::chaining {
 template <typename T>
-struct fetcher_chainable : protocol {
+struct fetchable : protocol {
     struct impl {
         virtual opt_t<T> fetched_value() = 0;
     };
 
-    fetcher_chainable(std::shared_ptr<impl>);
-    fetcher_chainable(std::nullptr_t);
+    fetchable(std::shared_ptr<impl>);
+    fetchable(std::nullptr_t);
 
     opt_t<T> fetched_value();
 };
