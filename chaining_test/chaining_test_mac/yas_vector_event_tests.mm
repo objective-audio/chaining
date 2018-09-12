@@ -1,0 +1,67 @@
+//
+//  yas_vector_event_tests.mm
+//
+
+#import <XCTest/XCTest.h>
+#import "yas_chaining_vector_holder.h"
+
+using namespace yas;
+using namespace yas::chaining;
+
+@interface yas_vector_event_tests : XCTestCase
+
+@end
+
+@implementation yas_vector_event_tests
+
+- (void)setUp {
+    [super setUp];
+}
+
+- (void)tearDown {
+    [super tearDown];
+}
+
+- (void)test_make_all_event {
+    std::vector<int> const elements{1, 2, 3};
+    auto event = vector::make_all_event(elements);
+
+    XCTAssertEqual(event.type(), vector::event_type::all);
+    XCTAssertEqual(event.get<vector::all_event<int>>().elements, (std::vector<int>{1, 2, 3}));
+}
+
+- (void)test_make_inserted_event {
+    int const element = 1;
+    auto event = vector::make_inserted_event(element, 2);
+
+    XCTAssertEqual(event.type(), vector::event_type::inserted);
+    XCTAssertEqual(event.get<vector::inserted_event<int>>().element, 1);
+    XCTAssertEqual(event.get<vector::inserted_event<int>>().index, 2);
+}
+
+- (void)test_make_erased_event {
+    auto event = vector::make_erased_event<int>(3);
+
+    XCTAssertEqual(event.type(), vector::event_type::erased);
+    XCTAssertEqual(event.get<vector::erased_event<int>>().index, 3);
+}
+
+- (void)test_make_replaced_event {
+    int const element = 4;
+    auto event = vector::make_replaced_event(element, 5);
+
+    XCTAssertEqual(event.type(), vector::event_type::replaced);
+    XCTAssertEqual(event.get<vector::replaced_event<int>>().element, 4);
+    XCTAssertEqual(event.get<vector::replaced_event<int>>().index, 5);
+}
+
+- (void)test_make_relayed_event {
+    int const element = 6;
+    auto event = vector::make_relayed_event(element, 7);
+
+    XCTAssertEqual(event.type(), vector::event_type::relayed);
+    XCTAssertEqual(event.get<vector::relayed_event<int>>().element, 6);
+    XCTAssertEqual(event.get<vector::relayed_event<int>>().index, 7);
+}
+
+@end

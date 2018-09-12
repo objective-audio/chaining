@@ -16,7 +16,7 @@ template <typename T>
 struct immutable_holder : sender<T> {
     class impl;
 
-    T const &value() const;
+    [[nodiscard]] T const &value() const;
 
     [[nodiscard]] chain<T, T, T, true> chain();
 
