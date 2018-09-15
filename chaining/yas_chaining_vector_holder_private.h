@@ -9,8 +9,13 @@
 
 namespace yas::chaining::vector {
 template <typename T>
-event<T> make_all_event(std::vector<T> const &elements) {
-    return event<T>{all_event<T>{.elements = elements}};
+event<T> make_fetched_event(std::vector<T> const &elements) {
+    return event<T>{fetched_event<T>{.elements = elements}};
+}
+
+template <typename T>
+event<T> make_any_event(std::vector<T> const &elements) {
+    return event<T>{any_event<T>{.elements = elements}};
 }
 
 template <typename T>
@@ -54,7 +59,11 @@ struct event<T>::impl : event<T>::impl_base {
 };
 
 template <typename T>
-event<T>::event(all_event<T> &&event) : base(std::make_shared<impl<all_event<T>>>(std::move(event))) {
+event<T>::event(fetched_event<T> &&event) : base(std::make_shared<impl<fetched_event<T>>>(std::move(event))) {
+}
+
+template <typename T>
+event<T>::event(any_event<T> &&event) : base(std::make_shared<impl<any_event<T>>>(std::move(event))) {
 }
 
 template <typename T>
@@ -171,7 +180,7 @@ struct immutable_holder<T>::impl : sender<event<T>>::impl {
         this->_raw.clear();
         this->_observers.clear();
 
-        this->broadcast(make_all_event(this->_raw));
+        this->broadcast(make_any_event(this->_raw));
     }
 
     std::vector<T> &raw() {
@@ -187,7 +196,7 @@ struct immutable_holder<T>::impl : sender<event<T>>::impl {
     }
 
     void fetch_for(any_joint const &joint) override {
-        this->send_value_to_target(make_all_event(this->_raw), joint.identifier());
+        this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
 
    private:
@@ -235,7 +244,7 @@ struct immutable_holder<T>::impl : sender<event<T>>::impl {
 
         this->_raw = std::move(vec);
 
-        this->broadcast(make_all_event(this->_raw));
+        this->broadcast(make_any_event(this->_raw));
     }
 
     void _replace(T &&element, std::size_t const idx, chaining_f chaining) {

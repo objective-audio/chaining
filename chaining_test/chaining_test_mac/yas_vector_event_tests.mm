@@ -22,12 +22,20 @@ using namespace yas::chaining;
     [super tearDown];
 }
 
-- (void)test_make_all_event {
+- (void)test_make_fetched_event {
     std::vector<int> const elements{1, 2, 3};
-    auto event = vector::make_all_event(elements);
+    auto event = vector::make_fetched_event(elements);
 
-    XCTAssertEqual(event.type(), vector::event_type::all);
-    XCTAssertEqual(event.get<vector::all_event<int>>().elements, (std::vector<int>{1, 2, 3}));
+    XCTAssertEqual(event.type(), vector::event_type::fetched);
+    XCTAssertEqual(event.get<vector::fetched_event<int>>().elements, (std::vector<int>{1, 2, 3}));
+}
+
+- (void)test_make_any_event {
+    std::vector<int> const elements{1, 2, 3};
+    auto event = vector::make_any_event(elements);
+
+    XCTAssertEqual(event.type(), vector::event_type::any);
+    XCTAssertEqual(event.get<vector::any_event<int>>().elements, (std::vector<int>{1, 2, 3}));
 }
 
 - (void)test_make_inserted_event {

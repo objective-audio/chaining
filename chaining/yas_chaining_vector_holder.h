@@ -16,7 +16,8 @@ class receiver;
 
 namespace yas::chaining::vector {
 enum event_type {
-    all,
+    fetched,
+    any,
     inserted,
     erased,
     replaced,
@@ -24,8 +25,14 @@ enum event_type {
 };
 
 template <typename T>
-struct all_event {
-    static vector::event_type const type = vector::event_type::all;
+struct fetched_event {
+    static vector::event_type const type = vector::event_type::fetched;
+    std::vector<T> const &elements;
+};
+
+template <typename T>
+struct any_event {
+    static vector::event_type const type = vector::event_type::any;
     std::vector<T> const &elements;
 };
 
@@ -63,7 +70,8 @@ struct event : base {
     template <typename Event>
     class impl;
 
-    event(all_event<T> &&);
+    event(fetched_event<T> &&);
+    event(any_event<T> &&);
     event(inserted_event<T> &&);
     event(erased_event<T> &&);
     event(replaced_event<T> &&);

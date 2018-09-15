@@ -23,7 +23,7 @@ using namespace yas::chaining;
     [super tearDown];
 }
 
-- (void)test_chain_all_by_sync {
+- (void)test_chain_fetched_by_sync {
     vector::holder<int> holder{{0, 1, 2}};
 
     std::vector<vector::event<int>> received;
@@ -31,11 +31,11 @@ using namespace yas::chaining;
     auto chain = holder.chain().perform([&received](auto const &event) { received.push_back(event); }).sync();
 
     XCTAssertEqual(received.size(), 1);
-    XCTAssertEqual(received.at(0).type(), vector::event_type::all);
-    XCTAssertEqual(received.at(0).get<vector::all_event<int>>().elements, (std::vector{0, 1, 2}));
+    XCTAssertEqual(received.at(0).type(), vector::event_type::fetched);
+    XCTAssertEqual(received.at(0).get<vector::fetched_event<int>>().elements, (std::vector{0, 1, 2}));
 }
 
-- (void)test_chain_all_by_replace {
+- (void)test_chain_any_by_replace {
     vector::holder<int> holder{{0, 1, 2}};
 
     std::vector<vector::event<int>> received;
@@ -45,11 +45,11 @@ using namespace yas::chaining;
     holder.replace({3, 4});
 
     XCTAssertEqual(received.size(), 1);
-    XCTAssertEqual(received.at(0).type(), vector::event_type::all);
-    XCTAssertEqual(received.at(0).get<vector::all_event<int>>().elements, (std::vector{3, 4}));
+    XCTAssertEqual(received.at(0).type(), vector::event_type::any);
+    XCTAssertEqual(received.at(0).get<vector::any_event<int>>().elements, (std::vector{3, 4}));
 }
 
-- (void)test_chain_all_by_clear {
+- (void)test_chain_any_by_clear {
     vector::holder<int> holder{{0, 1, 2}};
 
     std::vector<vector::event<int>> received;
@@ -59,8 +59,8 @@ using namespace yas::chaining;
     holder.clear();
 
     XCTAssertEqual(received.size(), 1);
-    XCTAssertEqual(received.at(0).type(), vector::event_type::all);
-    XCTAssertEqual(received.at(0).get<vector::all_event<int>>().elements.size(), 0);
+    XCTAssertEqual(received.at(0).type(), vector::event_type::any);
+    XCTAssertEqual(received.at(0).get<vector::any_event<int>>().elements.size(), 0);
 }
 
 - (void)test_chain_inserted {
