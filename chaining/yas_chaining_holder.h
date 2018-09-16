@@ -32,7 +32,8 @@ struct holder : immutable_holder<T> {
 
     ~holder() final;
 
-    T &value();
+    [[nodiscard]] T const &value() const;
+    [[nodiscard]] T &value();
     void set_value(T);
 
     [[nodiscard]] receiver<T> &receiver();

@@ -33,6 +33,12 @@ using namespace yas::chaining;
     XCTAssertEqual(holder.value(), 2);
 }
 
+- (void)test_const_getter {
+    holder<int> const holder{1};
+
+    XCTAssertEqual(holder.value(), 1);
+}
+
 - (void)test_chain {
     holder<int> holder{10};
 

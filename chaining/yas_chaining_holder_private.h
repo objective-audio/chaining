@@ -81,6 +81,11 @@ T const &immutable_holder<T>::value() const {
 }
 
 template <typename T>
+T const &holder<T>::value() const {
+    return this->template impl_ptr<immutable_impl>()->value();
+}
+
+template <typename T>
 T &holder<T>::value() {
     return this->template impl_ptr<immutable_impl>()->value();
 }
