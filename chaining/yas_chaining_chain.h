@@ -62,8 +62,10 @@ struct chain : base {
     [[nodiscard]] observer<Begin> sync();
 };
 
-template <typename T, bool Syncable>
-using chain_t = chain<T, T, T, Syncable>;
+template <typename T>
+using chain_syncable_t = chain<T, T, T, true>;
+template <typename T>
+using chain_unsyncable_t = chain<T, T, T, false>;
 }  // namespace yas::chaining
 
 #include "yas_chaining_chain_private.h"
