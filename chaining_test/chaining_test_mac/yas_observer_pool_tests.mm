@@ -86,4 +86,25 @@ using namespace yas::chaining;
     XCTAssertEqual(received, 1);
 }
 
+- (void)test_add_observer_by_plus_equal {
+    holder<int> holder{1};
+    int received = 0;
+
+    {
+        observer_pool pool;
+
+        pool += holder.chain().perform([&received](int const &value) { received = value; }).sync();
+
+        XCTAssertEqual(received, 1);
+
+        holder.set_value(2);
+
+        XCTAssertEqual(received, 2);
+    }
+
+    holder.set_value(3);
+
+    XCTAssertEqual(received, 2);
+}
+
 @end

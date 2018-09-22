@@ -17,5 +17,7 @@ struct observer_pool : base {
     void remove_observer(any_observer &);
 
     void invalidate();
+
+    observer_pool &operator+=(any_observer);
 };
 }  // namespace yas::chaining

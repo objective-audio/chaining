@@ -53,3 +53,8 @@ void observer_pool::remove_observer(any_observer &observer) {
 void observer_pool::invalidate() {
     impl_ptr<impl>()->invalidate();
 }
+
+observer_pool &observer_pool::operator+=(any_observer observer) {
+    this->add_observer(std::move(observer));
+    return *this;
+}
