@@ -67,7 +67,7 @@ void fetcher<T>::broadcast() const {
 
 template <typename T>
 void fetcher<T>::broadcast(T const &value) const {
-    this->template impl_ptr<impl>()->_broadcast(value);
+    this->template impl_ptr<impl>()->broadcast(value);
 }
 
 template <typename T>
