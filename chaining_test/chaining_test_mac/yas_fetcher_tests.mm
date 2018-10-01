@@ -22,6 +22,46 @@ using namespace yas;
     [super tearDown];
 }
 
+- (void)test_fetched_value {
+    int sending = 1;
+
+    chaining::fetcher<int> fetcher{[&sending] { return sending; }};
+
+    XCTAssertEqual(fetcher.fetched_value(), 1);
+}
+
+- (void)test_broadcast {
+    int sending = 1;
+
+    chaining::fetcher<int> fetcher{[&sending] { return sending; }};
+
+    int notified = -1;
+
+    auto flow = fetcher.chain().perform([&notified](int const &value) { notified = value; }).end();
+
+    XCTAssertEqual(notified, -1);
+
+    fetcher.broadcast();
+
+    XCTAssertEqual(notified, 1);
+}
+
+- (void)test_broadcast_with_value {
+    int sending = 1;
+
+    chaining::fetcher<int> fetcher{[&sending] { return sending; }};
+
+    int notified = -1;
+
+    auto flow = fetcher.chain().perform([&notified](int const &value) { notified = value; }).end();
+
+    XCTAssertEqual(notified, -1);
+
+    fetcher.broadcast(2);
+
+    XCTAssertEqual(notified, 2);
+}
+
 - (void)test_sync {
     int sending = 1;
 
