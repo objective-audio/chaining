@@ -23,6 +23,7 @@ struct fetcher : sender<T> {
     opt_t<T> fetched_value() const;
 
     void broadcast() const;
+    void broadcast(T const &) const;
 
     [[nodiscard]] chain<T, T, T, true> chain();
 

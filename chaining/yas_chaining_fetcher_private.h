@@ -66,6 +66,11 @@ void fetcher<T>::broadcast() const {
 }
 
 template <typename T>
+void fetcher<T>::broadcast(T const &value) const {
+    this->template impl_ptr<impl>()->_broadcast(value);
+}
+
+template <typename T>
 chaining::chain<T, T, T, true> fetcher<T>::chain() {
     return this->template impl_ptr<impl>()->template chain<true>(*this);
 }
