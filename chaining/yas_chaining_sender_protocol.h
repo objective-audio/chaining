@@ -10,7 +10,7 @@ namespace yas::chaining {
 class any_joint;
 
 template <typename T>
-struct sendable : protocol {
+struct[[nodiscard]] sendable : protocol {
     struct impl : protocol::impl {
         virtual void broadcast(T const &) = 0;
         virtual void send_value_to_target(T const &, std::uintptr_t const) = 0;

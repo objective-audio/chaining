@@ -34,7 +34,7 @@ struct any_joint : base {
 };
 
 template <typename T>
-struct joint : any_joint {
+struct[[nodiscard]] joint : any_joint {
     class impl;
 
     joint(weak<sender<T>>);

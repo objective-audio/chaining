@@ -98,7 +98,7 @@ struct immutable_holder : sender<event<T>> {
     T const &at(std::size_t const) const;
     std::size_t size() const;
 
-    [[nodiscard]] chain_t chain();
+    chain_t chain();
 
    protected:
     immutable_holder(std::shared_ptr<impl> &&);

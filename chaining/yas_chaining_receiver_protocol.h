@@ -11,7 +11,7 @@ template <typename T>
 class receiver;
 
 template <typename T>
-struct receivable : protocol {
+struct[[nodiscard]] receivable : protocol {
     struct impl : protocol::impl {
         virtual void receive_value(T const &) = 0;
     };

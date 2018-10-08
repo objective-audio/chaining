@@ -25,9 +25,9 @@ struct fetcher : sender<T> {
     void broadcast() const;
     void broadcast(T const &) const;
 
-    [[nodiscard]] chain<T, T, T, true> chain();
+    chain<T, T, T, true> chain();
 
-    [[nodiscard]] receiver<> &receiver();
+    receiver<> &receiver();
 
     fetchable<T> fetchable();
 

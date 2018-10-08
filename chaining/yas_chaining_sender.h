@@ -18,7 +18,7 @@ struct sender : base, any_sender {
 
     sender(std::nullptr_t);
 
-    [[nodiscard]] sendable<T> sendable();
+    sendable<T> sendable();
 
    protected:
     sender(std::shared_ptr<impl> &&);

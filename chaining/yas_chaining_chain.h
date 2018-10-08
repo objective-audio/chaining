@@ -16,7 +16,7 @@ template <typename T>
 struct joint;
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-struct chain : base {
+struct[[nodiscard]] chain : base {
     class impl;
 
     chain(joint<Begin>);
@@ -26,40 +26,40 @@ struct chain : base {
 
     ~chain() final;
 
-    [[nodiscard]] auto normalize();
+    auto normalize();
 
-    [[nodiscard]] chain<Out, In, Begin, Syncable> perform(std::function<void(Out const &)>);
+    chain<Out, In, Begin, Syncable> perform(std::function<void(Out const &)>);
 
     template <std::size_t N = 0, typename T>
-    [[nodiscard]] chain<Out, In, Begin, Syncable> receive(receiver<T> &);
+    chain<Out, In, Begin, Syncable> receive(receiver<T> &);
     template <typename T, std::size_t N>
-    [[nodiscard]] chain<Out, In, Begin, Syncable> receive(std::array<receiver<T>, N>);
+    chain<Out, In, Begin, Syncable> receive(std::array<receiver<T>, N>);
     template <typename T>
-    [[nodiscard]] chain<Out, In, Begin, Syncable> receive(std::vector<receiver<T>>);
+    chain<Out, In, Begin, Syncable> receive(std::vector<receiver<T>>);
     template <typename T>
-    [[nodiscard]] chain<Out, In, Begin, Syncable> receive(std::initializer_list<receiver<T>>);
-    [[nodiscard]] chain<Out, In, Begin, Syncable> receive_null(receiver<std::nullptr_t> &);
+    chain<Out, In, Begin, Syncable> receive(std::initializer_list<receiver<T>>);
+    chain<Out, In, Begin, Syncable> receive_null(receiver<std::nullptr_t> &);
 
-    [[nodiscard]] chain<Out, Out, Begin, Syncable> guard(std::function<bool(Out const &)>);
+    chain<Out, Out, Begin, Syncable> guard(std::function<bool(Out const &)>);
 
     template <typename F>
-    [[nodiscard]] auto to(F);
+    auto to(F);
     template <typename T>
-    [[nodiscard]] auto to_value(T);
-    [[nodiscard]] auto to_null();
-    [[nodiscard]] auto to_tuple();
+    auto to_value(T);
+    auto to_null();
+    auto to_tuple();
 
     template <typename SubIn, typename SubBegin, bool SubSyncable>
-    [[nodiscard]] chain<Out, Out, Begin, Syncable | SubSyncable> merge(chain<Out, SubIn, SubBegin, SubSyncable>);
+    chain<Out, Out, Begin, Syncable | SubSyncable> merge(chain<Out, SubIn, SubBegin, SubSyncable>);
 
     template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable>
-    [[nodiscard]] auto pair(chain<SubOut, SubIn, SubBegin, SubSyncable>);
+    auto pair(chain<SubOut, SubIn, SubBegin, SubSyncable>);
 
     template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable>
-    [[nodiscard]] auto combine(chain<SubOut, SubIn, SubBegin, SubSyncable>);
+    auto combine(chain<SubOut, SubIn, SubBegin, SubSyncable>);
 
-    [[nodiscard]] observer<Begin> end();
-    [[nodiscard]] observer<Begin> sync();
+    observer<Begin> end();
+    observer<Begin> sync();
 };
 
 template <typename T>

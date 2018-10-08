@@ -11,7 +11,7 @@ template <typename T>
 class joint;
 
 template <typename Begin>
-struct observer : any_observer {
+struct[[nodiscard]] observer : any_observer {
     class impl;
 
     observer(joint<Begin>);
@@ -19,7 +19,7 @@ struct observer : any_observer {
 
     ~observer() final;
 
-    [[nodiscard]] chaining::joint<Begin> &joint();
+    chaining::joint<Begin> &joint();
 };
 }  // namespace yas::chaining
 

@@ -11,7 +11,7 @@ template <typename T>
 struct receivable;
 
 template <typename T = std::nullptr_t>
-struct receiver : base {
+struct[[nodiscard]] receiver : base {
     class impl;
 
     receiver(std::function<void(T const &)>);
@@ -20,7 +20,7 @@ struct receiver : base {
 
     ~receiver() final;
 
-    [[nodiscard]] receivable<T> receivable();
+    receivable<T> receivable();
 
    private:
     chaining::receivable<T> _receivable = nullptr;
