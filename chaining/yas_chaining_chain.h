@@ -64,8 +64,16 @@ struct[[nodiscard]] chain : base {
 
 template <typename T>
 using chain_syncable_t = chain<T, T, T, true>;
+template <typename T, typename U>
+using chain_relayed_syncable_t = chain<T, U, U, true>;
+template <typename T, typename U>
+using chain_normalized_syncable_t = chain<T, T, U, true>;
 template <typename T>
 using chain_unsyncable_t = chain<T, T, T, false>;
+template <typename T, typename U>
+using chain_relayed_unsyncable_t = chain<T, U, U, false>;
+template <typename T, typename U>
+using chain_normalized_unsyncable_t = chain<T, T, U, false>;
 }  // namespace yas::chaining
 
 #include "yas_chaining_chain_private.h"
