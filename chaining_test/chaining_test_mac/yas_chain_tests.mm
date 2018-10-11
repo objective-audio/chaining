@@ -140,10 +140,10 @@ using namespace yas;
 - (void)test_normalize {
     chaining::notifier<int> notifier;
 
-    chaining::chain<std::string, int, int, false> to_chain =
+    chaining::chain_relayed_unsyncable_t<std::string, int> to_chain =
         notifier.chain().to([](int const &value) { return std::to_string(value); });
 
-    chaining::chain<std::string, std::string, int, false> normalized_chain = to_chain.normalize();
+    chaining::chain_normalized_unsyncable_t<std::string, int> normalized_chain = to_chain.normalize();
 
     std::string received = "";
 
