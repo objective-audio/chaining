@@ -10,7 +10,6 @@
 		B60813052123195500D86603 /* yas_to_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B60813042123195500D86603 /* yas_to_tests.mm */; };
 		B6081307212319CB00D86603 /* yas_sync_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6081306212319CB00D86603 /* yas_sync_tests.mm */; };
 		B608130921231A5000D86603 /* yas_receiver_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B608130821231A5000D86603 /* yas_receiver_tests.mm */; };
-		B608F0B621194162000A17BD /* yas_any.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B608F0B421194162000A17BD /* yas_any.cpp */; };
 		B61643E32123EDFB002A182F /* yas_stl_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61643E02123EDFB002A182F /* yas_stl_utils.cpp */; };
 		B61643E62127C22C002A182F /* yas_chaining_any_observer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61643E42127C22C002A182F /* yas_chaining_any_observer.cpp */; };
 		B61643E92127C3FB002A182F /* yas_chaining_observer_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61643E72127C3FB002A182F /* yas_chaining_observer_pool.cpp */; };
@@ -46,9 +45,6 @@
 		B608F0A621194014000A17BD /* yas_type_traits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_type_traits.h; sourceTree = "<group>"; };
 		B608F0AB211940A0000A17BD /* chaining_test_mac.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chaining_test_mac.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B608F0AF211940A0000A17BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B608F0B321194162000A17BD /* yas_any_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_any_private.h; sourceTree = "<group>"; };
-		B608F0B421194162000A17BD /* yas_any.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_any.cpp; sourceTree = "<group>"; };
-		B608F0B521194162000A17BD /* yas_any.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_any.h; sourceTree = "<group>"; };
 		B608F0B721194174000A17BD /* yas_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_types.h; sourceTree = "<group>"; };
 		B61643E02123EDFB002A182F /* yas_stl_utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_stl_utils.cpp; sourceTree = "<group>"; };
 		B61643E12123EDFB002A182F /* yas_stl_utils_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_stl_utils_private.h; sourceTree = "<group>"; };
@@ -124,9 +120,6 @@
 		B608F04521193F65000A17BD /* cpp_utils */ = {
 			isa = PBXGroup;
 			children = (
-				B608F0B321194162000A17BD /* yas_any_private.h */,
-				B608F0B421194162000A17BD /* yas_any.cpp */,
-				B608F0B521194162000A17BD /* yas_any.h */,
 				B608F09921193F7E000A17BD /* yas_base_private.h */,
 				B608F09821193F7E000A17BD /* yas_base.cpp */,
 				B608F09721193F7E000A17BD /* yas_base.h */,
@@ -286,7 +279,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B608F0B621194162000A17BD /* yas_any.cpp in Sources */,
 				B6277A1921437B5E00CA15A9 /* yas_vector_event_tests.mm in Sources */,
 				B61643E92127C3FB002A182F /* yas_chaining_observer_pool.cpp in Sources */,
 				B67438C2211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm in Sources */,
@@ -435,7 +427,6 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.objective-audio.chaining-test-mac";
@@ -499,7 +490,6 @@
 					"@executable_path/../Frameworks",
 					"@loader_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.13;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_BUNDLE_IDENTIFIER = "jp.objective-audio.chaining-test-mac";
 				PRODUCT_NAME = "$(TARGET_NAME)";
