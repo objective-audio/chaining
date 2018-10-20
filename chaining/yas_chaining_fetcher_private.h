@@ -11,7 +11,7 @@
 namespace yas::chaining {
 template <typename T>
 struct fetcher<T>::impl : sender<T>::impl, chaining::fetchable<T>::impl {
-    impl(std::function<opt_t<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {
+    impl(std::function<std::optional<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {
     }
 
     void fetch_for(any_joint const &joint) override {
@@ -20,7 +20,7 @@ struct fetcher<T>::impl : sender<T>::impl, chaining::fetchable<T>::impl {
         }
     }
 
-    opt_t<T> fetched_value() override {
+    std::optional<T> fetched_value() override {
         return this->_fetching_handler();
     }
 
@@ -43,12 +43,13 @@ struct fetcher<T>::impl : sender<T>::impl, chaining::fetchable<T>::impl {
     }
 
    private:
-    std::function<opt_t<T>(void)> _fetching_handler;
+    std::function<std::optional<T>(void)> _fetching_handler;
     chaining::receiver<> _receiver{nullptr};
 };
 
 template <typename T>
-fetcher<T>::fetcher(std::function<opt_t<T>(void)> handler) : sender<T>(std::make_shared<impl>(std::move(handler))) {
+fetcher<T>::fetcher(std::function<std::optional<T>(void)> handler)
+    : sender<T>(std::make_shared<impl>(std::move(handler))) {
 }
 
 template <typename T>
@@ -56,7 +57,7 @@ fetcher<T>::fetcher(std::nullptr_t) : sender<T>(nullptr) {
 }
 
 template <typename T>
-opt_t<T> fetcher<T>::fetched_value() const {
+std::optional<T> fetcher<T>::fetched_value() const {
     return this->template impl_ptr<impl>()->fetched_value();
 }
 

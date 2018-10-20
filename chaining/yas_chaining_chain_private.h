@@ -4,11 +4,11 @@
 
 #pragma once
 
+#include <optional>
 #include <vector>
 #include "yas_chaining_observer.h"
 #include "yas_chaining_receiver.h"
 #include "yas_fast_each.h"
-#include "yas_types.h"
 
 namespace yas::chaining {
 template <typename Out, typename In, typename Begin, bool Syncable>
@@ -47,7 +47,7 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
               disable_if_tuple_t<SubOut, std::nullptr_t> = nullptr, typename MainOut = Out,
               disable_if_tuple_t<MainOut, std::nullptr_t> = nullptr>
     auto tuple(chain<SubOut, SubIn, SubBegin, SubSyncable> &&sub_chain) {
-        using opt_tuple_t = std::tuple<opt_t<Out>, opt_t<SubOut>>;
+        using opt_tuple_t = std::tuple<std::optional<Out>, std::optional<SubOut>>;
 
         chaining::joint<Begin> &joint = this->_joint;
         auto weak_joint = to_weak(joint);
@@ -59,13 +59,13 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
         sub_joint.template push_handler<SubIn>(
             [handler = sub_imp->_handler, weak_joint, next_idx](SubIn const &value) mutable {
                 if (auto joint = weak_joint.lock()) {
-                    joint.template handler<opt_tuple_t>(next_idx)(opt_tuple_t(nullopt, handler(value)));
+                    joint.template handler<opt_tuple_t>(next_idx)(opt_tuple_t(std::nullopt, handler(value)));
                 }
             });
 
         joint.template push_handler<In>([handler = this->_handler, weak_joint, next_idx](In const &value) mutable {
             if (auto joint = weak_joint.lock()) {
-                joint.template handler<opt_tuple_t>(next_idx)(opt_tuple_t(handler(value), nullopt));
+                joint.template handler<opt_tuple_t>(next_idx)(opt_tuple_t(handler(value), std::nullopt));
             }
         });
 
@@ -78,7 +78,7 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
     template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable>
     auto combine_pair(chaining::chain<Out, In, Begin, Syncable> &chain,
                       chaining::chain<SubOut, SubIn, SubBegin, SubSyncable> &&sub_chain) {
-        using opt_pair_t = std::pair<opt_t<Out>, opt_t<SubOut>>;
+        using opt_pair_t = std::pair<std::optional<Out>, std::optional<SubOut>>;
 
         return chain.pair(std::move(sub_chain))
             .to([opt_pair = opt_pair_t{}](opt_pair_t const &value) mutable {
@@ -363,7 +363,7 @@ chain<Out, Out, Begin, Syncable | SubSyncable> chain<Out, In, Begin, Syncable>::
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable>
 auto chain<Out, In, Begin, Syncable>::pair(chain<SubOut, SubIn, SubBegin, SubSyncable> sub_chain) {
-    using opt_pair_t = std::pair<opt_t<Out>, opt_t<SubOut>>;
+    using opt_pair_t = std::pair<std::optional<Out>, std::optional<SubOut>>;
 
     auto imp = impl_ptr<impl>();
     chaining::joint<Begin> &joint = imp->_joint;
@@ -376,13 +376,13 @@ auto chain<Out, In, Begin, Syncable>::pair(chain<SubOut, SubIn, SubBegin, SubSyn
     sub_joint.template push_handler<SubIn>(
         [handler = sub_imp->_handler, weak_joint, next_idx](SubIn const &value) mutable {
             if (auto joint = weak_joint.lock()) {
-                joint.template handler<opt_pair_t>(next_idx)(opt_pair_t{nullopt, handler(value)});
+                joint.template handler<opt_pair_t>(next_idx)(opt_pair_t{std::nullopt, handler(value)});
             }
         });
 
     joint.template push_handler<In>([handler = imp->_handler, weak_joint, next_idx](In const &value) mutable {
         if (auto joint = weak_joint.lock()) {
-            joint.template handler<opt_pair_t>(next_idx)(opt_pair_t(handler(value), nullopt));
+            joint.template handler<opt_pair_t>(next_idx)(opt_pair_t(handler(value), std::nullopt));
         }
     });
 

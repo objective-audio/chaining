@@ -4,10 +4,10 @@
 
 #pragma once
 
+#include <optional>
 #include "yas_chaining_fetcher_protocol.h"
 #include "yas_chaining_receiver.h"
 #include "yas_chaining_sender.h"
-#include "yas_types.h"
 
 namespace yas::chaining {
 template <typename Out, typename In, typename Begin, bool Syncable>
@@ -17,10 +17,10 @@ template <typename T>
 struct fetcher : sender<T> {
     class impl;
 
-    fetcher(std::function<opt_t<T>(void)>);
+    fetcher(std::function<std::optional<T>(void)>);
     fetcher(std::nullptr_t);
 
-    opt_t<T> fetched_value() const;
+    std::optional<T> fetched_value() const;
 
     void broadcast() const;
     void broadcast(T const &) const;

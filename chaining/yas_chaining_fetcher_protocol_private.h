@@ -14,7 +14,7 @@ fetchable<T>::fetchable(std::nullptr_t) : protocol(nullptr) {
 }
 
 template <typename T>
-opt_t<T> fetchable<T>::fetched_value() {
+std::optional<T> fetchable<T>::fetched_value() {
     return this->template impl_ptr<impl>()->fetched_value();
 }
 }  // namespace yas::chaining

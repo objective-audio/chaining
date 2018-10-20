@@ -90,7 +90,7 @@ using namespace yas;
 - (void)test_to_tuple {
     chaining::notifier<int> notifier;
 
-    opt_t<std::tuple<int>> called;
+    std::optional<std::tuple<int>> called;
 
     auto chain = notifier.chain().to_tuple().perform([&called](std::tuple<int> const &value) { called = value; }).end();
 
@@ -103,7 +103,7 @@ using namespace yas;
 - (void)test_to_tuple_from_tuple {
     chaining::notifier<std::tuple<int>> notifier;
 
-    opt_t<std::tuple<int>> called;
+    std::optional<std::tuple<int>> called;
 
     auto chain = notifier.chain().to_tuple().perform([&called](auto const &value) { called = value; }).end();
 
@@ -116,7 +116,7 @@ using namespace yas;
 - (void)test_to_tuple_from_pair {
     chaining::notifier<std::pair<int, std::string>> notifier;
 
-    opt_t<std::tuple<int, std::string>> called;
+    std::optional<std::tuple<int, std::string>> called;
 
     auto chain = notifier.chain().to_tuple().perform([&called](auto const &value) { called = value; }).end();
 

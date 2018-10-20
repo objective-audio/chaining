@@ -69,7 +69,7 @@ using namespace yas;
     chaining::notifier<int> main_notifier;
     chaining::notifier<std::string> sub_notifier;
 
-    using opt_pair_t = std::pair<opt_t<int>, opt_t<std::string>>;
+    using opt_pair_t = std::pair<std::optional<int>, std::optional<std::string>>;
 
     opt_pair_t received;
 
@@ -92,7 +92,7 @@ using namespace yas;
     chaining::notifier<int> main_notifier;
     chaining::notifier<std::string> sub_notifier;
 
-    using opt_pair_t = opt_t<std::pair<int, std::string>>;
+    using opt_pair_t = std::optional<std::pair<int, std::string>>;
 
     opt_pair_t received;
 
@@ -120,7 +120,7 @@ using namespace yas;
     auto main_chain = main_notifier.chain().to_tuple();
     auto sub_chain2 = sub_notifier2.chain().to_tuple();
 
-    opt_t<std::tuple<int, std::string, float>> received;
+    std::optional<std::tuple<int, std::string, float>> received;
 
     auto chain = main_chain.combine(sub_chain)
                      .combine(sub_chain2)
