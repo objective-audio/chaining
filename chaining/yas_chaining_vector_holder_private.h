@@ -40,9 +40,7 @@ event<T> make_relayed_event(T const &element, std::size_t const idx) {
 
 template <typename T>
 struct event<T>::impl_base : base::impl {
-    virtual event_type type() {
-        throw std::runtime_error("type() must be overridden");
-    }
+    virtual event_type type() = 0;
 };
 
 template <typename T>
@@ -94,8 +92,8 @@ event_type event<T>::type() const {
 template <typename T>
 template <typename Event>
 Event const &event<T>::get() const {
-    if (auto ip = std::dynamic_pointer_cast<impl<Event>>(impl_ptr())) {
-        return ip->event;
+    if (auto event_impl = std::dynamic_pointer_cast<impl<Event>>(impl_ptr())) {
+        return event_impl->event;
     }
 
     throw std::runtime_error("get event failed.");
@@ -202,7 +200,6 @@ struct immutable_holder<T>::impl : sender<event<T>>::impl {
    private:
     std::vector<T> _raw;
     std::vector<wrapper_ptr> _observers;
-    std::mutex _set_mutex;
 
     template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     chaining_f _element_chaining() {
@@ -214,9 +211,9 @@ struct immutable_holder<T>::impl : sender<event<T>>::impl {
                                         auto holder = weak_holder.lock();
                                         wrapper_ptr wrapper = weak_wrapper.lock();
                                         if (holder && wrapper) {
-                                            auto ip = holder.template impl_ptr<impl>();
-                                            if (auto idx = yas::index(ip->_observers, wrapper)) {
-                                                ip->broadcast(make_relayed_event(element, *idx));
+                                            auto holder_impl = holder.template impl_ptr<impl>();
+                                            if (auto idx = yas::index(holder_impl->_observers, wrapper)) {
+                                                holder_impl->broadcast(make_relayed_event(element, *idx));
                                             }
                                         }
                                     })

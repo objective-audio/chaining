@@ -1,0 +1,11 @@
+language: objective-c
+osx_image: xcode10.1
+branches:
+  only:
+    - master
+notifications:
+  email: false
+install:
+  - brew install clang-format
+script:
+  - xcodebuild -project chaining_test/chaining_test.xcodeproj -scheme chaining_test_mac -configuration Debug OBJROOT=build -sdk macosx clean test
