@@ -73,11 +73,10 @@ struct immutable_holder : sender<event<Key, Value>> {
 
     immutable_holder(std::nullptr_t);
 
-    using map_t = std::multimap<Key, Value>;
     using event_t = multimap::event<Key, Value>;
     using chain_t = chain<event_t, event_t, event_t, true>;
 
-    map_t const &raw() const;
+    std::multimap<Key, Value> const &raw() const;
     std::size_t size() const;
 
     chain_t chain();
