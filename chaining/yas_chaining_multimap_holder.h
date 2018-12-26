@@ -93,6 +93,8 @@ struct holder : immutable_holder<Key, Value> {
 
     ~holder() final;
 
+    std::multimap<Key, Value> &raw();
+
     void replace(std::multimap<Key, Value>);
     void insert(std::multimap<Key, Value>);
     void insert(Key, Value);

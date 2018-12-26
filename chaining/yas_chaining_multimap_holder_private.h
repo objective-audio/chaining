@@ -293,6 +293,11 @@ template <typename Key, typename Value>
 holder<Key, Value>::~holder() = default;
 
 template <typename Key, typename Value>
+std::multimap<Key, Value> &holder<Key, Value>::raw() {
+    return this->template impl_ptr<immutable_impl>()->raw();
+}
+
+template <typename Key, typename Value>
 void holder<Key, Value>::replace(std::multimap<Key, Value> map) {
     this->template impl_ptr<immutable_impl>()->replace(std::move(map));
 }
