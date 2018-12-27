@@ -206,7 +206,8 @@ struct immutable_holder<T>::impl : sender<event<T>>::impl {
         auto weak_holder = to_weak(this->template cast<immutable_holder<T>>());
         return [weak_holder](T &element, wrapper_ptr &wrapper) {
             wrapper_wptr weak_wrapper = wrapper;
-            wrapper->observer = element.chain()
+            wrapper->observer = element.sendable()
+                                    .chain_unsync()
                                     .perform([weak_holder, weak_wrapper](T const &element) {
                                         auto holder = weak_holder.lock();
                                         wrapper_ptr wrapper = weak_wrapper.lock();
@@ -300,7 +301,7 @@ std::size_t immutable_holder<T>::size() const {
 
 template <typename T>
 typename immutable_holder<T>::chain_t immutable_holder<T>::immutable_holder<T>::chain() {
-    return this->template impl_ptr<impl>()->template chain<true>(*this);
+    return this->template impl_ptr<impl>()->template chain<true>();
 }
 
 template <typename T>

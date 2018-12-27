@@ -24,6 +24,10 @@ struct fetcher<T>::impl : sender<T>::impl, chaining::fetchable<T>::impl {
         return this->_fetching_handler();
     }
 
+    chaining::chain<T, T, T, true> chain_sync() override {
+        return this->template chain<true>();
+    }
+
     void _broadcast() {
         if (auto value = this->_fetching_handler()) {
             this->broadcast(*value);
@@ -73,7 +77,7 @@ void fetcher<T>::broadcast(T const &value) const {
 
 template <typename T>
 chaining::chain<T, T, T, true> fetcher<T>::chain() {
-    return this->template impl_ptr<impl>()->template chain<true>(*this);
+    return this->template impl_ptr<impl>()->template chain<true>();
 }
 
 template <typename T>
