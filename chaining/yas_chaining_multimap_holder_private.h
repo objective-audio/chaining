@@ -271,7 +271,7 @@ std::size_t immutable_holder<Key, Value>::size() const {
 
 template <typename Key, typename Value>
 typename immutable_holder<Key, Value>::chain_t immutable_holder<Key, Value>::immutable_holder<Key, Value>::chain() {
-    return this->template impl_ptr<impl>()->template chain<true>();
+    return this->template impl_ptr<impl>()->chain_sync();
 }
 
 #pragma mark - multimap::holder

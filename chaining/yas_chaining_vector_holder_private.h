@@ -301,7 +301,7 @@ std::size_t immutable_holder<T>::size() const {
 
 template <typename T>
 typename immutable_holder<T>::chain_t immutable_holder<T>::immutable_holder<T>::chain() {
-    return this->template impl_ptr<impl>()->template chain<true>();
+    return this->template impl_ptr<impl>()->chain_sync();
 }
 
 template <typename T>

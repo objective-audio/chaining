@@ -40,24 +40,24 @@ struct sender<T>::impl : base::impl, chaining::sendable<T>::impl {
     void fetch_for(any_joint const &joint) override {
     }
 
+    chaining::chain<T, T, T, false> chain_unsync() override {
+        return this->_chain<false>();
+    }
+
+    chaining::chain<T, T, T, true> chain_sync() override {
+        return this->_chain<true>();
+    }
+
+   private:
+    std::vector<weak<joint<T>>> _joints;
+
     template <bool Syncable>
-    chain<T, T, T, Syncable> chain() {
+    chain<T, T, T, Syncable> _chain() {
         auto sender = this->template cast<chaining::sender<T>>();
         chaining::joint<T> joint{to_weak(sender)};
         this->_joints.emplace_back(to_weak(joint));
         return chaining::chain<T, T, T, Syncable>{std::move(joint)};
     }
-
-    chaining::chain<T, T, T, false> chain_unsync() override {
-        return this->chain<false>();
-    }
-
-    chaining::chain<T, T, T, true> chain_sync() override {
-        return this->chain<true>();
-    }
-
-   private:
-    std::vector<weak<joint<T>>> _joints;
 };
 
 template <typename T>
