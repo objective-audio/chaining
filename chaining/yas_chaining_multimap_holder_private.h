@@ -195,7 +195,8 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
         auto weak_holder = to_weak(this->template cast<immutable_holder<Key, Value>>());
         return [weak_holder](Key const &key, Value &value, wrapper_ptr &wrapper) {
             wrapper_wptr weak_wrapper = wrapper;
-            wrapper->observer = value.chain()
+            wrapper->observer = value.sendable()
+                                    .chain_unsync()
                                     .perform([weak_holder, weak_wrapper, key](Value const &value) {
                                         auto holder = weak_holder.lock();
                                         wrapper_ptr wrapper = weak_wrapper.lock();
@@ -270,7 +271,7 @@ std::size_t immutable_holder<Key, Value>::size() const {
 
 template <typename Key, typename Value>
 typename immutable_holder<Key, Value>::chain_t immutable_holder<Key, Value>::immutable_holder<Key, Value>::chain() {
-    return this->template impl_ptr<impl>()->template chain<true>(*this);
+    return this->template impl_ptr<impl>()->chain_sync();
 }
 
 #pragma mark - multimap::holder
