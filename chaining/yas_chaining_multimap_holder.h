@@ -17,17 +17,9 @@ enum event_type {
 };
 
 template <typename Key, typename Value>
-struct event : base {
-    class impl;
-
-    event(multimap::event_type const, std::multimap<Key, Value> const &);
-    event(std::nullptr_t);
-
-    multimap::event_type type() const;
-    std::multimap<Key, Value> const &elements() const;
-
-    template <typename Event>
-    Event const &get() const;
+struct event {
+    multimap::event_type const type;
+    std::multimap<Key, Value> const &elements;
 };
 
 template <typename Key, typename Value>

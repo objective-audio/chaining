@@ -8,33 +8,6 @@
 #include "yas_stl_utils.h"
 
 namespace yas::chaining::multimap {
-template <typename Key, typename Value>
-struct event<Key, Value>::impl : base::impl {
-    event_type const type;
-    std::multimap<Key, Value> const &elements;
-
-    impl(event_type const type, std::multimap<Key, Value> const &elements) : type(type), elements(elements) {
-    }
-};
-
-template <typename Key, typename Value>
-event<Key, Value>::event(multimap::event_type const event_type, std::multimap<Key, Value> const &elements)
-    : base(std::make_shared<impl>(event_type, elements)) {
-}
-
-template <typename Key, typename Value>
-event<Key, Value>::event(std::nullptr_t) : base(nullptr) {
-}
-
-template <typename Key, typename Value>
-multimap::event_type event<Key, Value>::type() const {
-    return this->template impl_ptr<impl>()->type;
-}
-
-template <typename Key, typename Value>
-std::multimap<Key, Value> const &event<Key, Value>::elements() const {
-    return this->template impl_ptr<impl>()->elements;
-}
 
 #pragma mark - multimap::immutable_holder
 
