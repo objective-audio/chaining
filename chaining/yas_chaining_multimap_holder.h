@@ -17,50 +17,14 @@ enum event_type {
 };
 
 template <typename Key, typename Value>
-struct fetched_event {
-    static multimap::event_type const type = multimap::event_type::fetched;
-    std::multimap<Key, Value> const &elements;
-};
-
-template <typename Key, typename Value>
-struct any_event {
-    static multimap::event_type const type = multimap::event_type::any;
-    std::multimap<Key, Value> const &elements;
-};
-
-template <typename Key, typename Value>
-struct inserted_event {
-    static multimap::event_type const type = multimap::event_type::inserted;
-    std::multimap<Key, Value> const &elements;
-};
-
-template <typename Key, typename Value>
-struct erased_event {
-    static multimap::event_type const type = multimap::event_type::erased;
-    std::multimap<Key, Value> const &elements;
-};
-
-template <typename Key, typename Value>
-struct relayed_event {
-    static multimap::event_type const type = multimap::event_type::relayed;
-    std::multimap<Key, Value> const &elements;
-};
-
-template <typename Key, typename Value>
 struct event : base {
-    class impl_base;
-
-    template <typename Event>
     class impl;
 
-    event(fetched_event<Key, Value> &&);
-    event(any_event<Key, Value> &&);
-    event(inserted_event<Key, Value> &&);
-    event(erased_event<Key, Value> &&);
-    event(relayed_event<Key, Value> &&);
+    event(multimap::event_type const, std::multimap<Key, Value> const &);
     event(std::nullptr_t);
 
     multimap::event_type type() const;
+    std::multimap<Key, Value> const &elements() const;
 
     template <typename Event>
     Event const &get() const;

@@ -112,44 +112,4 @@ using namespace yas::chaining;
     XCTAssertEqual(holder.size(), 0);
 }
 
-- (void)test_make_fetched_event {
-    std::multimap<int, std::string> elements{{0, "10"}, {1, "11"}};
-    multimap::event<int, std::string> event = multimap::make_fetched_event(elements);
-
-    XCTAssertEqual(event.type(), multimap::event_type::fetched);
-    XCTAssertEqual((event.get<multimap::fetched_event<int, std::string>>().elements), elements);
-}
-
-- (void)test_make_any_event {
-    std::multimap<int, std::string> elements{{0, "10"}, {1, "11"}};
-    multimap::event<int, std::string> event = multimap::make_any_event(elements);
-
-    XCTAssertEqual(event.type(), multimap::event_type::any);
-    XCTAssertEqual((event.get<multimap::any_event<int, std::string>>().elements), elements);
-}
-
-- (void)test_make_inserted_event {
-    std::multimap<int, std::string> elements{{0, "10"}, {1, "11"}};
-    multimap::event<int, std::string> event = multimap::make_inserted_event(elements);
-
-    XCTAssertEqual(event.type(), multimap::event_type::inserted);
-    XCTAssertEqual((event.get<multimap::inserted_event<int, std::string>>().elements), elements);
-}
-
-- (void)test_make_erased_event {
-    std::multimap<int, std::string> elements{{0, "10"}, {1, "11"}};
-    multimap::event<int, std::string> event = multimap::make_erased_event(elements);
-
-    XCTAssertEqual(event.type(), multimap::event_type::erased);
-    XCTAssertEqual((event.get<multimap::erased_event<int, std::string>>().elements), elements);
-}
-
-- (void)test_make_relayed_event {
-    std::multimap<int, std::string> elements{{0, "10"}, {1, "11"}};
-    multimap::event<int, std::string> event = multimap::make_relayed_event(elements);
-
-    XCTAssertEqual(event.type(), multimap::event_type::relayed);
-    XCTAssertEqual((event.get<multimap::relayed_event<int, std::string>>().elements), elements);
-}
-
 @end

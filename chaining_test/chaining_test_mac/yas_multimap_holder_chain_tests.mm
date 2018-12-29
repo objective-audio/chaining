@@ -31,8 +31,7 @@ using namespace yas::chaining;
 
     XCTAssertEqual(received.size(), 1);
     XCTAssertEqual(received.at(0).type(), multimap::event_type::fetched);
-    XCTAssertEqual((received.at(0).get<multimap::fetched_event<int, std::string>>().elements),
-                   (std::multimap<int, std::string>{{{0, "10"}, {1, "11"}, {2, "12"}}}));
+    XCTAssertEqual((received.at(0).elements()), (std::multimap<int, std::string>{{{0, "10"}, {1, "11"}, {2, "12"}}}));
 }
 
 - (void)test_chain_any_by_replace {
@@ -46,8 +45,7 @@ using namespace yas::chaining;
 
     XCTAssertEqual(received.size(), 1);
     XCTAssertEqual(received.at(0).type(), multimap::event_type::any);
-    XCTAssertEqual((received.at(0).get<multimap::any_event<int, std::string>>().elements),
-                   (std::multimap<int, std::string>{{3, "13"}, {4, "14"}}));
+    XCTAssertEqual((received.at(0).elements()), (std::multimap<int, std::string>{{3, "13"}, {4, "14"}}));
 }
 
 - (void)test_chain_any_by_clear {
@@ -61,7 +59,7 @@ using namespace yas::chaining;
 
     XCTAssertEqual(received.size(), 1);
     XCTAssertEqual(received.at(0).type(), multimap::event_type::any);
-    XCTAssertEqual((received.at(0).get<multimap::any_event<int, std::string>>().elements.size()), 0);
+    XCTAssertEqual((received.at(0).elements().size()), 0);
 }
 
 - (void)test_chain_inserted {
@@ -74,8 +72,7 @@ using namespace yas::chaining;
                      .perform([&received_events, &received_elements](auto const &event) {
                          received_events.push_back(event);
                          if (event.type() == multimap::event_type::inserted) {
-                             received_elements.push_back(
-                                 event.template get<multimap::inserted_event<int, std::string>>().elements);
+                             received_elements.push_back(event.elements());
                          }
                      })
                      .end();
@@ -98,8 +95,7 @@ using namespace yas::chaining;
                      .perform([&received_events, &received_elements](auto const &event) {
                          received_events.push_back(event);
                          if (event.type() == multimap::event_type::erased) {
-                             received_elements.push_back(
-                                 event.template get<multimap::erased_event<int, std::string>>().elements);
+                             received_elements.push_back(event.elements());
                          }
                      })
                      .end();
@@ -120,16 +116,14 @@ using namespace yas::chaining;
     std::vector<multimap::event<int, chaining::holder<std::string>>> received_events;
     std::vector<std::multimap<int, chaining::holder<std::string>>> received_elements;
 
-    auto chain =
-        map_holder.chain()
-            .perform([&received_events, &received_elements](auto const &event) {
-                received_events.push_back(event);
-                if (event.type() == multimap::event_type::relayed) {
-                    received_elements.push_back(
-                        event.template get<multimap::relayed_event<int, chaining::holder<std::string>>>().elements);
-                }
-            })
-            .end();
+    auto chain = map_holder.chain()
+                     .perform([&received_events, &received_elements](auto const &event) {
+                         received_events.push_back(event);
+                         if (event.type() == multimap::event_type::relayed) {
+                             received_elements.push_back(event.elements());
+                         }
+                     })
+                     .end();
 
     holder1.set_value("3");
 
@@ -160,16 +154,14 @@ using namespace yas::chaining;
     std::vector<multimap::event<int, chaining::holder<std::string>>> received_events;
     std::vector<std::multimap<int, chaining::holder<std::string>>> received_elements;
 
-    auto chain =
-        map_holder.chain()
-            .perform([&received_events, &received_elements](auto const &event) {
-                received_events.push_back(event);
-                if (event.type() == multimap::event_type::relayed) {
-                    received_elements.push_back(
-                        event.template get<multimap::relayed_event<int, chaining::holder<std::string>>>().elements);
-                }
-            })
-            .end();
+    auto chain = map_holder.chain()
+                     .perform([&received_events, &received_elements](auto const &event) {
+                         received_events.push_back(event);
+                         if (event.type() == multimap::event_type::relayed) {
+                             received_elements.push_back(event.elements());
+                         }
+                     })
+                     .end();
 
     holder1.set_value("3");
 
@@ -204,8 +196,7 @@ using namespace yas::chaining;
                      .perform([&received_events, &received_elements](auto const &event) {
                          received_events.push_back(event);
                          if (event.type() == multimap::event_type::relayed) {
-                             received_elements.push_back(
-                                 event.template get<multimap::relayed_event<int, chaining::holder<int>>>().elements);
+                             received_elements.push_back(event.elements());
                          }
                      })
                      .end();
@@ -246,8 +237,7 @@ using namespace yas::chaining;
                      .perform([&received_events, &received_elements](auto const &event) {
                          received_events.push_back(event);
                          if (event.type() == multimap::event_type::relayed) {
-                             received_elements.push_back(
-                                 event.template get<multimap::relayed_event<int, chaining::holder<int>>>().elements);
+                             received_elements.push_back(event.elements());
                          }
                      })
                      .end();

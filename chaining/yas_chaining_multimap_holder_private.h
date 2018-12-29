@@ -9,71 +9,17 @@
 
 namespace yas::chaining::multimap {
 template <typename Key, typename Value>
-event<Key, Value> make_fetched_event(std::multimap<Key, Value> const &elements) {
-    return event<Key, Value>{fetched_event<Key, Value>{.elements = elements}};
-}
+struct event<Key, Value>::impl : base::impl {
+    event_type const type;
+    std::multimap<Key, Value> const &elements;
 
-template <typename Key, typename Value>
-event<Key, Value> make_any_event(std::multimap<Key, Value> const &elements) {
-    return event<Key, Value>{any_event<Key, Value>{.elements = elements}};
-}
-
-template <typename Key, typename Value>
-event<Key, Value> make_inserted_event(std::multimap<Key, Value> const &elements) {
-    return event<Key, Value>{inserted_event<Key, Value>{.elements = elements}};
-}
-
-template <typename Key, typename Value>
-event<Key, Value> make_erased_event(std::multimap<Key, Value> const &elements) {
-    return event<Key, Value>{erased_event<Key, Value>{.elements = elements}};
-}
-
-template <typename Key, typename Value>
-event<Key, Value> make_relayed_event(std::multimap<Key, Value> const &elements) {
-    return event<Key, Value>{relayed_event<Key, Value>{.elements = elements}};
-}
-
-template <typename Key, typename Value>
-struct event<Key, Value>::impl_base : base::impl {
-    virtual event_type type() = 0;
-};
-
-template <typename Key, typename Value>
-template <typename Event>
-struct event<Key, Value>::impl : event<Key, Value>::impl_base {
-    Event const event;
-
-    impl(Event &&event) : event(std::move(event)) {
-    }
-
-    event_type type() override {
-        return Event::type;
+    impl(event_type const type, std::multimap<Key, Value> const &elements) : type(type), elements(elements) {
     }
 };
 
 template <typename Key, typename Value>
-event<Key, Value>::event(fetched_event<Key, Value> &&event)
-    : base(std::make_shared<impl<fetched_event<Key, Value>>>(std::move(event))) {
-}
-
-template <typename Key, typename Value>
-event<Key, Value>::event(any_event<Key, Value> &&event)
-    : base(std::make_shared<impl<any_event<Key, Value>>>(std::move(event))) {
-}
-
-template <typename Key, typename Value>
-event<Key, Value>::event(inserted_event<Key, Value> &&event)
-    : base(std::make_shared<impl<inserted_event<Key, Value>>>(std::move(event))) {
-}
-
-template <typename Key, typename Value>
-event<Key, Value>::event(erased_event<Key, Value> &&event)
-    : base(std::make_shared<impl<erased_event<Key, Value>>>(std::move(event))) {
-}
-
-template <typename Key, typename Value>
-event<Key, Value>::event(relayed_event<Key, Value> &&event)
-    : base(std::make_shared<impl<relayed_event<Key, Value>>>(std::move(event))) {
+event<Key, Value>::event(multimap::event_type const event_type, std::multimap<Key, Value> const &elements)
+    : base(std::make_shared<impl>(event_type, elements)) {
 }
 
 template <typename Key, typename Value>
@@ -82,17 +28,12 @@ event<Key, Value>::event(std::nullptr_t) : base(nullptr) {
 
 template <typename Key, typename Value>
 multimap::event_type event<Key, Value>::type() const {
-    return this->template impl_ptr<impl_base>()->type();
+    return this->template impl_ptr<impl>()->type;
 }
 
 template <typename Key, typename Value>
-template <typename Event>
-Event const &event<Key, Value>::get() const {
-    if (auto event_impl = std::dynamic_pointer_cast<impl<Event>>(impl_ptr())) {
-        return event_impl->event;
-    }
-
-    throw std::runtime_error("get event failed.");
+std::multimap<Key, Value> const &event<Key, Value>::elements() const {
+    return this->template impl_ptr<impl>()->elements;
 }
 
 #pragma mark - multimap::immutable_holder
@@ -150,7 +91,7 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
             }
         });
 
-        this->broadcast(make_erased_event<Key, Value>(erased));
+        this->broadcast(event<Key, Value>{event_type::erased, erased});
 
         return erased;
     }
@@ -167,7 +108,7 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
         this->_observers.clear();
         this->_raw.clear();
 
-        this->broadcast(make_any_event(this->_raw));
+        this->broadcast(event<Key, Value>{event_type::any, this->_raw});
     }
 
     std::multimap<Key, Value> &raw() {
@@ -183,7 +124,7 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
     }
 
     void fetch_for(any_joint const &joint) override {
-        this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
+        this->send_value_to_target(event<Key, Value>{event_type::fetched, this->_raw}, joint.identifier());
     }
 
    private:
@@ -202,7 +143,8 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
                                         wrapper_ptr wrapper = weak_wrapper.lock();
                                         if (holder && wrapper) {
                                             std::multimap<Key, Value> elements{{key, value}};
-                                            holder.template impl_ptr<impl>()->broadcast(make_relayed_event(elements));
+                                            holder.template impl_ptr<impl>()->broadcast(
+                                                event<Key, Value>{event_type::relayed, elements});
                                         }
                                     })
                                     .end();
@@ -231,7 +173,7 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
             this->_raw = std::move(map);
         }
 
-        this->broadcast(make_any_event(this->_raw));
+        this->broadcast(event<Key, Value>{event_type::any, this->_raw});
     }
 
     void _insert(std::multimap<Key, Value> &&map, chaining_f chaining) {
@@ -247,7 +189,7 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
             this->_raw.insert(map.begin(), map.end());
         }
 
-        this->broadcast(make_inserted_event(map));
+        this->broadcast(event<Key, Value>{event_type::inserted, map});
     }
 };
 
