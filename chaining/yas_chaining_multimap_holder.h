@@ -43,8 +43,7 @@ struct erased_event {
 template <typename Key, typename Value>
 struct relayed_event {
     static multimap::event_type const type = multimap::event_type::relayed;
-    Value const &value;
-    Key const &key;
+    std::multimap<Key, Value> const &elements;
 };
 
 template <typename Key, typename Value>

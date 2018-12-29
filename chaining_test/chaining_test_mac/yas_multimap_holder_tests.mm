@@ -145,13 +145,11 @@ using namespace yas::chaining;
 }
 
 - (void)test_make_relayed_event {
-    int const key = 1;
-    std::string const value = "11";
-    multimap::event<int, std::string> event = multimap::make_relayed_event(value, key);
+    std::multimap<int, std::string> elements{{0, "10"}, {1, "11"}};
+    multimap::event<int, std::string> event = multimap::make_relayed_event(elements);
 
     XCTAssertEqual(event.type(), multimap::event_type::relayed);
-    XCTAssertEqual((event.get<multimap::relayed_event<int, std::string>>().key), 1);
-    XCTAssertEqual((event.get<multimap::relayed_event<int, std::string>>().value), "11");
+    XCTAssertEqual((event.get<multimap::relayed_event<int, std::string>>().elements), elements);
 }
 
 @end

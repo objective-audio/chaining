@@ -29,8 +29,8 @@ event<Key, Value> make_erased_event(std::multimap<Key, Value> const &elements) {
 }
 
 template <typename Key, typename Value>
-event<Key, Value> make_relayed_event(Value const &value, Key const &key) {
-    return event<Key, Value>{relayed_event<Key, Value>{.value = value, .key = key}};
+event<Key, Value> make_relayed_event(std::multimap<Key, Value> const &elements) {
+    return event<Key, Value>{relayed_event<Key, Value>{.elements = elements}};
 }
 
 template <typename Key, typename Value>
@@ -201,7 +201,8 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
                                         auto holder = weak_holder.lock();
                                         wrapper_ptr wrapper = weak_wrapper.lock();
                                         if (holder && wrapper) {
-                                            holder.template impl_ptr<impl>()->broadcast(make_relayed_event(value, key));
+                                            std::multimap<Key, Value> elements{{key, value}};
+                                            holder.template impl_ptr<impl>()->broadcast(make_relayed_event(elements));
                                         }
                                     })
                                     .end();
