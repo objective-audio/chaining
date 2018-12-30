@@ -30,7 +30,7 @@ using namespace yas::chaining;
     XCTAssertEqual(holder3.size(), 3);
 }
 
-- (void)test_replace {
+- (void)test_replace_all {
     map::holder<int, std::string> holder{{{0, "10"}, {1, "11"}}};
 
     XCTAssertEqual(holder.size(), 2);
@@ -40,6 +40,15 @@ using namespace yas::chaining;
 
     XCTAssertEqual(holder.size(), 1);
     XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{2, "12"}}));
+}
+
+- (void)test_replace {
+    map::holder<int, std::string> holder{{{0, "10"}, {1, "11"}}};
+
+    holder.replace(0, "100");
+
+    XCTAssertEqual(holder.size(), 2);
+    XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{0, "100"}, {1, "11"}}));
 }
 
 - (void)test_insert_map {
