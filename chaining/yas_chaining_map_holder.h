@@ -33,6 +33,7 @@ struct immutable_holder : sender<event<Key, Value>> {
     using chain_t = chain<event_t, event_t, event_t, true>;
 
     std::map<Key, Value> const &raw() const;
+    bool has_value(Key const &) const;
     Value const &at(Key const &) const;
     std::size_t size() const;
 
