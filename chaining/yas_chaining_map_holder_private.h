@@ -167,10 +167,14 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
             if (any_observer &observer = wrapper->observer) {
                 observer.invalidate();
             }
+            this->_observers.erase(key);
         }
 
-        this->_observers.erase(key);
-        this->_raw.erase(key);
+        bool isErased = false;
+        if (this->_raw.count(key) > 0) {
+            this->_raw.erase(key);
+            isErased = true;
+        }
 
         auto inserted = this->_raw.emplace(key, value);
 
@@ -182,7 +186,7 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
         }
 
         std::map<Key, Value> map{{std::move(key), std::move(value)}};
-        this->broadcast(event<Key, Value>{event_type::replaced, map});
+        this->broadcast(event<Key, Value>{isErased ? event_type::replaced : event_type::inserted, map});
     }
 
     void _insert(std::map<Key, Value> &&map, chaining_f chaining) {
