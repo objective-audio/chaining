@@ -225,6 +225,16 @@ std::map<Key, Value> const &immutable_holder<Key, Value>::raw() const {
 }
 
 template <typename Key, typename Value>
+bool immutable_holder<Key, Value>::has_value(Key const &key) const {
+    return this->raw().count(key) > 0;
+}
+
+template <typename Key, typename Value>
+Value const &immutable_holder<Key, Value>::at(Key const &key) const {
+    return this->raw().at(key);
+}
+
+template <typename Key, typename Value>
 std::size_t immutable_holder<Key, Value>::size() const {
     return this->raw().size();
 }
