@@ -109,12 +109,14 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
         auto weak_holder = to_weak(this->template cast<immutable_holder<Key, Value>>());
         return [weak_holder](Key const &key, Value &value, wrapper_ptr &wrapper) {
             wrapper_wptr weak_wrapper = wrapper;
+            auto weak_value = to_weak(value);
             wrapper->observer = value.sendable()
                                     .chain_unsync()
-                                    .perform([weak_holder, weak_wrapper, key](Value const &value) {
+                                    .perform([weak_holder, weak_wrapper, key, weak_value](auto const &) {
                                         auto holder = weak_holder.lock();
+                                        auto value = weak_value.lock();
                                         wrapper_ptr wrapper = weak_wrapper.lock();
-                                        if (holder && wrapper) {
+                                        if (holder && wrapper && value) {
                                             std::multimap<Key, Value> elements{{key, value}};
                                             holder.template impl_ptr<impl>()->broadcast(
                                                 event<Key, Value>{event_type::relayed, elements});
