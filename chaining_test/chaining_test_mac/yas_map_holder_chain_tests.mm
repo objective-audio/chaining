@@ -123,7 +123,7 @@ using namespace yas::chaining;
                      })
                      .end();
 
-    holder.replace(1, "111");
+    holder.insert_or_replace(1, "111");
 
     XCTAssertEqual(received_events.size(), 1);
     XCTAssertEqual(received_events.at(0).type, map::event_type::replaced);
