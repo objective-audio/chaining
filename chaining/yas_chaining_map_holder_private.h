@@ -37,6 +37,16 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
     }
 
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
+    void replace(Key &&key, Value &&value) {
+        this->_replace(std::move(key), std::move(value), this->_element_chaining());
+    }
+
+    template <typename Element = Value, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
+    void replace(Key &&key, Value &&value) {
+        this->_replace(std::move(key), std::move(value), nullptr);
+    }
+
+    template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     void insert(std::map<Key, Value> &&map) {
         this->_insert(std::move(map), this->_element_chaining());
     }
@@ -151,6 +161,30 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
         this->broadcast(event<Key, Value>{event_type::any, this->_raw});
     }
 
+    void _replace(Key &&key, Value &&value, chaining_f chaining) {
+        if (this->_observers.count(key) > 0) {
+            auto &wrapper = this->_observers.at(key);
+            if (any_observer &observer = wrapper->observer) {
+                observer.invalidate();
+            }
+        }
+
+        this->_observers.erase(key);
+        this->_raw.erase(key);
+
+        auto inserted = this->_raw.emplace(key, value);
+
+        if (chaining && inserted.second) {
+            wrapper_ptr wrapper = std::make_shared<observer_wrapper>();
+            wrapper->value = &inserted.first->second;
+            chaining(key, value, wrapper);
+            this->_observers.emplace(key, std::move(wrapper));
+        }
+
+        std::map<Key, Value> map{{std::move(key), std::move(value)}};
+        this->broadcast(event<Key, Value>{event_type::replaced, map});
+    }
+
     void _insert(std::map<Key, Value> &&map, chaining_f chaining) {
         if (chaining) {
             for (auto &pair : map) {
@@ -221,6 +255,11 @@ std::map<Key, Value> &holder<Key, Value>::raw() {
 template <typename Key, typename Value>
 void holder<Key, Value>::replace(std::map<Key, Value> map) {
     this->template impl_ptr<immutable_impl>()->replace(std::move(map));
+}
+
+template <typename Key, typename Value>
+void holder<Key, Value>::replace(Key key, Value value) {
+    this->template impl_ptr<immutable_impl>()->replace(std::move(key), std::move(value));
 }
 
 template <typename Key, typename Value>

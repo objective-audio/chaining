@@ -13,6 +13,7 @@ enum event_type {
     any,
     inserted,
     erased,
+    replaced,
     relayed,
 };
 
@@ -51,6 +52,7 @@ struct holder : immutable_holder<Key, Value> {
     std::map<Key, Value> &raw();
 
     void replace(std::map<Key, Value>);
+    void replace(Key, Value);
     void insert(std::map<Key, Value>);
     void insert(Key, Value);
     std::map<Key, Value> erase_if(std::function<bool(Key const &, Value const &)> const &);
