@@ -37,7 +37,7 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
     }
 
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(Key &&key, Value &&value) {
+    void insert_or_replace(Key &&key, Value &&value) {
         this->_insert_or_replace(std::move(key), std::move(value), this->_element_chaining());
     }
 
