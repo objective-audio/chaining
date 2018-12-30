@@ -51,7 +51,7 @@ struct holder : immutable_holder<Key, Value> {
 
     std::map<Key, Value> &raw();
 
-    void replace(std::map<Key, Value>);
+    void replace_all(std::map<Key, Value>);
     void replace(Key, Value);
     void insert(std::map<Key, Value>);
     void insert(Key, Value);

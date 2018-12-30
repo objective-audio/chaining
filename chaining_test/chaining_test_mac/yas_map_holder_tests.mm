@@ -36,7 +36,7 @@ using namespace yas::chaining;
     XCTAssertEqual(holder.size(), 2);
     XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{0, "10"}, {1, "11"}}));
 
-    holder.replace({{2, "12"}});
+    holder.replace_all({{2, "12"}});
 
     XCTAssertEqual(holder.size(), 1);
     XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{2, "12"}}));
