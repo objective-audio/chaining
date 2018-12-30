@@ -54,7 +54,6 @@ struct holder : immutable_holder<Key, Value> {
     void replace_all(std::map<Key, Value>);
     void insert_or_replace(Key, Value);
     void insert(std::map<Key, Value>);
-    void insert(Key, Value);
     std::map<Key, Value> erase_if(std::function<bool(Key const &, Value const &)> const &);
     std::map<Key, Value> erase_for_value(Value const &);
     std::map<Key, Value> erase_for_key(Key const &);

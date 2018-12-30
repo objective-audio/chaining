@@ -272,11 +272,6 @@ void holder<Key, Value>::insert(std::map<Key, Value> map) {
 }
 
 template <typename Key, typename Value>
-void holder<Key, Value>::insert(Key key, Value value) {
-    this->insert(std::map<Key, Value>{{std::move(key), std::move(value)}});
-}
-
-template <typename Key, typename Value>
 std::map<Key, Value> holder<Key, Value>::erase_if(std::function<bool(Key const &, Value const &)> const &handler) {
     return this->template impl_ptr<immutable_impl>()->erase_if(handler);
 }

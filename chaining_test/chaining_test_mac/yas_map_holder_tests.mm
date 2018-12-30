@@ -63,18 +63,6 @@ using namespace yas::chaining;
     XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));
 }
 
-- (void)test_insert_single {
-    map::holder<int, std::string> holder{{{0, "10"}, {2, "12"}}};
-
-    XCTAssertEqual(holder.size(), 2);
-    XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{0, "10"}, {2, "12"}}));
-
-    holder.insert(1, "11");
-
-    XCTAssertEqual(holder.size(), 3);
-    XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));
-}
-
 - (void)test_erase_if {
     map::holder<int, std::string> holder{{{0, "10"}, {1, "11"}, {2, "12"}}};
 
