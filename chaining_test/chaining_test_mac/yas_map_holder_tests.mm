@@ -42,13 +42,25 @@ using namespace yas::chaining;
     XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{2, "12"}}));
 }
 
-- (void)test_replace {
+- (void)test_replace_by_insert_or_replace {
     map::holder<int, std::string> holder{{{0, "10"}, {1, "11"}}};
 
-    holder.replace(0, "100");
+    holder.insert_or_replace(0, "100");
 
     XCTAssertEqual(holder.size(), 2);
     XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{0, "100"}, {1, "11"}}));
+}
+
+- (void)test_insert_by_insert_or_replace {
+    map::holder<int, std::string> holder{{{0, "10"}, {2, "12"}}};
+
+    XCTAssertEqual(holder.size(), 2);
+    XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{0, "10"}, {2, "12"}}));
+
+    holder.insert_or_replace(1, "11");
+
+    XCTAssertEqual(holder.size(), 3);
+    XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));
 }
 
 - (void)test_insert_map {
@@ -58,18 +70,6 @@ using namespace yas::chaining;
     XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{1, "11"}}));
 
     holder.insert(std::map<int, std::string>{{{0, "10"}, {2, "12"}}});
-
-    XCTAssertEqual(holder.size(), 3);
-    XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));
-}
-
-- (void)test_insert_single {
-    map::holder<int, std::string> holder{{{0, "10"}, {2, "12"}}};
-
-    XCTAssertEqual(holder.size(), 2);
-    XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{0, "10"}, {2, "12"}}));
-
-    holder.insert(1, "11");
 
     XCTAssertEqual(holder.size(), 3);
     XCTAssertEqual(holder.raw(), (std::map<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));

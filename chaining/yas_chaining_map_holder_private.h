@@ -37,13 +37,13 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
     }
 
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(Key &&key, Value &&value) {
-        this->_replace(std::move(key), std::move(value), this->_element_chaining());
+    void insert_or_replace(Key &&key, Value &&value) {
+        this->_insert_or_replace(std::move(key), std::move(value), this->_element_chaining());
     }
 
     template <typename Element = Value, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(Key &&key, Value &&value) {
-        this->_replace(std::move(key), std::move(value), nullptr);
+    void insert_or_replace(Key &&key, Value &&value) {
+        this->_insert_or_replace(std::move(key), std::move(value), nullptr);
     }
 
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
@@ -161,16 +161,20 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
         this->broadcast(event<Key, Value>{event_type::any, this->_raw});
     }
 
-    void _replace(Key &&key, Value &&value, chaining_f chaining) {
+    void _insert_or_replace(Key &&key, Value &&value, chaining_f chaining) {
         if (this->_observers.count(key) > 0) {
             auto &wrapper = this->_observers.at(key);
             if (any_observer &observer = wrapper->observer) {
                 observer.invalidate();
             }
+            this->_observers.erase(key);
         }
 
-        this->_observers.erase(key);
-        this->_raw.erase(key);
+        bool isErased = false;
+        if (this->_raw.count(key) > 0) {
+            this->_raw.erase(key);
+            isErased = true;
+        }
 
         auto inserted = this->_raw.emplace(key, value);
 
@@ -182,7 +186,7 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
         }
 
         std::map<Key, Value> map{{std::move(key), std::move(value)}};
-        this->broadcast(event<Key, Value>{event_type::replaced, map});
+        this->broadcast(event<Key, Value>{isErased ? event_type::replaced : event_type::inserted, map});
     }
 
     void _insert(std::map<Key, Value> &&map, chaining_f chaining) {
@@ -258,18 +262,13 @@ void holder<Key, Value>::replace_all(std::map<Key, Value> map) {
 }
 
 template <typename Key, typename Value>
-void holder<Key, Value>::replace(Key key, Value value) {
-    this->template impl_ptr<immutable_impl>()->replace(std::move(key), std::move(value));
+void holder<Key, Value>::insert_or_replace(Key key, Value value) {
+    this->template impl_ptr<immutable_impl>()->insert_or_replace(std::move(key), std::move(value));
 }
 
 template <typename Key, typename Value>
 void holder<Key, Value>::insert(std::map<Key, Value> map) {
     this->template impl_ptr<immutable_impl>()->insert(std::move(map));
-}
-
-template <typename Key, typename Value>
-void holder<Key, Value>::insert(Key key, Value value) {
-    this->insert(std::map<Key, Value>{{std::move(key), std::move(value)}});
 }
 
 template <typename Key, typename Value>

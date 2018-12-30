@@ -77,7 +77,30 @@ using namespace yas::chaining;
                      })
                      .end();
 
-    holder.insert({{3, "13"}});
+    holder.insert({{3, "13"}, {4, "14"}});
+
+    XCTAssertEqual(received_events.size(), 1);
+    XCTAssertEqual(received_events.at(0).type, map::event_type::inserted);
+    XCTAssertEqual(received_elements.size(), 1);
+    XCTAssertEqual(received_elements.at(0), (std::map<int, std::string>{{3, "13"}, {4, "14"}}));
+}
+
+- (void)test_chain_inserted_by_insert_or_replace {
+    map::holder<int, std::string> holder{{{0, "10"}, {1, "11"}, {2, "12"}}};
+
+    std::vector<map::event<int, std::string>> received_events;
+    std::vector<std::map<int, std::string>> received_elements;
+
+    auto chain = holder.chain()
+                     .perform([&received_events, &received_elements](auto const &event) {
+                         received_events.push_back(event);
+                         if (event.type == map::event_type::inserted) {
+                             received_elements.push_back(event.elements);
+                         }
+                     })
+                     .end();
+
+    holder.insert_or_replace(3, "13");
 
     XCTAssertEqual(received_events.size(), 1);
     XCTAssertEqual(received_events.at(0).type, map::event_type::inserted);
@@ -108,7 +131,7 @@ using namespace yas::chaining;
     XCTAssertEqual(received_elements.at(0), (std::map<int, std::string>{{1, "11"}}));
 }
 
-- (void)test_chain_replaced {
+- (void)test_chain_replaced_by_insert_or_replace {
     map::holder<int, std::string> holder{{{0, "10"}, {1, "11"}, {2, "12"}}};
 
     std::vector<map::event<int, std::string>> received_events;
@@ -123,7 +146,7 @@ using namespace yas::chaining;
                      })
                      .end();
 
-    holder.replace(1, "111");
+    holder.insert_or_replace(1, "111");
 
     XCTAssertEqual(received_events.size(), 1);
     XCTAssertEqual(received_events.at(0).type, map::event_type::replaced);
@@ -169,10 +192,10 @@ using namespace yas::chaining;
     map::holder<int, chaining::holder<std::string>> map_holder;
 
     holder<std::string> holder1{"1"};
-    map_holder.insert(1, holder1);
+    map_holder.insert_or_replace(1, holder1);
 
     holder<std::string> holder2{"2"};
-    map_holder.insert(2, holder2);
+    map_holder.insert_or_replace(2, holder2);
 
     std::vector<map::event<int, chaining::holder<std::string>>> received_events;
     std::vector<std::map<int, chaining::holder<std::string>>> received_elements;
