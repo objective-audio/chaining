@@ -108,7 +108,7 @@ using namespace yas::chaining;
     XCTAssertEqual(received_elements.at(0), (std::map<int, std::string>{{1, "11"}}));
 }
 
-- (void)test_chain_replaced {
+- (void)test_chain_replaced_by_insert_or_replace {
     map::holder<int, std::string> holder{{{0, "10"}, {1, "11"}, {2, "12"}}};
 
     std::vector<map::event<int, std::string>> received_events;
@@ -169,10 +169,10 @@ using namespace yas::chaining;
     map::holder<int, chaining::holder<std::string>> map_holder;
 
     holder<std::string> holder1{"1"};
-    map_holder.insert(1, holder1);
+    map_holder.insert_or_replace(1, holder1);
 
     holder<std::string> holder2{"2"};
-    map_holder.insert(2, holder2);
+    map_holder.insert_or_replace(2, holder2);
 
     std::vector<map::event<int, chaining::holder<std::string>>> received_events;
     std::vector<std::map<int, chaining::holder<std::string>>> received_elements;
