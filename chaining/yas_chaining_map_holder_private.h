@@ -269,6 +269,11 @@ std::map<Key, Value> &holder<Key, Value>::raw() {
 }
 
 template <typename Key, typename Value>
+Value &holder<Key, Value>::at(Key const &key) {
+    return this->template impl_ptr<immutable_impl>()->raw().at(key);
+}
+
+template <typename Key, typename Value>
 void holder<Key, Value>::replace_all(std::map<Key, Value> map) {
     this->template impl_ptr<immutable_impl>()->replace(std::move(map));
 }
