@@ -205,13 +205,15 @@ struct immutable_holder<T>::impl : sender<event<T>>::impl {
     chaining_f _element_chaining() {
         auto weak_holder = to_weak(this->template cast<immutable_holder<T>>());
         return [weak_holder](T &element, wrapper_ptr &wrapper) {
+            auto weak_element = to_weak(element);
             wrapper_wptr weak_wrapper = wrapper;
             wrapper->observer = element.sendable()
                                     .chain_unsync()
-                                    .perform([weak_holder, weak_wrapper](T const &element) {
+                                    .perform([weak_holder, weak_wrapper, weak_element](auto const &) {
                                         auto holder = weak_holder.lock();
+                                        auto element = weak_element.lock();
                                         wrapper_ptr wrapper = weak_wrapper.lock();
-                                        if (holder && wrapper) {
+                                        if (holder && wrapper && element) {
                                             auto holder_impl = holder.template impl_ptr<impl>();
                                             if (auto idx = yas::index(holder_impl->_observers, wrapper)) {
                                                 holder_impl->broadcast(make_relayed_event(element, *idx));

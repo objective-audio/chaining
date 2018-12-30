@@ -14,6 +14,8 @@ struct any_sender {};
 
 template <typename T>
 struct sender : base, any_sender {
+    using SendType = T;
+
     class impl;
 
     sender(std::nullptr_t);
