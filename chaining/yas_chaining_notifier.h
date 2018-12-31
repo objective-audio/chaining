@@ -21,7 +21,7 @@ struct notifier : sender<T> {
 
     void notify(T const &);
 
-    chain<T, T, T, false> chain();
+    chain_unsync_t<T> chain();
 
     receiver<T> &receiver();
 

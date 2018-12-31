@@ -72,7 +72,7 @@ void fetcher<T>::broadcast(T const &value) const {
 }
 
 template <typename T>
-chaining::chain<T, T, T, true> fetcher<T>::chain() {
+chain_sync_t<T> fetcher<T>::chain() {
     return this->template impl_ptr<impl>()->chain_sync();
 }
 

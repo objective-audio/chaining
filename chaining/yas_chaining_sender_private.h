@@ -40,11 +40,11 @@ struct sender<T>::impl : base::impl, chaining::sendable<T>::impl {
     void fetch_for(any_joint const &joint) override {
     }
 
-    chaining::chain<T, T, T, false> chain_unsync() override {
+    chain_unsync_t<T> chain_unsync() override {
         return this->_chain<false>();
     }
 
-    chaining::chain<T, T, T, true> chain_sync() override {
+    chain_sync_t<T> chain_sync() override {
         return this->_chain<true>();
     }
 
