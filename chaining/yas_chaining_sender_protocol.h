@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include "yas_chaining_types.h"
 #include "yas_protocol.h"
 
 namespace yas::chaining {
@@ -16,8 +17,8 @@ struct[[nodiscard]] sendable : protocol {
         virtual void send_value_to_target(T const &, std::uintptr_t const) = 0;
         virtual void erase_joint(std::uintptr_t const) = 0;
         virtual void fetch_for(any_joint const &) = 0;
-        virtual chain<T, T, T, false> chain_unsync() = 0;
-        virtual chain<T, T, T, true> chain_sync() = 0;
+        virtual chain_unsync_t<T> chain_unsync() = 0;
+        virtual chain_sync_t<T> chain_sync() = 0;
     };
 
     sendable(std::shared_ptr<impl>);
@@ -27,8 +28,8 @@ struct[[nodiscard]] sendable : protocol {
     void send_value_to_target(T const &, std::uintptr_t const);
     void erase_joint(std::uintptr_t const);
     void fetch_for(any_joint const &);
-    chain<T, T, T, false> chain_unsync();
-    chain<T, T, T, true> chain_sync();
+    chain_unsync_t<T> chain_unsync();
+    chain_sync_t<T> chain_sync();
 };
 }  // namespace yas::chaining
 

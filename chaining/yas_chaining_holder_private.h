@@ -96,7 +96,7 @@ void holder<T>::set_value(T value) {
 }
 
 template <typename T>
-chain<T, T, T, true> immutable_holder<T>::chain() {
+chain_sync_t<T> immutable_holder<T>::chain() {
     return this->template impl_ptr<impl>()->chain_sync();
 }
 

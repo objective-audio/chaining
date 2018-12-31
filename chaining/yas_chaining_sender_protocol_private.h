@@ -34,12 +34,12 @@ void sendable<T>::fetch_for(any_joint const &joint) {
 }
 
 template <typename T>
-chain<T, T, T, false> sendable<T>::chain_unsync() {
+chain_unsync_t<T> sendable<T>::chain_unsync() {
     return impl_ptr<impl>()->chain_unsync();
 }
 
 template <typename T>
-chaining::chain<T, T, T, true> sendable<T>::chain_sync() {
+chain_sync_t<T> sendable<T>::chain_sync() {
     return this->template impl_ptr<impl>()->chain_sync();
 }
 }  // namespace yas::chaining

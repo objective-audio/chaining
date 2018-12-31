@@ -18,7 +18,7 @@ struct immutable_holder : sender<T> {
 
     [[nodiscard]] T const &value() const;
 
-    chain<T, T, T, true> chain();
+    chain_sync_t<T> chain();
 
    protected:
     immutable_holder(std::shared_ptr<impl> &&);
