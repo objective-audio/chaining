@@ -43,7 +43,7 @@
 		B623BA4321DC4D7000D16037 /* yas_chaining_sender_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA2021DC4D7000D16037 /* yas_chaining_sender_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B623BA4421DC4D7000D16037 /* yas_chaining_multimap_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA2121DC4D7000D16037 /* yas_chaining_multimap_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B623BA4521DC4D7000D16037 /* yas_chaining_any_observer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B623BA2221DC4D7000D16037 /* yas_chaining_any_observer.cpp */; };
-		B623BA4821DC4D8600D16037 /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B623BA4721DC4D8600D16037 /* cpp_utils.framework */; };
+		B623BA9F21DC50DC00D16037 /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B623BA4721DC4D8600D16037 /* cpp_utils.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -86,6 +86,8 @@
 		B623BA2121DC4D7000D16037 /* yas_chaining_multimap_holder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_multimap_holder.h; sourceTree = "<group>"; };
 		B623BA2221DC4D7000D16037 /* yas_chaining_any_observer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_any_observer.cpp; sourceTree = "<group>"; };
 		B623BA4721DC4D8600D16037 /* cpp_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cpp_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B623BA9521DC4EFD00D16037 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
+		B623BA9721DC4F0B00D16037 /* objc_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = objc_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -93,7 +95,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B623BA4821DC4D8600D16037 /* cpp_utils.framework in Frameworks */,
+				B623BA9F21DC50DC00D16037 /* cpp_utils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -173,6 +175,8 @@
 		B623BA4621DC4D8600D16037 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B623BA9721DC4F0B00D16037 /* objc_utils.framework */,
+				B623BA9521DC4EFD00D16037 /* Accelerate.framework */,
 				B623BA4721DC4D8600D16037 /* cpp_utils.framework */,
 			);
 			name = Frameworks;
