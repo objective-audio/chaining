@@ -7,93 +7,96 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B623B9FB21DC4D3600D16037 /* chaining.h in Headers */ = {isa = PBXBuildFile; fileRef = B623B9F921DC4D3600D16037 /* chaining.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA6D21DC4DA000D16037 /* yas_chaining_joint.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA4A21DC4DA000D16037 /* yas_chaining_joint.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA6E21DC4DA000D16037 /* yas_chaining_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA4B21DC4DA000D16037 /* yas_chaining_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA6F21DC4DA000D16037 /* yas_chaining_observer.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA4C21DC4DA000D16037 /* yas_chaining_observer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7021DC4DA000D16037 /* yas_chaining_notifier.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA4D21DC4DA000D16037 /* yas_chaining_notifier.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7121DC4DA000D16037 /* yas_chaining_sender_protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA4E21DC4DA000D16037 /* yas_chaining_sender_protocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7221DC4DA000D16037 /* yas_chaining_fetcher_protocol_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA4F21DC4DA000D16037 /* yas_chaining_fetcher_protocol_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7321DC4DA000D16037 /* yas_chaining_receiver_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5021DC4DA000D16037 /* yas_chaining_receiver_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7421DC4DA000D16037 /* yas_chaining_fetcher.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5121DC4DA000D16037 /* yas_chaining_fetcher.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7521DC4DA000D16037 /* yas_chaining_sender_protocol_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5221DC4DA000D16037 /* yas_chaining_sender_protocol_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7621DC4DA000D16037 /* yas_chaining_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5321DC4DA000D16037 /* yas_chaining_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7721DC4DA000D16037 /* yas_chaining_chain.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5421DC4DA000D16037 /* yas_chaining_chain.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7821DC4DA000D16037 /* yas_chaining_receiver_protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5521DC4DA000D16037 /* yas_chaining_receiver_protocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7921DC4DA000D16037 /* yas_chaining_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5621DC4DA000D16037 /* yas_chaining_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7A21DC4DA000D16037 /* yas_chaining_chain_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5721DC4DA000D16037 /* yas_chaining_chain_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7B21DC4DA000D16037 /* yas_chaining_observer_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5821DC4DA000D16037 /* yas_chaining_observer_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7C21DC4DA000D16037 /* yas_chaining_joint_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5921DC4DA000D16037 /* yas_chaining_joint_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7D21DC4DA000D16037 /* yas_chaining_holder_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5A21DC4DA000D16037 /* yas_chaining_holder_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA7E21DC4DA000D16037 /* yas_chaining_observer_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B623BA5B21DC4DA000D16037 /* yas_chaining_observer_pool.cpp */; };
-		B623BA7F21DC4DA000D16037 /* yas_chaining_observer_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5C21DC4DA000D16037 /* yas_chaining_observer_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8021DC4DA000D16037 /* yas_chaining.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5D21DC4DA000D16037 /* yas_chaining.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8121DC4DA000D16037 /* yas_chaining_vector_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5E21DC4DA000D16037 /* yas_chaining_vector_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8221DC4DA000D16037 /* yas_chaining_any_observer.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA5F21DC4DA000D16037 /* yas_chaining_any_observer.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8321DC4DA000D16037 /* yas_chaining_map_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA6021DC4DA000D16037 /* yas_chaining_map_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8421DC4DA000D16037 /* yas_chaining_receiver.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA6121DC4DA000D16037 /* yas_chaining_receiver.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8521DC4DA000D16037 /* yas_chaining_sender.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA6221DC4DA000D16037 /* yas_chaining_sender.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8621DC4DA000D16037 /* yas_chaining_map_holder_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA6321DC4DA000D16037 /* yas_chaining_map_holder_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8721DC4DA000D16037 /* yas_chaining_multimap_holder_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA6421DC4DA000D16037 /* yas_chaining_multimap_holder_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8821DC4DA000D16037 /* yas_chaining_vector_holder_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA6521DC4DA000D16037 /* yas_chaining_vector_holder_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8921DC4DA000D16037 /* yas_chaining_fetcher_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA6621DC4DA000D16037 /* yas_chaining_fetcher_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8A21DC4DA000D16037 /* yas_chaining_notifier_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA6721DC4DA000D16037 /* yas_chaining_notifier_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8B21DC4DA000D16037 /* yas_chaining_receiver_protocol_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA6821DC4DA000D16037 /* yas_chaining_receiver_protocol_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8C21DC4DA000D16037 /* yas_chaining_fetcher_protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA6921DC4DA000D16037 /* yas_chaining_fetcher_protocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8D21DC4DA000D16037 /* yas_chaining_sender_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA6A21DC4DA000D16037 /* yas_chaining_sender_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8E21DC4DA000D16037 /* yas_chaining_multimap_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA6B21DC4DA000D16037 /* yas_chaining_multimap_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B623BA8F21DC4DA000D16037 /* yas_chaining_any_observer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B623BA6C21DC4DA000D16037 /* yas_chaining_any_observer.cpp */; };
-		B623BA9221DC4DB400D16037 /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B623BA9121DC4DB400D16037 /* cpp_utils.framework */; };
+		B652393B21DC5F6D0035E7E2 /* chaining.h in Headers */ = {isa = PBXBuildFile; fileRef = B652393921DC5F6D0035E7E2 /* chaining.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652394021DC5F990035E7E2 /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B652393F21DC5F990035E7E2 /* cpp_utils.framework */; };
+		B652396B21DC60160035E7E2 /* yas_chaining_joint.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394821DC60150035E7E2 /* yas_chaining_joint.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652396C21DC60160035E7E2 /* yas_chaining_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394921DC60150035E7E2 /* yas_chaining_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652396D21DC60160035E7E2 /* yas_chaining_observer.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394A21DC60150035E7E2 /* yas_chaining_observer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652396E21DC60160035E7E2 /* yas_chaining_notifier.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394B21DC60150035E7E2 /* yas_chaining_notifier.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652396F21DC60160035E7E2 /* yas_chaining_sender_protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394C21DC60150035E7E2 /* yas_chaining_sender_protocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397021DC60160035E7E2 /* yas_chaining_fetcher_protocol_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394D21DC60150035E7E2 /* yas_chaining_fetcher_protocol_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397121DC60160035E7E2 /* yas_chaining_receiver_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394E21DC60150035E7E2 /* yas_chaining_receiver_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397221DC60160035E7E2 /* yas_chaining_fetcher.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394F21DC60150035E7E2 /* yas_chaining_fetcher.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397321DC60160035E7E2 /* yas_chaining_sender_protocol_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395021DC60150035E7E2 /* yas_chaining_sender_protocol_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397421DC60160035E7E2 /* yas_chaining_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395121DC60150035E7E2 /* yas_chaining_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397521DC60160035E7E2 /* yas_chaining_chain.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395221DC60150035E7E2 /* yas_chaining_chain.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397621DC60160035E7E2 /* yas_chaining_receiver_protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395321DC60150035E7E2 /* yas_chaining_receiver_protocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397721DC60160035E7E2 /* yas_chaining_utils.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395421DC60150035E7E2 /* yas_chaining_utils.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397821DC60160035E7E2 /* yas_chaining_chain_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395521DC60150035E7E2 /* yas_chaining_chain_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397921DC60160035E7E2 /* yas_chaining_observer_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395621DC60150035E7E2 /* yas_chaining_observer_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397A21DC60160035E7E2 /* yas_chaining_joint_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395721DC60150035E7E2 /* yas_chaining_joint_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397B21DC60160035E7E2 /* yas_chaining_holder_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395821DC60150035E7E2 /* yas_chaining_holder_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397C21DC60160035E7E2 /* yas_chaining_observer_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B652395921DC60150035E7E2 /* yas_chaining_observer_pool.cpp */; };
+		B652397D21DC60160035E7E2 /* yas_chaining_observer_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395A21DC60150035E7E2 /* yas_chaining_observer_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397E21DC60160035E7E2 /* yas_chaining.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395B21DC60150035E7E2 /* yas_chaining.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652397F21DC60160035E7E2 /* yas_chaining_vector_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395C21DC60160035E7E2 /* yas_chaining_vector_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652398021DC60160035E7E2 /* yas_chaining_any_observer.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395D21DC60160035E7E2 /* yas_chaining_any_observer.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652398121DC60160035E7E2 /* yas_chaining_map_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395E21DC60160035E7E2 /* yas_chaining_map_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652398221DC60160035E7E2 /* yas_chaining_receiver.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395F21DC60160035E7E2 /* yas_chaining_receiver.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652398321DC60160035E7E2 /* yas_chaining_sender.h in Headers */ = {isa = PBXBuildFile; fileRef = B652396021DC60160035E7E2 /* yas_chaining_sender.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652398421DC60160035E7E2 /* yas_chaining_map_holder_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652396121DC60160035E7E2 /* yas_chaining_map_holder_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652398521DC60160035E7E2 /* yas_chaining_multimap_holder_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652396221DC60160035E7E2 /* yas_chaining_multimap_holder_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652398621DC60160035E7E2 /* yas_chaining_vector_holder_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652396321DC60160035E7E2 /* yas_chaining_vector_holder_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652398721DC60160035E7E2 /* yas_chaining_fetcher_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652396421DC60160035E7E2 /* yas_chaining_fetcher_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652398821DC60160035E7E2 /* yas_chaining_notifier_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652396521DC60160035E7E2 /* yas_chaining_notifier_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652398921DC60160035E7E2 /* yas_chaining_receiver_protocol_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652396621DC60160035E7E2 /* yas_chaining_receiver_protocol_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652398A21DC60160035E7E2 /* yas_chaining_fetcher_protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B652396721DC60160035E7E2 /* yas_chaining_fetcher_protocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652398B21DC60160035E7E2 /* yas_chaining_sender_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652396821DC60160035E7E2 /* yas_chaining_sender_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652398C21DC60160035E7E2 /* yas_chaining_multimap_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B652396921DC60160035E7E2 /* yas_chaining_multimap_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B652398D21DC60160035E7E2 /* yas_chaining_any_observer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B652396A21DC60160035E7E2 /* yas_chaining_any_observer.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B623B9F621DC4D3600D16037 /* chaining.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = chaining.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		B623B9F921DC4D3600D16037 /* chaining.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = chaining.h; sourceTree = "<group>"; };
-		B623B9FA21DC4D3600D16037 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B623BA4A21DC4DA000D16037 /* yas_chaining_joint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_joint.h; sourceTree = "<group>"; };
-		B623BA4B21DC4DA000D16037 /* yas_chaining_holder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_holder.h; sourceTree = "<group>"; };
-		B623BA4C21DC4DA000D16037 /* yas_chaining_observer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_observer.h; sourceTree = "<group>"; };
-		B623BA4D21DC4DA000D16037 /* yas_chaining_notifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_notifier.h; sourceTree = "<group>"; };
-		B623BA4E21DC4DA000D16037 /* yas_chaining_sender_protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender_protocol.h; sourceTree = "<group>"; };
-		B623BA4F21DC4DA000D16037 /* yas_chaining_fetcher_protocol_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher_protocol_private.h; sourceTree = "<group>"; };
-		B623BA5021DC4DA000D16037 /* yas_chaining_receiver_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver_private.h; sourceTree = "<group>"; };
-		B623BA5121DC4DA000D16037 /* yas_chaining_fetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher.h; sourceTree = "<group>"; };
-		B623BA5221DC4DA000D16037 /* yas_chaining_sender_protocol_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender_protocol_private.h; sourceTree = "<group>"; };
-		B623BA5321DC4DA000D16037 /* yas_chaining_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_types.h; sourceTree = "<group>"; };
-		B623BA5421DC4DA000D16037 /* yas_chaining_chain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_chain.h; sourceTree = "<group>"; };
-		B623BA5521DC4DA000D16037 /* yas_chaining_receiver_protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver_protocol.h; sourceTree = "<group>"; };
-		B623BA5621DC4DA000D16037 /* yas_chaining_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_utils.h; sourceTree = "<group>"; };
-		B623BA5721DC4DA000D16037 /* yas_chaining_chain_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_chain_private.h; sourceTree = "<group>"; };
-		B623BA5821DC4DA000D16037 /* yas_chaining_observer_pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_observer_pool.h; sourceTree = "<group>"; };
-		B623BA5921DC4DA000D16037 /* yas_chaining_joint_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_joint_private.h; sourceTree = "<group>"; };
-		B623BA5A21DC4DA000D16037 /* yas_chaining_holder_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_holder_private.h; sourceTree = "<group>"; };
-		B623BA5B21DC4DA000D16037 /* yas_chaining_observer_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_observer_pool.cpp; sourceTree = "<group>"; };
-		B623BA5C21DC4DA000D16037 /* yas_chaining_observer_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_observer_private.h; sourceTree = "<group>"; };
-		B623BA5D21DC4DA000D16037 /* yas_chaining.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining.h; sourceTree = "<group>"; };
-		B623BA5E21DC4DA000D16037 /* yas_chaining_vector_holder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_vector_holder.h; sourceTree = "<group>"; };
-		B623BA5F21DC4DA000D16037 /* yas_chaining_any_observer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_any_observer.h; sourceTree = "<group>"; };
-		B623BA6021DC4DA000D16037 /* yas_chaining_map_holder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_map_holder.h; sourceTree = "<group>"; };
-		B623BA6121DC4DA000D16037 /* yas_chaining_receiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver.h; sourceTree = "<group>"; };
-		B623BA6221DC4DA000D16037 /* yas_chaining_sender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender.h; sourceTree = "<group>"; };
-		B623BA6321DC4DA000D16037 /* yas_chaining_map_holder_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_map_holder_private.h; sourceTree = "<group>"; };
-		B623BA6421DC4DA000D16037 /* yas_chaining_multimap_holder_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_multimap_holder_private.h; sourceTree = "<group>"; };
-		B623BA6521DC4DA000D16037 /* yas_chaining_vector_holder_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_vector_holder_private.h; sourceTree = "<group>"; };
-		B623BA6621DC4DA000D16037 /* yas_chaining_fetcher_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher_private.h; sourceTree = "<group>"; };
-		B623BA6721DC4DA000D16037 /* yas_chaining_notifier_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_notifier_private.h; sourceTree = "<group>"; };
-		B623BA6821DC4DA000D16037 /* yas_chaining_receiver_protocol_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver_protocol_private.h; sourceTree = "<group>"; };
-		B623BA6921DC4DA000D16037 /* yas_chaining_fetcher_protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher_protocol.h; sourceTree = "<group>"; };
-		B623BA6A21DC4DA000D16037 /* yas_chaining_sender_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender_private.h; sourceTree = "<group>"; };
-		B623BA6B21DC4DA000D16037 /* yas_chaining_multimap_holder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_multimap_holder.h; sourceTree = "<group>"; };
-		B623BA6C21DC4DA000D16037 /* yas_chaining_any_observer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_any_observer.cpp; sourceTree = "<group>"; };
 		B623BA9121DC4DB400D16037 /* cpp_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cpp_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B652393721DC5F6D0035E7E2 /* chaining.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = chaining.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B652393921DC5F6D0035E7E2 /* chaining.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = chaining.h; sourceTree = "<group>"; };
+		B652393A21DC5F6D0035E7E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		B652393F21DC5F990035E7E2 /* cpp_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cpp_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B652394121DC5F990035E7E2 /* objc_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = objc_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B652394321DC5F990035E7E2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
+		B652394821DC60150035E7E2 /* yas_chaining_joint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_joint.h; sourceTree = "<group>"; };
+		B652394921DC60150035E7E2 /* yas_chaining_holder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_holder.h; sourceTree = "<group>"; };
+		B652394A21DC60150035E7E2 /* yas_chaining_observer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_observer.h; sourceTree = "<group>"; };
+		B652394B21DC60150035E7E2 /* yas_chaining_notifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_notifier.h; sourceTree = "<group>"; };
+		B652394C21DC60150035E7E2 /* yas_chaining_sender_protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender_protocol.h; sourceTree = "<group>"; };
+		B652394D21DC60150035E7E2 /* yas_chaining_fetcher_protocol_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher_protocol_private.h; sourceTree = "<group>"; };
+		B652394E21DC60150035E7E2 /* yas_chaining_receiver_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver_private.h; sourceTree = "<group>"; };
+		B652394F21DC60150035E7E2 /* yas_chaining_fetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher.h; sourceTree = "<group>"; };
+		B652395021DC60150035E7E2 /* yas_chaining_sender_protocol_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender_protocol_private.h; sourceTree = "<group>"; };
+		B652395121DC60150035E7E2 /* yas_chaining_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_types.h; sourceTree = "<group>"; };
+		B652395221DC60150035E7E2 /* yas_chaining_chain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_chain.h; sourceTree = "<group>"; };
+		B652395321DC60150035E7E2 /* yas_chaining_receiver_protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver_protocol.h; sourceTree = "<group>"; };
+		B652395421DC60150035E7E2 /* yas_chaining_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_utils.h; sourceTree = "<group>"; };
+		B652395521DC60150035E7E2 /* yas_chaining_chain_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_chain_private.h; sourceTree = "<group>"; };
+		B652395621DC60150035E7E2 /* yas_chaining_observer_pool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_observer_pool.h; sourceTree = "<group>"; };
+		B652395721DC60150035E7E2 /* yas_chaining_joint_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_joint_private.h; sourceTree = "<group>"; };
+		B652395821DC60150035E7E2 /* yas_chaining_holder_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_holder_private.h; sourceTree = "<group>"; };
+		B652395921DC60150035E7E2 /* yas_chaining_observer_pool.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_observer_pool.cpp; sourceTree = "<group>"; };
+		B652395A21DC60150035E7E2 /* yas_chaining_observer_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_observer_private.h; sourceTree = "<group>"; };
+		B652395B21DC60150035E7E2 /* yas_chaining.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining.h; sourceTree = "<group>"; };
+		B652395C21DC60160035E7E2 /* yas_chaining_vector_holder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_vector_holder.h; sourceTree = "<group>"; };
+		B652395D21DC60160035E7E2 /* yas_chaining_any_observer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_any_observer.h; sourceTree = "<group>"; };
+		B652395E21DC60160035E7E2 /* yas_chaining_map_holder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_map_holder.h; sourceTree = "<group>"; };
+		B652395F21DC60160035E7E2 /* yas_chaining_receiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver.h; sourceTree = "<group>"; };
+		B652396021DC60160035E7E2 /* yas_chaining_sender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender.h; sourceTree = "<group>"; };
+		B652396121DC60160035E7E2 /* yas_chaining_map_holder_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_map_holder_private.h; sourceTree = "<group>"; };
+		B652396221DC60160035E7E2 /* yas_chaining_multimap_holder_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_multimap_holder_private.h; sourceTree = "<group>"; };
+		B652396321DC60160035E7E2 /* yas_chaining_vector_holder_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_vector_holder_private.h; sourceTree = "<group>"; };
+		B652396421DC60160035E7E2 /* yas_chaining_fetcher_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher_private.h; sourceTree = "<group>"; };
+		B652396521DC60160035E7E2 /* yas_chaining_notifier_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_notifier_private.h; sourceTree = "<group>"; };
+		B652396621DC60160035E7E2 /* yas_chaining_receiver_protocol_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver_protocol_private.h; sourceTree = "<group>"; };
+		B652396721DC60160035E7E2 /* yas_chaining_fetcher_protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher_protocol.h; sourceTree = "<group>"; };
+		B652396821DC60160035E7E2 /* yas_chaining_sender_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender_private.h; sourceTree = "<group>"; };
+		B652396921DC60160035E7E2 /* yas_chaining_multimap_holder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_multimap_holder.h; sourceTree = "<group>"; };
+		B652396A21DC60160035E7E2 /* yas_chaining_any_observer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_any_observer.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		B623B9F321DC4D3600D16037 /* Frameworks */ = {
+		B652393421DC5F6D0035E7E2 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B623BA9221DC4DB400D16037 /* cpp_utils.framework in Frameworks */,
+				B652394021DC5F990035E7E2 /* cpp_utils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -103,7 +106,7 @@
 		B623B9DC21DC4CC800D16037 = {
 			isa = PBXGroup;
 			children = (
-				B623B9F821DC4D3600D16037 /* chaining */,
+				B652393821DC5F6D0035E7E2 /* chaining */,
 				B623B9F721DC4D3600D16037 /* Products */,
 				B623BA9021DC4DB400D16037 /* Frameworks */,
 			);
@@ -112,127 +115,130 @@
 		B623B9F721DC4D3600D16037 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B623B9F621DC4D3600D16037 /* chaining.framework */,
+				B652393721DC5F6D0035E7E2 /* chaining.framework */,
 			);
 			name = Products;
-			sourceTree = "<group>";
-		};
-		B623B9F821DC4D3600D16037 /* chaining */ = {
-			isa = PBXGroup;
-			children = (
-				B623BA4921DC4DA000D16037 /* chaining */,
-				B623B9F921DC4D3600D16037 /* chaining.h */,
-				B623B9FA21DC4D3600D16037 /* Info.plist */,
-			);
-			path = chaining;
-			sourceTree = "<group>";
-		};
-		B623BA4921DC4DA000D16037 /* chaining */ = {
-			isa = PBXGroup;
-			children = (
-				B623BA6C21DC4DA000D16037 /* yas_chaining_any_observer.cpp */,
-				B623BA5F21DC4DA000D16037 /* yas_chaining_any_observer.h */,
-				B623BA5721DC4DA000D16037 /* yas_chaining_chain_private.h */,
-				B623BA5421DC4DA000D16037 /* yas_chaining_chain.h */,
-				B623BA6621DC4DA000D16037 /* yas_chaining_fetcher_private.h */,
-				B623BA4F21DC4DA000D16037 /* yas_chaining_fetcher_protocol_private.h */,
-				B623BA6921DC4DA000D16037 /* yas_chaining_fetcher_protocol.h */,
-				B623BA5121DC4DA000D16037 /* yas_chaining_fetcher.h */,
-				B623BA5A21DC4DA000D16037 /* yas_chaining_holder_private.h */,
-				B623BA4B21DC4DA000D16037 /* yas_chaining_holder.h */,
-				B623BA5921DC4DA000D16037 /* yas_chaining_joint_private.h */,
-				B623BA4A21DC4DA000D16037 /* yas_chaining_joint.h */,
-				B623BA6321DC4DA000D16037 /* yas_chaining_map_holder_private.h */,
-				B623BA6021DC4DA000D16037 /* yas_chaining_map_holder.h */,
-				B623BA6421DC4DA000D16037 /* yas_chaining_multimap_holder_private.h */,
-				B623BA6B21DC4DA000D16037 /* yas_chaining_multimap_holder.h */,
-				B623BA6721DC4DA000D16037 /* yas_chaining_notifier_private.h */,
-				B623BA4D21DC4DA000D16037 /* yas_chaining_notifier.h */,
-				B623BA5B21DC4DA000D16037 /* yas_chaining_observer_pool.cpp */,
-				B623BA5821DC4DA000D16037 /* yas_chaining_observer_pool.h */,
-				B623BA5C21DC4DA000D16037 /* yas_chaining_observer_private.h */,
-				B623BA4C21DC4DA000D16037 /* yas_chaining_observer.h */,
-				B623BA5021DC4DA000D16037 /* yas_chaining_receiver_private.h */,
-				B623BA6821DC4DA000D16037 /* yas_chaining_receiver_protocol_private.h */,
-				B623BA5521DC4DA000D16037 /* yas_chaining_receiver_protocol.h */,
-				B623BA6121DC4DA000D16037 /* yas_chaining_receiver.h */,
-				B623BA6A21DC4DA000D16037 /* yas_chaining_sender_private.h */,
-				B623BA5221DC4DA000D16037 /* yas_chaining_sender_protocol_private.h */,
-				B623BA4E21DC4DA000D16037 /* yas_chaining_sender_protocol.h */,
-				B623BA6221DC4DA000D16037 /* yas_chaining_sender.h */,
-				B623BA5321DC4DA000D16037 /* yas_chaining_types.h */,
-				B623BA5621DC4DA000D16037 /* yas_chaining_utils.h */,
-				B623BA6521DC4DA000D16037 /* yas_chaining_vector_holder_private.h */,
-				B623BA5E21DC4DA000D16037 /* yas_chaining_vector_holder.h */,
-				B623BA5D21DC4DA000D16037 /* yas_chaining.h */,
-			);
-			name = chaining;
-			path = ../../chaining;
 			sourceTree = "<group>";
 		};
 		B623BA9021DC4DB400D16037 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B652394321DC5F990035E7E2 /* Accelerate.framework */,
+				B652393F21DC5F990035E7E2 /* cpp_utils.framework */,
+				B652394121DC5F990035E7E2 /* objc_utils.framework */,
 				B623BA9121DC4DB400D16037 /* cpp_utils.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		B652393821DC5F6D0035E7E2 /* chaining */ = {
+			isa = PBXGroup;
+			children = (
+				B652394721DC60150035E7E2 /* chaining */,
+				B652393921DC5F6D0035E7E2 /* chaining.h */,
+				B652393A21DC5F6D0035E7E2 /* Info.plist */,
+			);
+			path = chaining;
+			sourceTree = "<group>";
+		};
+		B652394721DC60150035E7E2 /* chaining */ = {
+			isa = PBXGroup;
+			children = (
+				B652396A21DC60160035E7E2 /* yas_chaining_any_observer.cpp */,
+				B652395921DC60150035E7E2 /* yas_chaining_observer_pool.cpp */,
+				B652395D21DC60160035E7E2 /* yas_chaining_any_observer.h */,
+				B652395521DC60150035E7E2 /* yas_chaining_chain_private.h */,
+				B652395221DC60150035E7E2 /* yas_chaining_chain.h */,
+				B652396421DC60160035E7E2 /* yas_chaining_fetcher_private.h */,
+				B652394D21DC60150035E7E2 /* yas_chaining_fetcher_protocol_private.h */,
+				B652396721DC60160035E7E2 /* yas_chaining_fetcher_protocol.h */,
+				B652394F21DC60150035E7E2 /* yas_chaining_fetcher.h */,
+				B652395821DC60150035E7E2 /* yas_chaining_holder_private.h */,
+				B652394921DC60150035E7E2 /* yas_chaining_holder.h */,
+				B652395721DC60150035E7E2 /* yas_chaining_joint_private.h */,
+				B652394821DC60150035E7E2 /* yas_chaining_joint.h */,
+				B652396121DC60160035E7E2 /* yas_chaining_map_holder_private.h */,
+				B652395E21DC60160035E7E2 /* yas_chaining_map_holder.h */,
+				B652396221DC60160035E7E2 /* yas_chaining_multimap_holder_private.h */,
+				B652396921DC60160035E7E2 /* yas_chaining_multimap_holder.h */,
+				B652396521DC60160035E7E2 /* yas_chaining_notifier_private.h */,
+				B652394B21DC60150035E7E2 /* yas_chaining_notifier.h */,
+				B652395621DC60150035E7E2 /* yas_chaining_observer_pool.h */,
+				B652395A21DC60150035E7E2 /* yas_chaining_observer_private.h */,
+				B652394A21DC60150035E7E2 /* yas_chaining_observer.h */,
+				B652394E21DC60150035E7E2 /* yas_chaining_receiver_private.h */,
+				B652396621DC60160035E7E2 /* yas_chaining_receiver_protocol_private.h */,
+				B652395321DC60150035E7E2 /* yas_chaining_receiver_protocol.h */,
+				B652395F21DC60160035E7E2 /* yas_chaining_receiver.h */,
+				B652396821DC60160035E7E2 /* yas_chaining_sender_private.h */,
+				B652395021DC60150035E7E2 /* yas_chaining_sender_protocol_private.h */,
+				B652394C21DC60150035E7E2 /* yas_chaining_sender_protocol.h */,
+				B652396021DC60160035E7E2 /* yas_chaining_sender.h */,
+				B652395121DC60150035E7E2 /* yas_chaining_types.h */,
+				B652395421DC60150035E7E2 /* yas_chaining_utils.h */,
+				B652396321DC60160035E7E2 /* yas_chaining_vector_holder_private.h */,
+				B652395C21DC60160035E7E2 /* yas_chaining_vector_holder.h */,
+				B652395B21DC60150035E7E2 /* yas_chaining.h */,
+			);
+			name = chaining;
+			path = ../../chaining;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		B623B9F121DC4D3600D16037 /* Headers */ = {
+		B652393221DC5F6D0035E7E2 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B623BA7521DC4DA000D16037 /* yas_chaining_sender_protocol_private.h in Headers */,
-				B623BA7321DC4DA000D16037 /* yas_chaining_receiver_private.h in Headers */,
-				B623BA7C21DC4DA000D16037 /* yas_chaining_joint_private.h in Headers */,
-				B623BA7021DC4DA000D16037 /* yas_chaining_notifier.h in Headers */,
-				B623BA6D21DC4DA000D16037 /* yas_chaining_joint.h in Headers */,
-				B623BA7421DC4DA000D16037 /* yas_chaining_fetcher.h in Headers */,
-				B623BA8621DC4DA000D16037 /* yas_chaining_map_holder_private.h in Headers */,
-				B623BA8521DC4DA000D16037 /* yas_chaining_sender.h in Headers */,
-				B623BA7721DC4DA000D16037 /* yas_chaining_chain.h in Headers */,
-				B623BA7821DC4DA000D16037 /* yas_chaining_receiver_protocol.h in Headers */,
-				B623BA8E21DC4DA000D16037 /* yas_chaining_multimap_holder.h in Headers */,
-				B623BA8D21DC4DA000D16037 /* yas_chaining_sender_private.h in Headers */,
-				B623BA8721DC4DA000D16037 /* yas_chaining_multimap_holder_private.h in Headers */,
-				B623BA8221DC4DA000D16037 /* yas_chaining_any_observer.h in Headers */,
-				B623BA7A21DC4DA000D16037 /* yas_chaining_chain_private.h in Headers */,
-				B623BA7621DC4DA000D16037 /* yas_chaining_types.h in Headers */,
-				B623BA8121DC4DA000D16037 /* yas_chaining_vector_holder.h in Headers */,
-				B623BA7121DC4DA000D16037 /* yas_chaining_sender_protocol.h in Headers */,
-				B623BA7221DC4DA000D16037 /* yas_chaining_fetcher_protocol_private.h in Headers */,
-				B623BA8A21DC4DA000D16037 /* yas_chaining_notifier_private.h in Headers */,
-				B623BA6F21DC4DA000D16037 /* yas_chaining_observer.h in Headers */,
-				B623BA8C21DC4DA000D16037 /* yas_chaining_fetcher_protocol.h in Headers */,
-				B623BA8021DC4DA000D16037 /* yas_chaining.h in Headers */,
-				B623BA7921DC4DA000D16037 /* yas_chaining_utils.h in Headers */,
-				B623BA7F21DC4DA000D16037 /* yas_chaining_observer_private.h in Headers */,
-				B623BA6E21DC4DA000D16037 /* yas_chaining_holder.h in Headers */,
-				B623BA7D21DC4DA000D16037 /* yas_chaining_holder_private.h in Headers */,
-				B623B9FB21DC4D3600D16037 /* chaining.h in Headers */,
-				B623BA8B21DC4DA000D16037 /* yas_chaining_receiver_protocol_private.h in Headers */,
-				B623BA8821DC4DA000D16037 /* yas_chaining_vector_holder_private.h in Headers */,
-				B623BA8321DC4DA000D16037 /* yas_chaining_map_holder.h in Headers */,
-				B623BA8421DC4DA000D16037 /* yas_chaining_receiver.h in Headers */,
-				B623BA8921DC4DA000D16037 /* yas_chaining_fetcher_private.h in Headers */,
-				B623BA7B21DC4DA000D16037 /* yas_chaining_observer_pool.h in Headers */,
+				B652397321DC60160035E7E2 /* yas_chaining_sender_protocol_private.h in Headers */,
+				B652397121DC60160035E7E2 /* yas_chaining_receiver_private.h in Headers */,
+				B652397A21DC60160035E7E2 /* yas_chaining_joint_private.h in Headers */,
+				B652396E21DC60160035E7E2 /* yas_chaining_notifier.h in Headers */,
+				B652396B21DC60160035E7E2 /* yas_chaining_joint.h in Headers */,
+				B652397221DC60160035E7E2 /* yas_chaining_fetcher.h in Headers */,
+				B652398421DC60160035E7E2 /* yas_chaining_map_holder_private.h in Headers */,
+				B652398321DC60160035E7E2 /* yas_chaining_sender.h in Headers */,
+				B652397521DC60160035E7E2 /* yas_chaining_chain.h in Headers */,
+				B652397621DC60160035E7E2 /* yas_chaining_receiver_protocol.h in Headers */,
+				B652398C21DC60160035E7E2 /* yas_chaining_multimap_holder.h in Headers */,
+				B652398B21DC60160035E7E2 /* yas_chaining_sender_private.h in Headers */,
+				B652398521DC60160035E7E2 /* yas_chaining_multimap_holder_private.h in Headers */,
+				B652398021DC60160035E7E2 /* yas_chaining_any_observer.h in Headers */,
+				B652397821DC60160035E7E2 /* yas_chaining_chain_private.h in Headers */,
+				B652397421DC60160035E7E2 /* yas_chaining_types.h in Headers */,
+				B652397F21DC60160035E7E2 /* yas_chaining_vector_holder.h in Headers */,
+				B652396F21DC60160035E7E2 /* yas_chaining_sender_protocol.h in Headers */,
+				B652397021DC60160035E7E2 /* yas_chaining_fetcher_protocol_private.h in Headers */,
+				B652398821DC60160035E7E2 /* yas_chaining_notifier_private.h in Headers */,
+				B652396D21DC60160035E7E2 /* yas_chaining_observer.h in Headers */,
+				B652398A21DC60160035E7E2 /* yas_chaining_fetcher_protocol.h in Headers */,
+				B652397E21DC60160035E7E2 /* yas_chaining.h in Headers */,
+				B652397721DC60160035E7E2 /* yas_chaining_utils.h in Headers */,
+				B652397D21DC60160035E7E2 /* yas_chaining_observer_private.h in Headers */,
+				B652396C21DC60160035E7E2 /* yas_chaining_holder.h in Headers */,
+				B652397B21DC60160035E7E2 /* yas_chaining_holder_private.h in Headers */,
+				B652393B21DC5F6D0035E7E2 /* chaining.h in Headers */,
+				B652398921DC60160035E7E2 /* yas_chaining_receiver_protocol_private.h in Headers */,
+				B652398621DC60160035E7E2 /* yas_chaining_vector_holder_private.h in Headers */,
+				B652398121DC60160035E7E2 /* yas_chaining_map_holder.h in Headers */,
+				B652398221DC60160035E7E2 /* yas_chaining_receiver.h in Headers */,
+				B652398721DC60160035E7E2 /* yas_chaining_fetcher_private.h in Headers */,
+				B652397921DC60160035E7E2 /* yas_chaining_observer_pool.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		B623B9F521DC4D3600D16037 /* chaining */ = {
+		B652393621DC5F6D0035E7E2 /* chaining */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B623B9FE21DC4D3600D16037 /* Build configuration list for PBXNativeTarget "chaining" */;
+			buildConfigurationList = B652393C21DC5F6D0035E7E2 /* Build configuration list for PBXNativeTarget "chaining" */;
 			buildPhases = (
-				B623B9F121DC4D3600D16037 /* Headers */,
-				B623B9F221DC4D3600D16037 /* Sources */,
-				B623B9F321DC4D3600D16037 /* Frameworks */,
-				B623B9F421DC4D3600D16037 /* Resources */,
+				B652393221DC5F6D0035E7E2 /* Headers */,
+				B652393321DC5F6D0035E7E2 /* Sources */,
+				B652393421DC5F6D0035E7E2 /* Frameworks */,
+				B652393521DC5F6D0035E7E2 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -240,7 +246,7 @@
 			);
 			name = chaining;
 			productName = chaining;
-			productReference = B623B9F621DC4D3600D16037 /* chaining.framework */;
+			productReference = B652393721DC5F6D0035E7E2 /* chaining.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -251,8 +257,8 @@
 			attributes = {
 				LastUpgradeCheck = 1010;
 				TargetAttributes = {
-					B623B9F521DC4D3600D16037 = {
-						CreatedOnToolsVersion = 10.1;
+					B652393621DC5F6D0035E7E2 = {
+						CreatedOnToolsVersion = 10.0;
 					};
 				};
 			};
@@ -268,13 +274,13 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B623B9F521DC4D3600D16037 /* chaining */,
+				B652393621DC5F6D0035E7E2 /* chaining */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		B623B9F421DC4D3600D16037 /* Resources */ = {
+		B652393521DC5F6D0035E7E2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -284,12 +290,12 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		B623B9F221DC4D3600D16037 /* Sources */ = {
+		B652393321DC5F6D0035E7E2 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B623BA7E21DC4DA000D16037 /* yas_chaining_observer_pool.cpp in Sources */,
-				B623BA8F21DC4DA000D16037 /* yas_chaining_any_observer.cpp in Sources */,
+				B652397C21DC60160035E7E2 /* yas_chaining_observer_pool.cpp in Sources */,
+				B652398D21DC60160035E7E2 /* yas_chaining_any_observer.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -308,7 +314,7 @@
 			};
 			name = Release;
 		};
-		B623B9FC21DC4D3600D16037 /* Debug */ = {
+		B652393D21DC5F6D0035E7E2 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -339,19 +345,18 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -368,25 +373,27 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = chaining/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
 				MTL_FAST_MATH = YES;
 				ONLY_ACTIVE_ARCH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "objective-audio.chaining";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.objective-audio.chaining";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = macosx;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		B623B9FD21DC4D3600D16037 /* Release */ = {
+		B652393E21DC5F6D0035E7E2 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -417,19 +424,18 @@
 				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				CODE_SIGN_IDENTITY = "-";
-				CODE_SIGN_STYLE = Automatic;
-				COMBINE_HIDPI_IMAGES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
 				COPY_PHASE_STRIP = NO;
 				CURRENT_PROJECT_VERSION = 1;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_VERSION = A;
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -440,18 +446,21 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				INFOPLIST_FILE = chaining/Info.plist;
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
-					"@executable_path/../Frameworks",
+					"@executable_path/Frameworks",
 					"@loader_path/Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 10.14;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				MTL_FAST_MATH = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = "objective-audio.chaining";
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.objective-audio.chaining";
 				PRODUCT_NAME = "$(TARGET_NAME:c99extidentifier)";
-				SDKROOT = macosx;
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
@@ -469,11 +478,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B623B9FE21DC4D3600D16037 /* Build configuration list for PBXNativeTarget "chaining" */ = {
+		B652393C21DC5F6D0035E7E2 /* Build configuration list for PBXNativeTarget "chaining" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				B623B9FC21DC4D3600D16037 /* Debug */,
-				B623B9FD21DC4D3600D16037 /* Release */,
+				B652393D21DC5F6D0035E7E2 /* Debug */,
+				B652393E21DC5F6D0035E7E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

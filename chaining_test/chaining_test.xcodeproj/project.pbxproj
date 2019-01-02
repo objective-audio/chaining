@@ -34,7 +34,7 @@
 		B652392A21DC5D980035E7E2 /* yas_vector_holder_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6277A1A2143FCC600CA15A9 /* yas_vector_holder_chain_tests.mm */; };
 		B652392B21DC5D980035E7E2 /* yas_vector_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DFE505213BCC410018244A /* yas_vector_holder_tests.mm */; };
 		B652392D21DC5E1D0035E7E2 /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B652392C21DC5E1D0035E7E2 /* cpp_utils.framework */; };
-		B652392E21DC5E1D0035E7E2 /* chaining.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B623BA9321DC4E7800D16037 /* chaining.framework */; };
+		B652394621DC5FC80035E7E2 /* chaining.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B652394521DC5FC80035E7E2 /* chaining.framework */; };
 		B66B085421CE497F002D6527 /* yas_multimap_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B66B085321CE497F002D6527 /* yas_multimap_holder_tests.mm */; };
 		B67438C2211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BC211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm */; };
 		B67438C3211E6BCF0015E7D6 /* yas_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BD211E6BCF0015E7D6 /* yas_holder_tests.mm */; };
@@ -63,6 +63,7 @@
 		B652391321DC5CA00035E7E2 /* chaining_test_ios.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chaining_test_ios.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B652392C21DC5E1D0035E7E2 /* cpp_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cpp_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B652392F21DC5E1D0035E7E2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
+		B652394521DC5FC80035E7E2 /* chaining.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = chaining.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B66B085321CE497F002D6527 /* yas_multimap_holder_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_multimap_holder_tests.mm; sourceTree = "<group>"; };
 		B67438BC211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_chaining_utils_tests.mm; sourceTree = "<group>"; };
 		B67438BD211E6BCF0015E7D6 /* yas_holder_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_holder_tests.mm; sourceTree = "<group>"; };
@@ -89,7 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B652392E21DC5E1D0035E7E2 /* chaining.framework in Frameworks */,
+				B652394621DC5FC80035E7E2 /* chaining.framework in Frameworks */,
 				B652392D21DC5E1D0035E7E2 /* cpp_utils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -143,6 +144,7 @@
 		B623B9D221DC4A5300D16037 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B652394521DC5FC80035E7E2 /* chaining.framework */,
 				B652392F21DC5E1D0035E7E2 /* Accelerate.framework */,
 				B652392C21DC5E1D0035E7E2 /* cpp_utils.framework */,
 				B623BA9B21DC509400D16037 /* Accelerate.framework */,
@@ -177,6 +179,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B652391A21DC5CA00035E7E2 /* Build configuration list for PBXNativeTarget "chaining_test_ios" */;
 			buildPhases = (
+				B652393121DC5E820035E7E2 /* ShellScript */,
 				B652390F21DC5CA00035E7E2 /* Sources */,
 				B652391021DC5CA00035E7E2 /* Frameworks */,
 				B652391121DC5CA00035E7E2 /* Resources */,
@@ -248,6 +251,23 @@
 			files = (
 			);
 			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "../script/format.sh\n";
+		};
+		B652393121DC5E820035E7E2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
 			);
 			outputPaths = (
 			);

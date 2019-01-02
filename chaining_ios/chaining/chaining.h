@@ -2,7 +2,7 @@
 //  chaining.h
 //
 
-#import <Cocoa/Cocoa.h>
+#import <UIKit/UIKit.h>
 
 //! Project version number for chaining.
 FOUNDATION_EXPORT double chainingVersionNumber;
