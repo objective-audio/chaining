@@ -4,8 +4,8 @@
 
 #pragma once
 
+#include <cpp_utils/yas_protocol.h>
 #include "yas_chaining_types.h"
-#include "yas_protocol.h"
 
 namespace yas::chaining {
 class any_joint;

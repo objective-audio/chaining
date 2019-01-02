@@ -4,8 +4,8 @@
 
 #pragma once
 
+#include <cpp_utils/yas_base.h>
 #include <functional>
-#include "yas_base.h"
 
 namespace yas::chaining {
 template <typename Begin>
