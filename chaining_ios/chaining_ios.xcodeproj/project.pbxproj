@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B62525A221DCFD9900EE2ECA /* objc_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62525A121DCFD9900EE2ECA /* objc_utils.framework */; };
 		B652393B21DC5F6D0035E7E2 /* chaining.h in Headers */ = {isa = PBXBuildFile; fileRef = B652393921DC5F6D0035E7E2 /* chaining.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B652394021DC5F990035E7E2 /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B652393F21DC5F990035E7E2 /* cpp_utils.framework */; };
 		B652396B21DC60160035E7E2 /* yas_chaining_joint.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394821DC60150035E7E2 /* yas_chaining_joint.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -48,6 +49,7 @@
 
 /* Begin PBXFileReference section */
 		B623BA9121DC4DB400D16037 /* cpp_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cpp_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B62525A121DCFD9900EE2ECA /* objc_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = objc_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B652393721DC5F6D0035E7E2 /* chaining.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = chaining.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B652393921DC5F6D0035E7E2 /* chaining.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = chaining.h; sourceTree = "<group>"; };
 		B652393A21DC5F6D0035E7E2 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -96,6 +98,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B62525A221DCFD9900EE2ECA /* objc_utils.framework in Frameworks */,
 				B652394021DC5F990035E7E2 /* cpp_utils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -123,6 +126,7 @@
 		B623BA9021DC4DB400D16037 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B62525A121DCFD9900EE2ECA /* objc_utils.framework */,
 				B652394321DC5F990035E7E2 /* Accelerate.framework */,
 				B652393F21DC5F990035E7E2 /* cpp_utils.framework */,
 				B652394121DC5F990035E7E2 /* objc_utils.framework */,
