@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "yas_protocol.h"
+#include <cpp_utils/yas_protocol.h>
 
 namespace yas::chaining {
 template <typename Out, typename In, typename Begin, bool Syncable>

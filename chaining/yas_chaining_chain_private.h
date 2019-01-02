@@ -4,11 +4,11 @@
 
 #pragma once
 
+#include <cpp_utils/yas_fast_each.h>
 #include <optional>
 #include <vector>
 #include "yas_chaining_observer.h"
 #include "yas_chaining_receiver.h"
-#include "yas_fast_each.h"
 
 namespace yas::chaining {
 template <typename Out, typename In, typename Begin, bool Syncable>

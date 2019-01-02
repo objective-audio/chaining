@@ -4,10 +4,10 @@
 
 #pragma once
 
+#include <cpp_utils/yas_stl_utils.h>
 #include <vector>
 #include "yas_chaining_joint.h"
 #include "yas_chaining_sender_protocol.h"
-#include "yas_stl_utils.h"
 
 namespace yas::chaining {
 template <typename Out, typename In, typename Begin, bool Syncable>

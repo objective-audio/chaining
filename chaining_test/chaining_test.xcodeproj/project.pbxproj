@@ -10,21 +10,37 @@
 		B60813052123195500D86603 /* yas_to_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B60813042123195500D86603 /* yas_to_tests.mm */; };
 		B6081307212319CB00D86603 /* yas_sync_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6081306212319CB00D86603 /* yas_sync_tests.mm */; };
 		B608130921231A5000D86603 /* yas_receiver_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B608130821231A5000D86603 /* yas_receiver_tests.mm */; };
-		B61643E32123EDFB002A182F /* yas_stl_utils.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61643E02123EDFB002A182F /* yas_stl_utils.cpp */; };
-		B61643E62127C22C002A182F /* yas_chaining_any_observer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61643E42127C22C002A182F /* yas_chaining_any_observer.cpp */; };
-		B61643E92127C3FB002A182F /* yas_chaining_observer_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B61643E72127C3FB002A182F /* yas_chaining_observer_pool.cpp */; };
 		B61643EB2127C7EB002A182F /* yas_observer_pool_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B61643EA2127C7EB002A182F /* yas_observer_pool_tests.mm */; };
+		B623BA9421DC4E7800D16037 /* chaining.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B623BA9321DC4E7800D16037 /* chaining.framework */; };
+		B623BA9E21DC50C100D16037 /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B623B9D321DC4A5300D16037 /* cpp_utils.framework */; };
 		B6277A1921437B5E00CA15A9 /* yas_vector_event_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6277A1821437B5E00CA15A9 /* yas_vector_event_tests.mm */; };
 		B6277A1B2143FCC600CA15A9 /* yas_vector_holder_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6277A1A2143FCC600CA15A9 /* yas_vector_holder_chain_tests.mm */; };
 		B6359CD721D08E4A00481348 /* yas_multimap_holder_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6359CD621D08E4A00481348 /* yas_multimap_holder_chain_tests.mm */; };
+		B652391B21DC5D980035E7E2 /* yas_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438C0211E6BCF0015E7D6 /* yas_chain_tests.mm */; };
+		B652391C21DC5D980035E7E2 /* yas_chaining_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BC211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm */; };
+		B652391D21DC5D980035E7E2 /* yas_fetcher_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438C1211E6BCF0015E7D6 /* yas_fetcher_tests.mm */; };
+		B652391E21DC5D980035E7E2 /* yas_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BD211E6BCF0015E7D6 /* yas_holder_tests.mm */; };
+		B652391F21DC5D980035E7E2 /* yas_map_holder_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B684E89421D86B5700599A55 /* yas_map_holder_chain_tests.mm */; };
+		B652392021DC5D980035E7E2 /* yas_map_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B684E89221D85ADE00599A55 /* yas_map_holder_tests.mm */; };
+		B652392121DC5D980035E7E2 /* yas_multimap_holder_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6359CD621D08E4A00481348 /* yas_multimap_holder_chain_tests.mm */; };
+		B652392221DC5D980035E7E2 /* yas_multimap_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B66B085321CE497F002D6527 /* yas_multimap_holder_tests.mm */; };
+		B652392321DC5D980035E7E2 /* yas_notifier_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BF211E6BCF0015E7D6 /* yas_notifier_tests.mm */; };
+		B652392421DC5D980035E7E2 /* yas_observer_pool_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B61643EA2127C7EB002A182F /* yas_observer_pool_tests.mm */; };
+		B652392521DC5D980035E7E2 /* yas_observer_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6B154862123CC9C0051026A /* yas_observer_tests.mm */; };
+		B652392621DC5D980035E7E2 /* yas_receiver_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B608130821231A5000D86603 /* yas_receiver_tests.mm */; };
+		B652392721DC5D980035E7E2 /* yas_sync_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6081306212319CB00D86603 /* yas_sync_tests.mm */; };
+		B652392821DC5D980035E7E2 /* yas_to_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B60813042123195500D86603 /* yas_to_tests.mm */; };
+		B652392921DC5D980035E7E2 /* yas_vector_event_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6277A1821437B5E00CA15A9 /* yas_vector_event_tests.mm */; };
+		B652392A21DC5D980035E7E2 /* yas_vector_holder_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6277A1A2143FCC600CA15A9 /* yas_vector_holder_chain_tests.mm */; };
+		B652392B21DC5D980035E7E2 /* yas_vector_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DFE505213BCC410018244A /* yas_vector_holder_tests.mm */; };
+		B652392D21DC5E1D0035E7E2 /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B652392C21DC5E1D0035E7E2 /* cpp_utils.framework */; };
+		B652394621DC5FC80035E7E2 /* chaining.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B652394521DC5FC80035E7E2 /* chaining.framework */; };
 		B66B085421CE497F002D6527 /* yas_multimap_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B66B085321CE497F002D6527 /* yas_multimap_holder_tests.mm */; };
 		B67438C2211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BC211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm */; };
 		B67438C3211E6BCF0015E7D6 /* yas_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BD211E6BCF0015E7D6 /* yas_holder_tests.mm */; };
 		B67438C5211E6BCF0015E7D6 /* yas_notifier_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438BF211E6BCF0015E7D6 /* yas_notifier_tests.mm */; };
 		B67438C6211E6BCF0015E7D6 /* yas_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438C0211E6BCF0015E7D6 /* yas_chain_tests.mm */; };
 		B67438C7211E6BCF0015E7D6 /* yas_fetcher_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B67438C1211E6BCF0015E7D6 /* yas_fetcher_tests.mm */; };
-		B67438C8211E6C8C0015E7D6 /* yas_base.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B608F09821193F7E000A17BD /* yas_base.cpp */; };
-		B67438C9211E6C900015E7D6 /* yas_protocol.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B608F09C21193F93000A17BD /* yas_protocol.cpp */; };
 		B684E89321D85ADE00599A55 /* yas_map_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B684E89221D85ADE00599A55 /* yas_map_holder_tests.mm */; };
 		B684E89521D86B5700599A55 /* yas_map_holder_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B684E89421D86B5700599A55 /* yas_map_holder_chain_tests.mm */; };
 		B6B154872123CC9C0051026A /* yas_observer_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6B154862123CC9C0051026A /* yas_observer_tests.mm */; };
@@ -35,69 +51,28 @@
 		B60813042123195500D86603 /* yas_to_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_to_tests.mm; sourceTree = "<group>"; };
 		B6081306212319CB00D86603 /* yas_sync_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_sync_tests.mm; sourceTree = "<group>"; };
 		B608130821231A5000D86603 /* yas_receiver_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_receiver_tests.mm; sourceTree = "<group>"; };
-		B608F09721193F7E000A17BD /* yas_base.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_base.h; sourceTree = "<group>"; };
-		B608F09821193F7E000A17BD /* yas_base.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_base.cpp; sourceTree = "<group>"; };
-		B608F09921193F7E000A17BD /* yas_base_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_base_private.h; sourceTree = "<group>"; };
-		B608F09B21193F93000A17BD /* yas_protocol_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_protocol_private.h; sourceTree = "<group>"; };
-		B608F09C21193F93000A17BD /* yas_protocol.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_protocol.cpp; sourceTree = "<group>"; };
-		B608F09D21193F93000A17BD /* yas_protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_protocol.h; sourceTree = "<group>"; };
-		B608F0A021193FD1000A17BD /* yas_chaining_chain_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_chain_private.h; sourceTree = "<group>"; };
-		B608F0A221193FD1000A17BD /* yas_chaining_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_utils.h; sourceTree = "<group>"; };
-		B608F0A321193FD1000A17BD /* yas_chaining_chain.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_chain.h; sourceTree = "<group>"; };
-		B608F0A421194005000A17BD /* yas_fast_each.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_fast_each.h; sourceTree = "<group>"; };
-		B608F0A521194005000A17BD /* yas_fast_each_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_fast_each_private.h; sourceTree = "<group>"; };
-		B608F0A621194014000A17BD /* yas_type_traits.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_type_traits.h; sourceTree = "<group>"; };
 		B608F0AB211940A0000A17BD /* chaining_test_mac.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chaining_test_mac.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B608F0AF211940A0000A17BD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		B608F0B721194174000A17BD /* yas_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_types.h; sourceTree = "<group>"; };
-		B61643E02123EDFB002A182F /* yas_stl_utils.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_stl_utils.cpp; sourceTree = "<group>"; };
-		B61643E12123EDFB002A182F /* yas_stl_utils_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_stl_utils_private.h; sourceTree = "<group>"; };
-		B61643E22123EDFB002A182F /* yas_stl_utils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_stl_utils.h; sourceTree = "<group>"; };
-		B61643E42127C22C002A182F /* yas_chaining_any_observer.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_any_observer.cpp; sourceTree = "<group>"; };
-		B61643E52127C22C002A182F /* yas_chaining_any_observer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_any_observer.h; sourceTree = "<group>"; };
-		B61643E72127C3FB002A182F /* yas_chaining_observer_pool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_observer_pool.cpp; sourceTree = "<group>"; };
-		B61643E82127C3FB002A182F /* yas_chaining_observer_pool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_observer_pool.h; sourceTree = "<group>"; };
 		B61643EA2127C7EB002A182F /* yas_observer_pool_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observer_pool_tests.mm; sourceTree = "<group>"; };
-		B61643EC212824DB002A182F /* yas_chaining_fetcher_protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher_protocol.h; sourceTree = "<group>"; };
-		B61643ED212824E8002A182F /* yas_chaining_fetcher_protocol_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher_protocol_private.h; sourceTree = "<group>"; };
+		B623B9D321DC4A5300D16037 /* cpp_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cpp_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B623BA9321DC4E7800D16037 /* chaining.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = chaining.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B623BA9B21DC509400D16037 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		B6277A1821437B5E00CA15A9 /* yas_vector_event_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_vector_event_tests.mm; sourceTree = "<group>"; };
 		B6277A1A2143FCC600CA15A9 /* yas_vector_holder_chain_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_vector_holder_chain_tests.mm; sourceTree = "<group>"; };
 		B6359CD621D08E4A00481348 /* yas_multimap_holder_chain_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_multimap_holder_chain_tests.mm; sourceTree = "<group>"; };
-		B6530872211EC6E200D2C655 /* yas_chaining_holder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_holder.h; sourceTree = "<group>"; };
-		B6530873211EC6F100D2C655 /* yas_chaining_holder_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_holder_private.h; sourceTree = "<group>"; };
-		B6530874211ECBA500D2C655 /* yas_chaining_fetcher.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher.h; sourceTree = "<group>"; };
-		B6530875211ECBB000D2C655 /* yas_chaining_fetcher_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher_private.h; sourceTree = "<group>"; };
-		B6530876211ECCBB00D2C655 /* yas_chaining_notifier.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_notifier.h; sourceTree = "<group>"; };
-		B6530877211ECCC600D2C655 /* yas_chaining_notifier_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_notifier_private.h; sourceTree = "<group>"; };
-		B6530878211ED27200D2C655 /* yas_chaining_observer.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_observer.h; sourceTree = "<group>"; };
-		B6530879211ED27D00D2C655 /* yas_chaining_observer_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_observer_private.h; sourceTree = "<group>"; };
-		B653087A211EFA4200D2C655 /* yas_chaining_receiver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver.h; sourceTree = "<group>"; };
-		B653087B211EFA4E00D2C655 /* yas_chaining_receiver_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver_private.h; sourceTree = "<group>"; };
-		B653087C211EFC9B00D2C655 /* yas_chaining_sender.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender.h; sourceTree = "<group>"; };
-		B653087D211EFCA800D2C655 /* yas_chaining_sender_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender_private.h; sourceTree = "<group>"; };
-		B6530880211F062700D2C655 /* yas_chaining.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining.h; sourceTree = "<group>"; };
-		B6530884212027F800D2C655 /* yas_chaining_receiver_protocol_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver_protocol_private.h; sourceTree = "<group>"; };
-		B65308852121201200D2C655 /* yas_chaining_joint_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_joint_private.h; sourceTree = "<group>"; };
-		B6530886212120B300D2C655 /* yas_chaining_joint.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_joint.h; sourceTree = "<group>"; };
-		B65308872121227500D2C655 /* yas_chaining_sender_protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender_protocol.h; sourceTree = "<group>"; };
-		B6530888212131D600D2C655 /* yas_chaining_receiver_protocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver_protocol.h; sourceTree = "<group>"; };
-		B666630F21CDDFDE00334340 /* yas_chaining_multimap_holder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_multimap_holder.h; sourceTree = "<group>"; };
-		B666631021CDDFEE00334340 /* yas_chaining_multimap_holder_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_multimap_holder_private.h; sourceTree = "<group>"; };
+		B652391321DC5CA00035E7E2 /* chaining_test_ios.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chaining_test_ios.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B652392C21DC5E1D0035E7E2 /* cpp_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cpp_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B652392F21DC5E1D0035E7E2 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS12.0.sdk/System/Library/Frameworks/Accelerate.framework; sourceTree = DEVELOPER_DIR; };
+		B652394521DC5FC80035E7E2 /* chaining.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = chaining.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B66B085321CE497F002D6527 /* yas_multimap_holder_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_multimap_holder_tests.mm; sourceTree = "<group>"; };
 		B67438BC211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_chaining_utils_tests.mm; sourceTree = "<group>"; };
 		B67438BD211E6BCF0015E7D6 /* yas_holder_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_holder_tests.mm; sourceTree = "<group>"; };
 		B67438BF211E6BCF0015E7D6 /* yas_notifier_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_notifier_tests.mm; sourceTree = "<group>"; };
 		B67438C0211E6BCF0015E7D6 /* yas_chain_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_chain_tests.mm; sourceTree = "<group>"; };
 		B67438C1211E6BCF0015E7D6 /* yas_fetcher_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_fetcher_tests.mm; sourceTree = "<group>"; };
-		B684E89021D858D500599A55 /* yas_chaining_map_holder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_map_holder.h; sourceTree = "<group>"; };
-		B684E89121D858E200599A55 /* yas_chaining_map_holder_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_map_holder_private.h; sourceTree = "<group>"; };
 		B684E89221D85ADE00599A55 /* yas_map_holder_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_map_holder_tests.mm; sourceTree = "<group>"; };
 		B684E89421D86B5700599A55 /* yas_map_holder_chain_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_map_holder_chain_tests.mm; sourceTree = "<group>"; };
-		B684E89821D9BB1400599A55 /* yas_chaining_types.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_types.h; sourceTree = "<group>"; };
-		B6A5A1F3212117D500F86C29 /* yas_chaining_sender_protocol_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender_protocol_private.h; sourceTree = "<group>"; };
 		B6B154862123CC9C0051026A /* yas_observer_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observer_tests.mm; sourceTree = "<group>"; };
-		B6DFE503213B7FE40018244A /* yas_chaining_vector_holder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_vector_holder.h; sourceTree = "<group>"; };
-		B6DFE504213B7FFD0018244A /* yas_chaining_vector_holder_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_vector_holder_private.h; sourceTree = "<group>"; };
 		B6DFE505213BCC410018244A /* yas_vector_holder_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_vector_holder_tests.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -106,6 +81,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B623BA9E21DC50C100D16037 /* cpp_utils.framework in Frameworks */,
+				B623BA9421DC4E7800D16037 /* chaining.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B652391021DC5CA00035E7E2 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B652394621DC5FC80035E7E2 /* chaining.framework in Frameworks */,
+				B652392D21DC5E1D0035E7E2 /* cpp_utils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -115,10 +101,9 @@
 		B608F03121193EF9000A17BD = {
 			isa = PBXGroup;
 			children = (
-				B608F04521193F65000A17BD /* cpp_utils */,
-				B608F09F21193FD1000A17BD /* chaining */,
-				B608F0AC211940A0000A17BD /* chaining_test_mac */,
+				B608F0AC211940A0000A17BD /* chaining_test */,
 				B608F03D21193F23000A17BD /* Products */,
+				B623B9D221DC4A5300D16037 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -126,75 +111,12 @@
 			isa = PBXGroup;
 			children = (
 				B608F0AB211940A0000A17BD /* chaining_test_mac.xctest */,
+				B652391321DC5CA00035E7E2 /* chaining_test_ios.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		B608F04521193F65000A17BD /* cpp_utils */ = {
-			isa = PBXGroup;
-			children = (
-				B608F09921193F7E000A17BD /* yas_base_private.h */,
-				B608F09821193F7E000A17BD /* yas_base.cpp */,
-				B608F09721193F7E000A17BD /* yas_base.h */,
-				B608F0A521194005000A17BD /* yas_fast_each_private.h */,
-				B608F0A421194005000A17BD /* yas_fast_each.h */,
-				B608F09B21193F93000A17BD /* yas_protocol_private.h */,
-				B608F09C21193F93000A17BD /* yas_protocol.cpp */,
-				B608F09D21193F93000A17BD /* yas_protocol.h */,
-				B61643E12123EDFB002A182F /* yas_stl_utils_private.h */,
-				B61643E02123EDFB002A182F /* yas_stl_utils.cpp */,
-				B61643E22123EDFB002A182F /* yas_stl_utils.h */,
-				B608F0A621194014000A17BD /* yas_type_traits.h */,
-				B608F0B721194174000A17BD /* yas_types.h */,
-			);
-			name = cpp_utils;
-			path = ../submodules/cpp_utils/cpp_utils;
-			sourceTree = "<group>";
-		};
-		B608F09F21193FD1000A17BD /* chaining */ = {
-			isa = PBXGroup;
-			children = (
-				B61643E42127C22C002A182F /* yas_chaining_any_observer.cpp */,
-				B61643E52127C22C002A182F /* yas_chaining_any_observer.h */,
-				B608F0A021193FD1000A17BD /* yas_chaining_chain_private.h */,
-				B608F0A321193FD1000A17BD /* yas_chaining_chain.h */,
-				B6530875211ECBB000D2C655 /* yas_chaining_fetcher_private.h */,
-				B61643ED212824E8002A182F /* yas_chaining_fetcher_protocol_private.h */,
-				B61643EC212824DB002A182F /* yas_chaining_fetcher_protocol.h */,
-				B6530874211ECBA500D2C655 /* yas_chaining_fetcher.h */,
-				B684E89821D9BB1400599A55 /* yas_chaining_types.h */,
-				B6530873211EC6F100D2C655 /* yas_chaining_holder_private.h */,
-				B6530872211EC6E200D2C655 /* yas_chaining_holder.h */,
-				B65308852121201200D2C655 /* yas_chaining_joint_private.h */,
-				B6530886212120B300D2C655 /* yas_chaining_joint.h */,
-				B684E89121D858E200599A55 /* yas_chaining_map_holder_private.h */,
-				B684E89021D858D500599A55 /* yas_chaining_map_holder.h */,
-				B666631021CDDFEE00334340 /* yas_chaining_multimap_holder_private.h */,
-				B666630F21CDDFDE00334340 /* yas_chaining_multimap_holder.h */,
-				B6530877211ECCC600D2C655 /* yas_chaining_notifier_private.h */,
-				B6530876211ECCBB00D2C655 /* yas_chaining_notifier.h */,
-				B61643E72127C3FB002A182F /* yas_chaining_observer_pool.cpp */,
-				B61643E82127C3FB002A182F /* yas_chaining_observer_pool.h */,
-				B6530879211ED27D00D2C655 /* yas_chaining_observer_private.h */,
-				B6530878211ED27200D2C655 /* yas_chaining_observer.h */,
-				B653087B211EFA4E00D2C655 /* yas_chaining_receiver_private.h */,
-				B6530884212027F800D2C655 /* yas_chaining_receiver_protocol_private.h */,
-				B6530888212131D600D2C655 /* yas_chaining_receiver_protocol.h */,
-				B653087A211EFA4200D2C655 /* yas_chaining_receiver.h */,
-				B653087D211EFCA800D2C655 /* yas_chaining_sender_private.h */,
-				B6A5A1F3212117D500F86C29 /* yas_chaining_sender_protocol_private.h */,
-				B65308872121227500D2C655 /* yas_chaining_sender_protocol.h */,
-				B653087C211EFC9B00D2C655 /* yas_chaining_sender.h */,
-				B608F0A221193FD1000A17BD /* yas_chaining_utils.h */,
-				B6DFE504213B7FFD0018244A /* yas_chaining_vector_holder_private.h */,
-				B6DFE503213B7FE40018244A /* yas_chaining_vector_holder.h */,
-				B6530880211F062700D2C655 /* yas_chaining.h */,
-			);
-			name = chaining;
-			path = ../chaining;
-			sourceTree = "<group>";
-		};
-		B608F0AC211940A0000A17BD /* chaining_test_mac */ = {
+		B608F0AC211940A0000A17BD /* chaining_test */ = {
 			isa = PBXGroup;
 			children = (
 				B608F0AF211940A0000A17BD /* Info.plist */,
@@ -216,7 +138,20 @@
 				B6277A1A2143FCC600CA15A9 /* yas_vector_holder_chain_tests.mm */,
 				B6DFE505213BCC410018244A /* yas_vector_holder_tests.mm */,
 			);
-			path = chaining_test_mac;
+			path = chaining_test;
+			sourceTree = "<group>";
+		};
+		B623B9D221DC4A5300D16037 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B652394521DC5FC80035E7E2 /* chaining.framework */,
+				B652392F21DC5E1D0035E7E2 /* Accelerate.framework */,
+				B652392C21DC5E1D0035E7E2 /* cpp_utils.framework */,
+				B623BA9B21DC509400D16037 /* Accelerate.framework */,
+				B623BA9321DC4E7800D16037 /* chaining.framework */,
+				B623B9D321DC4A5300D16037 /* cpp_utils.framework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -240,6 +175,24 @@
 			productReference = B608F0AB211940A0000A17BD /* chaining_test_mac.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
+		B652391221DC5CA00035E7E2 /* chaining_test_ios */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = B652391A21DC5CA00035E7E2 /* Build configuration list for PBXNativeTarget "chaining_test_ios" */;
+			buildPhases = (
+				B652393121DC5E820035E7E2 /* ShellScript */,
+				B652390F21DC5CA00035E7E2 /* Sources */,
+				B652391021DC5CA00035E7E2 /* Frameworks */,
+				B652391121DC5CA00035E7E2 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = chaining_test_ios;
+			productName = chaining_test_ios;
+			productReference = B652391321DC5CA00035E7E2 /* chaining_test_ios.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -250,6 +203,9 @@
 				TargetAttributes = {
 					B608F0AA211940A0000A17BD = {
 						CreatedOnToolsVersion = 9.4.1;
+					};
+					B652391221DC5CA00035E7E2 = {
+						CreatedOnToolsVersion = 10.0;
 					};
 				};
 			};
@@ -266,12 +222,20 @@
 			projectRoot = "";
 			targets = (
 				B608F0AA211940A0000A17BD /* chaining_test_mac */,
+				B652391221DC5CA00035E7E2 /* chaining_test_ios */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		B608F0A9211940A0000A17BD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B652391121DC5CA00035E7E2 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -294,6 +258,23 @@
 			shellPath = /bin/sh;
 			shellScript = "../script/format.sh\n";
 		};
+		B652393121DC5E820035E7E2 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "../script/format.sh\n";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -302,27 +283,46 @@
 			buildActionMask = 2147483647;
 			files = (
 				B6277A1921437B5E00CA15A9 /* yas_vector_event_tests.mm in Sources */,
-				B61643E92127C3FB002A182F /* yas_chaining_observer_pool.cpp in Sources */,
 				B67438C2211E6BCF0015E7D6 /* yas_chaining_utils_tests.mm in Sources */,
-				B61643E32123EDFB002A182F /* yas_stl_utils.cpp in Sources */,
 				B67438C6211E6BCF0015E7D6 /* yas_chain_tests.mm in Sources */,
 				B66B085421CE497F002D6527 /* yas_multimap_holder_tests.mm in Sources */,
-				B67438C8211E6C8C0015E7D6 /* yas_base.cpp in Sources */,
 				B6081307212319CB00D86603 /* yas_sync_tests.mm in Sources */,
 				B67438C3211E6BCF0015E7D6 /* yas_holder_tests.mm in Sources */,
 				B67438C5211E6BCF0015E7D6 /* yas_notifier_tests.mm in Sources */,
 				B6359CD721D08E4A00481348 /* yas_multimap_holder_chain_tests.mm in Sources */,
 				B67438C7211E6BCF0015E7D6 /* yas_fetcher_tests.mm in Sources */,
-				B67438C9211E6C900015E7D6 /* yas_protocol.cpp in Sources */,
 				B6B154872123CC9C0051026A /* yas_observer_tests.mm in Sources */,
 				B61643EB2127C7EB002A182F /* yas_observer_pool_tests.mm in Sources */,
 				B6277A1B2143FCC600CA15A9 /* yas_vector_holder_chain_tests.mm in Sources */,
-				B61643E62127C22C002A182F /* yas_chaining_any_observer.cpp in Sources */,
 				B60813052123195500D86603 /* yas_to_tests.mm in Sources */,
 				B608130921231A5000D86603 /* yas_receiver_tests.mm in Sources */,
 				B684E89321D85ADE00599A55 /* yas_map_holder_tests.mm in Sources */,
 				B684E89521D86B5700599A55 /* yas_map_holder_chain_tests.mm in Sources */,
 				B6DFE506213BCC410018244A /* yas_vector_holder_tests.mm in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B652390F21DC5CA00035E7E2 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				B652392B21DC5D980035E7E2 /* yas_vector_holder_tests.mm in Sources */,
+				B652392A21DC5D980035E7E2 /* yas_vector_holder_chain_tests.mm in Sources */,
+				B652392621DC5D980035E7E2 /* yas_receiver_tests.mm in Sources */,
+				B652392221DC5D980035E7E2 /* yas_multimap_holder_tests.mm in Sources */,
+				B652392921DC5D980035E7E2 /* yas_vector_event_tests.mm in Sources */,
+				B652392021DC5D980035E7E2 /* yas_map_holder_tests.mm in Sources */,
+				B652392121DC5D980035E7E2 /* yas_multimap_holder_chain_tests.mm in Sources */,
+				B652392321DC5D980035E7E2 /* yas_notifier_tests.mm in Sources */,
+				B652391F21DC5D980035E7E2 /* yas_map_holder_chain_tests.mm in Sources */,
+				B652392721DC5D980035E7E2 /* yas_sync_tests.mm in Sources */,
+				B652391C21DC5D980035E7E2 /* yas_chaining_utils_tests.mm in Sources */,
+				B652392521DC5D980035E7E2 /* yas_observer_tests.mm in Sources */,
+				B652391B21DC5D980035E7E2 /* yas_chain_tests.mm in Sources */,
+				B652392821DC5D980035E7E2 /* yas_to_tests.mm in Sources */,
+				B652392421DC5D980035E7E2 /* yas_observer_pool_tests.mm in Sources */,
+				B652391D21DC5D980035E7E2 /* yas_fetcher_tests.mm in Sources */,
+				B652391E21DC5D980035E7E2 /* yas_holder_tests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -402,7 +402,6 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -447,7 +446,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = chaining_test_mac/Info.plist;
+				INFOPLIST_FILE = chaining_test/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -471,7 +470,6 @@
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
-				CLANG_ENABLE_OBJC_ARC = YES;
 				CLANG_ENABLE_OBJC_WEAK = YES;
 				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
@@ -510,7 +508,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = chaining_test_mac/Info.plist;
+				INFOPLIST_FILE = chaining_test/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/../Frameworks",
@@ -521,6 +519,92 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				SDKROOT = macosx;
+			};
+			name = Release;
+		};
+		B652391821DC5CA00035E7E2 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEVELOPMENT_TEAM = "";
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = chaining_test/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.objective-audio.chaining-test-ios";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		B652391921DC5CA00035E7E2 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEVELOPMENT_TEAM = "";
+				ENABLE_NS_ASSERTIONS = NO;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = chaining_test/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = "jp.objective-audio.chaining-test-ios";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SDKROOT = iphoneos;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
 		};
@@ -541,6 +625,15 @@
 			buildConfigurations = (
 				B608F0B1211940A0000A17BD /* Debug */,
 				B608F0B2211940A0000A17BD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		B652391A21DC5CA00035E7E2 /* Build configuration list for PBXNativeTarget "chaining_test_ios" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				B652391821DC5CA00035E7E2 /* Debug */,
+				B652391921DC5CA00035E7E2 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
