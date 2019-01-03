@@ -11,8 +11,6 @@
 		B6081307212319CB00D86603 /* yas_sync_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6081306212319CB00D86603 /* yas_sync_tests.mm */; };
 		B608130921231A5000D86603 /* yas_receiver_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B608130821231A5000D86603 /* yas_receiver_tests.mm */; };
 		B61643EB2127C7EB002A182F /* yas_observer_pool_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B61643EA2127C7EB002A182F /* yas_observer_pool_tests.mm */; };
-		B623BA9421DC4E7800D16037 /* chaining.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B623BA9321DC4E7800D16037 /* chaining.framework */; };
-		B623BA9E21DC50C100D16037 /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B623B9D321DC4A5300D16037 /* cpp_utils.framework */; };
 		B62525A621DCFE3200EE2ECA /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62525A521DCFE3200EE2ECA /* cpp_utils.framework */; };
 		B62525A821DD010E00EE2ECA /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62525A721DD010E00EE2ECA /* UIKit.framework */; };
 		B6277A1921437B5E00CA15A9 /* yas_vector_event_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6277A1821437B5E00CA15A9 /* yas_vector_event_tests.mm */; };
@@ -46,6 +44,8 @@
 		B684E89521D86B5700599A55 /* yas_map_holder_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B684E89421D86B5700599A55 /* yas_map_holder_chain_tests.mm */; };
 		B6B154872123CC9C0051026A /* yas_observer_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6B154862123CC9C0051026A /* yas_observer_tests.mm */; };
 		B6DFE506213BCC410018244A /* yas_vector_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DFE505213BCC410018244A /* yas_vector_holder_tests.mm */; };
+		B6EA2AB321DDAE6600387B90 /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B623B9D321DC4A5300D16037 /* cpp_utils.framework */; };
+		B6EA2AB721DDAFB000387B90 /* chaining.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B623BA9321DC4E7800D16037 /* chaining.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -77,6 +77,7 @@
 		B684E89421D86B5700599A55 /* yas_map_holder_chain_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_map_holder_chain_tests.mm; sourceTree = "<group>"; };
 		B6B154862123CC9C0051026A /* yas_observer_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observer_tests.mm; sourceTree = "<group>"; };
 		B6DFE505213BCC410018244A /* yas_vector_holder_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_vector_holder_tests.mm; sourceTree = "<group>"; };
+		B6EA2AB421DDAE6C00387B90 /* objc_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = objc_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,8 +85,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B623BA9E21DC50C100D16037 /* cpp_utils.framework in Frameworks */,
-				B623BA9421DC4E7800D16037 /* chaining.framework in Frameworks */,
+				B6EA2AB721DDAFB000387B90 /* chaining.framework in Frameworks */,
+				B6EA2AB321DDAE6600387B90 /* cpp_utils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -148,6 +149,7 @@
 		B623B9D221DC4A5300D16037 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				B6EA2AB421DDAE6C00387B90 /* objc_utils.framework */,
 				B62525A721DD010E00EE2ECA /* UIKit.framework */,
 				B62525A521DCFE3200EE2ECA /* cpp_utils.framework */,
 				B652394521DC5FC80035E7E2 /* chaining.framework */,
