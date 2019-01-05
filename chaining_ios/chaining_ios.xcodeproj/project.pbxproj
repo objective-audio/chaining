@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B62525A221DCFD9900EE2ECA /* objc_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62525A121DCFD9900EE2ECA /* objc_utils.framework */; };
 		B652393B21DC5F6D0035E7E2 /* chaining.h in Headers */ = {isa = PBXBuildFile; fileRef = B652393921DC5F6D0035E7E2 /* chaining.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B652394021DC5F990035E7E2 /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B652393F21DC5F990035E7E2 /* cpp_utils.framework */; };
 		B652396B21DC60160035E7E2 /* yas_chaining_joint.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394821DC60150035E7E2 /* yas_chaining_joint.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -98,7 +97,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B62525A221DCFD9900EE2ECA /* objc_utils.framework in Frameworks */,
 				B652394021DC5F990035E7E2 /* cpp_utils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

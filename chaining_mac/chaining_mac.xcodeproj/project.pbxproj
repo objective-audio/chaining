@@ -44,7 +44,6 @@
 		B623BA4421DC4D7000D16037 /* yas_chaining_multimap_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B623BA2121DC4D7000D16037 /* yas_chaining_multimap_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B623BA4521DC4D7000D16037 /* yas_chaining_any_observer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B623BA2221DC4D7000D16037 /* yas_chaining_any_observer.cpp */; };
 		B623BA9F21DC50DC00D16037 /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B623BA4721DC4D8600D16037 /* cpp_utils.framework */; };
-		B62525A421DCFDAD00EE2ECA /* objc_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B62525A321DCFDAD00EE2ECA /* objc_utils.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -97,7 +96,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B62525A421DCFDAD00EE2ECA /* objc_utils.framework in Frameworks */,
 				B623BA9F21DC50DC00D16037 /* cpp_utils.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
