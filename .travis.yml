@@ -8,5 +8,5 @@ notifications:
 install:
   - brew install clang-format
 script:
-  - xcodebuild -workspace chaining.xcworkspace -scheme chaining_test_mac -configuration Debug OBJROOT=build -sdk macosx clean test
-  - xcodebuild -workspace chaining.xcworkspace -scheme chaining_test_ios -configuration Debug OBJROOT=build -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6,OS=12.1' clean test
+  - xcodebuild -workspace chaining_mac.xcworkspace -scheme chaining_test_mac -configuration Debug OBJROOT=build -sdk macosx clean test
+  - xcodebuild -workspace chaining_ios.xcworkspace -scheme chaining_test_ios -configuration Debug OBJROOT=build -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 6,OS=12.1' clean test
