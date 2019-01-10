@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:chaining_test.xcodeproj">
+      location = "self:chaining_ios_tests.xcodeproj">
    </FileRef>
 </Workspace>
