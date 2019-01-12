@@ -134,6 +134,7 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B6DE35FB21E783E100E49BCB /* Build configuration list for PBXNativeTarget "chaining_mac_tests" */;
 			buildPhases = (
+				B6D4C60721E9B124004A95A8 /* ShellScript */,
 				B6DE35F121E783E100E49BCB /* Sources */,
 				B6DE35F221E783E100E49BCB /* Frameworks */,
 				B6DE35F321E783E100E49BCB /* Resources */,
@@ -186,6 +187,26 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		B6D4C60721E9B124004A95A8 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "../script/format.sh\n";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		B6DE35F121E783E100E49BCB /* Sources */ = {
