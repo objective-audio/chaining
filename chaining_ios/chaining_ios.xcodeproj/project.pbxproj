@@ -44,6 +44,7 @@
 		B652398B21DC60160035E7E2 /* yas_chaining_sender_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652396821DC60160035E7E2 /* yas_chaining_sender_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B652398C21DC60160035E7E2 /* yas_chaining_multimap_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B652396921DC60160035E7E2 /* yas_chaining_multimap_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B652398D21DC60160035E7E2 /* yas_chaining_any_observer.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B652396A21DC60160035E7E2 /* yas_chaining_any_observer.cpp */; };
+		B68AE95021EF5AB4004E2983 /* yas_chaining_vector_holder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B68AE94F21EF5AB4004E2983 /* yas_chaining_vector_holder.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -90,6 +91,7 @@
 		B652396821DC60160035E7E2 /* yas_chaining_sender_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender_private.h; sourceTree = "<group>"; };
 		B652396921DC60160035E7E2 /* yas_chaining_multimap_holder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_multimap_holder.h; sourceTree = "<group>"; };
 		B652396A21DC60160035E7E2 /* yas_chaining_any_observer.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_any_observer.cpp; sourceTree = "<group>"; };
+		B68AE94F21EF5AB4004E2983 /* yas_chaining_vector_holder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_vector_holder.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -179,6 +181,7 @@
 				B652395121DC60150035E7E2 /* yas_chaining_types.h */,
 				B652395421DC60150035E7E2 /* yas_chaining_utils.h */,
 				B652396321DC60160035E7E2 /* yas_chaining_vector_holder_private.h */,
+				B68AE94F21EF5AB4004E2983 /* yas_chaining_vector_holder.cpp */,
 				B652395C21DC60160035E7E2 /* yas_chaining_vector_holder.h */,
 				B652395B21DC60150035E7E2 /* yas_chaining_umbrella.h */,
 			);
@@ -296,6 +299,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B68AE95021EF5AB4004E2983 /* yas_chaining_vector_holder.cpp in Sources */,
 				B652397C21DC60160035E7E2 /* yas_chaining_observer_pool.cpp in Sources */,
 				B652398D21DC60160035E7E2 /* yas_chaining_any_observer.cpp in Sources */,
 			);

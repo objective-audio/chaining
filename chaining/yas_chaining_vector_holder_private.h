@@ -9,43 +9,41 @@
 
 namespace yas::chaining::vector {
 template <typename T>
-event<T> make_fetched_event(std::vector<T> const &elements) {
-    return event<T>{fetched_event<T>{.elements = elements}};
+event make_fetched_event(std::vector<T> const &elements) {
+    return event{fetched_event<T>{.elements = elements}};
 }
 
 template <typename T>
-event<T> make_any_event(std::vector<T> const &elements) {
-    return event<T>{any_event<T>{.elements = elements}};
+event make_any_event(std::vector<T> const &elements) {
+    return event{any_event<T>{.elements = elements}};
 }
 
 template <typename T>
-event<T> make_inserted_event(T const &element, std::size_t const idx) {
-    return event<T>{inserted_event<T>{.element = element, .index = idx}};
+event make_inserted_event(T const &element, std::size_t const idx) {
+    return event{inserted_event<T>{.element = element, .index = idx}};
 }
 
 template <typename T>
-event<T> make_erased_event(std::size_t const idx) {
-    return event<T>{erased_event<T>{.index = idx}};
+event make_erased_event(std::size_t const idx) {
+    return event{erased_event<T>{.index = idx}};
 }
 
 template <typename T>
-event<T> make_replaced_event(T const &element, std::size_t const idx) {
-    return event<T>{replaced_event<T>{.element = element, .index = idx}};
+event make_replaced_event(T const &element, std::size_t const idx) {
+    return event{replaced_event<T>{.element = element, .index = idx}};
 }
 
 template <typename T>
-event<T> make_relayed_event(T const &element, std::size_t const idx) {
-    return event<T>{relayed_event<T>{.element = element, .index = idx}};
+event make_relayed_event(T const &element, std::size_t const idx, typename T::SendType const &relayed) {
+    return event{relayed_event<T>{.element = element, .index = idx, .relayed = relayed}};
 }
 
-template <typename T>
-struct event<T>::impl_base : base::impl {
+struct event::impl_base : base::impl {
     virtual event_type type() = 0;
 };
 
-template <typename T>
 template <typename Event>
-struct event<T>::impl : event<T>::impl_base {
+struct event::impl : event::impl_base {
     Event const event;
 
     impl(Event &&event) : event(std::move(event)) {
@@ -56,42 +54,12 @@ struct event<T>::impl : event<T>::impl_base {
     }
 };
 
-template <typename T>
-event<T>::event(fetched_event<T> &&event) : base(std::make_shared<impl<fetched_event<T>>>(std::move(event))) {
-}
-
-template <typename T>
-event<T>::event(any_event<T> &&event) : base(std::make_shared<impl<any_event<T>>>(std::move(event))) {
-}
-
-template <typename T>
-event<T>::event(inserted_event<T> &&event) : base(std::make_shared<impl<inserted_event<T>>>(std::move(event))) {
-}
-
-template <typename T>
-event<T>::event(erased_event<T> &&event) : base(std::make_shared<impl<erased_event<T>>>(std::move(event))) {
-}
-
-template <typename T>
-event<T>::event(replaced_event<T> &&event) : base(std::make_shared<impl<replaced_event<T>>>(std::move(event))) {
-}
-
-template <typename T>
-event<T>::event(relayed_event<T> &&event) : base(std::make_shared<impl<relayed_event<T>>>(std::move(event))) {
-}
-
-template <typename T>
-event<T>::event(std::nullptr_t) : base(nullptr) {
-}
-
-template <typename T>
-event_type event<T>::type() const {
-    return this->template impl_ptr<impl_base>()->type();
-}
-
-template <typename T>
 template <typename Event>
-Event const &event<T>::get() const {
+event::event(Event &&event) : base(std::make_shared<impl<Event>>(std::move(event))) {
+}
+
+template <typename Event>
+Event const &event::get() const {
     if (auto event_impl = std::dynamic_pointer_cast<impl<Event>>(impl_ptr())) {
         return event_impl->event;
     }
@@ -100,7 +68,7 @@ Event const &event<T>::get() const {
 }
 
 template <typename T>
-struct immutable_holder<T>::impl : sender<event<T>>::impl {
+struct immutable_holder<T>::impl : sender<event>::impl {
     struct observer_wrapper {
         any_observer observer = nullptr;
     };
@@ -209,14 +177,14 @@ struct immutable_holder<T>::impl : sender<event<T>>::impl {
             wrapper_wptr weak_wrapper = wrapper;
             wrapper->observer = element.sendable()
                                     .chain_unsync()
-                                    .perform([weak_holder, weak_wrapper, weak_element](auto const &) {
+                                    .perform([weak_holder, weak_wrapper, weak_element](auto const &relayed) {
                                         auto holder = weak_holder.lock();
                                         auto element = weak_element.lock();
                                         wrapper_ptr wrapper = weak_wrapper.lock();
                                         if (holder && wrapper && element) {
                                             auto holder_impl = holder.template impl_ptr<impl>();
                                             if (auto idx = yas::index(holder_impl->_observers, wrapper)) {
-                                                holder_impl->broadcast(make_relayed_event(element, *idx));
+                                                holder_impl->broadcast(make_relayed_event(element, *idx, relayed));
                                             }
                                         }
                                     })
@@ -279,11 +247,11 @@ struct immutable_holder<T>::impl : sender<event<T>>::impl {
 };
 
 template <typename T>
-immutable_holder<T>::immutable_holder(std::shared_ptr<impl> &&imp) : sender<event<T>>(std::move(imp)) {
+immutable_holder<T>::immutable_holder(std::shared_ptr<impl> &&imp) : sender<event>(std::move(imp)) {
 }
 
 template <typename T>
-immutable_holder<T>::immutable_holder(std::nullptr_t) : sender<event<T>>(nullptr) {
+immutable_holder<T>::immutable_holder(std::nullptr_t) : sender<event>(nullptr) {
 }
 
 template <typename T>
