@@ -61,21 +61,17 @@ struct relayed_event {
     static vector::event_type const type = vector::event_type::relayed;
     T const &element;
     std::size_t const index;
+    typename T::SendType const &relayed;
 };
 
-template <typename T>
 struct event : base {
     class impl_base;
 
     template <typename Event>
     class impl;
 
-    event(fetched_event<T> &&);
-    event(any_event<T> &&);
-    event(inserted_event<T> &&);
-    event(erased_event<T> &&);
-    event(replaced_event<T> &&);
-    event(relayed_event<T> &&);
+    template <typename Event>
+    event(Event &&);
     event(std::nullptr_t);
 
     vector::event_type type() const;
@@ -85,13 +81,13 @@ struct event : base {
 };
 
 template <typename T>
-struct immutable_holder : sender<event<T>> {
+struct immutable_holder : sender<event> {
     class impl;
 
     immutable_holder(std::nullptr_t);
 
     using vector_t = std::vector<T>;
-    using event_t = vector::event<T>;
+    using event_t = vector::event;
     using chain_t = chain<event_t, event_t, event_t, true>;
 
     vector_t const &raw() const;

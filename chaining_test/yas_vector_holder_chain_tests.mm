@@ -26,7 +26,7 @@ using namespace yas::chaining;
 - (void)test_chain_fetched_by_sync {
     vector::holder<int> holder{{0, 1, 2}};
 
-    std::vector<vector::event<int>> received;
+    std::vector<vector::event> received;
 
     auto chain = holder.chain().perform([&received](auto const &event) { received.push_back(event); }).sync();
 
@@ -38,7 +38,7 @@ using namespace yas::chaining;
 - (void)test_chain_any_by_replace {
     vector::holder<int> holder{{0, 1, 2}};
 
-    std::vector<vector::event<int>> received;
+    std::vector<vector::event> received;
 
     auto chain = holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
@@ -52,7 +52,7 @@ using namespace yas::chaining;
 - (void)test_chain_any_by_clear {
     vector::holder<int> holder{{0, 1, 2}};
 
-    std::vector<vector::event<int>> received;
+    std::vector<vector::event> received;
 
     auto chain = holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
@@ -66,7 +66,7 @@ using namespace yas::chaining;
 - (void)test_chain_inserted {
     vector::holder<int> holder{{0, 1, 2}};
 
-    std::vector<vector::event<int>> received;
+    std::vector<vector::event> received;
 
     auto chain = holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
@@ -81,7 +81,7 @@ using namespace yas::chaining;
 - (void)test_chain_erased {
     vector::holder<int> holder{{0, 1, 2}};
 
-    std::vector<vector::event<int>> received;
+    std::vector<vector::event> received;
 
     auto chain = holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
@@ -95,7 +95,7 @@ using namespace yas::chaining;
 - (void)test_chain_replace {
     vector::holder<int> holder{{0, 1, 2}};
 
-    std::vector<vector::event<int>> received;
+    std::vector<vector::event> received;
 
     auto chain = holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
@@ -111,14 +111,22 @@ using namespace yas::chaining;
     holder<int> holder{1};
     vector::holder<chaining::holder<int>> vector_holder{{holder}};
 
-    std::vector<vector::event<chaining::holder<int>>> received;
+    std::vector<vector::event> received;
+    std::vector<int> relayed;
 
-    auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
+    auto chain = vector_holder.chain()
+                     .perform([&received, &relayed](auto const &event) {
+                         received.push_back(event);
+                         relayed.push_back(event.template get<vector::relayed_event<chaining::holder<int>>>().relayed);
+                     })
+                     .end();
 
     holder.set_value(2);
 
     XCTAssertEqual(received.size(), 1);
     XCTAssertEqual(received.at(0).type(), vector::event_type::relayed);
+    XCTAssertEqual(relayed.size(), 1);
+    XCTAssertEqual(relayed.at(0), 2);
 }
 
 - (void)test_chain_relayed_after_inserted {
@@ -127,7 +135,7 @@ using namespace yas::chaining;
     holder<int> holder{1};
     vector_holder.insert(holder, 0);
 
-    std::vector<vector::event<chaining::holder<int>>> received;
+    std::vector<vector::event> received;
 
     auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
@@ -143,7 +151,7 @@ using namespace yas::chaining;
     holder<int> holder2{2};
     vector_holder.replace(holder2, 0);
 
-    std::vector<vector::event<chaining::holder<int>>> received;
+    std::vector<vector::event> received;
 
     auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
@@ -160,7 +168,7 @@ using namespace yas::chaining;
     holder<int> holder3{3};
     vector_holder.replace({holder3});
 
-    std::vector<vector::event<chaining::holder<int>>> received;
+    std::vector<vector::event> received;
 
     auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
@@ -176,7 +184,7 @@ using namespace yas::chaining;
 
     vector_holder.erase_at(0);
 
-    std::vector<vector::event<chaining::holder<int>>> received;
+    std::vector<vector::event> received;
 
     auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
@@ -196,7 +204,7 @@ using namespace yas::chaining;
 
     vector_holder.clear();
 
-    std::vector<vector::event<chaining::holder<int>>> received;
+    std::vector<vector::event> received;
 
     auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
@@ -213,7 +221,7 @@ using namespace yas::chaining;
 
     vector_holder.replace(holder<int>{10}, 0);
 
-    std::vector<vector::event<chaining::holder<int>>> received;
+    std::vector<vector::event> received;
 
     auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
@@ -233,7 +241,7 @@ using namespace yas::chaining;
 
     vector_holder.replace({holder<int>{10}});
 
-    std::vector<vector::event<chaining::holder<int>>> received;
+    std::vector<vector::event> received;
 
     auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
