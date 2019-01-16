@@ -5,6 +5,7 @@
 #pragma once
 
 #include <vector>
+#include "yas_chaining_event.h"
 #include "yas_chaining_sender.h"
 
 namespace yas::chaining {
@@ -15,69 +16,44 @@ class receiver;
 }  // namespace yas::chaining
 
 namespace yas::chaining::vector {
-enum event_type {
-    fetched,
-    any,
-    inserted,
-    erased,
-    replaced,
-    relayed,
-};
-
 template <typename T>
 struct fetched_event {
-    static vector::event_type const type = vector::event_type::fetched;
+    static event_type const type = event_type::fetched;
     std::vector<T> const &elements;
 };
 
 template <typename T>
 struct any_event {
-    static vector::event_type const type = vector::event_type::any;
+    static event_type const type = event_type::any;
     std::vector<T> const &elements;
 };
 
 template <typename T>
 struct inserted_event {
-    static vector::event_type const type = vector::event_type::inserted;
+    static event_type const type = event_type::inserted;
     T const &element;
     std::size_t const index;
 };
 
 template <typename T>
 struct erased_event {
-    static vector::event_type const type = vector::event_type::erased;
+    static event_type const type = event_type::erased;
     std::size_t const index;
 };
 
 template <typename T>
 struct replaced_event {
-    static vector::event_type const type = vector::event_type::replaced;
+    static event_type const type = event_type::replaced;
     T const &element;
     std::size_t const index;
 };
 
 template <typename T>
 struct relayed_event {
-    static vector::event_type const type = vector::event_type::relayed;
+    static event_type const type = event_type::relayed;
     T const &element;
     std::size_t const index;
     typename T::SendType const &relayed;
-};
-
-struct event : base {
-    class impl_base;
-
-    template <typename Event>
-    class impl;
-
-    template <typename Event>
-    event(Event &&);
-    event(std::nullptr_t);
-
-    vector::event_type type() const;
-
-    template <typename Event>
-    Event const &get() const;
 };
 
 template <typename T>
@@ -87,8 +63,7 @@ struct immutable_holder : sender<event> {
     immutable_holder(std::nullptr_t);
 
     using vector_t = std::vector<T>;
-    using event_t = vector::event;
-    using chain_t = chain<event_t, event_t, event_t, true>;
+    using chain_t = chain<event, event, event, true>;
 
     vector_t const &raw() const;
     T const &at(std::size_t const) const;
