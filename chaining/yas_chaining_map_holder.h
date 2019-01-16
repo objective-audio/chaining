@@ -5,32 +5,55 @@
 #pragma once
 
 #include <map>
+#include "yas_chaining_event.h"
 #include "yas_chaining_sender.h"
 
 namespace yas::chaining::map {
-enum event_type {
-    fetched,
-    any,
-    inserted,
-    erased,
-    replaced,
-    relayed,
-};
-
 template <typename Key, typename Value>
-struct event {
-    event_type const type;
+struct fetched_event {
+    static event_type const type = event_type::fetched;
     std::map<Key, Value> const &elements;
 };
 
 template <typename Key, typename Value>
-struct immutable_holder : sender<event<Key, Value>> {
+struct any_event {
+    static event_type const type = event_type::any;
+    std::map<Key, Value> const &elements;
+};
+
+template <typename Key, typename Value>
+struct inserted_event {
+    static event_type const type = event_type::inserted;
+    std::map<Key, Value> const &elements;
+};
+
+template <typename Key, typename Value>
+struct erased_event {
+    static event_type const type = event_type::erased;
+    std::map<Key, Value> const &elements;
+};
+
+template <typename Key, typename Value>
+struct replaced_event {
+    static event_type const type = event_type::replaced;
+    std::map<Key, Value> const &elements;
+};
+
+template <typename Key, typename Value>
+struct relayed_event {
+    static event_type const type = event_type::relayed;
+    Value const &value;
+    Key const &key;
+    typename Value::SendType const &relayed;
+};
+
+template <typename Key, typename Value>
+struct immutable_holder : sender<event> {
     class impl;
 
     immutable_holder(std::nullptr_t);
 
-    using event_t = map::event<Key, Value>;
-    using chain_t = chain<event_t, event_t, event_t, true>;
+    using chain_t = chain<event, event, event, true>;
 
     std::map<Key, Value> const &raw() const;
     bool has_value(Key const &) const;
