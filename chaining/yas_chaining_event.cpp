@@ -1,14 +1,14 @@
 //
-//  yas_chaining_vector_holder.cpp
+//  yas_chaining_event.cpp
 //
 
-#include "yas_chaining_vector_holder.h"
+#include "yas_chaining_event.h"
 
-namespace yas::chaining::vector {
+namespace yas::chaining {
 event::event(std::nullptr_t) : base(nullptr) {
 }
 
 event_type event::type() const {
     return this->template impl_ptr<impl_base>()->type();
 }
-}  // namespace yas::chaining::vector
+}  // namespace yas::chaining

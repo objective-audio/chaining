@@ -38,35 +38,6 @@ event make_relayed_event(T const &element, std::size_t const idx, typename T::Se
     return event{relayed_event<T>{.element = element, .index = idx, .relayed = relayed}};
 }
 
-struct event::impl_base : base::impl {
-    virtual event_type type() = 0;
-};
-
-template <typename Event>
-struct event::impl : event::impl_base {
-    Event const event;
-
-    impl(Event &&event) : event(std::move(event)) {
-    }
-
-    event_type type() override {
-        return Event::type;
-    }
-};
-
-template <typename Event>
-event::event(Event &&event) : base(std::make_shared<impl<Event>>(std::move(event))) {
-}
-
-template <typename Event>
-Event const &event::get() const {
-    if (auto event_impl = std::dynamic_pointer_cast<impl<Event>>(impl_ptr())) {
-        return event_impl->event;
-    }
-
-    throw std::runtime_error("get event failed.");
-}
-
 template <typename T>
 struct immutable_holder<T>::impl : sender<event>::impl {
     struct observer_wrapper {
