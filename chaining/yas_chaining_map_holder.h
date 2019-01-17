@@ -36,7 +36,8 @@ struct erased_event {
 template <typename Key, typename Value>
 struct replaced_event {
     static event_type const type = event_type::replaced;
-    std::map<Key, Value> const &elements;
+    Key const &key;
+    Value const &value;
 };
 
 template <typename Key, typename Value>
