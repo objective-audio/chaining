@@ -42,8 +42,8 @@ struct replaced_event {
 template <typename Key, typename Value>
 struct relayed_event {
     static event_type const type = event_type::relayed;
-    Value const &value;
     Key const &key;
+    Value const &value;
     typename Value::SendType const &relayed;
 };
 
