@@ -29,8 +29,8 @@ event make_erased_event(std::map<Key, Value> const &elements) {
 }
 
 template <typename Key, typename Value>
-event make_replaced_event(std::map<Key, Value> const &elements) {
-    return event{replaced_event<Key, Value>{.elements = elements}};
+event make_replaced_event(Key const &key, Value const &value) {
+    return event{replaced_event<Key, Value>{.key = key, .value = value}};
 }
 
 template <typename Key, typename Value>
@@ -215,10 +215,10 @@ struct immutable_holder<Key, Value>::impl : sender<event>::impl {
             this->_observers.emplace(key, std::move(wrapper));
         }
 
-        std::map<Key, Value> map{{std::move(key), std::move(value)}};
         if (isErased) {
-            this->broadcast(make_replaced_event(map));
+            this->broadcast(make_replaced_event(key, value));
         } else {
+            std::map<Key, Value> map{{std::move(key), std::move(value)}};
             this->broadcast(make_inserted_event(map));
         }
     }

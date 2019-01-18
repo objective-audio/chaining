@@ -140,14 +140,15 @@ using namespace yas::chaining;
     map::holder<int, std::string> holder{{{0, "10"}, {1, "11"}, {2, "12"}}};
 
     std::vector<event> received_events;
-    std::vector<std::map<int, std::string>> received_elements;
+    std::vector<std::pair<int, std::string>> received_replaced_events;
 
     auto chain =
         holder.chain()
-            .perform([&received_events, &received_elements](auto const &event) {
+            .perform([&received_events, &received_replaced_events](auto const &event) {
                 received_events.push_back(event);
                 if (event.type() == event_type::replaced) {
-                    received_elements.push_back(event.template get<map::replaced_event<int, std::string>>().elements);
+                    auto const &replaced_event = event.template get<map::replaced_event<int, std::string>>();
+                    received_replaced_events.push_back(std::make_pair(replaced_event.key, replaced_event.value));
                 }
             })
             .end();
@@ -156,8 +157,9 @@ using namespace yas::chaining;
 
     XCTAssertEqual(received_events.size(), 1);
     XCTAssertEqual(received_events.at(0).type(), event_type::replaced);
-    XCTAssertEqual(received_elements.size(), 1);
-    XCTAssertEqual(received_elements.at(0), (std::map<int, std::string>{{1, "111"}}));
+    XCTAssertEqual(received_replaced_events.size(), 1);
+    XCTAssertEqual(received_replaced_events.at(0).first, 1);
+    XCTAssertEqual(received_replaced_events.at(0).second, "111");
 }
 
 - (void)test_chain_relayed {
