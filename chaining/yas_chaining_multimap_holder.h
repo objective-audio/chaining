@@ -5,31 +5,56 @@
 #pragma once
 
 #include <map>
+#include "yas_chaining_event.h"
 #include "yas_chaining_sender.h"
 
 namespace yas::chaining::multimap {
-enum event_type {
-    fetched,
-    any,
-    inserted,
-    erased,
-    relayed,
-};
-
 template <typename Key, typename Value>
-struct event {
-    multimap::event_type const type;
+struct fetched_event {
+    static event_type const type = event_type::fetched;
     std::multimap<Key, Value> const &elements;
 };
 
 template <typename Key, typename Value>
-struct immutable_holder : sender<event<Key, Value>> {
+struct any_event {
+    static event_type const type = event_type::any;
+    std::multimap<Key, Value> const &elements;
+};
+
+template <typename Key, typename Value>
+struct inserted_event {
+    static event_type const type = event_type::inserted;
+    std::multimap<Key, Value> const &elements;
+};
+
+template <typename Key, typename Value>
+struct erased_event {
+    static event_type const type = event_type::erased;
+    std::multimap<Key, Value> const &elements;
+};
+
+template <typename Key, typename Value>
+struct replaced_event {
+    static event_type const type = event_type::replaced;
+    Key const &key;
+    Value const &value;
+};
+
+template <typename Key, typename Value>
+struct relayed_event {
+    static event_type const type = event_type::relayed;
+    Key const &key;
+    Value const &value;
+    typename Value::SendType const &relayed;
+};
+
+template <typename Key, typename Value>
+struct immutable_holder : sender<event> {
     class impl;
 
     immutable_holder(std::nullptr_t);
 
-    using event_t = multimap::event<Key, Value>;
-    using chain_t = chain<event_t, event_t, event_t, true>;
+    using chain_t = chain<event, event, event, true>;
 
     std::multimap<Key, Value> const &raw() const;
     std::size_t size() const;

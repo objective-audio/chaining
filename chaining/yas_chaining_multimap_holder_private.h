@@ -8,11 +8,40 @@
 #include "yas_chaining_chain.h"
 
 namespace yas::chaining::multimap {
+template <typename Key, typename Value>
+event make_fetched_event(std::multimap<Key, Value> const &elements) {
+    return event{fetched_event<Key, Value>{.elements = elements}};
+}
+
+template <typename Key, typename Value>
+event make_any_event(std::multimap<Key, Value> const &elements) {
+    return event{any_event<Key, Value>{.elements = elements}};
+}
+
+template <typename Key, typename Value>
+event make_inserted_event(std::multimap<Key, Value> const &elements) {
+    return event{inserted_event<Key, Value>{.elements = elements}};
+}
+
+template <typename Key, typename Value>
+event make_erased_event(std::multimap<Key, Value> const &elements) {
+    return event{erased_event<Key, Value>{.elements = elements}};
+}
+
+template <typename Key, typename Value>
+event make_replaced_event(Key const &key, Value const &value) {
+    return event{replaced_event<Key, Value>{.key = key, .value = value}};
+}
+
+template <typename Key, typename Value>
+event make_relayed_event(Key const &key, Value const &value, typename Value::SendType const &relayed) {
+    return event{relayed_event<Key, Value>{.key = key, .value = value, .relayed = relayed}};
+}
 
 #pragma mark - multimap::immutable_holder
 
 template <typename Key, typename Value>
-struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
+struct immutable_holder<Key, Value>::impl : sender<event>::impl {
     struct observer_wrapper {
         any_observer observer = nullptr;
         Value *value = nullptr;
@@ -64,7 +93,7 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
             }
         });
 
-        this->broadcast(event<Key, Value>{event_type::erased, erased});
+        this->broadcast(make_erased_event(erased));
 
         return erased;
     }
@@ -81,7 +110,7 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
         this->_observers.clear();
         this->_raw.clear();
 
-        this->broadcast(event<Key, Value>{event_type::any, this->_raw});
+        this->broadcast(make_any_event(this->_raw));
     }
 
     std::multimap<Key, Value> &raw() {
@@ -97,7 +126,7 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
     }
 
     void fetch_for(any_joint const &joint) override {
-        this->send_value_to_target(event<Key, Value>{event_type::fetched, this->_raw}, joint.identifier());
+        this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
 
    private:
@@ -110,19 +139,18 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
         return [weak_holder](Key const &key, Value &value, wrapper_ptr &wrapper) {
             wrapper_wptr weak_wrapper = wrapper;
             auto weak_value = to_weak(value);
-            wrapper->observer = value.sendable()
-                                    .chain_unsync()
-                                    .perform([weak_holder, weak_wrapper, key, weak_value](auto const &) {
-                                        auto holder = weak_holder.lock();
-                                        auto value = weak_value.lock();
-                                        wrapper_ptr wrapper = weak_wrapper.lock();
-                                        if (holder && wrapper && value) {
-                                            std::multimap<Key, Value> elements{{key, value}};
-                                            holder.template impl_ptr<impl>()->broadcast(
-                                                event<Key, Value>{event_type::relayed, elements});
-                                        }
-                                    })
-                                    .end();
+            wrapper->observer =
+                value.sendable()
+                    .chain_unsync()
+                    .perform([weak_holder, weak_wrapper, key, weak_value](auto const &relayed) {
+                        auto holder = weak_holder.lock();
+                        auto value = weak_value.lock();
+                        wrapper_ptr wrapper = weak_wrapper.lock();
+                        if (holder && wrapper && value) {
+                            holder.template impl_ptr<impl>()->broadcast(make_relayed_event(key, value, relayed));
+                        }
+                    })
+                    .end();
         };
     }
 
@@ -148,7 +176,7 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
             this->_raw = std::move(map);
         }
 
-        this->broadcast(event<Key, Value>{event_type::any, this->_raw});
+        this->broadcast(make_any_event(this->_raw));
     }
 
     void _insert(std::multimap<Key, Value> &&map, chaining_f chaining) {
@@ -164,17 +192,16 @@ struct immutable_holder<Key, Value>::impl : sender<event<Key, Value>>::impl {
             this->_raw.insert(map.begin(), map.end());
         }
 
-        this->broadcast(event<Key, Value>{event_type::inserted, map});
+        this->broadcast(make_inserted_event(map));
     }
 };
 
 template <typename Key, typename Value>
-immutable_holder<Key, Value>::immutable_holder(std::shared_ptr<impl> &&imp)
-    : sender<event<Key, Value>>(std::move(imp)) {
+immutable_holder<Key, Value>::immutable_holder(std::shared_ptr<impl> &&imp) : sender<event>(std::move(imp)) {
 }
 
 template <typename Key, typename Value>
-immutable_holder<Key, Value>::immutable_holder(std::nullptr_t) : sender<event<Key, Value>>(nullptr) {
+immutable_holder<Key, Value>::immutable_holder(std::nullptr_t) : sender<event>(nullptr) {
 }
 
 template <typename Key, typename Value>
