@@ -169,8 +169,6 @@
 				B652394D21DC60150035E7E2 /* yas_chaining_fetcher_protocol_private.h */,
 				B652396721DC60160035E7E2 /* yas_chaining_fetcher_protocol.h */,
 				B652394F21DC60150035E7E2 /* yas_chaining_fetcher.h */,
-				B652395821DC60150035E7E2 /* yas_chaining_value_holder_private.h */,
-				B652394921DC60150035E7E2 /* yas_chaining_value_holder.h */,
 				B652395721DC60150035E7E2 /* yas_chaining_joint_private.h */,
 				B652394821DC60150035E7E2 /* yas_chaining_joint.h */,
 				B652396121DC60160035E7E2 /* yas_chaining_map_holder_private.h */,
@@ -194,6 +192,8 @@
 				B652395121DC60150035E7E2 /* yas_chaining_types.h */,
 				B652395B21DC60150035E7E2 /* yas_chaining_umbrella.h */,
 				B652395421DC60150035E7E2 /* yas_chaining_utils.h */,
+				B652395821DC60150035E7E2 /* yas_chaining_value_holder_private.h */,
+				B652394921DC60150035E7E2 /* yas_chaining_value_holder.h */,
 				B652396321DC60160035E7E2 /* yas_chaining_vector_holder_private.h */,
 				B652395C21DC60160035E7E2 /* yas_chaining_vector_holder.h */,
 			);
