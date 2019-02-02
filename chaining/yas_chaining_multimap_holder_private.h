@@ -38,10 +38,10 @@ event make_relayed_event(Key const &key, Value const &value, typename Value::Sen
     return event{relayed_event<Key, Value>{.key = key, .value = value, .relayed = relayed}};
 }
 
-#pragma mark - multimap::immutable_holder
+#pragma mark - multimap::holder::impl
 
 template <typename Key, typename Value>
-struct immutable_holder<Key, Value>::impl : sender<event>::impl {
+struct holder<Key, Value>::impl : sender<event>::impl {
     struct observer_wrapper {
         any_observer observer = nullptr;
         Value *value = nullptr;
@@ -118,7 +118,7 @@ struct immutable_holder<Key, Value>::impl : sender<event>::impl {
     }
 
     virtual bool is_equal(std::shared_ptr<base::impl> const &rhs) const override {
-        if (auto rhs_impl = std::dynamic_pointer_cast<typename immutable_holder<Key, Value>::impl>(rhs)) {
+        if (auto rhs_impl = std::dynamic_pointer_cast<typename holder<Key, Value>::impl>(rhs)) {
             return this->_raw == rhs_impl->_raw;
         } else {
             return false;
@@ -135,7 +135,7 @@ struct immutable_holder<Key, Value>::impl : sender<event>::impl {
 
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     chaining_f _element_chaining() {
-        auto weak_holder = to_weak(this->template cast<immutable_holder<Key, Value>>());
+        auto weak_holder = to_weak(this->template cast<holder<Key, Value>>());
         return [weak_holder](Key const &key, Value &value, wrapper_ptr &wrapper) {
             wrapper_wptr weak_wrapper = wrapper;
             auto weak_value = to_weak(value);
@@ -196,61 +196,42 @@ struct immutable_holder<Key, Value>::impl : sender<event>::impl {
     }
 };
 
-template <typename Key, typename Value>
-immutable_holder<Key, Value>::immutable_holder(std::shared_ptr<impl> &&imp) : sender<event>(std::move(imp)) {
-}
-
-template <typename Key, typename Value>
-immutable_holder<Key, Value>::immutable_holder(std::nullptr_t) : sender<event>(nullptr) {
-}
-
-template <typename Key, typename Value>
-std::multimap<Key, Value> const &immutable_holder<Key, Value>::raw() const {
-    return this->template impl_ptr<impl>()->raw();
-}
-
-template <typename Key, typename Value>
-std::size_t immutable_holder<Key, Value>::size() const {
-    return this->raw().size();
-}
-
-template <typename Key, typename Value>
-typename immutable_holder<Key, Value>::chain_t immutable_holder<Key, Value>::immutable_holder<Key, Value>::chain() {
-    return this->template impl_ptr<impl>()->chain_sync();
-}
-
 #pragma mark - multimap::holder
 
 template <typename Key, typename Value>
-holder<Key, Value>::holder() : immutable_holder<Key, Value>(std::make_shared<immutable_impl>()) {
+holder<Key, Value>::holder() : sender<event>(std::make_shared<impl>()) {
 }
 
 template <typename Key, typename Value>
-holder<Key, Value>::holder(std::multimap<Key, Value> map)
-    : immutable_holder<Key, Value>(std::make_shared<immutable_impl>()) {
-    this->template impl_ptr<immutable_impl>()->prepare(std::move(map));
+holder<Key, Value>::holder(std::multimap<Key, Value> map) : sender<event>(std::make_shared<impl>()) {
+    this->template impl_ptr<impl>()->prepare(std::move(map));
 }
 
 template <typename Key, typename Value>
-holder<Key, Value>::holder(std::nullptr_t) : immutable_holder<Key, Value>(nullptr) {
+holder<Key, Value>::holder(std::nullptr_t) : sender<event>(nullptr) {
 }
 
 template <typename Key, typename Value>
 holder<Key, Value>::~holder() = default;
 
 template <typename Key, typename Value>
-std::multimap<Key, Value> &holder<Key, Value>::raw() {
-    return this->template impl_ptr<immutable_impl>()->raw();
+std::multimap<Key, Value> const &holder<Key, Value>::raw() const {
+    return this->template impl_ptr<impl>()->raw();
+}
+
+template <typename Key, typename Value>
+std::size_t holder<Key, Value>::size() const {
+    return this->raw().size();
 }
 
 template <typename Key, typename Value>
 void holder<Key, Value>::replace(std::multimap<Key, Value> map) {
-    this->template impl_ptr<immutable_impl>()->replace(std::move(map));
+    this->template impl_ptr<impl>()->replace(std::move(map));
 }
 
 template <typename Key, typename Value>
 void holder<Key, Value>::insert(std::multimap<Key, Value> map) {
-    this->template impl_ptr<immutable_impl>()->insert(std::move(map));
+    this->template impl_ptr<impl>()->insert(std::move(map));
 }
 
 template <typename Key, typename Value>
@@ -260,7 +241,7 @@ void holder<Key, Value>::insert(Key key, Value value) {
 
 template <typename Key, typename Value>
 std::multimap<Key, Value> holder<Key, Value>::erase_if(std::function<bool(Key const &, Value const &)> const &handler) {
-    return this->template impl_ptr<immutable_impl>()->erase_if(handler);
+    return this->template impl_ptr<impl>()->erase_if(handler);
 }
 
 template <typename Key, typename Value>
@@ -275,6 +256,11 @@ std::multimap<Key, Value> holder<Key, Value>::erase_for_key(Key const &key) {
 
 template <typename Key, typename Value>
 void holder<Key, Value>::clear() {
-    this->template impl_ptr<immutable_impl>()->clear();
+    this->template impl_ptr<impl>()->clear();
+}
+
+template <typename Key, typename Value>
+typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::chain() {
+    return this->template impl_ptr<impl>()->chain_sync();
 }
 }  // namespace yas::chaining::multimap
