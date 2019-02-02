@@ -3,6 +3,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <chaining/yas_chaining_alias.h>
 #import <chaining/yas_chaining_holder.h>
 #import <chaining/yas_chaining_map_holder.h>
 #import <string>
@@ -358,6 +359,25 @@ using namespace yas::chaining;
     holder3.set_value(30);
 
     XCTAssertEqual(received_events.size(), 1);
+}
+
+- (void)test_alias {
+    map::holder<int, std::string> holder{{{0, "10"}, {1, "11"}, {2, "12"}}};
+    auto alias = make_alias(holder);
+
+    XCTAssertEqual(alias.raw(), (std::map<int, std::string>{{{0, "10"}, {1, "11"}, {2, "12"}}}));
+
+    std::vector<chaining::event> received;
+
+    auto observer = alias.chain().perform([&received](auto const &event) { received.push_back(event); }).sync();
+
+    XCTAssertEqual(received.size(), 1);
+    XCTAssertEqual(received.at(0).type(), event_type::fetched);
+
+    holder.insert({{3, "13"}});
+
+    XCTAssertEqual(received.size(), 2);
+    XCTAssertEqual(received.at(1).type(), event_type::inserted);
 }
 
 @end
