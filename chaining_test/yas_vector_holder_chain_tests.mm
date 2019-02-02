@@ -3,6 +3,7 @@
 //
 
 #import <XCTest/XCTest.h>
+#import <chaining/yas_chaining_alias.h>
 #import <chaining/yas_chaining_holder.h>
 #import <chaining/yas_chaining_vector_holder.h>
 
@@ -249,6 +250,25 @@ using namespace yas::chaining;
     holder2.set_value(4);
 
     XCTAssertEqual(received.size(), 0);
+}
+
+- (void)test_alias {
+    vector::holder<int> holder{{0, 1, 2}};
+    auto alias = make_alias(holder);
+
+    XCTAssertEqual(alias.raw(), (std::vector<int>{{0, 1, 2}}));
+
+    std::vector<chaining::event> received;
+
+    auto observer = alias.chain().perform([&received](auto const &event) { received.push_back(event); }).sync();
+
+    XCTAssertEqual(received.size(), 1);
+    XCTAssertEqual(received.at(0).type(), event_type::fetched);
+
+    holder.push_back(3);
+
+    XCTAssertEqual(received.size(), 2);
+    XCTAssertEqual(received.at(1).type(), event_type::inserted);
 }
 
 @end

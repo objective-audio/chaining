@@ -57,41 +57,30 @@ struct relayed_event {
 };
 
 template <typename T>
-struct immutable_holder : sender<event> {
+struct holder : sender<event> {
     class impl;
-
-    immutable_holder(std::nullptr_t);
 
     using vector_t = std::vector<T>;
     using chain_t = chain<event, event, event, true>;
+
+    holder();
+    explicit holder(vector_t);
+    holder(std::nullptr_t);
+
+    ~holder() final;
 
     vector_t const &raw() const;
     T const &at(std::size_t const) const;
     std::size_t size() const;
 
-    chain_t chain();
-
-   protected:
-    immutable_holder(std::shared_ptr<impl> &&);
-};
-
-template <typename T>
-struct holder : immutable_holder<T> {
-    holder();
-    explicit holder(std::vector<T>);
-    holder(std::nullptr_t);
-
-    ~holder() final;
-
-    void replace(std::vector<T>);
+    void replace(vector_t);
     void replace(T, std::size_t const);
     void push_back(T);
     void insert(T, std::size_t const);
     T erase_at(std::size_t const);
     void clear();
 
-   private:
-    using immutable_impl = typename immutable_holder<T>::impl;
+    chain_t chain();
 };
 }  // namespace yas::chaining::vector
 
