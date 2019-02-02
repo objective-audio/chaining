@@ -3,8 +3,8 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <chaining/yas_chaining_holder.h>
 #import <chaining/yas_chaining_observer_pool.h>
+#import <chaining/yas_chaining_value_holder.h>
 
 using namespace yas;
 using namespace yas::chaining;

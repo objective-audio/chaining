@@ -1,5 +1,5 @@
 //
-//  yas_chaining_holder.h
+//  yas_chaining_value_holder.h
 //
 
 #pragma once
@@ -35,4 +35,4 @@ struct holder : sender<T> {
 };
 }  // namespace yas::chaining::value
 
-#include "yas_chaining_holder_private.h"
+#include "yas_chaining_value_holder_private.h"

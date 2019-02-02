@@ -4,7 +4,7 @@
 
 #import <XCTest/XCTest.h>
 #import <chaining/yas_chaining_alias.h>
-#import <chaining/yas_chaining_holder.h>
+#import <chaining/yas_chaining_value_holder.h>
 
 using namespace yas;
 using namespace yas::chaining;
