@@ -11,7 +11,9 @@ template <typename Out, typename In, typename Begin, bool Syncable>
 class chain;
 template <typename T>
 class receiver;
+}  // namespace yas::chaining
 
+namespace yas::chaining::value {
 template <typename T>
 struct holder : sender<T> {
     class impl;
@@ -31,6 +33,6 @@ struct holder : sender<T> {
 
     [[nodiscard]] receiver<T> &receiver();
 };
-}  // namespace yas::chaining
+}  // namespace yas::chaining::value
 
 #include "yas_chaining_holder_private.h"

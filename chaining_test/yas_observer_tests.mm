@@ -24,7 +24,7 @@ using namespace yas::chaining;
 }
 
 - (void)test_invalidate {
-    holder<int> holder{1};
+    value::holder<int> holder{1};
 
     int received = 0;
 
@@ -40,8 +40,8 @@ using namespace yas::chaining;
 }
 
 - (void)test_invalidate_with_sub_joints {
-    holder<int> main_holder{1};
-    holder<int> sub_holder{2};
+    value::holder<int> main_holder{1};
+    value::holder<int> sub_holder{2};
 
     int received = 0;
 

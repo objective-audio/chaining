@@ -7,6 +7,7 @@
 #import <chaining/yas_chaining_holder.h>
 
 using namespace yas;
+using namespace yas::chaining;
 
 @interface yas_alias_tests : XCTestCase
 
@@ -21,8 +22,8 @@ using namespace yas;
 }
 
 - (void)test_chain {
-    chaining::holder<int> holder{0};
-    chaining::alias<chaining::holder<int>> alias{holder};
+    value::holder<int> holder{0};
+    chaining::alias<value::holder<int>> alias{holder};
 
     std::vector<int> called;
 
@@ -38,7 +39,7 @@ using namespace yas;
 }
 
 - (void)test_make_alias {
-    chaining::holder<int> holder{0};
+    value::holder<int> holder{0};
     auto alias = make_alias(holder);
 
     std::vector<int> called;
@@ -50,7 +51,7 @@ using namespace yas;
 }
 
 - (void)test_raw {
-    chaining::holder<int> holder{0};
+    value::holder<int> holder{0};
     auto alias = make_alias(holder);
 
     XCTAssertEqual(alias.raw(), 0);

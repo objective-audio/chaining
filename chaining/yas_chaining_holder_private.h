@@ -7,7 +7,7 @@
 #include <mutex>
 #include "yas_chaining_chain.h"
 
-namespace yas::chaining {
+namespace yas::chaining::value {
 template <typename T>
 struct holder<T>::impl : sender<T>::impl {
     impl(T &&value) : _value(std::move(value)) {
@@ -32,8 +32,8 @@ struct holder<T>::impl : sender<T>::impl {
 
     chaining::receiver<T> &receiver() {
         if (!this->_receiver) {
-            this->_receiver = chaining::receiver<T>{
-                [weak_holder = to_weak(this->template cast<chaining::holder<T>>())](T const &value) {
+            this->_receiver =
+                chaining::receiver<T>{[weak_holder = to_weak(this->template cast<value::holder<T>>())](T const &value) {
                     if (auto holder = weak_holder.lock()) {
                         holder.set_value(value);
                     }
@@ -43,7 +43,7 @@ struct holder<T>::impl : sender<T>::impl {
     }
 
     virtual bool is_equal(std::shared_ptr<base::impl> const &rhs) const override {
-        if (auto rhs_impl = std::dynamic_pointer_cast<typename holder<T>::impl>(rhs)) {
+        if (auto rhs_impl = std::dynamic_pointer_cast<typename value::holder<T>::impl>(rhs)) {
             return this->_value == rhs_impl->_value;
         } else {
             return false;
@@ -94,4 +94,4 @@ template <typename T>
 receiver<T> &holder<T>::receiver() {
     return this->template impl_ptr<impl>()->receiver();
 }
-}  // namespace yas::chaining
+}  // namespace yas::chaining::value
