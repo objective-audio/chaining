@@ -60,11 +60,11 @@ struct holder : sender<event> {
 
     ~holder() final;
 
-    std::map<Key, Value> const &raw() const;
-    bool has_value(Key const &) const;
-    Value const &at(Key const &) const;
-    Value &at(Key const &);
-    std::size_t size() const;
+    [[nodiscard]] std::map<Key, Value> const &raw() const;
+    [[nodiscard]] bool has_value(Key const &) const;
+    [[nodiscard]] Value const &at(Key const &) const;
+    [[nodiscard]] Value &at(Key const &);
+    [[nodiscard]] std::size_t size() const;
 
     void replace_all(std::map<Key, Value>);
     void insert_or_replace(Key, Value);
@@ -74,7 +74,7 @@ struct holder : sender<event> {
     std::map<Key, Value> erase_for_key(Key const &);
     void clear();
 
-    chain_t chain();
+    [[nodiscard]] chain_t chain();
 };
 }  // namespace yas::chaining::map
 

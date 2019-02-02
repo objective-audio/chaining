@@ -21,9 +21,9 @@ struct notifier : sender<T> {
 
     void notify(T const &);
 
-    chain_unsync_t<T> chain();
+    [[nodiscard]] chain_unsync_t<T> chain();
 
-    receiver<T> &receiver();
+    [[nodiscard]] receiver<T> &receiver();
 
    protected:
     notifier(std::shared_ptr<impl> &&);

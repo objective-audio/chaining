@@ -69,9 +69,9 @@ struct holder : sender<event> {
 
     ~holder() final;
 
-    vector_t const &raw() const;
-    T const &at(std::size_t const) const;
-    std::size_t size() const;
+    [[nodiscard]] vector_t const &raw() const;
+    [[nodiscard]] T const &at(std::size_t const) const;
+    [[nodiscard]] std::size_t size() const;
 
     void replace(vector_t);
     void replace(T, std::size_t const);
@@ -80,7 +80,7 @@ struct holder : sender<event> {
     T erase_at(std::size_t const);
     void clear();
 
-    chain_t chain();
+    [[nodiscard]] chain_t chain();
 };
 }  // namespace yas::chaining::vector
 

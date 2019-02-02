@@ -60,9 +60,9 @@ struct holder : sender<event> {
 
     ~holder() final;
 
-    std::multimap<Key, Value> const &raw() const;
+    [[nodiscard]] std::multimap<Key, Value> const &raw() const;
 
-    std::size_t size() const;
+    [[nodiscard]] std::size_t size() const;
     void replace(std::multimap<Key, Value>);
     void insert(std::multimap<Key, Value>);
     void insert(Key, Value);
@@ -71,7 +71,7 @@ struct holder : sender<event> {
     std::multimap<Key, Value> erase_for_key(Key const &);
     void clear();
 
-    chain_t chain();
+    [[nodiscard]] chain_t chain();
 };
 }  // namespace yas::chaining::multimap
 

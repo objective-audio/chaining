@@ -19,7 +19,7 @@ struct[[nodiscard]] observer : any_observer {
 
     ~observer() final;
 
-    chaining::joint<Begin> &joint();
+    [[nodiscard]] chaining::joint<Begin> &joint();
 };
 }  // namespace yas::chaining
 
