@@ -47,6 +47,8 @@
 		B68AE95321EF61A4004E2983 /* yas_chaining_event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B68AE95121EF61A4004E2983 /* yas_chaining_event.cpp */; };
 		B68AE95421EF61A4004E2983 /* yas_chaining_event.h in Headers */ = {isa = PBXBuildFile; fileRef = B68AE95221EF61A4004E2983 /* yas_chaining_event.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B68AE95621EF6353004E2983 /* yas_chaining_event_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B68AE95521EF6293004E2983 /* yas_chaining_event_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6A364ED2205B03500094C72 /* yas_chaining_alias.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A364EB2205AE8300094C72 /* yas_chaining_alias.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6A364EE2205B03500094C72 /* yas_chaining_alias_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B6A364EC2205AE9800094C72 /* yas_chaining_alias_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -95,6 +97,8 @@
 		B68AE95121EF61A4004E2983 /* yas_chaining_event.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_event.cpp; sourceTree = "<group>"; };
 		B68AE95221EF61A4004E2983 /* yas_chaining_event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_event.h; sourceTree = "<group>"; };
 		B68AE95521EF6293004E2983 /* yas_chaining_event_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_event_private.h; sourceTree = "<group>"; };
+		B6A364EB2205AE8300094C72 /* yas_chaining_alias.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_alias.h; sourceTree = "<group>"; };
+		B6A364EC2205AE9800094C72 /* yas_chaining_alias_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_alias_private.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -139,6 +143,8 @@
 		B623B9FF21DC4D7000D16037 /* chaining */ = {
 			isa = PBXGroup;
 			children = (
+				B6A364EC2205AE9800094C72 /* yas_chaining_alias_private.h */,
+				B6A364EB2205AE8300094C72 /* yas_chaining_alias.h */,
 				B623BA2221DC4D7000D16037 /* yas_chaining_any_observer.cpp */,
 				B623BA1521DC4D7000D16037 /* yas_chaining_any_observer.h */,
 				B623BA0D21DC4D7000D16037 /* yas_chaining_chain_private.h */,
@@ -209,6 +215,7 @@
 				B623BA3C21DC4D7000D16037 /* yas_chaining_map_holder_private.h in Headers */,
 				B623BA3B21DC4D7000D16037 /* yas_chaining_sender.h in Headers */,
 				B623BA2D21DC4D7000D16037 /* yas_chaining_chain.h in Headers */,
+				B6A364ED2205B03500094C72 /* yas_chaining_alias.h in Headers */,
 				B623BA2E21DC4D7000D16037 /* yas_chaining_receiver_protocol.h in Headers */,
 				B68AE95621EF6353004E2983 /* yas_chaining_event_private.h in Headers */,
 				B623BA4421DC4D7000D16037 /* yas_chaining_multimap_holder.h in Headers */,
@@ -235,6 +242,7 @@
 				B623BA3A21DC4D7000D16037 /* yas_chaining_receiver.h in Headers */,
 				B623BA3F21DC4D7000D16037 /* yas_chaining_fetcher_private.h in Headers */,
 				B68AE95421EF61A4004E2983 /* yas_chaining_event.h in Headers */,
+				B6A364EE2205B03500094C72 /* yas_chaining_alias_private.h in Headers */,
 				B623BA3121DC4D7000D16037 /* yas_chaining_observer_pool.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

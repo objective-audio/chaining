@@ -96,6 +96,9 @@ void holder<T>::set_value(T value) {
 }
 
 template <typename T>
+[[nodiscard]] T const &holder<T>::raw() const { return this->template impl_ptr<immutable_impl>()->value(); }
+
+template <typename T>
 chain_sync_t<T> immutable_holder<T>::chain() {
     return this->template impl_ptr<impl>()->chain_sync();
 }
