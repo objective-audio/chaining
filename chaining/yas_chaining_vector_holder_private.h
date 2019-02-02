@@ -39,7 +39,7 @@ event make_relayed_event(T const &element, std::size_t const idx, typename T::Se
 }
 
 template <typename T>
-struct immutable_holder<T>::impl : sender<event>::impl {
+struct holder<T>::impl : sender<event>::impl {
     struct observer_wrapper {
         any_observer observer = nullptr;
     };
@@ -125,7 +125,7 @@ struct immutable_holder<T>::impl : sender<event>::impl {
     }
 
     virtual bool is_equal(std::shared_ptr<base::impl> const &rhs) const override {
-        if (auto rhs_impl = std::dynamic_pointer_cast<typename immutable_holder<T>::impl>(rhs)) {
+        if (auto rhs_impl = std::dynamic_pointer_cast<typename holder<T>::impl>(rhs)) {
             return this->_raw == rhs_impl->_raw;
         } else {
             return false;
@@ -142,7 +142,7 @@ struct immutable_holder<T>::impl : sender<event>::impl {
 
     template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     chaining_f _element_chaining() {
-        auto weak_holder = to_weak(this->template cast<immutable_holder<T>>());
+        auto weak_holder = to_weak(this->template cast<holder<T>>());
         return [weak_holder](T &element, wrapper_ptr &wrapper) {
             auto weak_element = to_weak(element);
             wrapper_wptr weak_wrapper = wrapper;
@@ -218,44 +218,36 @@ struct immutable_holder<T>::impl : sender<event>::impl {
 };
 
 template <typename T>
-immutable_holder<T>::immutable_holder(std::shared_ptr<impl> &&imp) : sender<event>(std::move(imp)) {
-}
-
-template <typename T>
-immutable_holder<T>::immutable_holder(std::nullptr_t) : sender<event>(nullptr) {
-}
-
-template <typename T>
-typename immutable_holder<T>::vector_t const &immutable_holder<T>::raw() const {
+typename holder<T>::vector_t const &holder<T>::raw() const {
     return this->template impl_ptr<impl>()->raw();
 }
 
 template <typename T>
-T const &immutable_holder<T>::at(std::size_t const idx) const {
+T const &holder<T>::at(std::size_t const idx) const {
     return this->raw().at(idx);
 }
 
 template <typename T>
-std::size_t immutable_holder<T>::size() const {
+std::size_t holder<T>::size() const {
     return this->raw().size();
 }
 
 template <typename T>
-typename immutable_holder<T>::chain_t immutable_holder<T>::immutable_holder<T>::chain() {
+typename holder<T>::chain_t holder<T>::holder<T>::chain() {
     return this->template impl_ptr<impl>()->chain_sync();
 }
 
 template <typename T>
-holder<T>::holder() : immutable_holder<T>(std::make_shared<immutable_impl>()) {
+holder<T>::holder() : sender<event>(std::make_shared<impl>()) {
 }
 
 template <typename T>
-holder<T>::holder(std::vector<T> vec) : immutable_holder<T>(std::make_shared<immutable_impl>()) {
-    this->template impl_ptr<immutable_impl>()->prepare(std::move(vec));
+holder<T>::holder(std::vector<T> vec) : sender<event>(std::make_shared<impl>()) {
+    this->template impl_ptr<impl>()->prepare(std::move(vec));
 }
 
 template <typename T>
-holder<T>::holder(std::nullptr_t) : immutable_holder<T>(nullptr) {
+holder<T>::holder(std::nullptr_t) : sender<event>(nullptr) {
 }
 
 template <typename T>
@@ -263,31 +255,31 @@ holder<T>::~holder() = default;
 
 template <typename T>
 void holder<T>::replace(std::vector<T> vec) {
-    this->template impl_ptr<immutable_impl>()->replace(std::move(vec));
+    this->template impl_ptr<impl>()->replace(std::move(vec));
 }
 
 template <typename T>
 void holder<T>::replace(T value, std::size_t const idx) {
-    this->template impl_ptr<immutable_impl>()->replace(std::move(value), idx);
+    this->template impl_ptr<impl>()->replace(std::move(value), idx);
 }
 
 template <typename T>
 void holder<T>::push_back(T value) {
-    this->template impl_ptr<immutable_impl>()->push_back(std::move(value));
+    this->template impl_ptr<impl>()->push_back(std::move(value));
 }
 
 template <typename T>
 void holder<T>::insert(T value, std::size_t const idx) {
-    this->template impl_ptr<immutable_impl>()->insert(std::move(value), idx);
+    this->template impl_ptr<impl>()->insert(std::move(value), idx);
 }
 
 template <typename T>
 T holder<T>::erase_at(std::size_t const idx) {
-    return this->template impl_ptr<immutable_impl>()->erase_at(idx);
+    return this->template impl_ptr<impl>()->erase_at(idx);
 }
 
 template <typename T>
 void holder<T>::clear() {
-    this->template impl_ptr<immutable_impl>()->clear();
+    this->template impl_ptr<impl>()->clear();
 }
 }  // namespace yas::chaining::vector

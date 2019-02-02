@@ -49,32 +49,20 @@ struct relayed_event {
 };
 
 template <typename Key, typename Value>
-struct immutable_holder : sender<event> {
+struct holder : sender<event> {
     class impl;
-
-    immutable_holder(std::nullptr_t);
 
     using chain_t = chain<event, event, event, true>;
 
-    std::multimap<Key, Value> const &raw() const;
-    std::size_t size() const;
-
-    chain_t chain();
-
-   protected:
-    immutable_holder(std::shared_ptr<impl> &&);
-};
-
-template <typename Key, typename Value>
-struct holder : immutable_holder<Key, Value> {
     holder();
     explicit holder(std::multimap<Key, Value>);
     holder(std::nullptr_t);
 
     ~holder() final;
 
-    std::multimap<Key, Value> &raw();
+    [[nodiscard]] std::multimap<Key, Value> const &raw() const;
 
+    [[nodiscard]] std::size_t size() const;
     void replace(std::multimap<Key, Value>);
     void insert(std::multimap<Key, Value>);
     void insert(Key, Value);
@@ -83,8 +71,7 @@ struct holder : immutable_holder<Key, Value> {
     std::multimap<Key, Value> erase_for_key(Key const &);
     void clear();
 
-   private:
-    using immutable_impl = typename immutable_holder<Key, Value>::impl;
+    [[nodiscard]] chain_t chain();
 };
 }  // namespace yas::chaining::multimap
 

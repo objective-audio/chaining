@@ -28,10 +28,10 @@ struct event : base {
     event(Event &&);
     event(std::nullptr_t);
 
-    event_type type() const;
+    [[nodiscard]] event_type type() const;
 
     template <typename Event>
-    Event const &get() const;
+    [[nodiscard]] Event const &get() const;
 };
 }  // namespace yas::chaining
 

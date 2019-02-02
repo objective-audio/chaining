@@ -25,11 +25,11 @@ struct fetcher : sender<T> {
     void broadcast() const;
     void broadcast(T const &) const;
 
-    chain_sync_t<T> chain();
+    [[nodiscard]] chain_sync_t<T> chain();
 
-    receiver<> &receiver();
+    [[nodiscard]] receiver<> &receiver();
 
-    fetchable<T> fetchable();
+    [[nodiscard]] fetchable<T> fetchable();
 
    private:
     chaining::fetchable<T> _fetchable = nullptr;

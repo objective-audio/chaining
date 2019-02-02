@@ -47,9 +47,9 @@ struct[[nodiscard]] joint : any_joint {
 
     template <typename P>
     void push_handler(std::function<void(P const &)>);
-    std::size_t handlers_size() const;
+    [[nodiscard]] std::size_t handlers_size() const;
     template <typename P>
-    std::function<void(P const &)> const &handler(std::size_t const) const;
+    [[nodiscard]] std::function<void(P const &)> const &handler(std::size_t const) const;
     void add_sub_joint(any_joint);
 };
 }  // namespace yas::chaining

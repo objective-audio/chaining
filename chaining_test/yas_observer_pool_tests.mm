@@ -3,8 +3,8 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <chaining/yas_chaining_holder.h>
 #import <chaining/yas_chaining_observer_pool.h>
+#import <chaining/yas_chaining_value_holder.h>
 
 using namespace yas;
 using namespace yas::chaining;
@@ -30,7 +30,7 @@ using namespace yas::chaining;
 }
 
 - (void)test_add_observer {
-    holder<int> holder{1};
+    value::holder<int> holder{1};
     int received = 0;
 
     {
@@ -51,7 +51,7 @@ using namespace yas::chaining;
 }
 
 - (void)test_remove_observer {
-    holder<int> holder{1};
+    value::holder<int> holder{1};
     int received = 0;
 
     observer_pool pool;
@@ -70,7 +70,7 @@ using namespace yas::chaining;
 }
 
 - (void)test_invalidate {
-    holder<int> holder{1};
+    value::holder<int> holder{1};
     int received = 0;
 
     observer_pool pool;
@@ -87,7 +87,7 @@ using namespace yas::chaining;
 }
 
 - (void)test_add_observer_by_plus_equal {
-    holder<int> holder{1};
+    value::holder<int> holder{1};
     int received = 0;
 
     {

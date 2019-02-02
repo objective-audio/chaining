@@ -26,40 +26,40 @@ struct[[nodiscard]] chain : base {
 
     ~chain() final;
 
-    auto normalize();
+    [[nodiscard]] auto normalize();
 
-    chain<Out, In, Begin, Syncable> perform(std::function<void(Out const &)>);
+    [[nodiscard]] chain<Out, In, Begin, Syncable> perform(std::function<void(Out const &)>);
 
     template <std::size_t N = 0, typename T>
-    chain<Out, In, Begin, Syncable> receive(receiver<T> &);
+    [[nodiscard]] chain<Out, In, Begin, Syncable> receive(receiver<T> &);
     template <typename T, std::size_t N>
-    chain<Out, In, Begin, Syncable> receive(std::array<receiver<T>, N>);
+    [[nodiscard]] chain<Out, In, Begin, Syncable> receive(std::array<receiver<T>, N>);
     template <typename T>
-    chain<Out, In, Begin, Syncable> receive(std::vector<receiver<T>>);
+    [[nodiscard]] chain<Out, In, Begin, Syncable> receive(std::vector<receiver<T>>);
     template <typename T>
-    chain<Out, In, Begin, Syncable> receive(std::initializer_list<receiver<T>>);
-    chain<Out, In, Begin, Syncable> receive_null(receiver<std::nullptr_t> &);
+    [[nodiscard]] chain<Out, In, Begin, Syncable> receive(std::initializer_list<receiver<T>>);
+    [[nodiscard]] chain<Out, In, Begin, Syncable> receive_null(receiver<std::nullptr_t> &);
 
-    chain<Out, Out, Begin, Syncable> guard(std::function<bool(Out const &)>);
+    [[nodiscard]] chain<Out, Out, Begin, Syncable> guard(std::function<bool(Out const &)>);
 
     template <typename F>
-    auto to(F);
+    [[nodiscard]] auto to(F);
     template <typename T>
-    auto to_value(T);
-    auto to_null();
-    auto to_tuple();
+    [[nodiscard]] auto to_value(T);
+    [[nodiscard]] auto to_null();
+    [[nodiscard]] auto to_tuple();
 
     template <typename SubIn, typename SubBegin, bool SubSyncable>
-    chain<Out, Out, Begin, Syncable | SubSyncable> merge(chain<Out, SubIn, SubBegin, SubSyncable>);
+    [[nodiscard]] chain<Out, Out, Begin, Syncable | SubSyncable> merge(chain<Out, SubIn, SubBegin, SubSyncable>);
 
     template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable>
-    auto pair(chain<SubOut, SubIn, SubBegin, SubSyncable>);
+    [[nodiscard]] auto pair(chain<SubOut, SubIn, SubBegin, SubSyncable>);
 
     template <typename SubOut, typename SubIn, typename SubBegin, bool SubSyncable>
-    auto combine(chain<SubOut, SubIn, SubBegin, SubSyncable>);
+    [[nodiscard]] auto combine(chain<SubOut, SubIn, SubBegin, SubSyncable>);
 
-    observer<Begin> end();
-    observer<Begin> sync();
+    [[nodiscard]] observer<Begin> end();
+    [[nodiscard]] observer<Begin> sync();
 };
 }  // namespace yas::chaining
 

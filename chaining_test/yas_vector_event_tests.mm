@@ -3,7 +3,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <chaining/yas_chaining_holder.h>
+#import <chaining/yas_chaining_value_holder.h>
 #import <chaining/yas_chaining_vector_holder.h>
 
 using namespace yas;
@@ -65,13 +65,13 @@ using namespace yas::chaining;
 }
 
 - (void)test_make_relayed_event {
-    holder<int> const element{6};
+    value::holder<int> const element{6};
     auto event = vector::make_relayed_event(element, 7, 8);
 
     XCTAssertEqual(event.type(), event_type::relayed);
-    XCTAssertEqual(event.get<vector::relayed_event<holder<int>>>().element, holder<int>(6));
-    XCTAssertEqual(event.get<vector::relayed_event<holder<int>>>().index, 7);
-    XCTAssertEqual(event.get<vector::relayed_event<holder<int>>>().relayed, 8);
+    XCTAssertEqual(event.get<vector::relayed_event<value::holder<int>>>().element, value::holder<int>(6));
+    XCTAssertEqual(event.get<vector::relayed_event<value::holder<int>>>().index, 7);
+    XCTAssertEqual(event.get<vector::relayed_event<value::holder<int>>>().relayed, 8);
 }
 
 @end

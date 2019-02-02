@@ -20,7 +20,7 @@ struct[[nodiscard]] receiver : base {
 
     ~receiver() final;
 
-    receivable<T> receivable();
+    [[nodiscard]] receivable<T> receivable();
 
    private:
     chaining::receivable<T> _receivable = nullptr;
