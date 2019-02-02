@@ -13,20 +13,9 @@ template <typename T>
 class receiver;
 
 template <typename T>
-struct immutable_holder : sender<T> {
+struct holder : sender<T> {
     class impl;
 
-    [[nodiscard]] T const &value() const;
-
-    chain_sync_t<T> chain();
-
-   protected:
-    immutable_holder(std::shared_ptr<impl> &&);
-    immutable_holder(std::nullptr_t);
-};
-
-template <typename T>
-struct holder : immutable_holder<T> {
     holder(T);
     holder(std::nullptr_t);
 
@@ -38,10 +27,9 @@ struct holder : immutable_holder<T> {
 
     [[nodiscard]] T const &raw() const;
 
-    receiver<T> &receiver();
+    [[nodiscard]] chain_sync_t<T> chain();
 
-   private:
-    using immutable_impl = typename immutable_holder<T>::impl;
+    [[nodiscard]] receiver<T> &receiver();
 };
 }  // namespace yas::chaining
 

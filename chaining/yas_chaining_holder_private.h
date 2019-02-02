@@ -9,7 +9,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct immutable_holder<T>::impl : sender<T>::impl {
+struct holder<T>::impl : sender<T>::impl {
     impl(T &&value) : _value(std::move(value)) {
     }
 
@@ -43,7 +43,7 @@ struct immutable_holder<T>::impl : sender<T>::impl {
     }
 
     virtual bool is_equal(std::shared_ptr<base::impl> const &rhs) const override {
-        if (auto rhs_impl = std::dynamic_pointer_cast<typename immutable_holder<T>::impl>(rhs)) {
+        if (auto rhs_impl = std::dynamic_pointer_cast<typename holder<T>::impl>(rhs)) {
             return this->_value == rhs_impl->_value;
         } else {
             return false;
@@ -57,54 +57,41 @@ struct immutable_holder<T>::impl : sender<T>::impl {
 };
 
 template <typename T>
-immutable_holder<T>::immutable_holder(std::shared_ptr<impl> &&impl) : sender<T>(std::move(impl)) {
+holder<T>::holder(T value) : sender<T>(std::make_shared<impl>(std::move(value))) {
 }
 
 template <typename T>
-immutable_holder<T>::immutable_holder(std::nullptr_t) : sender<T>(nullptr) {
-}
-
-template <typename T>
-holder<T>::holder(T value) : immutable_holder<T>(std::make_shared<immutable_impl>(std::move(value))) {
-}
-
-template <typename T>
-holder<T>::holder(std::nullptr_t) : immutable_holder<T>(nullptr) {
+holder<T>::holder(std::nullptr_t) : sender<T>(nullptr) {
 }
 
 template <typename T>
 holder<T>::~holder() = default;
 
 template <typename T>
-T const &immutable_holder<T>::value() const {
+T const &holder<T>::value() const {
     return this->template impl_ptr<impl>()->value();
 }
 
 template <typename T>
-T const &holder<T>::value() const {
-    return this->template impl_ptr<immutable_impl>()->value();
-}
-
-template <typename T>
 T &holder<T>::value() {
-    return this->template impl_ptr<immutable_impl>()->value();
+    return this->template impl_ptr<impl>()->value();
 }
 
 template <typename T>
 void holder<T>::set_value(T value) {
-    this->template impl_ptr<immutable_impl>()->locked_set_value(std::move(value));
+    this->template impl_ptr<impl>()->locked_set_value(std::move(value));
 }
 
 template <typename T>
-[[nodiscard]] T const &holder<T>::raw() const { return this->template impl_ptr<immutable_impl>()->value(); }
+[[nodiscard]] T const &holder<T>::raw() const { return this->template impl_ptr<impl>()->value(); }
 
 template <typename T>
-chain_sync_t<T> immutable_holder<T>::chain() {
+chain_sync_t<T> holder<T>::chain() {
     return this->template impl_ptr<impl>()->chain_sync();
 }
 
 template <typename T>
 receiver<T> &holder<T>::receiver() {
-    return this->template impl_ptr<immutable_impl>()->receiver();
+    return this->template impl_ptr<impl>()->receiver();
 }
 }  // namespace yas::chaining
