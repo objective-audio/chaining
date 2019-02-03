@@ -53,12 +53,15 @@ using namespace yas::chaining;
 - (void)test_raw {
     value::holder<int> holder{0};
     auto alias = make_alias(holder);
+    auto const const_alias = make_alias(holder);
 
     XCTAssertEqual(alias.raw(), 0);
+    XCTAssertEqual(const_alias.raw(), 0);
 
     holder.set_value(1);
 
     XCTAssertEqual(alias.raw(), 1);
+    XCTAssertEqual(const_alias.raw(), 1);
 }
 
 @end
