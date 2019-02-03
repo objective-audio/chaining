@@ -220,6 +220,11 @@ std::multimap<Key, Value> const &holder<Key, Value>::raw() const {
 }
 
 template <typename Key, typename Value>
+std::multimap<Key, Value> &holder<Key, Value>::raw() {
+    return this->template impl_ptr<impl>()->raw();
+}
+
+template <typename Key, typename Value>
 std::size_t holder<Key, Value>::size() const {
     return this->raw().size();
 }

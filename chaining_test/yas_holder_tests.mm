@@ -26,17 +26,17 @@ using namespace yas::chaining;
 - (void)test_getter_setter {
     value::holder<int> holder{1};
 
-    XCTAssertEqual(holder.value(), 1);
+    XCTAssertEqual(holder.raw(), 1);
 
     holder.set_value(2);
 
-    XCTAssertEqual(holder.value(), 2);
+    XCTAssertEqual(holder.raw(), 2);
 }
 
 - (void)test_const_getter {
     value::holder<int> const holder{1};
 
-    XCTAssertEqual(holder.value(), 1);
+    XCTAssertEqual(holder.raw(), 1);
 }
 
 - (void)test_chain {
@@ -59,11 +59,11 @@ using namespace yas::chaining;
 
     auto flow = notifier.chain().receive(holder.receiver()).end();
 
-    XCTAssertEqual(holder.value(), 100);
+    XCTAssertEqual(holder.raw(), 100);
 
     notifier.notify(200);
 
-    XCTAssertEqual(holder.value(), 200);
+    XCTAssertEqual(holder.raw(), 200);
 }
 
 - (void)test_recursive_flow {
@@ -72,23 +72,23 @@ using namespace yas::chaining;
 
     auto flow1 = holder1.chain().receive(holder2.receiver()).sync();
 
-    XCTAssertEqual(holder1.value(), 123);
-    XCTAssertEqual(holder2.value(), 123);
+    XCTAssertEqual(holder1.raw(), 123);
+    XCTAssertEqual(holder2.raw(), 123);
 
     auto flow2 = holder2.chain().receive(holder1.receiver()).sync();
 
-    XCTAssertEqual(holder1.value(), 123);
-    XCTAssertEqual(holder2.value(), 123);
+    XCTAssertEqual(holder1.raw(), 123);
+    XCTAssertEqual(holder2.raw(), 123);
 
     holder1.set_value(789);
 
-    XCTAssertEqual(holder1.value(), 789);
-    XCTAssertEqual(holder2.value(), 789);
+    XCTAssertEqual(holder1.raw(), 789);
+    XCTAssertEqual(holder2.raw(), 789);
 
     holder2.set_value(0);
 
-    XCTAssertEqual(holder1.value(), 0);
-    XCTAssertEqual(holder2.value(), 0);
+    XCTAssertEqual(holder1.raw(), 0);
+    XCTAssertEqual(holder2.raw(), 0);
 }
 
 - (void)test_is_equal {

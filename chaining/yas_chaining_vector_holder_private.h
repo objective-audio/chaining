@@ -223,6 +223,11 @@ typename holder<T>::vector_t const &holder<T>::raw() const {
 }
 
 template <typename T>
+typename holder<T>::vector_t &holder<T>::raw() {
+    return this->template impl_ptr<impl>()->raw();
+}
+
+template <typename T>
 T const &holder<T>::at(std::size_t const idx) const {
     return this->raw().at(idx);
 }

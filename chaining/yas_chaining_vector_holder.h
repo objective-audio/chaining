@@ -70,6 +70,7 @@ struct holder : sender<event> {
     ~holder() final;
 
     [[nodiscard]] vector_t const &raw() const;
+    [[nodiscard]] vector_t &raw();
     [[nodiscard]] T const &at(std::size_t const) const;
     [[nodiscard]] std::size_t size() const;
 

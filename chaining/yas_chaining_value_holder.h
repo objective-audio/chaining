@@ -23,11 +23,10 @@ struct holder : sender<T> {
 
     ~holder() final;
 
-    [[nodiscard]] T const &value() const;
-    [[nodiscard]] T &value();
     void set_value(T);
 
     [[nodiscard]] T const &raw() const;
+    [[nodiscard]] T &raw();
 
     [[nodiscard]] chain_sync_t<T> chain();
 
