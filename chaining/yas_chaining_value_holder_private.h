@@ -68,16 +68,6 @@ template <typename T>
 holder<T>::~holder() = default;
 
 template <typename T>
-T const &holder<T>::value() const {
-    return this->template impl_ptr<impl>()->value();
-}
-
-template <typename T>
-T &holder<T>::value() {
-    return this->template impl_ptr<impl>()->value();
-}
-
-template <typename T>
 void holder<T>::set_value(T value) {
     this->template impl_ptr<impl>()->locked_set_value(std::move(value));
 }
