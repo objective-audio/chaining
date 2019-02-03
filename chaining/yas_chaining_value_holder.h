@@ -28,6 +28,7 @@ struct holder : sender<T> {
     void set_value(T);
 
     [[nodiscard]] T const &raw() const;
+    [[nodiscard]] T &raw();
 
     [[nodiscard]] chain_sync_t<T> chain();
 
