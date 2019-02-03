@@ -27,6 +27,11 @@ auto const &alias<T>::raw() const {
 }
 
 template <typename T>
+auto &alias<T>::raw() {
+    return impl_ptr<impl>()->_sender.raw();
+}
+
+template <typename T>
 auto alias<T>::chain() {
     return impl_ptr<impl>()->_sender.chain();
 }

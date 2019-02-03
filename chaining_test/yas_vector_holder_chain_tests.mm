@@ -255,7 +255,9 @@ using namespace yas::chaining;
 - (void)test_alias {
     vector::holder<int> holder{{0, 1, 2}};
     auto alias = make_alias(holder);
+    auto const const_alias = make_alias(holder);
 
+    XCTAssertEqual(alias.raw(), (std::vector<int>{{0, 1, 2}}));
     XCTAssertEqual(alias.raw(), (std::vector<int>{{0, 1, 2}}));
 
     std::vector<chaining::event> received;

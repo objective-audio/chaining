@@ -315,8 +315,10 @@ using namespace yas::chaining;
 - (void)test_alias {
     multimap::holder<int, std::string> holder{{{0, "10"}, {1, "11"}, {2, "12"}}};
     auto alias = make_alias(holder);
+    auto const_alias = make_alias(holder);
 
     XCTAssertEqual(alias.raw(), (std::multimap<int, std::string>{{{0, "10"}, {1, "11"}, {2, "12"}}}));
+    XCTAssertEqual(const_alias.raw(), (std::multimap<int, std::string>{{{0, "10"}, {1, "11"}, {2, "12"}}}));
 
     std::vector<chaining::event> received;
 

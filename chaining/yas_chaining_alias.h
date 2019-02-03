@@ -15,6 +15,7 @@ struct alias : base {
     alias(std::nullptr_t);
 
     [[nodiscard]] auto const &raw() const;
+    [[nodiscard]] auto &raw();
     [[nodiscard]] auto chain();
 };
 }  // namespace yas::chaining
