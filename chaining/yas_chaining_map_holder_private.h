@@ -266,6 +266,11 @@ std::map<Key, Value> const &holder<Key, Value>::raw() const {
 }
 
 template <typename Key, typename Value>
+std::map<Key, Value> &holder<Key, Value>::raw() {
+    return this->template impl_ptr<impl>()->raw();
+}
+
+template <typename Key, typename Value>
 bool holder<Key, Value>::has_value(Key const &key) const {
     return this->raw().count(key) > 0;
 }

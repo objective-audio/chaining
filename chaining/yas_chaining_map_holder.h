@@ -61,6 +61,8 @@ struct holder : sender<event> {
     ~holder() final;
 
     [[nodiscard]] std::map<Key, Value> const &raw() const;
+    [[nodiscard]] std::map<Key, Value> &raw();
+
     [[nodiscard]] bool has_value(Key const &) const;
     [[nodiscard]] Value const &at(Key const &) const;
     [[nodiscard]] Value &at(Key const &);
