@@ -56,7 +56,7 @@ using namespace yas;
     chaining::notifier<int> notifier1;
     chaining::notifier<int> notifier2;
 
-    auto flow1 = notifier1.chain().receive(notifier2.receiver()).end();
+    auto flow1 = notifier1.chain().send_to(notifier2.receiver()).end();
     auto flow2 = notifier2.chain().perform([&received](int const &value) { received = value; }).end();
 
     notifier1.notify(4);
@@ -74,7 +74,7 @@ using namespace yas;
         notifier.notify(value + 1);
     }};
 
-    auto flow = notifier.chain().receive(receiver).end();
+    auto flow = notifier.chain().send_to(receiver).end();
 
     notifier.notify(1);
 
