@@ -279,7 +279,7 @@ chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::send_to(std::in
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::receive_null(receiver<> &receiver) {
+chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::send_null(receiver<> &receiver) {
     return this->perform([weak_receiver = to_weak(receiver)](Out const &value) {
         if (chaining::receiver<> receiver = weak_receiver.lock()) {
             receiver.receivable().receive_value(nullptr);

@@ -119,13 +119,13 @@ using namespace yas;
     XCTAssertEqual(string_received, "20");
 }
 
-- (void)test_receive_null {
+- (void)test_send_null {
     bool received = false;
 
     chaining::notifier<int> notifier;
     chaining::receiver<> receiver{[&received]() { received = true; }};
 
-    auto chain = notifier.chain().receive_null(receiver).end();
+    auto chain = notifier.chain().send_null(receiver).end();
 
     notifier.notify(4);
 
