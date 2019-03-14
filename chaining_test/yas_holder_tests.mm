@@ -57,7 +57,7 @@ using namespace yas::chaining;
     value::holder<int> holder{100};
     notifier<int> notifier;
 
-    auto flow = notifier.chain().receive(holder.receiver()).end();
+    auto flow = notifier.chain().send_to(holder.receiver()).end();
 
     XCTAssertEqual(holder.raw(), 100);
 
@@ -70,12 +70,12 @@ using namespace yas::chaining;
     value::holder<int> holder1{123};
     value::holder<int> holder2{456};
 
-    auto flow1 = holder1.chain().receive(holder2.receiver()).sync();
+    auto flow1 = holder1.chain().send_to(holder2.receiver()).sync();
 
     XCTAssertEqual(holder1.raw(), 123);
     XCTAssertEqual(holder2.raw(), 123);
 
-    auto flow2 = holder2.chain().receive(holder1.receiver()).sync();
+    auto flow2 = holder2.chain().send_to(holder1.receiver()).sync();
 
     XCTAssertEqual(holder1.raw(), 123);
     XCTAssertEqual(holder2.raw(), 123);

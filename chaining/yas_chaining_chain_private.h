@@ -114,7 +114,7 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
     }
 
     template <std::size_t N, typename T, typename TupleOut = Out, enable_if_tuple_t<TupleOut, std::nullptr_t> = nullptr>
-    auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
+    auto send_to(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
         return chain.perform([weak_receiver = to_weak(receiver)](Out const &value) {
             if (chaining::receiver<T> receiver = weak_receiver.lock()) {
                 receiver.receivable().receive_value(std::get<N>(value));
@@ -123,7 +123,7 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
     }
 
     template <std::size_t N, typename T, typename ArrayOut = Out, enable_if_array_t<ArrayOut, std::nullptr_t> = nullptr>
-    auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
+    auto send_to(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
         return chain.perform([weak_receiver = to_weak(receiver)](Out const &value) {
             if (chaining::receiver<T> receiver = weak_receiver.lock()) {
                 receiver.receivable().receive_value(std::get<N>(value));
@@ -133,7 +133,7 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
 
     template <std::size_t N, typename T, typename NonOut = Out, disable_if_tuple_t<NonOut, std::nullptr_t> = nullptr,
               disable_if_array_t<NonOut, std::nullptr_t> = nullptr>
-    auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
+    auto send_to(chaining::chain<Out, In, Begin, Syncable> &chain, receiver<T> &receiver) {
         return chain.perform([weak_receiver = to_weak(receiver)](Out const &value) {
             if (chaining::receiver<T> receiver = weak_receiver.lock()) {
                 receiver.receivable().receive_value(value);
@@ -142,7 +142,7 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
     }
 
     template <typename T, std::size_t N>
-    auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, std::array<receiver<T>, N> &receivers) {
+    auto send_to(chaining::chain<Out, In, Begin, Syncable> &chain, std::array<receiver<T>, N> &receivers) {
         std::vector<weak<chaining::receiver<T>>> weak_receivers;
         weak_receivers.reserve(N);
 
@@ -164,7 +164,7 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
     }
 
     template <typename T>
-    auto receive(chaining::chain<Out, In, Begin, Syncable> &chain, std::vector<receiver<T>> &receivers) {
+    auto send_to(chaining::chain<Out, In, Begin, Syncable> &chain, std::vector<receiver<T>> &receivers) {
         std::size_t const count = receivers.size();
 
         std::vector<weak<chaining::receiver<T>>> weak_receivers;
@@ -255,31 +255,31 @@ chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::perform(
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <std::size_t N, typename T>
-chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::receive(receiver<T> &receiver) {
-    return impl_ptr<impl>()->template receive<N>(*this, receiver);
+chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::send_to(receiver<T> &receiver) {
+    return impl_ptr<impl>()->template send_to<N>(*this, receiver);
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename T, std::size_t N>
-chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::receive(std::array<receiver<T>, N> receivers) {
-    return impl_ptr<impl>()->template receive<T, N>(*this, receivers);
+chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::send_to(std::array<receiver<T>, N> receivers) {
+    return impl_ptr<impl>()->template send_to<T, N>(*this, receivers);
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename T>
-chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::receive(std::vector<receiver<T>> receivers) {
-    return impl_ptr<impl>()->template receive<T>(*this, receivers);
+chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::send_to(std::vector<receiver<T>> receivers) {
+    return impl_ptr<impl>()->template send_to<T>(*this, receivers);
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 template <typename T>
-chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::receive(std::initializer_list<receiver<T>> receivers) {
+chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::send_to(std::initializer_list<receiver<T>> receivers) {
     std::vector<receiver<T>> vector{receivers};
-    return impl_ptr<impl>()->template receive<T>(*this, vector);
+    return impl_ptr<impl>()->template send_to<T>(*this, vector);
 }
 
 template <typename Out, typename In, typename Begin, bool Syncable>
-chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::receive_null(receiver<> &receiver) {
+chain<Out, In, Begin, Syncable> chain<Out, In, Begin, Syncable>::send_null(receiver<> &receiver) {
     return this->perform([weak_receiver = to_weak(receiver)](Out const &value) {
         if (chaining::receiver<> receiver = weak_receiver.lock()) {
             receiver.receivable().receive_value(nullptr);

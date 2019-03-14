@@ -31,14 +31,14 @@ struct[[nodiscard]] chain : base {
     [[nodiscard]] chain<Out, In, Begin, Syncable> perform(std::function<void(Out const &)>);
 
     template <std::size_t N = 0, typename T>
-    [[nodiscard]] chain<Out, In, Begin, Syncable> receive(receiver<T> &);
+    [[nodiscard]] chain<Out, In, Begin, Syncable> send_to(receiver<T> &);
     template <typename T, std::size_t N>
-    [[nodiscard]] chain<Out, In, Begin, Syncable> receive(std::array<receiver<T>, N>);
+    [[nodiscard]] chain<Out, In, Begin, Syncable> send_to(std::array<receiver<T>, N>);
     template <typename T>
-    [[nodiscard]] chain<Out, In, Begin, Syncable> receive(std::vector<receiver<T>>);
+    [[nodiscard]] chain<Out, In, Begin, Syncable> send_to(std::vector<receiver<T>>);
     template <typename T>
-    [[nodiscard]] chain<Out, In, Begin, Syncable> receive(std::initializer_list<receiver<T>>);
-    [[nodiscard]] chain<Out, In, Begin, Syncable> receive_null(receiver<std::nullptr_t> &);
+    [[nodiscard]] chain<Out, In, Begin, Syncable> send_to(std::initializer_list<receiver<T>>);
+    [[nodiscard]] chain<Out, In, Begin, Syncable> send_null(receiver<std::nullptr_t> &);
 
     [[nodiscard]] chain<Out, Out, Begin, Syncable> guard(std::function<bool(Out const &)>);
 
