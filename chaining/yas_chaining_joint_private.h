@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <any>
 #include <vector>
 
 namespace yas::chaining {
@@ -17,7 +16,7 @@ struct joint<T>::impl : any_joint::impl {
 
     void call_first(T const &value) {
         if (this->_handlers.size() > 0) {
-            this->handler<T>(0)(value);
+            this->casted_handler<T>(0)(value);
         } else {
             std::runtime_error("handler not found. must call the end.");
         }
@@ -51,9 +50,13 @@ struct joint<T>::impl : any_joint::impl {
         this->_handlers.emplace_back(std::move(handler));
     }
 
+    std::any const &handler(std::size_t const idx) override {
+        return this->_handlers.at(idx);
+    }
+
     template <typename P>
-    std::function<void(P const &)> const &handler(std::size_t const idx) {
-        return *std::any_cast<std::function<void(P const &)>>(&this->_handlers.at(idx));
+    [[nodiscard]] std::function<void(P const &)> const &casted_handler(std::size_t const idx) {
+        return *std::any_cast<std::function<void(P const &)>>(&this->handler(idx));
     }
 
     std::size_t handlers_size() {
@@ -106,12 +109,6 @@ void joint<T>::push_handler(std::function<void(P const &)> handler) {
 template <typename T>
 std::size_t joint<T>::handlers_size() const {
     return impl_ptr<impl>()->handlers_size();
-}
-
-template <typename T>
-template <typename P>
-std::function<void(P const &)> const &joint<T>::handler(std::size_t const idx) const {
-    return impl_ptr<impl>()->template handler<P>(idx);
 }
 
 template <typename T>
