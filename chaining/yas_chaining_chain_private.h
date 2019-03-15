@@ -197,11 +197,11 @@ struct chain<Out, In, Begin, Syncable>::impl : base::impl {
         return this->_end();
     }
 
-    chaining::observer<Begin> broadcast() {
+    chaining::observer<Begin> fetch() {
         static_assert(Syncable, "Syncable must be true.");
 
         auto observer = this->_end();
-        observer.broadcast();
+        observer.fetch();
         return observer;
     }
 };
@@ -405,6 +405,6 @@ observer<Begin> chain<Out, In, Begin, Syncable>::end() {
 
 template <typename Out, typename In, typename Begin, bool Syncable>
 observer<Begin> chain<Out, In, Begin, Syncable>::sync() {
-    return impl_ptr<impl>()->broadcast();
+    return impl_ptr<impl>()->fetch();
 }
 }  // namespace yas::chaining

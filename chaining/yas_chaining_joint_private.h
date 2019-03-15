@@ -36,13 +36,13 @@ struct joint<T>::impl : any_joint::impl {
         this->_sub_joints.clear();
     }
 
-    void broadcast() override {
+    void fetch() override {
         if (auto sender = this->_weak_sender.lock()) {
             sender.sendable().fetch_for(cast<joint<T>>());
         }
 
         for (auto &sub_joint : this->_sub_joints) {
-            sub_joint.broadcast();
+            sub_joint.fetch();
         }
     }
 

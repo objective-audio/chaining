@@ -9,13 +9,13 @@
 namespace yas::chaining {
 struct any_observer : base {
     struct impl : base::impl {
-        virtual void broadcast() = 0;
+        virtual void fetch() = 0;
         virtual void invalidate() = 0;
     };
 
     any_observer(std::nullptr_t);
 
-    void broadcast();
+    void fetch();
     void invalidate();
 
    protected:

@@ -15,7 +15,7 @@ class chain;
 
 struct any_joint : base {
     struct impl : base::impl {
-        virtual void broadcast() = 0;
+        virtual void fetch() = 0;
         virtual void invalidate() = 0;
         virtual std::any const &handler(std::size_t const idx) = 0;
     };
@@ -26,8 +26,8 @@ struct any_joint : base {
     any_joint(std::nullptr_t) : base(nullptr) {
     }
 
-    void broadcast() {
-        impl_ptr<impl>()->broadcast();
+    void fetch() {
+        impl_ptr<impl>()->fetch();
     }
 
     void invalidate() {
