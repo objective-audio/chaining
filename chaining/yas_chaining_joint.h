@@ -20,24 +20,14 @@ struct any_joint : base {
         virtual std::any const &handler(std::size_t const idx) = 0;
     };
 
-    any_joint(std::shared_ptr<impl> &&ptr) : base(std::move(ptr)) {
-    }
+    any_joint(std::shared_ptr<impl> &&ptr);
+    any_joint(std::nullptr_t);
 
-    any_joint(std::nullptr_t) : base(nullptr) {
-    }
-
-    void fetch() {
-        impl_ptr<impl>()->fetch();
-    }
-
-    void invalidate() {
-        impl_ptr<impl>()->invalidate();
-    }
+    void fetch();
+    void invalidate();
 
     template <typename P>
-    [[nodiscard]] std::function<void(P const &)> const &handler(std::size_t const idx) const {
-        return *std::any_cast<std::function<void(P const &)>>(&impl_ptr<impl>()->handler(idx));
-    }
+    [[nodiscard]] std::function<void(P const &)> const &handler(std::size_t const idx) const;
 };
 
 template <typename T>

@@ -7,6 +7,11 @@
 #include <vector>
 
 namespace yas::chaining {
+template <typename P>
+std::function<void(P const &)> const &any_joint::handler(std::size_t const idx) const {
+    return *std::any_cast<std::function<void(P const &)>>(&impl_ptr<impl>()->handler(idx));
+}
+
 template <typename T>
 struct joint<T>::impl : any_joint::impl {
     weak<sender<T>> _weak_sender;
