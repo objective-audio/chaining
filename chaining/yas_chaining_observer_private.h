@@ -13,8 +13,8 @@ struct observer<Begin>::impl : any_observer::impl {
     impl(chaining::joint<Begin> &&joint) : _joint(std::move(joint)) {
     }
 
-    void broadcast() override {
-        this->_joint.broadcast();
+    void fetch() override {
+        this->_joint.fetch();
     }
 
     void invalidate() override {

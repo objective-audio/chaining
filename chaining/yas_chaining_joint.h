@@ -5,6 +5,7 @@
 #pragma once
 
 #include <cpp_utils/yas_base.h>
+#include <any>
 
 namespace yas::chaining {
 template <typename T>
@@ -14,23 +15,19 @@ class chain;
 
 struct any_joint : base {
     struct impl : base::impl {
-        virtual void broadcast() = 0;
+        virtual void fetch() = 0;
         virtual void invalidate() = 0;
+        virtual std::any const &handler(std::size_t const idx) = 0;
     };
 
-    any_joint(std::shared_ptr<impl> &&ptr) : base(std::move(ptr)) {
-    }
+    any_joint(std::shared_ptr<impl> &&ptr);
+    any_joint(std::nullptr_t);
 
-    any_joint(std::nullptr_t) : base(nullptr) {
-    }
+    void fetch();
+    void invalidate();
 
-    void broadcast() {
-        impl_ptr<impl>()->broadcast();
-    }
-
-    void invalidate() {
-        impl_ptr<impl>()->invalidate();
-    }
+    template <typename P>
+    [[nodiscard]] std::function<void(P const &)> const &handler(std::size_t const idx) const;
 };
 
 template <typename T>
@@ -48,8 +45,6 @@ struct[[nodiscard]] joint : any_joint {
     template <typename P>
     void push_handler(std::function<void(P const &)>);
     [[nodiscard]] std::size_t handlers_size() const;
-    template <typename P>
-    [[nodiscard]] std::function<void(P const &)> const &handler(std::size_t const) const;
     void add_sub_joint(any_joint);
 };
 }  // namespace yas::chaining
