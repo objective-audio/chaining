@@ -10,8 +10,6 @@
 namespace yas::chaining {
 template <typename T>
 class sender;
-template <typename Out, typename In, typename Begin, bool Syncable>
-class chain;
 
 struct any_joint : base {
     struct impl : base::impl {
@@ -28,6 +26,12 @@ struct any_joint : base {
 
     template <typename P>
     [[nodiscard]] std::function<void(P const &)> const &handler(std::size_t const idx) const;
+
+    template <typename T>
+    using handler_f = std::function<void(T const &, any_joint &)>;
+
+    template <typename P>
+    [[nodiscard]] handler_f<P> const &handler2(std::size_t const idx) const;
 };
 
 template <typename T>
@@ -43,7 +47,7 @@ struct[[nodiscard]] joint : any_joint {
     void invalidate();
 
     template <typename P>
-    void push_handler(std::function<void(P const &)>);
+    void push_handler(any_joint::handler_f<P>);
     [[nodiscard]] std::size_t handlers_size() const;
     void add_sub_joint(any_joint);
 };

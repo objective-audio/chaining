@@ -12,6 +12,11 @@ std::function<void(P const &)> const &any_joint::handler(std::size_t const idx) 
     return *std::any_cast<std::function<void(P const &)>>(&impl_ptr<impl>()->handler(idx));
 }
 
+template <typename P>
+any_joint::handler_f<P> const &any_joint::handler2(std::size_t const idx) const {
+    return *std::any_cast<handler_f<P>>(&impl_ptr<impl>()->handler(idx));
+}
+
 template <typename T>
 struct joint<T>::impl : any_joint::impl {
     weak<sender<T>> _weak_sender;
@@ -21,7 +26,8 @@ struct joint<T>::impl : any_joint::impl {
 
     void call_first(T const &value) {
         if (this->_handlers.size() > 0) {
-            this->casted_handler<T>(0)(value);
+            any_joint joint = cast<any_joint>();
+            joint.handler2<T>(0)(value, joint);
         } else {
             std::runtime_error("handler not found. must call the end.");
         }
@@ -57,11 +63,6 @@ struct joint<T>::impl : any_joint::impl {
 
     std::any const &handler(std::size_t const idx) override {
         return this->_handlers.at(idx);
-    }
-
-    template <typename P>
-    [[nodiscard]] std::function<void(P const &)> const &casted_handler(std::size_t const idx) {
-        return *std::any_cast<std::function<void(P const &)>>(&this->handler(idx));
     }
 
     std::size_t handlers_size() {
@@ -107,7 +108,7 @@ void joint<T>::invalidate() {
 
 template <typename T>
 template <typename P>
-void joint<T>::push_handler(std::function<void(P const &)> handler) {
+void joint<T>::push_handler(any_joint::handler_f<P> handler) {
     impl_ptr<impl>()->push_handler(std::move(handler));
 }
 

@@ -8,8 +8,6 @@
 #include "yas_chaining_types.h"
 
 namespace yas::chaining {
-class any_joint;
-
 template <typename T>
 struct[[nodiscard]] sendable : protocol {
     struct impl : protocol::impl {

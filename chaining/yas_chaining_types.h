@@ -5,19 +5,18 @@
 #pragma once
 
 namespace yas::chaining {
-template <typename Out, typename In, typename Begin, bool Syncable>
+template <typename Out, typename Begin, bool Syncable>
 class chain;
 
 template <typename T>
-using chain_sync_t = chain<T, T, T, true>;
+using chain_sync_t = chain<T, T, true>;
 template <typename T, typename U>
-using chain_relayed_sync_t = chain<T, U, U, true>;
-template <typename T, typename U>
-using chain_normalized_sync_t = chain<T, T, U, true>;
+using chain_relayed_sync_t = chain<T, U, true>;
 template <typename T>
-using chain_unsync_t = chain<T, T, T, false>;
+using chain_unsync_t = chain<T, T, false>;
 template <typename T, typename U>
-using chain_relayed_unsync_t = chain<T, U, U, false>;
+using chain_relayed_unsync_t = chain<T, U, false>;
+
 template <typename T, typename U>
-using chain_normalized_unsync_t = chain<T, T, U, false>;
+using opt_pair_t = std::pair<std::optional<T>, std::optional<U>>;
 }  // namespace yas::chaining
