@@ -10,13 +10,10 @@
 #include "yas_chaining_sender_protocol.h"
 
 namespace yas::chaining {
-template <typename Out, typename In, typename Begin, bool Syncable>
-class chain;
-
 template <typename T>
 struct sender<T>::impl : base::impl, chaining::sendable<T>::impl {
     void broadcast(T const &value) override {
-        for (weak<joint<T>> const &weak_joint : this->_joints) {
+        for (weak<joint<T>> const &weak_joint : this->_joints2) {
             if (joint<T> joint = weak_joint.lock()) {
                 joint.call_first(value);
             }
@@ -24,7 +21,7 @@ struct sender<T>::impl : base::impl, chaining::sendable<T>::impl {
     }
 
     void send_value_to_target(T const &value, std::uintptr_t const key) override {
-        for (weak<joint<T>> const &weak_joint : this->_joints) {
+        for (weak<joint<T>> const &weak_joint : this->_joints2) {
             if (weak_joint.identifier() == key) {
                 if (joint<T> joint = weak_joint.lock()) {
                     joint.call_first(value);
@@ -34,7 +31,7 @@ struct sender<T>::impl : base::impl, chaining::sendable<T>::impl {
     }
 
     void erase_joint(std::uintptr_t const key) override {
-        erase_if(this->_joints, [key](auto const &weak_joint) { return weak_joint.identifier() == key; });
+        erase_if(this->_joints2, [key](auto const &weak_joint) { return weak_joint.identifier() == key; });
     }
 
     void fetch_for(any_joint const &joint) override {
@@ -49,14 +46,14 @@ struct sender<T>::impl : base::impl, chaining::sendable<T>::impl {
     }
 
    private:
-    std::vector<weak<joint<T>>> _joints;
+    std::vector<weak<joint<T>>> _joints2;
 
     template <bool Syncable>
-    chain<T, T, T, Syncable> _chain() {
+    chain<T, T, Syncable> _chain() {
         auto sender = this->template cast<chaining::sender<T>>();
         chaining::joint<T> joint{to_weak(sender)};
-        this->_joints.emplace_back(to_weak(joint));
-        return chaining::chain<T, T, T, Syncable>{std::move(joint)};
+        this->_joints2.emplace_back(to_weak(joint));
+        return chaining::chain<T, T, Syncable>{std::move(joint)};
     }
 };
 

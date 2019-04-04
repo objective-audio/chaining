@@ -8,9 +8,6 @@
 
 namespace yas::chaining {
 template <typename T>
-class receiver;
-
-template <typename T>
 struct[[nodiscard]] receivable : protocol {
     struct impl : protocol::impl {
         virtual void receive_value(T const &) = 0;

@@ -7,9 +7,6 @@
 #include <cpp_utils/yas_protocol.h>
 
 namespace yas::chaining {
-template <typename Out, typename In, typename Begin, bool Syncable>
-struct chain;
-
 template <typename T>
 struct fetchable : protocol {
     struct impl {

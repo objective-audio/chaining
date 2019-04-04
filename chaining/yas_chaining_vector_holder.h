@@ -8,13 +8,6 @@
 #include "yas_chaining_event.h"
 #include "yas_chaining_sender.h"
 
-namespace yas::chaining {
-template <typename Out, typename In, typename Begin, bool Syncable>
-class chain;
-template <typename T>
-class receiver;
-}  // namespace yas::chaining
-
 namespace yas::chaining::vector {
 template <typename T>
 struct fetched_event {
@@ -61,7 +54,7 @@ struct holder : sender<event> {
     class impl;
 
     using vector_t = std::vector<T>;
-    using chain_t = chain<event, event, event, true>;
+    using chain_t = chain<event, event, true>;
 
     holder();
     explicit holder(vector_t);

@@ -10,9 +10,6 @@
 #include "yas_chaining_sender.h"
 
 namespace yas::chaining {
-template <typename Out, typename In, typename Begin, bool Syncable>
-class chain;
-
 template <typename T>
 struct fetcher : sender<T> {
     class impl;

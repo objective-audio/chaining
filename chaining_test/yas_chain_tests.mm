@@ -137,22 +137,4 @@ using namespace yas;
     XCTAssertEqual(std::get<2>(*received), 55.0f);
 }
 
-- (void)test_normalize {
-    chaining::notifier<int> notifier;
-
-    chaining::chain_relayed_unsync_t<std::string, int> to_chain =
-        notifier.chain().to([](int const &value) { return std::to_string(value); });
-
-    chaining::chain_normalized_unsync_t<std::string, int> normalized_chain = to_chain.normalize();
-
-    std::string received = "";
-
-    chaining::observer<int> observer =
-        normalized_chain.perform([&received](std::string const &value) { received = value; }).end();
-
-    notifier.notify(10);
-
-    XCTAssertEqual(received, "10");
-}
-
 @end

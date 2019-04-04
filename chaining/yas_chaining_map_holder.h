@@ -52,7 +52,7 @@ template <typename Key, typename Value>
 struct holder : sender<event> {
     class impl;
 
-    using chain_t = chain<event, event, event, true>;
+    using chain_t = chain<event, event, true>;
 
     holder();
     explicit holder(std::map<Key, Value>);
