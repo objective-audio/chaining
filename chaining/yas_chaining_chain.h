@@ -27,6 +27,12 @@ struct[[nodiscard]] chain : base {
 
     template <std::size_t N = 0, typename T>
     [[nodiscard]] chain<Out, Begin, Syncable> send_to(receiver<T> &);
+    template <typename T, std::size_t N>
+    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::array<receiver<T>, N>);
+    template <typename T>
+    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::vector<receiver<T>>);
+    template <typename T>
+    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::initializer_list<receiver<T>>);
     [[nodiscard]] chain<Out, Begin, Syncable> send_null(receiver<std::nullptr_t> &);
 
     [[nodiscard]] chain<Out, Begin, Syncable> guard(std::function<bool(Out const &)>);
