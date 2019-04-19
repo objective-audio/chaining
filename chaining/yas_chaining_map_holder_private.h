@@ -108,6 +108,21 @@ struct holder<Key, Value>::impl : sender<event>::impl {
         return erased;
     }
 
+    std::map<Key, Value> erase_for_key(Key const &key) {
+        this->_erase_observer_for_key(key);
+
+        std::map<Key, Value> erased;
+
+        if (this->_raw.count(key)) {
+            erased.emplace(key, std::move(this->_raw.at(key)));
+            this->_raw.erase(key);
+        }
+
+        this->broadcast(make_erased_event(erased));
+
+        return erased;
+    }
+
     void clear() {
         for (auto &pair : this->_observers) {
             if (auto &wrapper = pair.second) {
@@ -192,13 +207,7 @@ struct holder<Key, Value>::impl : sender<event>::impl {
     }
 
     void _insert_or_replace(Key &&key, Value &&value, chaining_f chaining) {
-        if (this->_observers.count(key) > 0) {
-            auto &wrapper = this->_observers.at(key);
-            if (any_observer &observer = wrapper->observer) {
-                observer.invalidate();
-            }
-            this->_observers.erase(key);
-        }
+        this->_erase_observer_for_key(key);
 
         bool isErased = false;
         if (this->_raw.count(key) > 0) {
@@ -239,6 +248,16 @@ struct holder<Key, Value>::impl : sender<event>::impl {
         }
 
         this->broadcast(make_inserted_event(map));
+    }
+
+    void _erase_observer_for_key(Key const &key) {
+        if (this->_observers.count(key) > 0) {
+            auto &wrapper = this->_observers.at(key);
+            if (any_observer &observer = wrapper->observer) {
+                observer.invalidate();
+            }
+            this->_observers.erase(key);
+        }
     }
 };
 
@@ -317,7 +336,7 @@ std::map<Key, Value> holder<Key, Value>::erase_for_value(Value const &value) {
 
 template <typename Key, typename Value>
 std::map<Key, Value> holder<Key, Value>::erase_for_key(Key const &key) {
-    return this->erase_if([&key](Key const &map_key, Value const &) { return map_key == key; });
+    return this->template impl_ptr<impl>()->erase_for_key(key);
 }
 
 template <typename Key, typename Value>
