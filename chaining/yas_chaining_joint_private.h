@@ -29,7 +29,7 @@ struct joint<T>::impl : any_joint::impl {
             any_joint joint = cast<any_joint>();
             joint.handler2<T>(0)(value, joint);
         } else {
-            std::runtime_error("handler not found. must call the end.");
+            throw std::runtime_error("handler not found. must call the end.");
         }
     }
 
