@@ -28,7 +28,7 @@ struct any_joint : base {
     using handler_f = std::function<void(T const &, any_joint &)>;
 
     template <typename P>
-    [[nodiscard]] handler_f<P> const &handler2(std::size_t const idx) const;
+    [[nodiscard]] handler_f<P> const &handler(std::size_t const idx) const;
 };
 
 template <typename T>

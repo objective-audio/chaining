@@ -8,7 +8,7 @@
 
 namespace yas::chaining {
 template <typename P>
-any_joint::handler_f<P> const &any_joint::handler2(std::size_t const idx) const {
+any_joint::handler_f<P> const &any_joint::handler(std::size_t const idx) const {
     return *std::any_cast<handler_f<P>>(&impl_ptr<impl>()->handler(idx));
 }
 
@@ -22,7 +22,7 @@ struct joint<T>::impl : any_joint::impl {
     void call_first(T const &value) {
         if (this->_handlers.size() > 0) {
             any_joint joint = cast<any_joint>();
-            joint.handler2<T>(0)(value, joint);
+            joint.handler<T>(0)(value, joint);
         } else {
             throw std::runtime_error("handler not found. must call the end.");
         }

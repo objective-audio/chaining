@@ -23,7 +23,7 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
 
         auto handler = [next_idx, perform_handler = std::move(perform_handler)](Out const &value, any_joint &joint) {
             perform_handler(value);
-            if (auto const &next_handler = joint.handler2<Out>(next_idx)) {
+            if (auto const &next_handler = joint.handler<Out>(next_idx)) {
                 next_handler(value, joint);
             }
         };
@@ -40,7 +40,7 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
 
         auto handler = [next_idx, to_handler = std::move(to_handler)](Out const &value, any_joint &joint) mutable {
             return_t<F> next_value = to_handler(value);
-            if (auto const &next_handler = joint.template handler2<return_t<F>>(next_idx)) {
+            if (auto const &next_handler = joint.template handler<return_t<F>>(next_idx)) {
                 next_handler(next_value, joint);
             }
         };
@@ -152,12 +152,12 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
 
         sub_joint.template push_handler<Out>([weak_joint, next_idx](Out const &value, any_joint &) mutable {
             if (auto joint = weak_joint.lock()) {
-                joint.template handler2<Out>(next_idx)(value, joint);
+                joint.template handler<Out>(next_idx)(value, joint);
             }
         });
 
         joint.template push_handler<Out>([next_idx](Out const &value, any_joint &joint) mutable {
-            joint.template handler2<Out>(next_idx)(value, joint);
+            joint.template handler<Out>(next_idx)(value, joint);
         });
 
         joint.add_sub_joint(std::move(sub_joint));
@@ -177,14 +177,14 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
 
         sub_joint.template push_handler<SubOut>([weak_joint, next_idx](SubOut const &value, any_joint &) mutable {
             if (any_joint joint = weak_joint.lock()) {
-                joint.template handler2<opt_pair_t<Out, SubOut>>(next_idx)(opt_pair_t<Out, SubOut>{std::nullopt, value},
-                                                                           joint);
+                joint.template handler<opt_pair_t<Out, SubOut>>(next_idx)(opt_pair_t<Out, SubOut>{std::nullopt, value},
+                                                                          joint);
             }
         });
 
         joint.template push_handler<Out>([next_idx](Out const &value, any_joint &joint) mutable {
-            joint.template handler2<opt_pair_t<Out, SubOut>>(next_idx)(opt_pair_t<Out, SubOut>{value, std::nullopt},
-                                                                       joint);
+            joint.template handler<opt_pair_t<Out, SubOut>>(next_idx)(opt_pair_t<Out, SubOut>{value, std::nullopt},
+                                                                      joint);
         });
 
         joint.add_sub_joint(std::move(sub_joint));
@@ -304,7 +304,7 @@ chain<Out, Begin, Syncable> chain<Out, Begin, Syncable>::guard(std::function<boo
 
     auto handler = [next_idx, guard_handler = std::move(guard_handler)](Out const &value, any_joint &joint) {
         if (guard_handler(value)) {
-            if (auto const &next_handler = joint.handler2<Out>(next_idx)) {
+            if (auto const &next_handler = joint.handler<Out>(next_idx)) {
                 next_handler(value, joint);
             }
         }
