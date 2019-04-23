@@ -8,11 +8,6 @@
 
 namespace yas::chaining {
 template <typename P>
-std::function<void(P const &)> const &any_joint::handler(std::size_t const idx) const {
-    return *std::any_cast<std::function<void(P const &)>>(&impl_ptr<impl>()->handler(idx));
-}
-
-template <typename P>
 any_joint::handler_f<P> const &any_joint::handler2(std::size_t const idx) const {
     return *std::any_cast<handler_f<P>>(&impl_ptr<impl>()->handler(idx));
 }

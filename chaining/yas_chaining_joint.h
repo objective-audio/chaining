@@ -24,9 +24,6 @@ struct any_joint : base {
     void fetch();
     void invalidate();
 
-    template <typename P>
-    [[nodiscard]] std::function<void(P const &)> const &handler(std::size_t const idx) const;
-
     template <typename T>
     using handler_f = std::function<void(T const &, any_joint &)>;
 
