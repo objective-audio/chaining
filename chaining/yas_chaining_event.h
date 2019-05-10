@@ -7,7 +7,7 @@
 #include <cpp_utils/yas_base.h>
 
 namespace yas::chaining {
-enum event_type {
+enum class event_type {
     fetched,
     any,
     inserted,
