@@ -16,7 +16,7 @@ struct alias : base {
 
     [[nodiscard]] auto const &raw() const;
     [[nodiscard]] auto &raw();
-    [[nodiscard]] auto chain();
+    [[nodiscard]] auto chain() const;
 };
 }  // namespace yas::chaining
 

@@ -238,7 +238,7 @@ std::size_t holder<T>::size() const {
 }
 
 template <typename T>
-typename holder<T>::chain_t holder<T>::holder<T>::chain() {
+typename holder<T>::chain_t holder<T>::holder<T>::chain() const {
     return this->template impl_ptr<impl>()->chain_sync();
 }
 

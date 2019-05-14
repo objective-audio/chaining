@@ -32,7 +32,7 @@ auto &alias<T>::raw() {
 }
 
 template <typename T>
-auto alias<T>::chain() {
+auto alias<T>::chain() const {
     return impl_ptr<impl>()->_sender.chain();
 }
 }  // namespace yas::chaining

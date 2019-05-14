@@ -74,7 +74,7 @@ struct holder : sender<event> {
     T erase_at(std::size_t const);
     void clear();
 
-    [[nodiscard]] chain_t chain();
+    [[nodiscard]] chain_t chain() const;
 };
 }  // namespace yas::chaining::vector
 

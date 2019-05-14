@@ -22,7 +22,7 @@ struct fetcher : sender<T> {
     void broadcast() const;
     void broadcast(T const &) const;
 
-    [[nodiscard]] chain_sync_t<T> chain();
+    [[nodiscard]] chain_sync_t<T> chain() const;
 
     [[nodiscard]] receiver<> &receiver();
 
