@@ -19,7 +19,7 @@ struct notifier : sender<T> {
 
     void notify(T const &);
 
-    [[nodiscard]] chain_unsync_t<T> chain();
+    [[nodiscard]] chain_unsync_t<T> chain() const;
 
     [[nodiscard]] receiver<T> &receiver();
 

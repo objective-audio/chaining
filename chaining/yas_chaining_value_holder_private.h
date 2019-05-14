@@ -79,7 +79,7 @@ template <typename T>
 [[nodiscard]] T &holder<T>::raw() { return this->template impl_ptr<impl>()->value(); }
 
 template <typename T>
-chain_sync_t<T> holder<T>::chain() {
+chain_sync_t<T> holder<T>::chain() const {
     return this->template impl_ptr<impl>()->chain_sync();
 }
 

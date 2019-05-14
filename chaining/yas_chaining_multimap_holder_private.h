@@ -265,7 +265,7 @@ void holder<Key, Value>::clear() {
 }
 
 template <typename Key, typename Value>
-typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::chain() {
+typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::chain() const {
     return this->template impl_ptr<impl>()->chain_sync();
 }
 }  // namespace yas::chaining::multimap

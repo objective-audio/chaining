@@ -76,7 +76,7 @@ struct holder : sender<event> {
     std::map<Key, Value> erase_for_key(Key const &);
     void clear();
 
-    [[nodiscard]] chain_t chain();
+    [[nodiscard]] chain_t chain() const;
 };
 }  // namespace yas::chaining::map
 

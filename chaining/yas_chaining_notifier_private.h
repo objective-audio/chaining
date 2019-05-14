@@ -51,7 +51,7 @@ void notifier<T>::notify(T const &value) {
 }
 
 template <typename T>
-chain_unsync_t<T> notifier<T>::chain() {
+chain_unsync_t<T> notifier<T>::chain() const {
     return this->template impl_ptr<impl>()->chain_unsync();
 }
 
