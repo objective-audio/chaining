@@ -9,7 +9,7 @@
 
 namespace yas::chaining::value {
 template <typename T>
-struct holder<T>::impl : sender<T>::impl {
+struct holder<T>::impl : sender<T>::impl, chaining::receivable<T>::impl {
     impl(T &&value) : _value(std::move(value)) {
     }
 
@@ -30,18 +30,6 @@ struct holder<T>::impl : sender<T>::impl {
         this->send_value_to_target(this->_value, joint.identifier());
     }
 
-    chaining::receiver<T> &receiver() {
-        if (!this->_receiver) {
-            this->_receiver =
-                chaining::receiver<T>{[weak_holder = to_weak(this->template cast<value::holder<T>>())](T const &value) {
-                    if (auto holder = weak_holder.lock()) {
-                        holder.set_value(value);
-                    }
-                }};
-        }
-        return this->_receiver;
-    }
-
     virtual bool is_equal(std::shared_ptr<base::impl> const &rhs) const override {
         if (auto rhs_impl = std::dynamic_pointer_cast<typename value::holder<T>::impl>(rhs)) {
             return this->_value == rhs_impl->_value;
@@ -50,10 +38,14 @@ struct holder<T>::impl : sender<T>::impl {
         }
     }
 
+    void receive_value(T const &value) override {
+        T copied = value;
+        this->locked_set_value(std::move(copied));
+    }
+
    private:
     T _value;
     std::mutex _set_mutex;
-    chaining::receiver<T> _receiver{nullptr};
 };
 
 template <typename T>
@@ -84,7 +76,7 @@ chain_sync_t<T> holder<T>::chain() const {
 }
 
 template <typename T>
-receiver<T> &holder<T>::receiver() {
-    return this->template impl_ptr<impl>()->receiver();
+receivable<T> holder<T>::receivable() {
+    return chaining::receivable<T>{this->template impl_ptr<typename chaining::receivable<T>::impl>()};
 }
 }  // namespace yas::chaining::value

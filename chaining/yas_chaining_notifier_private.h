@@ -9,28 +9,19 @@
 
 namespace yas::chaining {
 template <typename T>
-struct notifier<T>::impl : sender<T>::impl {
+struct notifier<T>::impl : sender<T>::impl, chaining::receivable<T>::impl {
     void locked_send_value(T const &value) {
         if (auto lock = std::unique_lock<std::mutex>(this->_send_mutex, std::try_to_lock); lock.owns_lock()) {
             this->broadcast(value);
         }
     }
 
-    chaining::receiver<T> &receiver() {
-        if (!this->_receiver) {
-            this->_receiver = chaining::receiver<T>{
-                [weak_notifier = to_weak(this->template cast<chaining::notifier<T>>())](T const &value) {
-                    if (auto notifier = weak_notifier.lock()) {
-                        notifier.notify(value);
-                    }
-                }};
-        }
-        return this->_receiver;
+    void receive_value(T const &value) {
+        this->locked_send_value(value);
     }
 
    private:
     std::mutex _send_mutex;
-    chaining::receiver<T> _receiver{nullptr};
 };
 
 template <typename T>
@@ -56,7 +47,7 @@ chain_unsync_t<T> notifier<T>::chain() const {
 }
 
 template <typename T>
-receiver<T> &notifier<T>::receiver() {
-    return this->template impl_ptr<impl>()->receiver();
+chaining::receivable<T> notifier<T>::receivable() {
+    return chaining::receivable<T>{this->template impl_ptr<typename chaining::receivable<T>::impl>()};
 }
 }  // namespace yas::chaining

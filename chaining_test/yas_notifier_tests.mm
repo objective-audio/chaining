@@ -4,6 +4,7 @@
 
 #import <XCTest/XCTest.h>
 #import <chaining/yas_chaining_notifier.h>
+#import <chaining/yas_chaining_perform_receiver.h>
 
 using namespace yas;
 
@@ -56,7 +57,7 @@ using namespace yas;
     chaining::notifier<int> notifier1;
     chaining::notifier<int> notifier2;
 
-    auto flow1 = notifier1.chain().send_to(notifier2.receiver()).end();
+    auto flow1 = notifier1.chain().send_to(notifier2).end();
     auto flow2 = notifier2.chain().perform([&received](int const &value) { received = value; }).end();
 
     notifier1.notify(4);
@@ -69,7 +70,7 @@ using namespace yas;
 
     chaining::notifier<int> notifier;
 
-    chaining::receiver<int> receiver{[&notifier, &received](int const &value) {
+    chaining::perform_receiver<int> receiver{[&notifier, &received](int const &value) {
         received = value;
         notifier.notify(value + 1);
     }};

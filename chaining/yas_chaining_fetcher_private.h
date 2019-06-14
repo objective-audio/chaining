@@ -10,7 +10,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct fetcher<T>::impl : sender<T>::impl, chaining::fetchable<T>::impl {
+struct fetcher<T>::impl : sender<T>::impl, chaining::fetchable<T>::impl, chaining::receivable<std::nullptr_t>::impl {
     impl(std::function<std::optional<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {
     }
 
@@ -30,21 +30,12 @@ struct fetcher<T>::impl : sender<T>::impl, chaining::fetchable<T>::impl {
         }
     }
 
-    chaining::receiver<> &receiver() {
-        if (!this->_receiver) {
-            this->_receiver =
-                chaining::receiver<>{[weak_fetcher = to_weak(this->template cast<chaining::fetcher<T>>())] {
-                    if (auto fetcher = weak_fetcher.lock()) {
-                        fetcher.broadcast();
-                    }
-                }};
-        }
-        return this->_receiver;
+    void receive_value(std::nullptr_t const &) override {
+        this->_broadcast();
     }
 
    private:
     std::function<std::optional<T>(void)> _fetching_handler;
-    chaining::receiver<> _receiver{nullptr};
 };
 
 template <typename T>
@@ -77,8 +68,9 @@ chain_sync_t<T> fetcher<T>::chain() const {
 }
 
 template <typename T>
-chaining::receiver<> &fetcher<T>::receiver() {
-    return this->template impl_ptr<impl>()->receiver();
+chaining::receivable<std::nullptr_t> fetcher<T>::receivable() {
+    return chaining::receivable<std::nullptr_t>{
+        this->template impl_ptr<typename chaining::receivable<std::nullptr_t>::impl>()};
 }
 
 template <typename T>

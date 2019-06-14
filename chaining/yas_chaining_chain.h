@@ -7,12 +7,11 @@
 #include <cpp_utils/yas_base.h>
 #include <cpp_utils/yas_type_traits.h>
 #include <functional>
+#include "yas_chaining_receiver.h"
 
 namespace yas::chaining {
 template <typename Begin>
 struct observer;
-template <typename T>
-struct receiver;
 
 template <typename Out, typename Begin, bool Syncable>
 struct[[nodiscard]] chain : base {
@@ -28,11 +27,11 @@ struct[[nodiscard]] chain : base {
     template <std::size_t N = 0, typename T>
     [[nodiscard]] chain<Out, Begin, Syncable> send_to(receiver<T> &);
     template <typename T, std::size_t N>
-    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::array<receiver<T>, N>);
+    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::array<T, N>);
     template <typename T>
-    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::vector<receiver<T>>);
+    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::vector<T>);
     template <typename T>
-    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::initializer_list<receiver<T>>);
+    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::initializer_list<T>);
     [[nodiscard]] chain<Out, Begin, Syncable> send_null(receiver<std::nullptr_t> &);
 
     [[nodiscard]] chain<Out, Begin, Syncable> guard(std::function<bool(Out const &)>);

@@ -41,7 +41,7 @@ event make_relayed_event(Key const &key, Value const &value, typename Value::Sen
 #pragma mark - map::holder::impl
 
 template <typename Key, typename Value>
-struct holder<Key, Value>::impl : sender<event>::impl {
+struct holder<Key, Value>::impl : sender<event>::impl, chaining::receivable<event>::impl {
     struct observer_wrapper {
         any_observer observer = nullptr;
         Value *value = nullptr;
@@ -154,47 +154,38 @@ struct holder<Key, Value>::impl : sender<event>::impl {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
 
-    chaining::receiver<event> &receiver() {
-        if (!this->_receiver) {
-            this->_receiver = chaining::receiver<event>{
-                [weak_holder = to_weak(this->template cast<map::holder<Key, Value>>())](chaining::event const &event) {
-                    if (auto holder = weak_holder.lock()) {
-                        switch (event.type()) {
-                            case event_type::fetched: {
-                                auto const &fetched = event.get<map::fetched_event<Key, Value>>();
-                                holder.replace_all(fetched.elements);
-                            } break;
-                            case event_type::any: {
-                                auto const &any = event.get<map::any_event<Key, Value>>();
-                                holder.replace_all(any.elements);
-                            } break;
-                            case event_type::inserted: {
-                                auto const &inserted = event.get<map::inserted_event<Key, Value>>();
-                                holder.insert(inserted.elements);
-                            } break;
-                            case event_type::erased: {
-                                auto const &erased = event.get<map::erased_event<Key, Value>>();
-                                holder.erase_if([&erased](Key const &key, Value const &) {
-                                    return erased.elements.count(key) > 0;
-                                });
-                            } break;
-                            case event_type::replaced: {
-                                auto const &replaced = event.get<map::replaced_event<Key, Value>>();
-                                holder.insert_or_replace(replaced.key, replaced.value);
-                            } break;
-                            case event_type::relayed:
-                                break;
-                        }
-                    }
-                }};
+    void receive_value(event const &event) override {
+        auto holder = cast<chaining::map::holder<Key, Value>>();
+
+        switch (event.type()) {
+            case event_type::fetched: {
+                auto const &fetched = event.get<map::fetched_event<Key, Value>>();
+                holder.replace_all(fetched.elements);
+            } break;
+            case event_type::any: {
+                auto const &any = event.get<map::any_event<Key, Value>>();
+                holder.replace_all(any.elements);
+            } break;
+            case event_type::inserted: {
+                auto const &inserted = event.get<map::inserted_event<Key, Value>>();
+                holder.insert(inserted.elements);
+            } break;
+            case event_type::erased: {
+                auto const &erased = event.get<map::erased_event<Key, Value>>();
+                holder.erase_if([&erased](Key const &key, Value const &) { return erased.elements.count(key) > 0; });
+            } break;
+            case event_type::replaced: {
+                auto const &replaced = event.get<map::replaced_event<Key, Value>>();
+                holder.insert_or_replace(replaced.key, replaced.value);
+            } break;
+            case event_type::relayed:
+                break;
         }
-        return this->_receiver;
     }
 
    private:
     std::map<Key, Value> _raw;
     std::map<Key, wrapper_ptr> _observers;
-    chaining::receiver<event> _receiver{nullptr};
 
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     chaining_f _element_chaining() {
@@ -311,6 +302,10 @@ holder<Key, Value>::holder(std::map<Key, Value> map) : sender<event>(std::make_s
 }
 
 template <typename Key, typename Value>
+holder<Key, Value>::holder(std::shared_ptr<impl> &&ptr) : sender<event>(std::move(ptr)) {
+}
+
+template <typename Key, typename Value>
 holder<Key, Value>::holder(std::nullptr_t) : sender<event>(nullptr) {
 }
 
@@ -388,7 +383,7 @@ typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::cha
 }
 
 template <typename Key, typename Value>
-receiver<event> &holder<Key, Value>::receiver() {
-    return this->template impl_ptr<impl>()->receiver();
+chaining::receivable<event> holder<Key, Value>::receivable() {
+    return chaining::receivable<event>{this->template impl_ptr<typename chaining::receivable<event>::impl>()};
 }
 }  // namespace yas::chaining::map
