@@ -9,6 +9,15 @@
 #include "yas_chaining_sender.h"
 
 namespace yas::chaining::multimap {
+struct event : chaining::event {
+    template <typename Event>
+    event(Event &&event) : chaining::event(std::move(event)) {
+    }
+
+    event(std::nullptr_t) : chaining::event(nullptr) {
+    }
+};
+
 template <typename Key, typename Value>
 struct fetched_event {
     static event_type const type = event_type::fetched;

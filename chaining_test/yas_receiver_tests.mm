@@ -26,7 +26,7 @@ using namespace yas;
     std::string received = "";
 
     chaining::notifier<int> notifier;
-    chaining::receiver<std::string> receiver{[&received](std::string const &value) { received = value; }};
+    chaining::perform_receiver<std::string> receiver{[&received](std::string const &value) { received = value; }};
 
     auto node = notifier.chain().to([](int const &value) { return std::to_string(value); }).send_to(receiver).end();
 
@@ -41,8 +41,8 @@ using namespace yas;
     int int_received = -1;
     std::string string_received = "";
 
-    chaining::receiver<int> int_receiver{[&int_received](int const &value) { int_received = value; }};
-    chaining::receiver<std::string> string_receiver{
+    chaining::perform_receiver<int> int_receiver{[&int_received](int const &value) { int_received = value; }};
+    chaining::perform_receiver<std::string> string_receiver{
         [&string_received](std::string const &value) { string_received = value; }};
 
     auto chain = notifier.chain().send_to<0>(int_receiver).send_to<1>(string_receiver).end();
@@ -57,7 +57,7 @@ using namespace yas;
     bool received = false;
 
     chaining::notifier<int> notifier;
-    chaining::receiver<> receiver{[&received]() { received = true; }};
+    chaining::perform_receiver<> receiver{[&received]() { received = true; }};
 
     auto chain = notifier.chain().send_null(receiver).end();
 
@@ -71,7 +71,7 @@ using namespace yas;
 
     chaining::notifier<int> notifier;
 
-    chaining::receiver<int> receiver{[&received](int const &value) { received = value; }};
+    chaining::perform_receiver<int> receiver{[&received](int const &value) { received = value; }};
 
     auto chain = notifier.chain().send_to(receiver).end();
 
@@ -85,9 +85,9 @@ using namespace yas;
     int received0 = -1;
     int received1 = -1;
 
-    chaining::receiver<int> receiver0{[&received0](int const &value) { received0 = value; }};
-    chaining::receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
-    std::array<chaining::receiver<int>, 2> receivers{receiver0, receiver1};
+    chaining::perform_receiver<int> receiver0{[&received0](int const &value) { received0 = value; }};
+    chaining::perform_receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
+    std::array<chaining::perform_receiver<int>, 2> receivers{receiver0, receiver1};
 
     chaining::any_observer chain = notifier.chain().send_to(receivers).end();
 
@@ -102,8 +102,8 @@ using namespace yas;
     int received0 = -1;
     int received1 = -1;
 
-    chaining::receiver<int> receiver0{[&received0](int const &value) { received0 = value; }};
-    chaining::receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
+    chaining::perform_receiver<int> receiver0{[&received0](int const &value) { received0 = value; }};
+    chaining::perform_receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
 
     chaining::any_observer chain = notifier.chain().send_to<0>(receiver0).send_to<1>(receiver1).end();
 
@@ -118,9 +118,9 @@ using namespace yas;
     int received0 = -1;
     int received1 = -1;
 
-    chaining::receiver<int> receiver0{[&received0](int const &value) { received0 = value; }};
-    chaining::receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
-    std::vector<chaining::receiver<int>> receivers{receiver0, receiver1};
+    chaining::perform_receiver<int> receiver0{[&received0](int const &value) { received0 = value; }};
+    chaining::perform_receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
+    std::vector<chaining::perform_receiver<int>> receivers{receiver0, receiver1};
 
     chaining::any_observer chain = notifier.chain().send_to(receivers).end();
 
@@ -135,8 +135,8 @@ using namespace yas;
     int received0 = -1;
     int received1 = -1;
 
-    chaining::receiver<int> receiver0{[&received0](int const &value) { received0 = value; }};
-    chaining::receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
+    chaining::perform_receiver<int> receiver0{[&received0](int const &value) { received0 = value; }};
+    chaining::perform_receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
 
     chaining::any_observer chain = notifier.chain().send_to({receiver0, receiver1}).end();
 

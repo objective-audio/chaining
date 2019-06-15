@@ -6,14 +6,19 @@
 
 #include <vector>
 #include "yas_chaining_event.h"
+#include "yas_chaining_receiver.h"
 #include "yas_chaining_sender.h"
 
-namespace yas::chaining {
-template <typename T>
-class receiver;
-}  // namespace yas::chaining
-
 namespace yas::chaining::vector {
+struct event : chaining::event {
+    template <typename Event>
+    event(Event &&event) : chaining::event(std::move(event)) {
+    }
+
+    event(std::nullptr_t) : chaining::event(nullptr) {
+    }
+};
+
 template <typename T>
 struct fetched_event {
     static event_type const type = event_type::fetched;
@@ -55,7 +60,7 @@ struct relayed_event {
 };
 
 template <typename T>
-struct holder : sender<event> {
+struct holder : sender<event>, receiver<event> {
     class impl;
 
     using vector_t = std::vector<T>;
@@ -81,7 +86,13 @@ struct holder : sender<event> {
 
     [[nodiscard]] chain_t chain() const;
 
-    [[nodiscard]] receiver<event> &receiver();
+    [[nodiscard]] chaining::receivable<event> receivable() override;
+
+   protected:
+    explicit holder(std::shared_ptr<impl> &&);
+
+   private:
+    chaining::receivable<event> _receivable = nullptr;
 };
 }  // namespace yas::chaining::vector
 

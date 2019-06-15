@@ -11,7 +11,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct fetcher : sender<T> {
+struct fetcher : sender<T>, receiver<> {
     class impl;
 
     fetcher(std::function<std::optional<T>(void)>);
@@ -24,12 +24,13 @@ struct fetcher : sender<T> {
 
     [[nodiscard]] chain_sync_t<T> chain() const;
 
-    [[nodiscard]] receiver<> &receiver();
+    [[nodiscard]] chaining::receivable<std::nullptr_t> receivable() override;
 
     [[nodiscard]] fetchable<T> fetchable();
 
    private:
     chaining::fetchable<T> _fetchable = nullptr;
+    chaining::receivable<std::nullptr_t> _receivable = nullptr;
 };
 }  // namespace yas::chaining
 

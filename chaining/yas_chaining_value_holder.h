@@ -4,16 +4,12 @@
 
 #pragma once
 
+#include "yas_chaining_receiver.h"
 #include "yas_chaining_sender.h"
-
-namespace yas::chaining {
-template <typename T>
-class receiver;
-}  // namespace yas::chaining
 
 namespace yas::chaining::value {
 template <typename T>
-struct holder : sender<T> {
+struct holder : sender<T>, receiver<T> {
     class impl;
 
     holder(T);
@@ -28,7 +24,10 @@ struct holder : sender<T> {
 
     [[nodiscard]] chain_sync_t<T> chain() const;
 
-    [[nodiscard]] receiver<T> &receiver();
+    [[nodiscard]] receivable<T> receivable() override;
+
+   private:
+    chaining::receivable<T> _receivable = nullptr;
 };
 }  // namespace yas::chaining::value
 

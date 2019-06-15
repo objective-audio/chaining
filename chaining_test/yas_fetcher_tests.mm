@@ -95,7 +95,7 @@ using namespace yas;
 
     sending = 2;
 
-    auto receive_flow = notifier.chain().send_to(fetcher.receiver()).end();
+    auto receive_flow = notifier.chain().send_to(fetcher).end();
 
     notifier.notify(nullptr);
 

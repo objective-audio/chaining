@@ -7,7 +7,7 @@
 #include <cpp_utils/yas_protocol.h>
 
 namespace yas::chaining {
-template <typename T>
+template <typename T = std::nullptr_t>
 struct[[nodiscard]] receivable : protocol {
     struct impl : protocol::impl {
         virtual void receive_value(T const &) = 0;

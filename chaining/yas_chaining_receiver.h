@@ -4,27 +4,20 @@
 
 #pragma once
 
-#include <cpp_utils/yas_base.h>
+#include "yas_chaining_receiver_protocol.h"
 
 namespace yas::chaining {
-template <typename T>
-struct receivable;
+struct any_receiver {};
 
 template <typename T = std::nullptr_t>
-struct[[nodiscard]] receiver : base {
-    class impl;
-
-    receiver(std::function<void(T const &)>);
-    receiver(std::function<void(void)>);
-    receiver(std::nullptr_t);
-
-    ~receiver() final;
-
-    [[nodiscard]] receivable<T> receivable();
-
-   private:
-    chaining::receivable<T> _receivable = nullptr;
+struct receiver : any_receiver {
+    virtual receivable<T> receivable() = 0;
 };
-}  // namespace yas::chaining
 
-#include "yas_chaining_receiver_private.h"
+template <typename T>
+using is_base_of_receiver = std::is_base_of<any_receiver, T>;
+template <typename T, typename V = void>
+using enable_if_base_of_receiver_t = typename std::enable_if_t<is_base_of_receiver<T>::value, V>;
+template <typename T, typename V = void>
+using disable_if_base_of_receiver_t = typename std::enable_if_t<!is_base_of_receiver<T>::value, V>;
+}  // namespace yas::chaining

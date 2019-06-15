@@ -39,7 +39,7 @@ event make_relayed_event(T const &element, std::size_t const idx, typename T::Se
 }
 
 template <typename T>
-struct holder<T>::impl : sender<event>::impl {
+struct holder<T>::impl : sender<event>::impl, chaining::receivable<event>::impl {
     struct observer_wrapper {
         any_observer observer = nullptr;
     };
@@ -136,45 +136,38 @@ struct holder<T>::impl : sender<event>::impl {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
 
-    chaining::receiver<event> &receiver() {
-        if (!this->_receiver) {
-            this->_receiver = chaining::receiver<event>{
-                [weak_holder = to_weak(this->template cast<vector::holder<T>>())](chaining::event const &event) {
-                    if (auto holder = weak_holder.lock()) {
-                        switch (event.type()) {
-                            case event_type::fetched: {
-                                auto const &fetched = event.get<vector::fetched_event<T>>();
-                                holder.replace(fetched.elements);
-                            } break;
-                            case event_type::any: {
-                                auto const &any = event.get<vector::any_event<T>>();
-                                holder.replace(any.elements);
-                            } break;
-                            case event_type::inserted: {
-                                auto const &inserted = event.get<vector::inserted_event<T>>();
-                                holder.insert(inserted.element, inserted.index);
-                            } break;
-                            case event_type::erased: {
-                                auto const &erased = event.get<vector::erased_event<T>>();
-                                holder.erase_at(erased.index);
-                            } break;
-                            case event_type::replaced: {
-                                auto const &replaced = event.get<vector::replaced_event<T>>();
-                                holder.replace(replaced.element, replaced.index);
-                            } break;
-                            case event_type::relayed:
-                                break;
-                        }
-                    }
-                }};
+    void receive_value(event const &event) override {
+        auto holder = cast<chaining::vector::holder<T>>();
+
+        switch (event.type()) {
+            case event_type::fetched: {
+                auto const &fetched = event.get<vector::fetched_event<T>>();
+                holder.replace(fetched.elements);
+            } break;
+            case event_type::any: {
+                auto const &any = event.get<vector::any_event<T>>();
+                holder.replace(any.elements);
+            } break;
+            case event_type::inserted: {
+                auto const &inserted = event.get<vector::inserted_event<T>>();
+                holder.insert(inserted.element, inserted.index);
+            } break;
+            case event_type::erased: {
+                auto const &erased = event.get<vector::erased_event<T>>();
+                holder.erase_at(erased.index);
+            } break;
+            case event_type::replaced: {
+                auto const &replaced = event.get<vector::replaced_event<T>>();
+                holder.replace(replaced.element, replaced.index);
+            } break;
+            case event_type::relayed:
+                break;
         }
-        return this->_receiver;
     }
 
    private:
     std::vector<T> _raw;
     std::vector<wrapper_ptr> _observers;
-    chaining::receiver<event> _receiver{nullptr};
 
     template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     chaining_f _element_chaining() {
@@ -288,6 +281,10 @@ holder<T>::holder(std::vector<T> vec) : sender<event>(std::make_shared<impl>()) 
 }
 
 template <typename T>
+holder<T>::holder(std::shared_ptr<impl> &&ptr) : sender<event>(std::move(ptr)) {
+}
+
+template <typename T>
 holder<T>::holder(std::nullptr_t) : sender<event>(nullptr) {
 }
 
@@ -325,7 +322,11 @@ void holder<T>::clear() {
 }
 
 template <typename T>
-receiver<event> &holder<T>::receiver() {
-    return this->template impl_ptr<impl>()->receiver();
+receivable<event> holder<T>::receivable() {
+    if (!this->_receivable) {
+        this->_receivable =
+            chaining::receivable<event>{this->template impl_ptr<typename chaining::receivable<event>::impl>()};
+    }
+    return this->_receivable;
 }
 }  // namespace yas::chaining::vector

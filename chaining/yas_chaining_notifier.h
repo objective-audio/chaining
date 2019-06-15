@@ -4,14 +4,12 @@
 
 #pragma once
 
+#include "yas_chaining_receiver.h"
 #include "yas_chaining_sender.h"
 
 namespace yas::chaining {
 template <typename T>
-struct receiver;
-
-template <typename T>
-struct notifier : sender<T> {
+struct notifier : sender<T>, receiver<T> {
     class impl;
 
     notifier();
@@ -21,10 +19,13 @@ struct notifier : sender<T> {
 
     [[nodiscard]] chain_unsync_t<T> chain() const;
 
-    [[nodiscard]] receiver<T> &receiver();
+    [[nodiscard]] chaining::receivable<T> receivable() override;
 
    protected:
     notifier(std::shared_ptr<impl> &&);
+
+   private:
+    chaining::receivable<T> _receivable = nullptr;
 };
 }  // namespace yas::chaining
 

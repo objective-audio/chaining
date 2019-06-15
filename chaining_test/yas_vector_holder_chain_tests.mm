@@ -25,7 +25,7 @@ using namespace yas::chaining;
 }
 
 - (void)test_chain_fetched_by_sync {
-    vector::holder<int> holder{{0, 1, 2}};
+    vector::holder<int> holder{std::vector<int>{0, 1, 2}};
 
     std::vector<event> received;
 
@@ -37,7 +37,7 @@ using namespace yas::chaining;
 }
 
 - (void)test_chain_any_by_replace {
-    vector::holder<int> holder{{0, 1, 2}};
+    vector::holder<int> holder{std::vector<int>{0, 1, 2}};
 
     std::vector<event> received;
 
@@ -51,7 +51,7 @@ using namespace yas::chaining;
 }
 
 - (void)test_chain_any_by_clear {
-    vector::holder<int> holder{{0, 1, 2}};
+    vector::holder<int> holder{std::vector<int>{0, 1, 2}};
 
     std::vector<event> received;
 
@@ -65,7 +65,7 @@ using namespace yas::chaining;
 }
 
 - (void)test_chain_inserted {
-    vector::holder<int> holder{{0, 1, 2}};
+    vector::holder<int> holder{std::vector<int>{0, 1, 2}};
 
     std::vector<event> received;
 
@@ -80,7 +80,7 @@ using namespace yas::chaining;
 }
 
 - (void)test_chain_erased {
-    vector::holder<int> holder{{0, 1, 2}};
+    vector::holder<int> holder{std::vector<int>{0, 1, 2}};
 
     std::vector<event> received;
 
@@ -94,7 +94,7 @@ using namespace yas::chaining;
 }
 
 - (void)test_chain_replace {
-    vector::holder<int> holder{{0, 1, 2}};
+    vector::holder<int> holder{std::vector<int>{0, 1, 2}};
 
     std::vector<event> received;
 
@@ -253,7 +253,7 @@ using namespace yas::chaining;
 }
 
 - (void)test_alias {
-    vector::holder<int> holder{{0, 1, 2}};
+    vector::holder<int> holder{std::vector<int>{0, 1, 2}};
     auto alias = make_alias(holder);
     auto const const_alias = make_alias(holder);
 
