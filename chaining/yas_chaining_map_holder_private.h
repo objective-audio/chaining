@@ -384,6 +384,10 @@ typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::cha
 
 template <typename Key, typename Value>
 chaining::receivable<event> holder<Key, Value>::receivable() {
-    return chaining::receivable<event>{this->template impl_ptr<typename chaining::receivable<event>::impl>()};
+    if (!this->_receivable) {
+        this->_receivable =
+            chaining::receivable<event>{this->template impl_ptr<typename chaining::receivable<event>::impl>()};
+    }
+    return this->_receivable;
 }
 }  // namespace yas::chaining::map

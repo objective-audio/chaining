@@ -69,8 +69,11 @@ chain_sync_t<T> fetcher<T>::chain() const {
 
 template <typename T>
 chaining::receivable<std::nullptr_t> fetcher<T>::receivable() {
-    return chaining::receivable<std::nullptr_t>{
-        this->template impl_ptr<typename chaining::receivable<std::nullptr_t>::impl>()};
+    if (!this->_receivable) {
+        this->_receivable = chaining::receivable<std::nullptr_t>{
+            this->template impl_ptr<typename chaining::receivable<std::nullptr_t>::impl>()};
+    }
+    return this->_receivable;
 }
 
 template <typename T>

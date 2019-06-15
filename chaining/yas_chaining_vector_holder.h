@@ -90,6 +90,9 @@ struct holder : sender<event>, receiver<event> {
 
    protected:
     explicit holder(std::shared_ptr<impl> &&);
+
+   private:
+    chaining::receivable<event> _receivable = nullptr;
 };
 }  // namespace yas::chaining::vector
 

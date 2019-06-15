@@ -25,6 +25,9 @@ struct holder : sender<T>, receiver<T> {
     [[nodiscard]] chain_sync_t<T> chain() const;
 
     [[nodiscard]] receivable<T> receivable() override;
+
+   private:
+    chaining::receivable<T> _receivable = nullptr;
 };
 }  // namespace yas::chaining::value
 

@@ -77,6 +77,9 @@ chain_sync_t<T> holder<T>::chain() const {
 
 template <typename T>
 receivable<T> holder<T>::receivable() {
-    return chaining::receivable<T>{this->template impl_ptr<typename chaining::receivable<T>::impl>()};
+    if (!this->_receivable) {
+        this->_receivable = chaining::receivable<T>{this->template impl_ptr<typename chaining::receivable<T>::impl>()};
+    }
+    return this->_receivable;
 }
 }  // namespace yas::chaining::value

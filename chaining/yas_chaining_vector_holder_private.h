@@ -323,6 +323,10 @@ void holder<T>::clear() {
 
 template <typename T>
 receivable<event> holder<T>::receivable() {
-    return chaining::receivable<event>{this->template impl_ptr<typename chaining::receivable<event>::impl>()};
+    if (!this->_receivable) {
+        this->_receivable =
+            chaining::receivable<event>{this->template impl_ptr<typename chaining::receivable<event>::impl>()};
+    }
+    return this->_receivable;
 }
 }  // namespace yas::chaining::vector

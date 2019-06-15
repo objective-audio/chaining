@@ -30,6 +30,7 @@ struct fetcher : sender<T>, receiver<> {
 
    private:
     chaining::fetchable<T> _fetchable = nullptr;
+    chaining::receivable<std::nullptr_t> _receivable = nullptr;
 };
 }  // namespace yas::chaining
 

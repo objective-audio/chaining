@@ -48,6 +48,9 @@ chain_unsync_t<T> notifier<T>::chain() const {
 
 template <typename T>
 chaining::receivable<T> notifier<T>::receivable() {
-    return chaining::receivable<T>{this->template impl_ptr<typename chaining::receivable<T>::impl>()};
+    if (!this->_receivable) {
+        this->_receivable = chaining::receivable<T>{this->template impl_ptr<typename chaining::receivable<T>::impl>()};
+    }
+    return this->_receivable;
 }
 }  // namespace yas::chaining

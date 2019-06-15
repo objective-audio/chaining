@@ -23,6 +23,9 @@ struct notifier : sender<T>, receiver<T> {
 
    protected:
     notifier(std::shared_ptr<impl> &&);
+
+   private:
+    chaining::receivable<T> _receivable = nullptr;
 };
 }  // namespace yas::chaining
 
