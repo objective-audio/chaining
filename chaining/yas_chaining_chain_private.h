@@ -69,27 +69,27 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
     template <std::size_t N, typename T, typename NonOut = Out, disable_if_tuple_t<NonOut, std::nullptr_t> = nullptr,
               disable_if_array_t<NonOut, std::nullptr_t> = nullptr>
     auto send_to(chaining::chain<Out, Begin, Syncable> &chain, receiver<T> &receiver) {
-        return chain.perform([weak_receiver = to_weak(receiver.receivable())](Out const &value) {
-            if (chaining::receivable<T> receiver = weak_receiver.lock()) {
-                receiver.receive_value(value);
+        return chain.perform([weak_receivable = to_weak(receiver.receivable())](Out const &value) {
+            if (chaining::receivable<T> receivable = weak_receivable.lock()) {
+                receivable.receive_value(value);
             }
         });
     }
 
     template <std::size_t N, typename T, typename TupleOut = Out, enable_if_tuple_t<TupleOut, std::nullptr_t> = nullptr>
     auto send_to(chaining::chain<Out, Begin, Syncable> &chain, receiver<T> &receiver) {
-        return chain.perform([weak_receiver = to_weak(receiver.receivable())](Out const &value) {
-            if (chaining::receivable<T> receiver = weak_receiver.lock()) {
-                receiver.receive_value(std::get<N>(value));
+        return chain.perform([weak_receivable = to_weak(receiver.receivable())](Out const &value) {
+            if (chaining::receivable<T> receivable = weak_receivable.lock()) {
+                receivable.receive_value(std::get<N>(value));
             }
         });
     }
 
     template <std::size_t N, typename T, typename ArrayOut = Out, enable_if_array_t<ArrayOut, std::nullptr_t> = nullptr>
     auto send_to(chaining::chain<Out, Begin, Syncable> &chain, receiver<T> &receiver) {
-        return chain.perform([weak_receiver = to_weak(receiver.receivable())](Out const &value) {
-            if (chaining::receivable<T> receiver = weak_receiver.lock()) {
-                receiver.receive_value(std::get<N>(value));
+        return chain.perform([weak_receivable = to_weak(receiver.receivable())](Out const &value) {
+            if (chaining::receivable<T> receivable = weak_receivable.lock()) {
+                receivable.receive_value(std::get<N>(value));
             }
         });
     }
