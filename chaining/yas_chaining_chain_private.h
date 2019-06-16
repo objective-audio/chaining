@@ -96,21 +96,21 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
 
     template <typename T, std::size_t N, enable_if_base_of_receiver_t<T, std::nullptr_t> = nullptr>
     auto send_to(chaining::chain<Out, Begin, Syncable> &chain, std::array<T, N> &receivers) {
-        std::vector<weak<T>> weak_receivers;
-        weak_receivers.reserve(N);
+        std::vector<protocol::weak<receivable<typename T::ReceiveType>>> weak_receivables;
+        weak_receivables.reserve(N);
 
         auto each = make_fast_each(N);
         while (yas_each_next(each)) {
             auto const &idx = yas_each_index(each);
-            weak_receivers.emplace_back(to_weak(receivers.at(idx)));
+            weak_receivables.emplace_back(to_weak(receivers.at(idx).receivable()));
         }
 
-        return chain.perform([weak_receivers = std::move(weak_receivers)](Out const &values) mutable {
+        return chain.perform([weak_receivables = std::move(weak_receivables)](Out const &values) mutable {
             auto each = make_fast_each(N);
             while (yas_each_next(each)) {
                 auto const &idx = yas_each_index(each);
-                if (T receiver = weak_receivers.at(idx).lock()) {
-                    receiver.receivable().receive_value(values.at(idx));
+                if (receivable<typename T::ReceiveType> receivable = weak_receivables.at(idx).lock()) {
+                    receivable.receive_value(values.at(idx));
                 }
             }
         });
