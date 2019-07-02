@@ -13,6 +13,10 @@ struct observer<Begin>::impl : any_observer::impl {
     impl(chaining::joint<Begin> &&joint) : _joint(std::move(joint)) {
     }
 
+    ~impl() {
+        this->_joint.invalidate();
+    }
+
     void fetch() override {
         this->_joint.fetch();
     }
