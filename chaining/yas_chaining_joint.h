@@ -6,48 +6,69 @@
 
 #include <cpp_utils/yas_base.h>
 #include <any>
+#include <vector>
 
 namespace yas::chaining {
 template <typename T>
-class sender;
+class sendable;
 
-struct any_joint : base {
-    struct impl : base::impl {
-        virtual void fetch() = 0;
-        virtual void invalidate() = 0;
-        virtual std::any const &handler(std::size_t const idx) = 0;
-    };
+struct any_joint {
+    virtual ~any_joint();
 
-    any_joint(std::shared_ptr<impl> &&ptr);
-    any_joint(std::nullptr_t);
+    virtual void fetch() = 0;
+    virtual void invalidate() = 0;
+    virtual std::any const &any_handler(std::size_t const idx) const = 0;
 
-    void fetch();
-    void invalidate();
+    uintptr_t identifier() const;
 
     template <typename T>
     using handler_f = std::function<void(T const &, any_joint &)>;
 
     template <typename P>
     [[nodiscard]] handler_f<P> const &handler(std::size_t const idx) const;
+
+   protected:
+    any_joint();
+
+   private:
+    any_joint(any_joint const &) = delete;
+    any_joint(any_joint &&) = delete;
+    any_joint &operator=(any_joint const &) = delete;
+    any_joint &operator=(any_joint &&) = delete;
 };
 
+using any_joint_ptr = std::shared_ptr<any_joint>;
+
 template <typename T>
-struct[[nodiscard]] joint : any_joint {
-    class impl;
+struct[[nodiscard]] joint final : any_joint {
+    joint(std::weak_ptr<sendable<T>> &&);
 
-    joint(weak<sender<T>>);
-    joint(std::nullptr_t);
-
-    ~joint() final;
+    ~joint();
 
     void call_first(T const &);
-    void invalidate();
+    void fetch() override;
+    void invalidate() override;
 
     template <typename P>
     void push_handler(any_joint::handler_f<P>);
+
     [[nodiscard]] std::size_t handlers_size() const;
-    void add_sub_joint(any_joint);
+
+    void add_sub_joint(any_joint_ptr);
+
+   private:
+    std::weak_ptr<sendable<T>> _weak_sendable;
+    std::vector<std::any> _handlers;
+    std::vector<any_joint_ptr> _sub_joints;
+
+    std::any const &any_handler(std::size_t const idx) const override;
 };
+
+template <typename T>
+using joint_ptr = std::shared_ptr<joint<T>>;
+
+template <typename T>
+joint_ptr<T> make_joint(std::weak_ptr<sendable<T>>);
 }  // namespace yas::chaining
 
 #include "yas_chaining_joint_private.h"

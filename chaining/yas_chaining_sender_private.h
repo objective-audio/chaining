@@ -11,27 +11,31 @@
 
 namespace yas::chaining {
 template <typename T>
-struct sender<T>::impl : base::impl, chaining::sendable<T>::impl {
+struct sender<T>::impl : chaining::sendable<T>, std::enable_shared_from_this<chaining::sendable<T>> {
     void broadcast(T const &value) override {
-        for (weak<joint<T>> const &weak_joint : this->_joints) {
-            if (joint<T> joint = weak_joint.lock()) {
-                joint.call_first(value);
+        for (std::weak_ptr<joint<T>> const &weak_joint : this->_joints) {
+            if (joint_ptr<T> joint = weak_joint.lock()) {
+                joint->call_first(value);
             }
         }
     }
 
     void send_value_to_target(T const &value, std::uintptr_t const key) override {
-        for (weak<joint<T>> const &weak_joint : this->_joints) {
-            if (weak_joint.identifier() == key) {
-                if (joint<T> joint = weak_joint.lock()) {
-                    joint.call_first(value);
-                }
+        for (std::weak_ptr<joint<T>> const &weak_joint : this->_joints) {
+            if (joint_ptr<T> joint = weak_joint.lock(); joint && joint->identifier() == key) {
+                joint->call_first(value);
             }
         }
     }
 
     void erase_joint(std::uintptr_t const key) override {
-        erase_if(this->_joints, [key](auto const &weak_joint) { return weak_joint.identifier() == key; });
+        erase_if(this->_joints, [key](auto const &weak_joint) {
+            if (auto joint = weak_joint.lock()) {
+                return joint->identifier() == key;
+            } else {
+                return false;
+            }
+        });
     }
 
     void fetch_for(any_joint const &joint) override {
@@ -45,31 +49,57 @@ struct sender<T>::impl : base::impl, chaining::sendable<T>::impl {
         return this->_chain<true>();
     }
 
+    uintptr_t identifier() const {
+        return reinterpret_cast<uintptr_t>(this);
+    }
+
+    virtual bool is_equal(std::shared_ptr<impl> const &rhs) const {
+        return this->identifier() == rhs->identifier();
+    }
+
    private:
-    std::vector<weak<joint<T>>> _joints;
+    std::vector<std::weak_ptr<joint<T>>> _joints;
 
     template <bool Syncable>
     chain<T, T, Syncable> _chain() {
-        auto sender = this->template cast<chaining::sender<T>>();
-        chaining::joint<T> joint{to_weak(sender)};
+        auto joint = make_joint(to_weak(this->shared_from_this()));
         this->_joints.emplace_back(to_weak(joint));
         return chaining::chain<T, T, Syncable>{std::move(joint)};
     }
 };
 
 template <typename T>
-sender<T>::sender(std::shared_ptr<impl> &&impl) : base(std::move(impl)) {
+sender<T>::sender(std::shared_ptr<impl> &&impl) : _impl(std::move(impl)) {
 }
 
 template <typename T>
-sender<T>::sender(std::nullptr_t) : base(nullptr) {
+std::shared_ptr<sendable<T>> sender<T>::sendable() {
+    return this->_impl;
 }
 
 template <typename T>
-sendable<T> sender<T>::sendable() {
-    if (!this->_sendable) {
-        this->_sendable = chaining::sendable<T>{impl_ptr<typename chaining::sendable<T>::impl>()};
-    }
-    return this->_sendable;
+bool sender<T>::operator==(sender const &rhs) const {
+    return _impl && rhs._impl && (_impl == rhs._impl || _impl->is_equal(rhs._impl));
+}
+
+template <typename T>
+bool sender<T>::operator!=(sender const &rhs) const {
+    return !_impl || !rhs._impl || (_impl != rhs._impl && !_impl->is_equal(rhs._impl));
+}
+
+template <typename T>
+bool sender<T>::operator==(std::nullptr_t) const {
+    return _impl == nullptr;
+}
+
+template <typename T>
+bool sender<T>::operator!=(std::nullptr_t) const {
+    return _impl != nullptr;
+}
+
+template <typename T>
+template <typename Impl>
+std::shared_ptr<Impl> sender<T>::impl_ptr() const {
+    return std::dynamic_pointer_cast<Impl>(_impl);
 }
 }  // namespace yas::chaining

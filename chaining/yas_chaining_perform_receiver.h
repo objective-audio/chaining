@@ -9,19 +9,16 @@
 
 namespace yas::chaining {
 template <typename T = std::nullptr_t>
-struct[[nodiscard]] perform_receiver : base, receiver<T> {
+struct[[nodiscard]] perform_receiver final : base, receiver<T> {
     class impl;
 
     perform_receiver(std::function<void(T const &)>);
     perform_receiver(std::function<void(void)>);
     perform_receiver(std::nullptr_t);
 
-    ~perform_receiver() final;
+    ~perform_receiver();
 
-    [[nodiscard]] receivable<T> receivable() override;
-
-   private:
-    chaining::receivable<T> _receivable = nullptr;
+    [[nodiscard]] receivable_ptr<T> receivable() override;
 };
 }  // namespace yas::chaining
 

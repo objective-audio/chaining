@@ -3,58 +3,36 @@
 //
 
 #include "yas_chaining_observer_pool.h"
-#include <unordered_map>
 
 using namespace yas;
 using namespace yas::chaining;
 
-struct observer_pool::impl : base::impl {
-    ~impl() {
-        this->invalidate();
-    }
+observer_pool::observer_pool() = default;
 
-    void add_observer(any_observer &&observer) {
-        this->_observers.emplace(observer.identifier(), std::move(observer));
-    }
-
-    void remove_observer(any_observer &observer) {
-        if (this->_observers.count(observer.identifier())) {
-            observer.invalidate();
-            this->_observers.erase(observer.identifier());
-        }
-    }
-
-    void invalidate() {
-        for (auto &pair : this->_observers) {
-            pair.second.invalidate();
-        }
-
-        this->_observers.clear();
-    }
-
-   private:
-    std::unordered_map<std::uintptr_t, any_observer> _observers;
-};
-
-observer_pool::observer_pool() : base(std::make_shared<impl>()) {
+observer_pool::~observer_pool() {
+    this->invalidate();
 }
 
-observer_pool::observer_pool(std::nullptr_t) : base(nullptr) {
+void observer_pool::add_observer(any_observer_ptr observer) {
+    this->_observers.emplace(observer->identifier(), std::move(observer));
 }
 
-void observer_pool::add_observer(any_observer observer) {
-    impl_ptr<impl>()->add_observer(std::move(observer));
-}
-
-void observer_pool::remove_observer(any_observer &observer) {
-    impl_ptr<impl>()->remove_observer(observer);
+void observer_pool::remove_observer(any_observer_ptr &observer) {
+    if (this->_observers.count(observer->identifier())) {
+        observer->invalidate();
+        this->_observers.erase(observer->identifier());
+    }
 }
 
 void observer_pool::invalidate() {
-    impl_ptr<impl>()->invalidate();
+    for (auto &pair : this->_observers) {
+        pair.second->invalidate();
+    }
+
+    this->_observers.clear();
 }
 
-observer_pool &observer_pool::operator+=(any_observer observer) {
+observer_pool &observer_pool::operator+=(any_observer_ptr observer) {
     this->add_observer(std::move(observer));
     return *this;
 }

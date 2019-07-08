@@ -8,16 +8,12 @@
 
 namespace yas::chaining {
 template <typename T = std::nullptr_t>
-struct[[nodiscard]] receivable : protocol {
-    struct impl : protocol::impl {
-        virtual void receive_value(T const &) = 0;
-    };
+struct [[nodiscard]] receivable {
+    virtual ~receivable() = default;
 
-    explicit receivable(std::shared_ptr<impl>);
-    receivable(std::nullptr_t);
-
-    void receive_value(T const &);
+    virtual void receive_value(T const &) = 0;
 };
-}  // namespace yas::chaining
 
-#include "yas_chaining_receiver_protocol_private.h"
+template <typename T = std::nullptr_t>
+using receivable_ptr = std::shared_ptr<receivable<T>>;
+}  // namespace yas::chaining

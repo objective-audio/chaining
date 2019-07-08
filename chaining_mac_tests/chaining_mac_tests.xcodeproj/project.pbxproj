@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		B6A364F02205B05F00094C72 /* yas_alias_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6A364EF2205B05F00094C72 /* yas_alias_tests.mm */; };
 		B6D4C60F21EDC96D004A95A8 /* yas_vector_holder_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DE360321E7843800E49BCB /* yas_vector_holder_chain_tests.mm */; };
 		B6D4C61221EDDF37004A95A8 /* yas_vector_event_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DE360821E7843800E49BCB /* yas_vector_event_tests.mm */; };
 		B6DE361021E7843800E49BCB /* yas_map_holder_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DE35FF21E7843800E49BCB /* yas_map_holder_chain_tests.mm */; };
@@ -30,7 +29,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B6A364EF2205B05F00094C72 /* yas_alias_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_alias_tests.mm; sourceTree = "<group>"; };
 		B6DE35F521E783E100E49BCB /* chaining_mac_tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chaining_mac_tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6DE35FA21E783E100E49BCB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B6DE35FF21E7843800E49BCB /* yas_map_holder_chain_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_map_holder_chain_tests.mm; sourceTree = "<group>"; };
@@ -97,7 +95,6 @@
 		B6DE35FE21E7843800E49BCB /* chaining_test */ = {
 			isa = PBXGroup;
 			children = (
-				B6A364EF2205B05F00094C72 /* yas_alias_tests.mm */,
 				B6DE360521E7843800E49BCB /* yas_chain_tests.mm */,
 				B6DE360121E7843800E49BCB /* yas_chaining_utils_tests.mm */,
 				B6DE360F21E7843800E49BCB /* yas_fetcher_tests.mm */,
@@ -233,7 +230,6 @@
 				B6DE361621E7843800E49BCB /* yas_chain_tests.mm in Sources */,
 				B6DE361021E7843800E49BCB /* yas_map_holder_chain_tests.mm in Sources */,
 				B6DE361C21E7843800E49BCB /* yas_observer_tests.mm in Sources */,
-				B6A364F02205B05F00094C72 /* yas_alias_tests.mm in Sources */,
 				B6DE361121E7843800E49BCB /* yas_observer_pool_tests.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -7,18 +7,23 @@
 #include <cpp_utils/yas_base.h>
 
 namespace yas::chaining {
-struct any_observer : base {
-    struct impl : base::impl {
-        virtual void fetch() = 0;
-        virtual void invalidate() = 0;
-    };
+struct any_observer {
+    virtual void fetch() = 0;
+    virtual void invalidate() = 0;
 
-    any_observer(std::nullptr_t);
+    virtual ~any_observer();
 
-    void fetch();
-    void invalidate();
+    uintptr_t identifier() const;
 
    protected:
-    any_observer(std::shared_ptr<impl> &&impl);
+    any_observer();
+
+   private:
+    any_observer(any_observer const &) = delete;
+    any_observer(any_observer &&) = delete;
+    any_observer &operator=(any_observer const &) = delete;
+    any_observer &operator=(any_observer &&) = delete;
 };
+
+using any_observer_ptr = std::shared_ptr<any_observer>;
 }  // namespace yas::chaining

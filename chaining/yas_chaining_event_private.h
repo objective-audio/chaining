@@ -6,12 +6,12 @@
 
 namespace yas::chaining {
 template <typename Event>
-event::event(Event &&event) : base(std::make_shared<impl<Event>>(std::move(event))) {
+event::event(Event &&event) : _impl(std::make_shared<impl<Event>>(std::move(event))) {
 }
 
 template <typename Event>
 Event const &event::get() const {
-    if (auto event_impl = std::dynamic_pointer_cast<impl<Event>>(impl_ptr())) {
+    if (auto event_impl = std::dynamic_pointer_cast<impl<Event>>(this->_impl)) {
         return event_impl->event;
     }
 

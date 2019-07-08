@@ -12,14 +12,14 @@
 
 namespace yas::chaining {
 template <typename Out, typename Begin, bool Syncable>
-struct chain<Out, Begin, Syncable>::impl : base::impl {
-    joint<Begin> _joint;
+struct chain<Out, Begin, Syncable>::impl {
+    joint_ptr<Begin> _joint;
 
-    impl(joint<Begin> &&joint) : _joint(std::move(joint)) {
+    impl(joint_ptr<Begin> &&joint) : _joint(std::move(joint)) {
     }
 
     chain<Out, Begin, Syncable> perform(std::function<void(Out const &)> &&perform_handler) {
-        std::size_t const next_idx = this->_joint.handlers_size() + 1;
+        std::size_t const next_idx = this->_joint->handlers_size() + 1;
 
         auto handler = [next_idx, perform_handler = std::move(perform_handler)](Out const &value, any_joint &joint) {
             perform_handler(value);
@@ -28,7 +28,7 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
             }
         };
 
-        this->_joint.template push_handler<Out>(std::move(handler));
+        this->_joint->template push_handler<Out>(std::move(handler));
 
         return chain<Out, Begin, Syncable>(std::move(this->_joint));
     }
@@ -36,7 +36,7 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
     template <typename F>
     chain<return_t<F>, Begin, Syncable> to(F &&to_handler) {
         auto &joint = this->_joint;
-        std::size_t const next_idx = joint.handlers_size() + 1;
+        std::size_t const next_idx = joint->handlers_size() + 1;
 
         auto handler = [next_idx, to_handler = std::move(to_handler)](Out const &value, any_joint &joint) mutable {
             return_t<F> next_value = to_handler(value);
@@ -45,24 +45,24 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
             }
         };
 
-        joint.template push_handler<Out>(std::move(handler));
+        joint->template push_handler<Out>(std::move(handler));
 
         return chaining::chain<return_t<F>, Begin, Syncable>(std::move(this->_joint));
     }
 
     template <typename T = Out, enable_if_tuple_t<T, std::nullptr_t> = nullptr>
-    auto to_tuple(chain<Out, Begin, Syncable> &chain) {
-        return chain;
+    auto to_tuple(chain<Out, Begin, Syncable> &&) {
+        return chaining::chain<Out, Begin, Syncable>(std::move(this->_joint));
     }
 
     template <typename T = Out, enable_if_pair_t<T, std::nullptr_t> = nullptr>
-    auto to_tuple(chain<Out, Begin, Syncable> &) {
+    auto to_tuple(chain<Out, Begin, Syncable> &&) {
         return this->to([](Out const &pair) { return std::make_tuple(pair.first, pair.second); });
     }
 
     template <typename T = Out, disable_if_tuple_t<T, std::nullptr_t> = nullptr,
               disable_if_pair_t<T, std::nullptr_t> = nullptr>
-    auto to_tuple(chain<Out, Begin, Syncable> &) {
+    auto to_tuple(chain<Out, Begin, Syncable> &&) {
         return this->to([](Out const &value) { return std::make_tuple(value); });
     }
 
@@ -70,8 +70,8 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
               disable_if_array_t<NonOut, std::nullptr_t> = nullptr>
     auto send_to(chaining::chain<Out, Begin, Syncable> &chain, receiver<T> &receiver) {
         return chain.perform([weak_receivable = to_weak(receiver.receivable())](Out const &value) {
-            if (chaining::receivable<T> receivable = weak_receivable.lock()) {
-                receivable.receive_value(value);
+            if (chaining::receivable_ptr<T> receivable = weak_receivable.lock()) {
+                receivable->receive_value(value);
             }
         });
     }
@@ -79,8 +79,8 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
     template <std::size_t N, typename T, typename TupleOut = Out, enable_if_tuple_t<TupleOut, std::nullptr_t> = nullptr>
     auto send_to(chaining::chain<Out, Begin, Syncable> &chain, receiver<T> &receiver) {
         return chain.perform([weak_receivable = to_weak(receiver.receivable())](Out const &value) {
-            if (chaining::receivable<T> receivable = weak_receivable.lock()) {
-                receivable.receive_value(std::get<N>(value));
+            if (chaining::receivable_ptr<T> receivable = weak_receivable.lock()) {
+                receivable->receive_value(std::get<N>(value));
             }
         });
     }
@@ -88,15 +88,15 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
     template <std::size_t N, typename T, typename ArrayOut = Out, enable_if_array_t<ArrayOut, std::nullptr_t> = nullptr>
     auto send_to(chaining::chain<Out, Begin, Syncable> &chain, receiver<T> &receiver) {
         return chain.perform([weak_receivable = to_weak(receiver.receivable())](Out const &value) {
-            if (chaining::receivable<T> receivable = weak_receivable.lock()) {
-                receivable.receive_value(std::get<N>(value));
+            if (chaining::receivable_ptr<T> receivable = weak_receivable.lock()) {
+                receivable->receive_value(std::get<N>(value));
             }
         });
     }
 
     template <typename T, std::size_t N, enable_if_base_of_receiver_t<T, std::nullptr_t> = nullptr>
     auto send_to(chaining::chain<Out, Begin, Syncable> &chain, std::array<T, N> &receivers) {
-        std::vector<protocol::weak<receivable<typename T::ReceiveType>>> weak_receivables;
+        std::vector<std::weak_ptr<receivable<typename T::ReceiveType>>> weak_receivables;
         weak_receivables.reserve(N);
 
         auto each = make_fast_each(N);
@@ -109,8 +109,8 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
             auto each = make_fast_each(N);
             while (yas_each_next(each)) {
                 auto const &idx = yas_each_index(each);
-                if (receivable<typename T::ReceiveType> receivable = weak_receivables.at(idx).lock()) {
-                    receivable.receive_value(values.at(idx));
+                if (receivable_ptr<typename T::ReceiveType> receivable = weak_receivables.at(idx).lock()) {
+                    receivable->receive_value(values.at(idx));
                 }
             }
         });
@@ -120,7 +120,7 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
     auto send_to(chaining::chain<Out, Begin, Syncable> &chain, std::vector<T> &receivers) {
         std::size_t const count = receivers.size();
 
-        std::vector<protocol::weak<receivable<typename T::ReceiveType>>> weak_receivables;
+        std::vector<std::weak_ptr<receivable<typename T::ReceiveType>>> weak_receivables;
         weak_receivables.reserve(count);
 
         auto each = make_fast_each(count);
@@ -134,33 +134,32 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
             auto each = make_fast_each(count);
             while (yas_each_next(each)) {
                 auto const &idx = yas_each_index(each);
-                if (receivable<typename T::ReceiveType> receivable = weak_receivables.at(idx).lock()) {
-                    receivable.receive_value(values.at(idx));
+                if (receivable_ptr<typename T::ReceiveType> receivable = weak_receivables.at(idx).lock()) {
+                    receivable->receive_value(values.at(idx));
                 }
             }
         });
     }
 
     template <typename SubBegin, bool SubSyncable>
-    chain<Out, Begin, Syncable | SubSyncable> merge(chain<Out, SubBegin, SubSyncable> sub_chain) {
-        chaining::joint<Begin> &joint = this->_joint;
+    chain<Out, Begin, Syncable | SubSyncable> merge(chain<Out, SubBegin, SubSyncable> &&sub_chain) {
+        chaining::joint_ptr<Begin> &joint = this->_joint;
         auto weak_joint = to_weak(joint);
-        std::size_t const next_idx = joint.handlers_size() + 1;
+        std::size_t const next_idx = joint->handlers_size() + 1;
 
-        auto sub_imp = sub_chain.template impl_ptr<typename chain<Out, SubBegin, SubSyncable>::impl>();
-        auto &sub_joint = sub_imp->_joint;
+        auto &sub_joint = sub_chain._impl->_joint;
 
-        sub_joint.template push_handler<Out>([weak_joint, next_idx](Out const &value, any_joint &) mutable {
+        sub_joint->template push_handler<Out>([weak_joint, next_idx](Out const &value, any_joint &) mutable {
             if (auto joint = weak_joint.lock()) {
-                joint.template handler<Out>(next_idx)(value, joint);
+                joint->template handler<Out>(next_idx)(value, *joint);
             }
         });
 
-        joint.template push_handler<Out>([next_idx](Out const &value, any_joint &joint) mutable {
+        joint->template push_handler<Out>([next_idx](Out const &value, any_joint &joint) mutable {
             joint.template handler<Out>(next_idx)(value, joint);
         });
 
-        joint.add_sub_joint(std::move(sub_joint));
+        joint->add_sub_joint(std::move(sub_joint));
 
         return chain<Out, Begin, Syncable | SubSyncable>(joint);
     }
@@ -168,26 +167,25 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
     template <typename SubOut, typename SubBegin, bool SubSyncable>
     chain<opt_pair_t<Out, SubOut>, Begin, Syncable | SubSyncable> pair(
         chain<SubOut, SubBegin, SubSyncable> &&sub_chain) {
-        chaining::joint<Begin> &joint = this->_joint;
+        chaining::joint_ptr<Begin> &joint = this->_joint;
         auto weak_joint = to_weak(joint);
-        std::size_t const next_idx = joint.handlers_size() + 1;
+        std::size_t const next_idx = joint->handlers_size() + 1;
 
-        auto sub_imp = sub_chain.template impl_ptr<typename chain<SubOut, SubBegin, SubSyncable>::impl>();
-        auto &sub_joint = sub_imp->_joint;
+        auto &sub_joint = sub_chain._impl->_joint;
 
-        sub_joint.template push_handler<SubOut>([weak_joint, next_idx](SubOut const &value, any_joint &) mutable {
-            if (any_joint joint = weak_joint.lock()) {
-                joint.template handler<opt_pair_t<Out, SubOut>>(next_idx)(opt_pair_t<Out, SubOut>{std::nullopt, value},
-                                                                          joint);
+        sub_joint->template push_handler<SubOut>([weak_joint, next_idx](SubOut const &value, any_joint &) mutable {
+            if (any_joint_ptr joint = weak_joint.lock()) {
+                joint->template handler<opt_pair_t<Out, SubOut>>(next_idx)(opt_pair_t<Out, SubOut>{std::nullopt, value},
+                                                                           *joint);
             }
         });
 
-        joint.template push_handler<Out>([next_idx](Out const &value, any_joint &joint) mutable {
+        joint->template push_handler<Out>([next_idx](Out const &value, any_joint &joint) mutable {
             joint.template handler<opt_pair_t<Out, SubOut>>(next_idx)(opt_pair_t<Out, SubOut>{value, std::nullopt},
                                                                       joint);
         });
 
-        joint.add_sub_joint(std::move(sub_joint));
+        joint->add_sub_joint(std::move(sub_joint));
 
         return chain<opt_pair_t<Out, SubOut>, Begin, Syncable | SubSyncable>(std::move(joint));
     }
@@ -227,80 +225,71 @@ struct chain<Out, Begin, Syncable>::impl : base::impl {
         });
     }
 
-    chaining::observer<Begin> _end() {
-        this->_joint.template push_handler<Out>([](Out const &, any_joint &) {});
-        return observer<Begin>(this->_joint);
+    chaining::observer_ptr<Begin> _end() {
+        this->_joint->template push_handler<Out>([](Out const &, any_joint &) {});
+        return make_observer<Begin>(this->_joint);
     }
 
-    chaining::observer<Begin> end() {
+    chaining::observer_ptr<Begin> end() {
         return this->_end();
     }
 
-    chaining::observer<Begin> fetch() {
+    chaining::observer_ptr<Begin> fetch() {
         static_assert(Syncable, "Syncable must be true.");
 
         auto observer = this->_end();
-        observer.fetch();
+        observer->fetch();
         return observer;
     }
 };
 
 template <typename Out, typename Begin, bool Syncable>
-chain<Out, Begin, Syncable>::chain(joint<Begin> joint) : base(std::make_shared<impl>(std::move(joint))) {
+chain<Out, Begin, Syncable>::chain(joint_ptr<Begin> joint) : _impl(std::make_unique<chain::impl>(std::move(joint))) {
 }
-
-template <typename Out, typename Begin, bool Syncable>
-chain<Out, Begin, Syncable>::chain(std::nullptr_t) : base(nullptr) {
-}
-
-template <typename Out, typename Begin, bool Syncable>
-chain<Out, Begin, Syncable>::~chain() = default;
 
 template <typename Out, typename Begin, bool Syncable>
 chain<Out, Begin, Syncable> chain<Out, Begin, Syncable>::perform(std::function<void(Out const &)> perform_handler) {
-    return impl_ptr<impl>()->perform(std::move(perform_handler));
+    return this->_impl->perform(std::move(perform_handler));
 }
 
 template <typename Out, typename Begin, bool Syncable>
 template <std::size_t N, typename T>
 chain<Out, Begin, Syncable> chain<Out, Begin, Syncable>::send_to(receiver<T> &receiver) {
-    return impl_ptr<impl>()->template send_to<N>(*this, receiver);
+    return this->_impl->template send_to<N>(*this, receiver);
 }
 
 template <typename Out, typename Begin, bool Syncable>
 template <typename T, std::size_t N>
 chain<Out, Begin, Syncable> chain<Out, Begin, Syncable>::send_to(std::array<T, N> receivers) {
-    return impl_ptr<impl>()->template send_to<T, N>(*this, receivers);
+    return this->_impl->template send_to<T, N>(*this, receivers);
 }
 
 template <typename Out, typename Begin, bool Syncable>
 template <typename T>
 chain<Out, Begin, Syncable> chain<Out, Begin, Syncable>::send_to(std::vector<T> receivers) {
-    return impl_ptr<impl>()->template send_to<T>(*this, receivers);
+    return this->_impl->template send_to<T>(*this, receivers);
 }
 
 template <typename Out, typename Begin, bool Syncable>
 template <typename T>
 chain<Out, Begin, Syncable> chain<Out, Begin, Syncable>::send_to(std::initializer_list<T> receivers) {
     std::vector<T> vector{receivers};
-    return impl_ptr<impl>()->template send_to<T>(*this, vector);
+    return this->_impl->template send_to<T>(*this, vector);
 }
 
 template <typename Out, typename Begin, bool Syncable>
 chain<Out, Begin, Syncable> chain<Out, Begin, Syncable>::send_null(receiver<> &receiver) {
-    return this->perform([weak_receiver = to_weak(receiver.receivable())](Out const &value) {
-        if (chaining::receivable<> receiver = weak_receiver.lock()) {
-            receiver.receive_value(nullptr);
+    return this->perform([weak_receivable = to_weak(receiver.receivable())](Out const &value) {
+        if (chaining::receivable_ptr<> receivable = weak_receivable.lock()) {
+            receivable->receive_value(nullptr);
         }
     });
 }
 
 template <typename Out, typename Begin, bool Syncable>
 chain<Out, Begin, Syncable> chain<Out, Begin, Syncable>::guard(std::function<bool(Out const &)> guard_handler) {
-    auto imp = impl_ptr<impl>();
-
-    auto &joint = imp->_joint;
-    std::size_t const next_idx = joint.handlers_size() + 1;
+    auto &joint = this->_impl->_joint;
+    std::size_t const next_idx = joint->handlers_size() + 1;
 
     auto handler = [next_idx, guard_handler = std::move(guard_handler)](Out const &value, any_joint &joint) {
         if (guard_handler(value)) {
@@ -310,7 +299,7 @@ chain<Out, Begin, Syncable> chain<Out, Begin, Syncable>::guard(std::function<boo
         }
     };
 
-    joint.template push_handler<Out>(std::move(handler));
+    joint->template push_handler<Out>(std::move(handler));
 
     return chain<Out, Begin, Syncable>(std::move(joint));
 }
@@ -318,52 +307,52 @@ chain<Out, Begin, Syncable> chain<Out, Begin, Syncable>::guard(std::function<boo
 template <typename Out, typename Begin, bool Syncable>
 template <typename F>
 chain<return_t<F>, Begin, Syncable> chain<Out, Begin, Syncable>::to(F handler) {
-    return impl_ptr<impl>()->to(std::move(handler));
+    return this->_impl->to(std::move(handler));
 }
 
 template <typename Out, typename Begin, bool Syncable>
 template <typename T>
 chain<T, Begin, Syncable> chain<Out, Begin, Syncable>::to_value(T value) {
-    return impl_ptr<impl>()->to([value = std::move(value)](Out const &) { return value; });
+    return this->_impl->to([value = std::move(value)](Out const &) { return value; });
 }
 
 template <typename Out, typename Begin, bool Syncable>
 chain<std::nullptr_t, Begin, Syncable> chain<Out, Begin, Syncable>::to_null() {
-    return impl_ptr<impl>()->to([](Out const &) { return nullptr; });
+    return this->_impl->to([](Out const &) { return nullptr; });
 }
 
 template <typename Out, typename Begin, bool Syncable>
 auto chain<Out, Begin, Syncable>::to_tuple() {
-    return impl_ptr<impl>()->template to_tuple<>(*this);
+    return this->_impl->template to_tuple<>(std::move(*this));
 }
 
 template <typename Out, typename Begin, bool Syncable>
 template <typename SubBegin, bool SubSyncable>
 chain<Out, Begin, Syncable | SubSyncable> chain<Out, Begin, Syncable>::merge(
-    chain<Out, SubBegin, SubSyncable> sub_chain) {
-    return impl_ptr<impl>()->merge(std::move(sub_chain));
+    chain<Out, SubBegin, SubSyncable> &&sub_chain) {
+    return this->_impl->merge(std::move(sub_chain));
 }
 
 template <typename Out, typename Begin, bool Syncable>
 template <typename SubOut, typename SubBegin, bool SubSyncable>
 chain<opt_pair_t<Out, SubOut>, Begin, Syncable | SubSyncable> chain<Out, Begin, Syncable>::pair(
-    chain<SubOut, SubBegin, SubSyncable> sub_chain) {
-    return impl_ptr<impl>()->pair(std::move(sub_chain));
+    chain<SubOut, SubBegin, SubSyncable> &&sub_chain) {
+    return this->_impl->pair(std::move(sub_chain));
 }
 
 template <typename Out, typename Begin, bool Syncable>
 template <typename SubOut, typename SubBegin, bool SubSyncable>
-auto chain<Out, Begin, Syncable>::combine(chain<SubOut, SubBegin, SubSyncable> sub_chain) {
-    return impl_ptr<impl>()->combine(*this, std::move(sub_chain));
+auto chain<Out, Begin, Syncable>::combine(chain<SubOut, SubBegin, SubSyncable> &&sub_chain) {
+    return this->_impl->combine(*this, std::move(sub_chain));
 }
 
 template <typename Out, typename Begin, bool Syncable>
-observer<Begin> chain<Out, Begin, Syncable>::end() {
-    return impl_ptr<impl>()->end();
+observer_ptr<Begin> chain<Out, Begin, Syncable>::end() {
+    return this->_impl->end();
 }
 
 template <typename Out, typename Begin, bool Syncable>
-observer<Begin> chain<Out, Begin, Syncable>::sync() {
-    return impl_ptr<impl>()->fetch();
+observer_ptr<Begin> chain<Out, Begin, Syncable>::sync() {
+    return this->_impl->fetch();
 }
 }  // namespace yas::chaining

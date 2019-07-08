@@ -28,11 +28,11 @@ using namespace yas::chaining;
 
     int received = 0;
 
-    any_observer observer = holder.chain().perform([&received](int const &value) { received = value; }).sync();
+    any_observer_ptr observer = holder.chain().perform([&received](int const &value) { received = value; }).sync();
 
     XCTAssertEqual(received, 1);
 
-    observer.invalidate();
+    observer->invalidate();
 
     holder.set_value(2);
 
@@ -45,14 +45,14 @@ using namespace yas::chaining;
 
     int received = 0;
 
-    any_observer observer = main_holder.chain()
-                                .merge(sub_holder.chain())
-                                .perform([&received](int const &value) { received = value; })
-                                .sync();
+    any_observer_ptr observer = main_holder.chain()
+                                    .merge(sub_holder.chain())
+                                    .perform([&received](int const &value) { received = value; })
+                                    .sync();
 
     XCTAssertEqual(received, 2);
 
-    observer.invalidate();
+    observer->invalidate();
 
     main_holder.set_value(3);
 
@@ -61,12 +61,6 @@ using namespace yas::chaining;
     sub_holder.set_value(4);
 
     XCTAssertEqual(received, 2);
-}
-
-- (void)test_create_any_observer_with_null {
-    any_observer observer{nullptr};
-
-    XCTAssertFalse(observer);
 }
 
 @end

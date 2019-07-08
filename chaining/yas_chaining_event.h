@@ -16,8 +16,8 @@ enum class event_type {
     relayed,
 };
 
-struct event : base {
-    struct impl_base : base::impl {
+struct event {
+    struct impl_base {
         virtual event_type type() = 0;
     };
 
@@ -26,12 +26,14 @@ struct event : base {
 
     template <typename Event>
     event(Event &&);
-    event(std::nullptr_t);
 
     [[nodiscard]] event_type type() const;
 
     template <typename Event>
     [[nodiscard]] Event const &get() const;
+
+   private:
+    std::shared_ptr<impl_base> _impl;
 };
 }  // namespace yas::chaining
 

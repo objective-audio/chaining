@@ -4,6 +4,7 @@
 
 #pragma once
 
+#include <cpp_utils/yas_weakable.h>
 #include <vector>
 #include "yas_chaining_event.h"
 #include "yas_chaining_receiver.h"
@@ -13,9 +14,6 @@ namespace yas::chaining::vector {
 struct event : chaining::event {
     template <typename Event>
     event(Event &&event) : chaining::event(std::move(event)) {
-    }
-
-    event(std::nullptr_t) : chaining::event(nullptr) {
     }
 };
 
@@ -60,7 +58,7 @@ struct relayed_event {
 };
 
 template <typename T>
-struct holder : sender<event>, receiver<event> {
+struct holder final : sender<event>, receiver<event>, weakable<holder<T>> {
     class impl;
 
     using vector_t = std::vector<T>;
@@ -68,9 +66,9 @@ struct holder : sender<event>, receiver<event> {
 
     holder();
     explicit holder(vector_t);
-    holder(std::nullptr_t);
+    explicit holder(std::shared_ptr<impl> &&);
 
-    ~holder() final;
+    ~holder();
 
     [[nodiscard]] vector_t const &raw() const;
     [[nodiscard]] vector_t &raw();
@@ -86,13 +84,9 @@ struct holder : sender<event>, receiver<event> {
 
     [[nodiscard]] chain_t chain() const;
 
-    [[nodiscard]] chaining::receivable<event> receivable() override;
+    [[nodiscard]] chaining::receivable_ptr<event> receivable() override;
 
-   protected:
-    explicit holder(std::shared_ptr<impl> &&);
-
-   private:
-    chaining::receivable<event> _receivable = nullptr;
+    std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
 };
 }  // namespace yas::chaining::vector
 

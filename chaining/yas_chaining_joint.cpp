@@ -6,16 +6,10 @@
 
 using namespace yas::chaining;
 
-any_joint::any_joint(std::shared_ptr<impl> &&ptr) : base(std::move(ptr)) {
-}
+any_joint::any_joint() = default;
 
-any_joint::any_joint(std::nullptr_t) : base(nullptr) {
-}
+any_joint::~any_joint() = default;
 
-void any_joint::fetch() {
-    impl_ptr<impl>()->fetch();
-}
-
-void any_joint::invalidate() {
-    impl_ptr<impl>()->invalidate();
+uintptr_t any_joint::identifier() const {
+    return reinterpret_cast<uintptr_t>(this);
 }
