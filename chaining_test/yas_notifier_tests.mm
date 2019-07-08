@@ -70,7 +70,7 @@ using namespace yas;
 
     chaining::notifier<int> notifier;
 
-    chaining::perform_receiver<int> receiver{[&notifier, &received](int const &value) {
+    auto receiver = chaining::perform_receiver<int>{[&notifier, &received](int const &value) {
         received = value;
         notifier.notify(value + 1);
     }};

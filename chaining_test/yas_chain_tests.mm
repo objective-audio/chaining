@@ -52,7 +52,7 @@ using namespace yas;
 
     auto chain = notifier.chain()
                      .to([](int const &value) { return std::to_string(value); })
-                     .merge(sub_chain)
+                     .merge(std::move(sub_chain))
                      .perform([&received](std::string const &value) { received = value; })
                      .end();
 
@@ -74,8 +74,10 @@ using namespace yas;
     opt_pair_t received;
 
     auto sub_chain = sub_notifier.chain();
-    auto main_chain =
-        main_notifier.chain().pair(sub_chain).perform([&received](auto const &value) { received = value; }).end();
+    auto main_chain = main_notifier.chain()
+                          .pair(std::move(sub_chain))
+                          .perform([&received](auto const &value) { received = value; })
+                          .end();
 
     main_notifier.notify(1);
 
@@ -97,8 +99,10 @@ using namespace yas;
     opt_pair_t received;
 
     auto sub_chain = sub_notifier.chain();
-    auto main_chain =
-        main_notifier.chain().combine(sub_chain).perform([&received](auto const &value) { received = value; }).end();
+    auto main_chain = main_notifier.chain()
+                          .combine(std::move(sub_chain))
+                          .perform([&received](auto const &value) { received = value; })
+                          .end();
 
     main_notifier.notify(1);
 
@@ -122,8 +126,8 @@ using namespace yas;
 
     std::optional<std::tuple<int, std::string, float>> received;
 
-    auto chain = main_chain.combine(sub_chain)
-                     .combine(sub_chain2)
+    auto chain = main_chain.combine(std::move(sub_chain))
+                     .combine(std::move(sub_chain2))
                      .perform([&received](std::tuple<int, std::string, float> const &value) { received = value; })
                      .end();
 

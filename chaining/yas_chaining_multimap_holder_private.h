@@ -41,9 +41,9 @@ event make_relayed_event(Key const &key, Value const &value, typename Value::Sen
 #pragma mark - multimap::holder::impl
 
 template <typename Key, typename Value>
-struct holder<Key, Value>::impl : sender<event>::impl {
+struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
     struct observer_wrapper {
-        any_observer observer = nullptr;
+        any_observer_ptr observer = nullptr;
         Value *value = nullptr;
     };
 
@@ -101,8 +101,8 @@ struct holder<Key, Value>::impl : sender<event>::impl {
     void clear() {
         for (auto &pair : this->_observers) {
             if (auto &wrapper = pair.second) {
-                if (any_observer &observer = wrapper->observer) {
-                    observer.invalidate();
+                if (any_observer_ptr &observer = wrapper->observer) {
+                    observer->invalidate();
                 }
             }
         }
@@ -117,7 +117,7 @@ struct holder<Key, Value>::impl : sender<event>::impl {
         return this->_raw;
     }
 
-    virtual bool is_equal(std::shared_ptr<base::impl> const &rhs) const override {
+    virtual bool is_equal(std::shared_ptr<sender<event>::impl> const &rhs) const override {
         if (auto rhs_impl = std::dynamic_pointer_cast<typename holder<Key, Value>::impl>(rhs)) {
             return this->_raw == rhs_impl->_raw;
         } else {
@@ -135,29 +135,28 @@ struct holder<Key, Value>::impl : sender<event>::impl {
 
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     chaining_f _element_chaining() {
-        auto weak_holder = to_weak(this->template cast<holder<Key, Value>>());
-        return [weak_holder](Key const &key, Value &value, wrapper_ptr &wrapper) {
+        auto weak_holder_impl = to_weak(std::dynamic_pointer_cast<holder<Key, Value>::impl>(shared_from_this()));
+        return [weak_holder_impl](Key const &key, Value &value, wrapper_ptr &wrapper) {
             wrapper_wptr weak_wrapper = wrapper;
             auto weak_value = to_weak(value);
-            wrapper->observer =
-                value.sendable()
-                    .chain_unsync()
-                    .perform([weak_holder, weak_wrapper, key, weak_value](auto const &relayed) {
-                        auto holder = weak_holder.lock();
-                        auto value = weak_value.lock();
-                        wrapper_ptr wrapper = weak_wrapper.lock();
-                        if (holder && wrapper && value) {
-                            holder.template impl_ptr<impl>()->broadcast(make_relayed_event(key, value, relayed));
-                        }
-                    })
-                    .end();
+            wrapper->observer = value.sendable()
+                                    ->chain_unsync()
+                                    .perform([weak_holder_impl, weak_wrapper, key, weak_value](auto const &relayed) {
+                                        auto holder_impl = weak_holder_impl.lock();
+                                        auto value = weak_value.lock();
+                                        wrapper_ptr wrapper = weak_wrapper.lock();
+                                        if (holder_impl && wrapper && value) {
+                                            holder_impl->broadcast(make_relayed_event(key, *value, relayed));
+                                        }
+                                    })
+                                    .end();
         };
     }
 
     void _replace(std::multimap<Key, Value> &&map, chaining_f chaining) {
         for (auto &wrapper_pair : this->_observers) {
-            if (any_observer &observer = wrapper_pair.second->observer) {
-                observer.invalidate();
+            if (any_observer_ptr &observer = wrapper_pair.second->observer) {
+                observer->invalidate();
             }
         }
 
@@ -208,7 +207,7 @@ holder<Key, Value>::holder(std::multimap<Key, Value> map) : sender<event>(std::m
 }
 
 template <typename Key, typename Value>
-holder<Key, Value>::holder(std::nullptr_t) : sender<event>(nullptr) {
+holder<Key, Value>::holder(std::shared_ptr<impl> &&impl) : sender<event>(std::move(impl)) {
 }
 
 template <typename Key, typename Value>
@@ -267,5 +266,10 @@ void holder<Key, Value>::clear() {
 template <typename Key, typename Value>
 typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::chain() const {
     return this->template impl_ptr<impl>()->chain_sync();
+}
+
+template <typename Key, typename Value>
+std::shared_ptr<weakable_impl> holder<Key, Value>::weakable_impl_ptr() const {
+    return this->template impl_ptr<impl>();
 }
 }  // namespace yas::chaining::multimap

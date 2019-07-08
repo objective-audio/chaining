@@ -11,16 +11,22 @@ template <typename T>
 class joint;
 
 template <typename Begin>
-struct[[nodiscard]] observer : any_observer {
-    class impl;
+struct[[nodiscard]] observer final : any_observer {
+    observer(std::shared_ptr<joint<Begin>>);
+    ~observer();
 
-    observer(joint<Begin>);
-    observer(std::nullptr_t);
+    virtual void fetch() override;
+    virtual void invalidate() override;
 
-    ~observer() final;
-
-    [[nodiscard]] chaining::joint<Begin> &joint();
+   private:
+    std::shared_ptr<chaining::joint<Begin>> _joint;
 };
+
+template <typename Begin>
+using observer_ptr = std::shared_ptr<observer<Begin>>;
+
+template <typename Begin>
+std::shared_ptr<observer<Begin>> make_observer(joint<Begin>);
 }  // namespace yas::chaining
 
 #include "yas_chaining_observer_private.h"

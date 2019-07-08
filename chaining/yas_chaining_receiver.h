@@ -13,7 +13,7 @@ template <typename T = std::nullptr_t>
 struct receiver : any_receiver {
     using ReceiveType = T;
 
-    virtual receivable<T> receivable() = 0;
+    virtual receivable_ptr<T> receivable() = 0;
 };
 
 template <typename T>

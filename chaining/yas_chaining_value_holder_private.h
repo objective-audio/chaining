@@ -9,7 +9,7 @@
 
 namespace yas::chaining::value {
 template <typename T>
-struct holder<T>::impl : sender<T>::impl, chaining::receivable<T>::impl {
+struct holder<T>::impl : sender<T>::impl, chaining::receivable<T>, weakable_impl {
     impl(T &&value) : _value(std::move(value)) {
     }
 
@@ -30,7 +30,7 @@ struct holder<T>::impl : sender<T>::impl, chaining::receivable<T>::impl {
         this->send_value_to_target(this->_value, joint.identifier());
     }
 
-    virtual bool is_equal(std::shared_ptr<base::impl> const &rhs) const override {
+    virtual bool is_equal(std::shared_ptr<typename sender<T>::impl> const &rhs) const override {
         if (auto rhs_impl = std::dynamic_pointer_cast<typename value::holder<T>::impl>(rhs)) {
             return this->_value == rhs_impl->_value;
         } else {
@@ -53,7 +53,7 @@ holder<T>::holder(T value) : sender<T>(std::make_shared<impl>(std::move(value)))
 }
 
 template <typename T>
-holder<T>::holder(std::nullptr_t) : sender<T>(nullptr) {
+holder<T>::holder(std::shared_ptr<impl> &&impl) : sender<T>(std::move(impl)) {
 }
 
 template <typename T>
@@ -76,10 +76,12 @@ chain_sync_t<T> holder<T>::chain() const {
 }
 
 template <typename T>
-receivable<T> holder<T>::receivable() {
-    if (!this->_receivable) {
-        this->_receivable = chaining::receivable<T>{this->template impl_ptr<typename chaining::receivable<T>::impl>()};
-    }
-    return this->_receivable;
+receivable_ptr<T> holder<T>::receivable() {
+    return this->template impl_ptr<typename chaining::receivable<T>>();
+}
+
+template <typename T>
+std::shared_ptr<weakable_impl> holder<T>::weakable_impl_ptr() const {
+    return this->template impl_ptr<impl>();
 }
 }  // namespace yas::chaining::value

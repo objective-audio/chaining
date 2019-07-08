@@ -110,29 +110,29 @@ using namespace yas::chaining;
 - (void)test_receiver {
     vector::holder<int> holder{std::vector<int>{0, 1, 2}};
 
-    holder.receivable().receive_value(vector::make_fetched_event(std::vector<int>{10}));
+    holder.receivable()->receive_value(vector::make_fetched_event(std::vector<int>{10}));
 
     XCTAssertEqual(holder.raw().size(), 1);
     XCTAssertEqual(holder.at(0), 10);
 
-    holder.receivable().receive_value(vector::make_any_event(std::vector<int>{3, 4}));
+    holder.receivable()->receive_value(vector::make_any_event(std::vector<int>{3, 4}));
 
     XCTAssertEqual(holder.raw().size(), 2);
     XCTAssertEqual(holder.at(0), 3);
     XCTAssertEqual(holder.at(1), 4);
 
-    holder.receivable().receive_value(vector::make_inserted_event(5, 2));
+    holder.receivable()->receive_value(vector::make_inserted_event(5, 2));
 
     XCTAssertEqual(holder.raw().size(), 3);
     XCTAssertEqual(holder.at(2), 5);
 
-    holder.receivable().receive_value(vector::make_erased_event<int>(1));
+    holder.receivable()->receive_value(vector::make_erased_event<int>(1));
 
     XCTAssertEqual(holder.raw().size(), 2);
     XCTAssertEqual(holder.at(0), 3);
     XCTAssertEqual(holder.at(1), 5);
 
-    holder.receivable().receive_value(vector::make_replaced_event(6, 1));
+    holder.receivable()->receive_value(vector::make_replaced_event(6, 1));
 
     XCTAssertEqual(holder.raw().size(), 2);
     XCTAssertEqual(holder.at(0), 3);

@@ -9,38 +9,26 @@
 
 namespace yas::chaining {
 template <typename Begin>
-struct observer<Begin>::impl : any_observer::impl {
-    impl(chaining::joint<Begin> &&joint) : _joint(std::move(joint)) {
-    }
-
-    ~impl() {
-        this->_joint.invalidate();
-    }
-
-    void fetch() override {
-        this->_joint.fetch();
-    }
-
-    void invalidate() override {
-        this->_joint.invalidate();
-    }
-
-    chaining::joint<Begin> _joint;
-};
-
-template <typename Begin>
-observer<Begin>::observer(chaining::joint<Begin> joint) : any_observer(std::make_shared<impl>(std::move(joint))) {
+observer<Begin>::observer(std::shared_ptr<chaining::joint<Begin>> joint) : any_observer(), _joint(std::move(joint)) {
 }
 
 template <typename Begin>
-observer<Begin>::observer(std::nullptr_t) : any_observer(nullptr) {
+observer<Begin>::~observer() {
+    this->_joint->invalidate();
 }
 
 template <typename Begin>
-observer<Begin>::~observer() = default;
+void observer<Begin>::fetch() {
+    this->_joint->fetch();
+}
 
 template <typename Begin>
-chaining::joint<Begin> &observer<Begin>::joint() {
-    return impl_ptr<impl>()->_joint;
+void observer<Begin>::invalidate() {
+    this->_joint->invalidate();
+}
+
+template <typename Begin>
+std::shared_ptr<observer<Begin>> make_observer(std::shared_ptr<joint<Begin>> joint) {
+    return std::make_shared<observer<Begin>>(std::move(joint));
 }
 }  // namespace yas::chaining

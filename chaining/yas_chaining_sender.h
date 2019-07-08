@@ -13,20 +13,26 @@ class sendable;
 struct any_sender {};
 
 template <typename T>
-struct sender : base, any_sender {
+struct sender : any_sender {
     using SendType = T;
 
     class impl;
 
-    sender(std::nullptr_t);
+    [[nodiscard]] std::shared_ptr<sendable<T>> sendable();
 
-    [[nodiscard]] sendable<T> sendable();
+    bool operator==(sender const &rhs) const;
+    bool operator!=(sender const &rhs) const;
+    bool operator==(std::nullptr_t) const;
+    bool operator!=(std::nullptr_t) const;
+
+    template <typename Impl = impl>
+    std::shared_ptr<Impl> impl_ptr() const;
 
    protected:
     sender(std::shared_ptr<impl> &&);
 
    private:
-    chaining::sendable<T> _sendable = nullptr;
+    std::shared_ptr<impl> _impl;
 };
 
 template <typename T>

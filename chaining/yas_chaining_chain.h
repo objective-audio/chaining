@@ -10,17 +10,14 @@
 #include "yas_chaining_receiver.h"
 
 namespace yas::chaining {
-template <typename Begin>
-struct observer;
+template <typename T>
+class observer;
 
 template <typename Out, typename Begin, bool Syncable>
-struct[[nodiscard]] chain : base {
+struct [[nodiscard]] chain final {
     class impl;
 
-    chain(joint<Begin>);
-    chain(std::nullptr_t);
-
-    ~chain() final;
+    chain(joint_ptr<Begin>);
 
     [[nodiscard]] chain<Out, Begin, Syncable> perform(std::function<void(Out const &)>);
 
@@ -44,17 +41,19 @@ struct[[nodiscard]] chain : base {
     [[nodiscard]] auto to_tuple();
 
     template <typename SubBegin, bool SubSyncable>
-    [[nodiscard]] chain<Out, Begin, Syncable | SubSyncable> merge(chain<Out, SubBegin, SubSyncable>);
+    [[nodiscard]] chain<Out, Begin, Syncable | SubSyncable> merge(chain<Out, SubBegin, SubSyncable> &&);
 
     template <typename SubOut, typename SubBegin, bool SubSyncable>
     [[nodiscard]] chain<opt_pair_t<Out, SubOut>, Begin, Syncable | SubSyncable> pair(
-        chain<SubOut, SubBegin, SubSyncable>);
+        chain<SubOut, SubBegin, SubSyncable> &&);
 
     template <typename SubOut, typename SubBegin, bool SubSyncable>
-    [[nodiscard]] auto combine(chain<SubOut, SubBegin, SubSyncable>);
+    [[nodiscard]] auto combine(chain<SubOut, SubBegin, SubSyncable> &&);
 
-    [[nodiscard]] observer<Begin> end();
-    [[nodiscard]] observer<Begin> sync();
+    [[nodiscard]] std::shared_ptr<observer<Begin>> end();
+    [[nodiscard]] std::shared_ptr<observer<Begin>> sync();
+
+    std::unique_ptr<impl> _impl;
 };
 }  // namespace yas::chaining
 

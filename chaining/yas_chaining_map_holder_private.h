@@ -41,9 +41,9 @@ event make_relayed_event(Key const &key, Value const &value, typename Value::Sen
 #pragma mark - map::holder::impl
 
 template <typename Key, typename Value>
-struct holder<Key, Value>::impl : sender<event>::impl, chaining::receivable<event>::impl {
+struct holder<Key, Value>::impl : sender<event>::impl, chaining::receivable<event>, weakable_impl {
     struct observer_wrapper {
-        any_observer observer = nullptr;
+        any_observer_ptr observer = nullptr;
         Value *value = nullptr;
     };
 
@@ -52,36 +52,36 @@ struct holder<Key, Value>::impl : sender<event>::impl, chaining::receivable<even
     using chaining_f = std::function<void(Key const &, Value &, wrapper_ptr &)>;
 
     void prepare(std::map<Key, Value> &&map) {
-        this->replace(std::move(map));
+        this->replace_all(std::move(map));
     }
 
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(std::map<Key, Value> &&map) {
+    void replace_all(std::map<Key, Element> map) {
         this->_replace(std::move(map), this->_element_chaining());
     }
 
     template <typename Element = Value, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(std::map<Key, Value> &&map) {
+    void replace_all(std::map<Key, Element> map) {
         this->_replace(std::move(map), nullptr);
     }
 
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void insert_or_replace(Key &&key, Value &&value) {
+    void insert_or_replace(Key key, Value value) {
         this->_insert_or_replace(std::move(key), std::move(value), this->_element_chaining());
     }
 
     template <typename Element = Value, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void insert_or_replace(Key &&key, Value &&value) {
+    void insert_or_replace(Key key, Value value) {
         this->_insert_or_replace(std::move(key), std::move(value), nullptr);
     }
 
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void insert(std::map<Key, Value> &&map) {
+    void insert(std::map<Key, Value> map) {
         this->_insert(std::move(map), this->_element_chaining());
     }
 
     template <typename Element = Value, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void insert(std::map<Key, Value> &&map) {
+    void insert(std::map<Key, Value> map) {
         this->_insert(std::move(map), nullptr);
     }
 
@@ -126,8 +126,8 @@ struct holder<Key, Value>::impl : sender<event>::impl, chaining::receivable<even
     void clear() {
         for (auto &pair : this->_observers) {
             if (auto &wrapper = pair.second) {
-                if (any_observer &observer = wrapper->observer) {
-                    observer.invalidate();
+                if (any_observer_ptr &observer = wrapper->observer) {
+                    observer->invalidate();
                 }
             }
         }
@@ -142,7 +142,7 @@ struct holder<Key, Value>::impl : sender<event>::impl, chaining::receivable<even
         return this->_raw;
     }
 
-    virtual bool is_equal(std::shared_ptr<base::impl> const &rhs) const override {
+    virtual bool is_equal(std::shared_ptr<sender<event>::impl> const &rhs) const override {
         if (auto rhs_impl = std::dynamic_pointer_cast<typename holder<Key, Value>::impl>(rhs)) {
             return this->_raw == rhs_impl->_raw;
         } else {
@@ -155,28 +155,26 @@ struct holder<Key, Value>::impl : sender<event>::impl, chaining::receivable<even
     }
 
     void receive_value(event const &event) override {
-        auto holder = cast<chaining::map::holder<Key, Value>>();
-
         switch (event.type()) {
             case event_type::fetched: {
                 auto const &fetched = event.get<map::fetched_event<Key, Value>>();
-                holder.replace_all(fetched.elements);
+                this->replace_all(fetched.elements);
             } break;
             case event_type::any: {
                 auto const &any = event.get<map::any_event<Key, Value>>();
-                holder.replace_all(any.elements);
+                this->replace_all(any.elements);
             } break;
             case event_type::inserted: {
                 auto const &inserted = event.get<map::inserted_event<Key, Value>>();
-                holder.insert(inserted.elements);
+                this->insert(inserted.elements);
             } break;
             case event_type::erased: {
                 auto const &erased = event.get<map::erased_event<Key, Value>>();
-                holder.erase_if([&erased](Key const &key, Value const &) { return erased.elements.count(key) > 0; });
+                this->erase_if([&erased](Key const &key, Value const &) { return erased.elements.count(key) > 0; });
             } break;
             case event_type::replaced: {
                 auto const &replaced = event.get<map::replaced_event<Key, Value>>();
-                holder.insert_or_replace(replaced.key, replaced.value);
+                this->insert_or_replace(replaced.key, replaced.value);
             } break;
             case event_type::relayed:
                 break;
@@ -189,29 +187,28 @@ struct holder<Key, Value>::impl : sender<event>::impl, chaining::receivable<even
 
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     chaining_f _element_chaining() {
-        auto weak_holder = to_weak(this->template cast<holder<Key, Value>>());
-        return [weak_holder](Key const &key, Value &value, wrapper_ptr &wrapper) {
+        auto weak_holder_impl = to_weak(std::dynamic_pointer_cast<holder<Key, Value>::impl>(shared_from_this()));
+        return [weak_holder_impl](Key const &key, Value &value, wrapper_ptr &wrapper) {
             auto weak_value = to_weak(value);
             wrapper_wptr weak_wrapper = wrapper;
-            wrapper->observer =
-                value.sendable()
-                    .chain_unsync()
-                    .perform([weak_holder, weak_wrapper, key, weak_value](auto const &relayed) {
-                        auto holder = weak_holder.lock();
-                        auto value = weak_value.lock();
-                        wrapper_ptr wrapper = weak_wrapper.lock();
-                        if (holder && wrapper && value) {
-                            holder.template impl_ptr<impl>()->broadcast(make_relayed_event(key, value, relayed));
-                        }
-                    })
-                    .end();
+            wrapper->observer = value.sendable()
+                                    ->chain_unsync()
+                                    .perform([weak_holder_impl, weak_wrapper, key, weak_value](auto const &relayed) {
+                                        auto holder_impl = weak_holder_impl.lock();
+                                        auto value = weak_value.lock();
+                                        wrapper_ptr wrapper = weak_wrapper.lock();
+                                        if (holder_impl && wrapper && value) {
+                                            holder_impl->broadcast(make_relayed_event(key, *value, relayed));
+                                        }
+                                    })
+                                    .end();
         };
     }
 
     void _replace(std::map<Key, Value> &&map, chaining_f chaining) {
         for (auto &wrapper_pair : this->_observers) {
-            if (any_observer &observer = wrapper_pair.second->observer) {
-                observer.invalidate();
+            if (any_observer_ptr &observer = wrapper_pair.second->observer) {
+                observer->invalidate();
             }
         }
 
@@ -282,8 +279,8 @@ struct holder<Key, Value>::impl : sender<event>::impl, chaining::receivable<even
     void _erase_observer_for_key(Key const &key) {
         if (this->_observers.count(key) > 0) {
             auto &wrapper = this->_observers.at(key);
-            if (any_observer &observer = wrapper->observer) {
-                observer.invalidate();
+            if (any_observer_ptr &observer = wrapper->observer) {
+                observer->invalidate();
             }
             this->_observers.erase(key);
         }
@@ -303,10 +300,6 @@ holder<Key, Value>::holder(std::map<Key, Value> map) : sender<event>(std::make_s
 
 template <typename Key, typename Value>
 holder<Key, Value>::holder(std::shared_ptr<impl> &&ptr) : sender<event>(std::move(ptr)) {
-}
-
-template <typename Key, typename Value>
-holder<Key, Value>::holder(std::nullptr_t) : sender<event>(nullptr) {
 }
 
 template <typename Key, typename Value>
@@ -344,7 +337,7 @@ std::size_t holder<Key, Value>::size() const {
 
 template <typename Key, typename Value>
 void holder<Key, Value>::replace_all(std::map<Key, Value> map) {
-    this->template impl_ptr<impl>()->replace(std::move(map));
+    this->template impl_ptr<impl>()->replace_all(std::move(map));
 }
 
 template <typename Key, typename Value>
@@ -383,11 +376,12 @@ typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::cha
 }
 
 template <typename Key, typename Value>
-chaining::receivable<event> holder<Key, Value>::receivable() {
-    if (!this->_receivable) {
-        this->_receivable =
-            chaining::receivable<event>{this->template impl_ptr<typename chaining::receivable<event>::impl>()};
-    }
-    return this->_receivable;
+chaining::receivable_ptr<event> holder<Key, Value>::receivable() {
+    return this->template impl_ptr<typename chaining::receivable<event>>();
+}
+
+template <typename Key, typename Value>
+std::shared_ptr<weakable_impl> holder<Key, Value>::weakable_impl_ptr() const {
+    return this->template impl_ptr<impl>();
 }
 }  // namespace yas::chaining::map

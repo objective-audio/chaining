@@ -6,11 +6,10 @@
 
 #include <mutex>
 #include "yas_chaining_chain.h"
-#include "yas_chaining_fetcher_protocol_private.h"
 
 namespace yas::chaining {
 template <typename T>
-struct fetcher<T>::impl : sender<T>::impl, chaining::fetchable<T>::impl, chaining::receivable<std::nullptr_t>::impl {
+struct fetcher<T>::impl : sender<T>::impl, chaining::receivable<std::nullptr_t>, weakable_impl {
     impl(std::function<std::optional<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {
     }
 
@@ -20,7 +19,7 @@ struct fetcher<T>::impl : sender<T>::impl, chaining::fetchable<T>::impl, chainin
         }
     }
 
-    std::optional<T> fetched_value() override {
+    std::optional<T> fetched_value() {
         return this->_fetching_handler();
     }
 
@@ -44,7 +43,7 @@ fetcher<T>::fetcher(std::function<std::optional<T>(void)> handler)
 }
 
 template <typename T>
-fetcher<T>::fetcher(std::nullptr_t) : sender<T>(nullptr) {
+fetcher<T>::fetcher(std::shared_ptr<impl> &&impl) : sender<T>(std::move(impl)) {
 }
 
 template <typename T>
@@ -68,19 +67,12 @@ chain_sync_t<T> fetcher<T>::chain() const {
 }
 
 template <typename T>
-chaining::receivable<std::nullptr_t> fetcher<T>::receivable() {
-    if (!this->_receivable) {
-        this->_receivable = chaining::receivable<std::nullptr_t>{
-            this->template impl_ptr<typename chaining::receivable<std::nullptr_t>::impl>()};
-    }
-    return this->_receivable;
+chaining::receivable_ptr<std::nullptr_t> fetcher<T>::receivable() {
+    return this->template impl_ptr<typename chaining::receivable<std::nullptr_t>>();
 }
 
 template <typename T>
-fetchable<T> fetcher<T>::fetchable() {
-    if (!this->_fetchable) {
-        this->_fetchable = chaining::fetchable<T>{this->template impl_ptr<typename chaining::fetchable<T>::impl>()};
-    }
-    return this->_fetchable;
+std::shared_ptr<weakable_impl> fetcher<T>::weakable_impl_ptr() const {
+    return this->template impl_ptr<impl>();
 }
 }  // namespace yas::chaining

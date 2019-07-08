@@ -6,7 +6,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct chaining::perform_receiver<T>::impl : base::impl, chaining::receivable<T>::impl {
+struct chaining::perform_receiver<T>::impl : base::impl, chaining::receivable<T> {
     std::function<void(T const &)> handler;
 
     impl(std::function<void(T const &)> &&handler) : handler(std::move(handler)) {
@@ -35,10 +35,7 @@ template <typename T>
 chaining::perform_receiver<T>::~perform_receiver() = default;
 
 template <typename T>
-chaining::receivable<T> chaining::perform_receiver<T>::receivable() {
-    if (!this->_receivable) {
-        this->_receivable = chaining::receivable<T>{impl_ptr<typename chaining::receivable<T>::impl>()};
-    }
-    return this->_receivable;
+chaining::receivable_ptr<T> chaining::perform_receiver<T>::receivable() {
+    return this->template impl_ptr<typename chaining::receivable<T>>();
 }
 }  // namespace yas::chaining

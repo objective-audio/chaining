@@ -39,9 +39,9 @@ event make_relayed_event(T const &element, std::size_t const idx, typename T::Se
 }
 
 template <typename T>
-struct holder<T>::impl : sender<event>::impl, chaining::receivable<event>::impl {
+struct holder<T>::impl : sender<event>::impl, chaining::receivable<event>, weakable_impl {
     struct observer_wrapper {
-        any_observer observer = nullptr;
+        any_observer_ptr observer = nullptr;
     };
 
     using wrapper_ptr = std::shared_ptr<observer_wrapper>;
@@ -49,26 +49,26 @@ struct holder<T>::impl : sender<event>::impl, chaining::receivable<event>::impl 
     using chaining_f = std::function<void(T &, wrapper_ptr &)>;
 
     void prepare(std::vector<T> &&vec) {
-        this->replace(std::move(vec));
+        this->replace_all(std::move(vec));
     }
 
     template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(std::vector<T> &&vec) {
+    void replace_all(std::vector<T> vec) {
         this->_replace(std::move(vec), this->_element_chaining());
     }
 
     template <typename Element = T, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(std::vector<T> &&vec) {
+    void replace_all(std::vector<T> vec) {
         this->_replace(std::move(vec), nullptr);
     }
 
     template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(T &&element, std::size_t const idx) {
+    void replace(T element, std::size_t const idx) {
         this->_replace(std::move(element), idx, this->_element_chaining());
     }
 
     template <typename Element = T, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(T &&element, std::size_t const idx) {
+    void replace(T element, std::size_t const idx) {
         this->_replace(std::move(element), idx, nullptr);
     }
 
@@ -78,20 +78,20 @@ struct holder<T>::impl : sender<event>::impl, chaining::receivable<event>::impl 
     }
 
     template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void insert(T &&element, std::size_t const idx) {
+    void insert(T element, std::size_t const idx) {
         this->_insert(std::move(element), idx, this->_element_chaining());
     }
 
     template <typename Element = T, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void insert(T &&element, std::size_t const idx) {
+    void insert(T element, std::size_t const idx) {
         this->_insert(std::move(element), idx, nullptr);
     }
 
     T erase_at(std::size_t const idx) {
         if (this->_observers.size() > idx) {
             if (wrapper_ptr &wrapper = this->_observers.at(idx)) {
-                if (any_observer &observer = wrapper->observer) {
-                    observer.invalidate();
+                if (any_observer_ptr &observer = wrapper->observer) {
+                    observer->invalidate();
                 }
             }
             yas::erase_at(this->_observers, idx);
@@ -108,8 +108,8 @@ struct holder<T>::impl : sender<event>::impl, chaining::receivable<event>::impl 
     void clear() {
         for (wrapper_ptr &wrapper : this->_observers) {
             if (wrapper) {
-                if (any_observer &observer = wrapper->observer) {
-                    observer.invalidate();
+                if (any_observer_ptr &observer = wrapper->observer) {
+                    observer->invalidate();
                 }
             }
         }
@@ -124,7 +124,7 @@ struct holder<T>::impl : sender<event>::impl, chaining::receivable<event>::impl 
         return this->_raw;
     }
 
-    virtual bool is_equal(std::shared_ptr<base::impl> const &rhs) const override {
+    virtual bool is_equal(std::shared_ptr<sender::impl> const &rhs) const override {
         if (auto rhs_impl = std::dynamic_pointer_cast<typename holder<T>::impl>(rhs)) {
             return this->_raw == rhs_impl->_raw;
         } else {
@@ -137,28 +137,26 @@ struct holder<T>::impl : sender<event>::impl, chaining::receivable<event>::impl 
     }
 
     void receive_value(event const &event) override {
-        auto holder = cast<chaining::vector::holder<T>>();
-
         switch (event.type()) {
             case event_type::fetched: {
                 auto const &fetched = event.get<vector::fetched_event<T>>();
-                holder.replace(fetched.elements);
+                this->replace_all(fetched.elements);
             } break;
             case event_type::any: {
                 auto const &any = event.get<vector::any_event<T>>();
-                holder.replace(any.elements);
+                this->replace_all(any.elements);
             } break;
             case event_type::inserted: {
                 auto const &inserted = event.get<vector::inserted_event<T>>();
-                holder.insert(inserted.element, inserted.index);
+                this->insert(inserted.element, inserted.index);
             } break;
             case event_type::erased: {
                 auto const &erased = event.get<vector::erased_event<T>>();
-                holder.erase_at(erased.index);
+                this->erase_at(erased.index);
             } break;
             case event_type::replaced: {
                 auto const &replaced = event.get<vector::replaced_event<T>>();
-                holder.replace(replaced.element, replaced.index);
+                this->replace(replaced.element, replaced.index);
             } break;
             case event_type::relayed:
                 break;
@@ -171,20 +169,19 @@ struct holder<T>::impl : sender<event>::impl, chaining::receivable<event>::impl 
 
     template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     chaining_f _element_chaining() {
-        auto weak_holder = to_weak(this->template cast<holder<T>>());
-        return [weak_holder](T &element, wrapper_ptr &wrapper) {
+        auto weak_holder_impl = to_weak(std::dynamic_pointer_cast<holder<T>::impl>(shared_from_this()));
+        return [weak_holder_impl](T &element, wrapper_ptr &wrapper) {
             auto weak_element = to_weak(element);
             wrapper_wptr weak_wrapper = wrapper;
             wrapper->observer = element.sendable()
-                                    .chain_unsync()
-                                    .perform([weak_holder, weak_wrapper, weak_element](auto const &relayed) {
-                                        auto holder = weak_holder.lock();
+                                    ->chain_unsync()
+                                    .perform([weak_holder_impl, weak_wrapper, weak_element](auto const &relayed) {
+                                        auto holder_impl = weak_holder_impl.lock();
                                         auto element = weak_element.lock();
                                         wrapper_ptr wrapper = weak_wrapper.lock();
-                                        if (holder && wrapper && element) {
-                                            auto holder_impl = holder.template impl_ptr<impl>();
+                                        if (holder_impl && wrapper && element) {
                                             if (auto idx = yas::index(holder_impl->_observers, wrapper)) {
-                                                holder_impl->broadcast(make_relayed_event(element, *idx, relayed));
+                                                holder_impl->broadcast(make_relayed_event(*element, *idx, relayed));
                                             }
                                         }
                                     })
@@ -194,8 +191,8 @@ struct holder<T>::impl : sender<event>::impl, chaining::receivable<event>::impl 
 
     void _replace(std::vector<T> &&vec, chaining_f chaining) {
         for (wrapper_ptr &wrapper : this->_observers) {
-            if (any_observer &observer = wrapper->observer) {
-                observer.invalidate();
+            if (any_observer_ptr &observer = wrapper->observer) {
+                observer->invalidate();
             }
         }
 
@@ -218,7 +215,7 @@ struct holder<T>::impl : sender<event>::impl, chaining::receivable<event>::impl 
     void _replace(T &&element, std::size_t const idx, chaining_f chaining) {
         if (idx < this->_observers.size()) {
             if (auto &observer = this->_observers.at(idx)->observer) {
-                observer.invalidate();
+                observer->invalidate();
             }
         }
 
@@ -285,15 +282,11 @@ holder<T>::holder(std::shared_ptr<impl> &&ptr) : sender<event>(std::move(ptr)) {
 }
 
 template <typename T>
-holder<T>::holder(std::nullptr_t) : sender<event>(nullptr) {
-}
-
-template <typename T>
 holder<T>::~holder() = default;
 
 template <typename T>
 void holder<T>::replace(std::vector<T> vec) {
-    this->template impl_ptr<impl>()->replace(std::move(vec));
+    this->template impl_ptr<impl>()->replace_all(std::move(vec));
 }
 
 template <typename T>
@@ -322,11 +315,12 @@ void holder<T>::clear() {
 }
 
 template <typename T>
-receivable<event> holder<T>::receivable() {
-    if (!this->_receivable) {
-        this->_receivable =
-            chaining::receivable<event>{this->template impl_ptr<typename chaining::receivable<event>::impl>()};
-    }
-    return this->_receivable;
+receivable_ptr<event> holder<T>::receivable() {
+    return this->template impl_ptr<typename chaining::receivable<event>>();
+}
+
+template <typename T>
+std::shared_ptr<weakable_impl> holder<T>::weakable_impl_ptr() const {
+    return this->template impl_ptr<impl>();
 }
 }  // namespace yas::chaining::vector

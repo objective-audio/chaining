@@ -26,8 +26,8 @@ using namespace yas;
 
     int received = -1;
 
-    auto chain = fetcher.chain().perform([&received](int const &value) { received = value; }).end();
-    chain.fetch();
+    auto observer = fetcher.chain().perform([&received](int const &value) { received = value; }).end();
+    observer->fetch();
 
     XCTAssertEqual(received, 100);
 }
@@ -37,8 +37,9 @@ using namespace yas;
 
     int received = -1;
 
-    chaining::any_observer chain = fetcher.chain().perform([&received](int const &value) { received = value; }).end();
-    chain.fetch();
+    chaining::any_observer_ptr observer =
+        fetcher.chain().perform([&received](int const &value) { received = value; }).end();
+    observer->fetch();
 
     XCTAssertEqual(received, 100);
 }
@@ -49,10 +50,10 @@ using namespace yas;
     int received1 = -1;
     int received2 = -1;
 
-    auto chain1 = fetcher.chain().perform([&received1](int const &value) { received1 = value; }).end();
-    auto chain2 = fetcher.chain().perform([&received2](int const &value) { received2 = value; }).end();
+    auto observer1 = fetcher.chain().perform([&received1](int const &value) { received1 = value; }).end();
+    auto observer2 = fetcher.chain().perform([&received2](int const &value) { received2 = value; }).end();
 
-    chain1.fetch();
+    observer1->fetch();
 
     XCTAssertEqual(received1, 100);
     XCTAssertEqual(received2, -1);

@@ -4,18 +4,19 @@
 
 #pragma once
 
+#include <cpp_utils/yas_weakable.h>
 #include "yas_chaining_receiver.h"
 #include "yas_chaining_sender.h"
 
 namespace yas::chaining::value {
 template <typename T>
-struct holder : sender<T>, receiver<T> {
+struct holder final : sender<T>, receiver<T>, weakable<holder<T>> {
     class impl;
 
     holder(T);
-    holder(std::nullptr_t);
+    explicit holder(std::shared_ptr<impl> &&);
 
-    ~holder() final;
+    ~holder();
 
     void set_value(T);
 
@@ -24,10 +25,9 @@ struct holder : sender<T>, receiver<T> {
 
     [[nodiscard]] chain_sync_t<T> chain() const;
 
-    [[nodiscard]] receivable<T> receivable() override;
+    [[nodiscard]] receivable_ptr<T> receivable() override;
 
-   private:
-    chaining::receivable<T> _receivable = nullptr;
+    std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
 };
 }  // namespace yas::chaining::value
 
