@@ -4,12 +4,11 @@
 
 #pragma once
 
-#include <cpp_utils/yas_base.h>
 #include "yas_chaining_receiver.h"
 
 namespace yas::chaining {
 template <typename T = std::nullptr_t>
-struct[[nodiscard]] perform_receiver final : base, receiver<T> {
+struct[[nodiscard]] perform_receiver final : receiver<T> {
     class impl;
 
     perform_receiver(std::function<void(T const &)>);
@@ -19,6 +18,9 @@ struct[[nodiscard]] perform_receiver final : base, receiver<T> {
     ~perform_receiver();
 
     [[nodiscard]] receivable_ptr<T> receivable() override;
+
+   private:
+    std::shared_ptr<impl> _impl;
 };
 }  // namespace yas::chaining
 
