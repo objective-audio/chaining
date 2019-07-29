@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <cpp_utils/yas_base.h>
+#include <memory>
 
 namespace yas::chaining {
 enum class event_type {

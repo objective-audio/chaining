@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <cpp_utils/yas_base.h>
 #include <cpp_utils/yas_type_traits.h>
 #include <functional>
 #include "yas_chaining_receiver.h"
