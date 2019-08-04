@@ -75,4 +75,9 @@ template <typename T>
 std::shared_ptr<weakable_impl> fetcher<T>::weakable_impl_ptr() const {
     return this->template impl_ptr<impl>();
 }
+
+template <typename T>
+std::shared_ptr<fetcher<T>> fetcher<T>::make_shared(std::function<std::optional<T>(void)> handler) {
+    return std::shared_ptr<fetcher<T>>(new fetcher<T>{std::move(handler)});
+}
 }  // namespace yas::chaining

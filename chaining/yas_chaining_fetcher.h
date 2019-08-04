@@ -27,6 +27,8 @@ struct fetcher final : sender<T>, receiver<>, weakable<fetcher<T>> {
     [[nodiscard]] chaining::receivable_ptr<std::nullptr_t> receivable() override;
 
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
+
+    static std::shared_ptr<fetcher> make_shared(std::function<std::optional<T>(void)>);
 };
 }  // namespace yas::chaining
 
