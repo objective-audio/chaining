@@ -28,6 +28,8 @@ struct holder final : sender<T>, receiver<T>, weakable<holder<T>> {
     [[nodiscard]] receivable_ptr<T> receivable() override;
 
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
+
+    static std::shared_ptr<holder> make_shared(T);
 };
 }  // namespace yas::chaining::value
 

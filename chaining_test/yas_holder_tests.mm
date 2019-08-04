@@ -23,6 +23,12 @@ using namespace yas::chaining;
     [super tearDown];
 }
 
+- (void)test_make_shared {
+    auto holder = value::holder<int>::make_shared(1);
+
+    XCTAssertTrue(holder);
+}
+
 - (void)test_getter_setter {
     value::holder<int> holder{1};
 
