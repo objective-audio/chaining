@@ -30,85 +30,85 @@ using namespace yas::chaining;
 }
 
 - (void)test_getter_setter {
-    value::holder<int> holder{1};
+    auto holder = value::holder<int>::make_shared(1);
 
-    XCTAssertEqual(holder.raw(), 1);
+    XCTAssertEqual(holder->raw(), 1);
 
-    holder.set_value(2);
+    holder->set_value(2);
 
-    XCTAssertEqual(holder.raw(), 2);
+    XCTAssertEqual(holder->raw(), 2);
 }
 
 - (void)test_const_getter {
-    value::holder<int> const holder{1};
+    auto const holder = value::holder<int>::make_shared(1);
 
-    XCTAssertEqual(holder.raw(), 1);
+    XCTAssertEqual(holder->raw(), 1);
 }
 
 - (void)test_chain {
-    value::holder<int> holder{10};
+    auto holder = value::holder<int>::make_shared(10);
 
     int received = -1;
 
-    auto flow = holder.chain().perform([&received](int const &value) { received = value; }).sync();
+    auto flow = holder->chain().perform([&received](int const &value) { received = value; }).sync();
 
     XCTAssertEqual(received, 10);
 
-    holder.set_value(20);
+    holder->set_value(20);
 
     XCTAssertEqual(received, 20);
 }
 
 - (void)test_receive {
-    value::holder<int> holder{100};
+    auto holder = value::holder<int>::make_shared(100);
     auto notifier = chaining::notifier<int>::make_shared();
 
-    auto flow = notifier->chain().send_to(holder).end();
+    auto flow = notifier->chain().send_to(*holder).end();
 
-    XCTAssertEqual(holder.raw(), 100);
+    XCTAssertEqual(holder->raw(), 100);
 
     notifier->notify(200);
 
-    XCTAssertEqual(holder.raw(), 200);
+    XCTAssertEqual(holder->raw(), 200);
 }
 
 - (void)test_recursive_flow {
-    value::holder<int> holder1{123};
-    value::holder<int> holder2{456};
+    auto holder1 = value::holder<int>::make_shared(123);
+    auto holder2 = value::holder<int>::make_shared(456);
 
-    auto flow1 = holder1.chain().send_to(holder2).sync();
+    auto flow1 = holder1->chain().send_to(*holder2).sync();
 
-    XCTAssertEqual(holder1.raw(), 123);
-    XCTAssertEqual(holder2.raw(), 123);
+    XCTAssertEqual(holder1->raw(), 123);
+    XCTAssertEqual(holder2->raw(), 123);
 
-    auto flow2 = holder2.chain().send_to(holder1).sync();
+    auto flow2 = holder2->chain().send_to(*holder1).sync();
 
-    XCTAssertEqual(holder1.raw(), 123);
-    XCTAssertEqual(holder2.raw(), 123);
+    XCTAssertEqual(holder1->raw(), 123);
+    XCTAssertEqual(holder2->raw(), 123);
 
-    holder1.set_value(789);
+    holder1->set_value(789);
 
-    XCTAssertEqual(holder1.raw(), 789);
-    XCTAssertEqual(holder2.raw(), 789);
+    XCTAssertEqual(holder1->raw(), 789);
+    XCTAssertEqual(holder2->raw(), 789);
 
-    holder2.set_value(0);
+    holder2->set_value(0);
 
-    XCTAssertEqual(holder1.raw(), 0);
-    XCTAssertEqual(holder2.raw(), 0);
+    XCTAssertEqual(holder1->raw(), 0);
+    XCTAssertEqual(holder2->raw(), 0);
 }
 
 - (void)test_is_equal {
-    value::holder<int> holder1a{1};
-    value::holder<int> holder1b{1};
-    value::holder<int> holder2{2};
+    auto holder1a = value::holder<int>::make_shared(1);
+    auto holder1b = value::holder<int>::make_shared(1);
+    auto holder2 = value::holder<int>::make_shared(2);
 
-    XCTAssertTrue(holder1a == holder1a);
-    XCTAssertTrue(holder1a == holder1b);
-    XCTAssertFalse(holder1a == holder2);
+    XCTAssertTrue(*holder1a == *holder1a);
+    XCTAssertTrue(*holder1a == *holder1b);
+    XCTAssertFalse(*holder1a == *holder2);
 
-    XCTAssertFalse(holder1a != holder1a);
-    XCTAssertFalse(holder1a != holder1b);
-    XCTAssertTrue(holder1a != holder2);
+    XCTAssertFalse(*holder1a != *holder1a);
+    XCTAssertFalse(*holder1a != *holder1b);
+    XCTAssertTrue(*holder1a != *holder2);
 }
 
 @end

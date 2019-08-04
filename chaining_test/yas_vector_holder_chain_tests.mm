@@ -108,8 +108,8 @@ using namespace yas::chaining;
 }
 
 - (void)test_chain_relayed {
-    value::holder<int> holder{1};
-    vector::holder<value::holder<int>> vector_holder{{holder}};
+    auto holder = value::holder<int>::make_shared(1);
+    vector::holder<value::holder<int>> vector_holder{{*holder}};
 
     std::vector<event> received;
     std::vector<int> relayed;
@@ -121,7 +121,7 @@ using namespace yas::chaining;
                      })
                      .end();
 
-    holder.set_value(2);
+    holder->set_value(2);
 
     XCTAssertEqual(received.size(), 1);
     XCTAssertEqual(received.at(0).type(), event_type::relayed);
@@ -132,55 +132,55 @@ using namespace yas::chaining;
 - (void)test_chain_relayed_after_inserted {
     vector::holder<value::holder<int>> vector_holder;
 
-    value::holder<int> holder{1};
-    vector_holder.insert(holder, 0);
+    auto holder = value::holder<int>::make_shared(1);
+    vector_holder.insert(*holder, 0);
 
     std::vector<event> received;
 
     auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
-    holder.set_value(2);
+    holder->set_value(2);
 
     XCTAssertEqual(received.size(), 1);
 }
 
 - (void)test_chain_relayed_after_replaced {
-    value::holder<int> holder1{1};
-    vector::holder<value::holder<int>> vector_holder{{holder1}};
+    auto holder1 = value::holder<int>::make_shared(1);
+    vector::holder<value::holder<int>> vector_holder{{*holder1}};
 
-    value::holder<int> holder2{2};
-    vector_holder.replace(holder2, 0);
+    auto holder2 = value::holder<int>::make_shared(2);
+    vector_holder.replace(*holder2, 0);
 
     std::vector<event> received;
 
     auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
-    holder2.set_value(20);
+    holder2->set_value(20);
 
     XCTAssertEqual(received.size(), 1);
 }
 
 - (void)test_chain_relayed_after_replaced_all {
-    value::holder<int> holder1{1};
-    value::holder<int> holder2{2};
-    vector::holder<value::holder<int>> vector_holder{{holder1, holder2}};
+    auto holder1 = value::holder<int>::make_shared(1);
+    auto holder2 = value::holder<int>::make_shared(2);
+    vector::holder<value::holder<int>> vector_holder{{*holder1, *holder2}};
 
-    value::holder<int> holder3{3};
-    vector_holder.replace({holder3});
+    auto holder3 = value::holder<int>::make_shared(3);
+    vector_holder.replace({*holder3});
 
     std::vector<event> received;
 
     auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
-    holder3.set_value(30);
+    holder3->set_value(30);
 
     XCTAssertEqual(received.size(), 1);
 }
 
 - (void)test_chain_not_relayed_after_erased {
-    value::holder<int> holder1{1};
-    value::holder<int> holder2{2};
-    vector::holder<value::holder<int>> vector_holder{{holder1, holder2}};
+    auto holder1 = value::holder<int>::make_shared(1);
+    auto holder2 = value::holder<int>::make_shared(2);
+    vector::holder<value::holder<int>> vector_holder{{*holder1, *holder2}};
 
     vector_holder.erase_at(0);
 
@@ -188,19 +188,19 @@ using namespace yas::chaining;
 
     auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
-    holder1.set_value(3);
+    holder1->set_value(3);
 
     XCTAssertEqual(received.size(), 0);
 
-    holder2.set_value(4);
+    holder2->set_value(4);
 
     XCTAssertEqual(received.size(), 1);
 }
 
 - (void)test_chain_not_relayed_after_clear {
-    value::holder<int> holder1{1};
-    value::holder<int> holder2{2};
-    vector::holder<value::holder<int>> vector_holder{{holder1, holder2}};
+    auto holder1 = value::holder<int>::make_shared(1);
+    auto holder2 = value::holder<int>::make_shared(2);
+    vector::holder<value::holder<int>> vector_holder{{*holder1, *holder2}};
 
     vector_holder.clear();
 
@@ -208,45 +208,47 @@ using namespace yas::chaining;
 
     auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
-    holder1.set_value(3);
-    holder2.set_value(4);
+    holder1->set_value(3);
+    holder2->set_value(4);
 
     XCTAssertEqual(received.size(), 0);
 }
 
 - (void)test_chain_not_relayed_after_replaced {
-    value::holder<int> holder1{1};
-    value::holder<int> holder2{2};
-    vector::holder<value::holder<int>> vector_holder{{holder1, holder2}};
+    auto holder1 = value::holder<int>::make_shared(1);
+    auto holder2 = value::holder<int>::make_shared(2);
+    vector::holder<value::holder<int>> vector_holder{{*holder1, *holder2}};
 
-    vector_holder.replace(value::holder<int>{10}, 0);
+    auto holder3 = value::holder<int>::make_shared(10);
+    vector_holder.replace(*holder3, 0);
 
     std::vector<event> received;
 
     auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
-    holder1.set_value(3);
+    holder1->set_value(3);
 
     XCTAssertEqual(received.size(), 0);
 
-    holder2.set_value(4);
+    holder2->set_value(4);
 
     XCTAssertEqual(received.size(), 1);
 }
 
 - (void)test_chain_not_relayed_after_replaced_all {
-    value::holder<int> holder1{1};
-    value::holder<int> holder2{2};
-    vector::holder<value::holder<int>> vector_holder{{holder1, holder2}};
+    auto holder1 = value::holder<int>::make_shared(1);
+    auto holder2 = value::holder<int>::make_shared(2);
+    vector::holder<value::holder<int>> vector_holder{{*holder1, *holder2}};
 
-    vector_holder.replace({value::holder<int>{10}});
+    auto holder3 = value::holder<int>::make_shared(10);
+    vector_holder.replace({*holder3});
 
     std::vector<event> received;
 
     auto chain = vector_holder.chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 
-    holder1.set_value(3);
-    holder2.set_value(4);
+    holder1->set_value(3);
+    holder2->set_value(4);
 
     XCTAssertEqual(received.size(), 0);
 }

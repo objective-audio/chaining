@@ -24,33 +24,33 @@ using namespace yas::chaining;
 }
 
 - (void)test_add_observer {
-    value::holder<int> holder{1};
+    auto holder = value::holder<int>::make_shared(1);
     int received = 0;
 
     {
         observer_pool pool;
 
-        pool.add_observer(holder.chain().perform([&received](int const &value) { received = value; }).sync());
+        pool.add_observer(holder->chain().perform([&received](int const &value) { received = value; }).sync());
 
         XCTAssertEqual(received, 1);
 
-        holder.set_value(2);
+        holder->set_value(2);
 
         XCTAssertEqual(received, 2);
     }
 
-    holder.set_value(3);
+    holder->set_value(3);
 
     XCTAssertEqual(received, 2);
 }
 
 - (void)test_remove_observer {
-    value::holder<int> holder{1};
+    auto holder = value::holder<int>::make_shared(1);
     int received = 0;
 
     observer_pool pool;
 
-    any_observer_ptr observer = holder.chain().perform([&received](int const &value) { received = value; }).sync();
+    any_observer_ptr observer = holder->chain().perform([&received](int const &value) { received = value; }).sync();
 
     pool.add_observer(observer);
 
@@ -58,45 +58,45 @@ using namespace yas::chaining;
 
     pool.remove_observer(observer);
 
-    holder.set_value(2);
+    holder->set_value(2);
 
     XCTAssertEqual(received, 1);
 }
 
 - (void)test_invalidate {
-    value::holder<int> holder{1};
+    auto holder = value::holder<int>::make_shared(1);
     int received = 0;
 
     observer_pool pool;
 
-    pool.add_observer(holder.chain().perform([&received](int const &value) { received = value; }).sync());
+    pool.add_observer(holder->chain().perform([&received](int const &value) { received = value; }).sync());
 
     XCTAssertEqual(received, 1);
 
     pool.invalidate();
 
-    holder.set_value(2);
+    holder->set_value(2);
 
     XCTAssertEqual(received, 1);
 }
 
 - (void)test_add_observer_by_plus_equal {
-    value::holder<int> holder{1};
+    auto holder = value::holder<int>::make_shared(1);
     int received = 0;
 
     {
         observer_pool pool;
 
-        pool += holder.chain().perform([&received](int const &value) { received = value; }).sync();
+        pool += holder->chain().perform([&received](int const &value) { received = value; }).sync();
 
         XCTAssertEqual(received, 1);
 
-        holder.set_value(2);
+        holder->set_value(2);
 
         XCTAssertEqual(received, 2);
     }
 
-    holder.set_value(3);
+    holder->set_value(3);
 
     XCTAssertEqual(received, 2);
 }

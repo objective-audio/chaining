@@ -113,9 +113,9 @@ using namespace yas::chaining;
 }
 
 - (void)test_chain_relayed {
-    value::holder<std::string> holder1{"1"};
-    value::holder<std::string> holder2{"2"};
-    auto map_holder = multimap::holder<int, value::holder<std::string>>::make_shared({{1, holder1}, {2, holder2}});
+    auto holder1 = value::holder<std::string>::make_shared("1");
+    auto holder2 = value::holder<std::string>::make_shared("2");
+    auto map_holder = multimap::holder<int, value::holder<std::string>>::make_shared({{1, *holder1}, {2, *holder2}});
 
     std::vector<event> received_events;
     std::vector<std::tuple<int, value::holder<std::string>, std::string>> received_relayed_events;
@@ -132,33 +132,35 @@ using namespace yas::chaining;
             })
             .end();
 
-    holder1.set_value("3");
+    holder1->set_value("3");
 
+    auto holder3 = value::holder<std::string>::make_shared("3");
     XCTAssertEqual(received_events.size(), 1);
     XCTAssertEqual(received_events.at(0).type(), event_type::relayed);
     XCTAssertEqual(received_relayed_events.size(), 1);
     XCTAssertEqual(std::get<0>(received_relayed_events.at(0)), 1);
-    XCTAssertEqual(std::get<1>(received_relayed_events.at(0)), (value::holder<std::string>{"3"}));
+    XCTAssertEqual(std::get<1>(received_relayed_events.at(0)), *holder3);
     XCTAssertEqual(std::get<2>(received_relayed_events.at(0)), "3");
 
-    holder2.set_value("4");
+    holder2->set_value("4");
 
+    auto holder4 = value::holder<std::string>::make_shared("4");
     XCTAssertEqual(received_events.size(), 2);
     XCTAssertEqual(received_events.at(1).type(), event_type::relayed);
     XCTAssertEqual(received_relayed_events.size(), 2);
     XCTAssertEqual(std::get<0>(received_relayed_events.at(1)), 2);
-    XCTAssertEqual(std::get<1>(received_relayed_events.at(1)), (value::holder<std::string>{"4"}));
+    XCTAssertEqual(std::get<1>(received_relayed_events.at(1)), *holder4);
     XCTAssertEqual(std::get<2>(received_relayed_events.at(1)), "4");
 }
 
 - (void)test_chain_relayed_after_inserted {
     auto map_holder = multimap::holder<int, value::holder<std::string>>::make_shared();
 
-    value::holder<std::string> holder1{"1"};
-    map_holder->insert(1, holder1);
+    auto holder1 = value::holder<std::string>::make_shared("1");
+    map_holder->insert(1, *holder1);
 
-    value::holder<std::string> holder2{"2"};
-    map_holder->insert(2, holder2);
+    auto holder2 = value::holder<std::string>::make_shared("2");
+    map_holder->insert(2, *holder2);
 
     std::vector<event> received_events;
     std::vector<std::tuple<int, value::holder<std::string>, std::string>> received_relayed_events;
@@ -175,32 +177,34 @@ using namespace yas::chaining;
             })
             .end();
 
-    holder1.set_value("3");
+    holder1->set_value("3");
 
+    auto holder3 = value::holder<std::string>::make_shared("3");
     XCTAssertEqual(received_events.size(), 1);
     XCTAssertEqual(received_events.at(0).type(), event_type::relayed);
     XCTAssertEqual(std::get<0>(received_relayed_events.at(0)), 1);
-    XCTAssertEqual(std::get<1>(received_relayed_events.at(0)), (value::holder<std::string>{"3"}));
+    XCTAssertEqual(std::get<1>(received_relayed_events.at(0)), *holder3);
     XCTAssertEqual(std::get<2>(received_relayed_events.at(0)), "3");
 
-    holder2.set_value("4");
+    holder2->set_value("4");
 
+    auto holder4 = value::holder<std::string>::make_shared("4");
     XCTAssertEqual(received_events.size(), 2);
     XCTAssertEqual(received_events.at(1).type(), event_type::relayed);
     XCTAssertEqual(received_relayed_events.size(), 2);
     XCTAssertEqual(std::get<0>(received_relayed_events.at(1)), 2);
-    XCTAssertEqual(std::get<1>(received_relayed_events.at(1)), (value::holder<std::string>{"4"}));
+    XCTAssertEqual(std::get<1>(received_relayed_events.at(1)), *holder4);
     XCTAssertEqual(std::get<2>(received_relayed_events.at(1)), "4");
 }
 
 - (void)test_chain_relayed_after_replaced {
-    value::holder<int> holder1{1};
-    value::holder<int> holder2{2};
-    auto map_holder = multimap::holder<int, value::holder<int>>::make_shared({{1, holder1}, {2, holder2}});
+    auto holder1 = value::holder<int>::make_shared(1);
+    auto holder2 = value::holder<int>::make_shared(2);
+    auto map_holder = multimap::holder<int, value::holder<int>>::make_shared({{1, *holder1}, {2, *holder2}});
 
-    value::holder<int> holder3{3};
-    value::holder<int> holder4{4};
-    map_holder->replace({{3, holder3}, {4, holder4}});
+    auto holder3 = value::holder<int>::make_shared(3);
+    auto holder4 = value::holder<int>::make_shared(4);
+    map_holder->replace({{3, *holder3}, {4, *holder4}});
 
     std::vector<event> received_events;
     std::vector<std::tuple<int, value::holder<int>, int>> received_relayed_events;
@@ -216,34 +220,36 @@ using namespace yas::chaining;
             })
             .end();
 
-    holder1.set_value(10);
-    holder2.set_value(20);
+    holder1->set_value(10);
+    holder2->set_value(20);
 
     XCTAssertEqual(received_events.size(), 0);
 
-    holder3.set_value(30);
+    holder3->set_value(30);
 
+    auto holder30 = value::holder<int>::make_shared(30);
     XCTAssertEqual(received_events.size(), 1);
     XCTAssertEqual(received_events.at(0).type(), event_type::relayed);
     XCTAssertEqual(received_relayed_events.size(), 1);
     XCTAssertEqual(std::get<0>(received_relayed_events.at(0)), 3);
-    XCTAssertEqual(std::get<1>(received_relayed_events.at(0)), (value::holder<int>{30}));
+    XCTAssertEqual(std::get<1>(received_relayed_events.at(0)), *holder30);
     XCTAssertEqual(std::get<2>(received_relayed_events.at(0)), 30);
 
-    holder4.set_value(40);
+    holder4->set_value(40);
 
+    auto holder40 = value::holder<int>::make_shared(40);
     XCTAssertEqual(received_events.size(), 2);
     XCTAssertEqual(received_events.at(1).type(), event_type::relayed);
     XCTAssertEqual(received_relayed_events.size(), 2);
     XCTAssertEqual(std::get<0>(received_relayed_events.at(1)), 4);
-    XCTAssertEqual(std::get<1>(received_relayed_events.at(1)), (value::holder<int>{40}));
+    XCTAssertEqual(std::get<1>(received_relayed_events.at(1)), *holder40);
     XCTAssertEqual(std::get<2>(received_relayed_events.at(1)), 40);
 }
 
 - (void)test_chain_not_relayed_after_erased {
-    value::holder<int> holder1{1};
-    value::holder<int> holder2{2};
-    auto map_holder = multimap::holder<int, value::holder<int>>::make_shared({{1, holder1}, {2, holder2}});
+    auto holder1 = value::holder<int>::make_shared(1);
+    auto holder2 = value::holder<int>::make_shared(2);
+    auto map_holder = multimap::holder<int, value::holder<int>>::make_shared({{1, *holder1}, {2, *holder2}});
 
     map_holder->erase_for_key(1);
 
@@ -261,19 +267,19 @@ using namespace yas::chaining;
             })
             .end();
 
-    holder1.set_value(3);
+    holder1->set_value(3);
 
     XCTAssertEqual(received_events.size(), 0);
 
-    holder2.set_value(4);
+    holder2->set_value(4);
 
     XCTAssertEqual(received_events.size(), 1);
 }
 
 - (void)test_chain_not_relayed_after_clear {
-    value::holder<int> holder1{1};
-    value::holder<int> holder2{2};
-    auto map_holder = multimap::holder<int, value::holder<int>>::make_shared({{1, holder1}, {2, holder2}});
+    auto holder1 = value::holder<int>::make_shared(1);
+    auto holder2 = value::holder<int>::make_shared(2);
+    auto map_holder = multimap::holder<int, value::holder<int>>::make_shared({{1, *holder1}, {2, *holder2}});
 
     map_holder->clear();
 
@@ -282,31 +288,31 @@ using namespace yas::chaining;
     auto chain =
         map_holder->chain().perform([&received_events](auto const &event) { received_events.push_back(event); }).end();
 
-    holder1.set_value(3);
-    holder2.set_value(4);
+    holder1->set_value(3);
+    holder2->set_value(4);
 
     XCTAssertEqual(received_events.size(), 0);
 }
 
 - (void)test_chain_not_relayed_after_replaced {
-    value::holder<int> holder1{1};
-    value::holder<int> holder2{2};
-    auto map_holder = multimap::holder<int, value::holder<int>>::make_shared({{1, holder1}, {2, holder2}});
+    auto holder1 = value::holder<int>::make_shared(1);
+    auto holder2 = value::holder<int>::make_shared(2);
+    auto map_holder = multimap::holder<int, value::holder<int>>::make_shared({{1, *holder1}, {2, *holder2}});
 
-    value::holder<int> holder3{3};
-    map_holder->replace({{3, holder3}});
+    auto holder3 = value::holder<int>::make_shared(3);
+    map_holder->replace({{3, *holder3}});
 
     std::vector<event> received_events;
 
     auto chain =
         map_holder->chain().perform([&received_events](auto const &event) { received_events.push_back(event); }).end();
 
-    holder1.set_value(10);
-    holder2.set_value(20);
+    holder1->set_value(10);
+    holder2->set_value(20);
 
     XCTAssertEqual(received_events.size(), 0);
 
-    holder3.set_value(30);
+    holder3->set_value(30);
 
     XCTAssertEqual(received_events.size(), 1);
 }

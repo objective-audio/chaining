@@ -49,7 +49,7 @@ struct holder<T>::impl : sender<T>::impl, chaining::receivable<T>, weakable_impl
 };
 
 template <typename T>
-holder<T>::holder(T value) : sender<T>(std::make_shared<impl>(std::move(value))) {
+holder<T>::holder(T &&value) : sender<T>(std::make_shared<impl>(std::move(value))) {
 }
 
 template <typename T>
