@@ -20,6 +20,12 @@ using namespace yas::chaining;
 - (void)tearDown {
 }
 
+- (void)test_make_shared {
+    auto holder = map::holder<int, std::string>::make_shared();
+
+    XCTAssertTrue(holder);
+}
+
 - (void)test_size {
     map::holder<int, std::string> holder0;
     map::holder<int, std::string> holder1{{{1, "11"}}};

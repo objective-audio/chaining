@@ -384,4 +384,14 @@ template <typename Key, typename Value>
 std::shared_ptr<weakable_impl> holder<Key, Value>::weakable_impl_ptr() const {
     return this->template impl_ptr<impl>();
 }
+
+template <typename Key, typename Value>
+std::shared_ptr<holder<Key, Value>> holder<Key, Value>::make_shared() {
+    return make_shared(std::map<Key, Value>{});
+}
+
+template <typename Key, typename Value>
+std::shared_ptr<holder<Key, Value>> holder<Key, Value>::make_shared(std::map<Key, Value> map) {
+    return std::shared_ptr<holder<Key, Value>>(new holder<Key, Value>{std::move(map)});
+}
 }  // namespace yas::chaining::map
