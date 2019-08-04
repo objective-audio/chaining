@@ -20,6 +20,12 @@ using namespace yas::chaining;
 - (void)tearDown {
 }
 
+- (void)test_make_shared {
+    auto holder = multimap::holder<int, std::string>::make_shared();
+
+    XCTAssertTrue(holder);
+}
+
 - (void)test_get_raw {
     multimap::holder<int, std::string> holder{{{0, "10"}, {1, "11"}, {2, "12"}}};
 
