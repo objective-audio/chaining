@@ -198,10 +198,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
 #pragma mark - multimap::holder
 
 template <typename Key, typename Value>
-holder<Key, Value>::holder() : sender<event>(std::make_shared<impl>()) {
-}
-
-template <typename Key, typename Value>
 holder<Key, Value>::holder(std::multimap<Key, Value> map) : sender<event>(std::make_shared<impl>()) {
     this->template impl_ptr<impl>()->prepare(std::move(map));
 }
