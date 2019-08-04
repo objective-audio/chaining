@@ -290,10 +290,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, chaining::receivable<even
 #pragma mark - map::holder
 
 template <typename Key, typename Value>
-holder<Key, Value>::holder() : sender<event>(std::make_shared<impl>()) {
-}
-
-template <typename Key, typename Value>
 holder<Key, Value>::holder(std::map<Key, Value> map) : sender<event>(std::make_shared<impl>()) {
     this->template impl_ptr<impl>()->prepare(std::move(map));
 }
