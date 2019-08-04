@@ -20,6 +20,12 @@ struct[[nodiscard]] perform_receiver final : receiver<T> {
 
    private:
     std::shared_ptr<impl> _impl;
+
+   public:
+    static std::shared_ptr<perform_receiver> make_shared(std::function<void(T const &)> const &);
+    static std::shared_ptr<perform_receiver> make_shared(std::function<void(T const &)> &&);
+    static std::shared_ptr<perform_receiver> make_shared(std::function<void(void)> const &);
+    static std::shared_ptr<perform_receiver> make_shared(std::function<void(void)> &&);
 };
 }  // namespace yas::chaining
 
