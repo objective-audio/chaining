@@ -269,10 +269,6 @@ typename holder<T>::chain_t holder<T>::holder<T>::chain() const {
 }
 
 template <typename T>
-holder<T>::holder() : sender<event>(std::make_shared<impl>()) {
-}
-
-template <typename T>
 holder<T>::holder(std::vector<T> vec) : sender<event>(std::make_shared<impl>()) {
     this->template impl_ptr<impl>()->prepare(std::move(vec));
 }
@@ -322,5 +318,15 @@ receivable_ptr<event> holder<T>::receivable() {
 template <typename T>
 std::shared_ptr<weakable_impl> holder<T>::weakable_impl_ptr() const {
     return this->template impl_ptr<impl>();
+}
+
+template <typename T>
+std::shared_ptr<holder<T>> holder<T>::make_shared() {
+    return make_shared(vector_t{});
+}
+
+template <typename T>
+std::shared_ptr<holder<T>> holder<T>::make_shared(vector_t vec) {
+    return std::shared_ptr<holder<T>>(new holder<T>{std::move(vec)});
 }
 }  // namespace yas::chaining::vector

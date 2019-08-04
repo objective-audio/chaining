@@ -38,7 +38,7 @@ struct fetcher<T>::impl : sender<T>::impl, chaining::receivable<std::nullptr_t>,
 };
 
 template <typename T>
-fetcher<T>::fetcher(std::function<std::optional<T>(void)> handler)
+fetcher<T>::fetcher(std::function<std::optional<T>(void)> &&handler)
     : sender<T>(std::make_shared<impl>(std::move(handler))) {
 }
 
@@ -74,5 +74,10 @@ chaining::receivable_ptr<std::nullptr_t> fetcher<T>::receivable() {
 template <typename T>
 std::shared_ptr<weakable_impl> fetcher<T>::weakable_impl_ptr() const {
     return this->template impl_ptr<impl>();
+}
+
+template <typename T>
+std::shared_ptr<fetcher<T>> fetcher<T>::make_shared(std::function<std::optional<T>(void)> handler) {
+    return std::shared_ptr<fetcher<T>>(new fetcher<T>{std::move(handler)});
 }
 }  // namespace yas::chaining

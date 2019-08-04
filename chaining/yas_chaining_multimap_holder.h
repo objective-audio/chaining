@@ -61,8 +61,6 @@ struct holder final : sender<event>, weakable<holder<Key, Value>> {
 
     using chain_t = chain<event, event, true>;
 
-    holder();
-    explicit holder(std::multimap<Key, Value>);
     explicit holder(std::shared_ptr<impl> &&);
 
     ~holder();
@@ -82,6 +80,13 @@ struct holder final : sender<event>, weakable<holder<Key, Value>> {
     [[nodiscard]] chain_t chain() const;
 
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
+
+   private:
+    explicit holder(std::multimap<Key, Value>);
+
+   public:
+    static std::shared_ptr<holder> make_shared();
+    static std::shared_ptr<holder> make_shared(std::multimap<Key, Value>);
 };
 }  // namespace yas::chaining::multimap
 

@@ -24,29 +24,29 @@ using namespace yas::chaining;
 }
 
 - (void)test_invalidate {
-    value::holder<int> holder{1};
+    auto holder = value::holder<int>::make_shared(1);
 
     int received = 0;
 
-    any_observer_ptr observer = holder.chain().perform([&received](int const &value) { received = value; }).sync();
+    any_observer_ptr observer = holder->chain().perform([&received](int const &value) { received = value; }).sync();
 
     XCTAssertEqual(received, 1);
 
     observer->invalidate();
 
-    holder.set_value(2);
+    holder->set_value(2);
 
     XCTAssertEqual(received, 1);
 }
 
 - (void)test_invalidate_with_sub_joints {
-    value::holder<int> main_holder{1};
-    value::holder<int> sub_holder{2};
+    auto main_holder = value::holder<int>::make_shared(1);
+    auto sub_holder = value::holder<int>::make_shared(2);
 
     int received = 0;
 
-    any_observer_ptr observer = main_holder.chain()
-                                    .merge(sub_holder.chain())
+    any_observer_ptr observer = main_holder->chain()
+                                    .merge(sub_holder->chain())
                                     .perform([&received](int const &value) { received = value; })
                                     .sync();
 
@@ -54,11 +54,11 @@ using namespace yas::chaining;
 
     observer->invalidate();
 
-    main_holder.set_value(3);
+    main_holder->set_value(3);
 
     XCTAssertEqual(received, 2);
 
-    sub_holder.set_value(4);
+    sub_holder->set_value(4);
 
     XCTAssertEqual(received, 2);
 }

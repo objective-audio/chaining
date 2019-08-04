@@ -23,26 +23,26 @@ using namespace yas;
 }
 
 - (void)test_to {
-    chaining::notifier<int> notifier;
+    auto notifier = chaining::notifier<int>::make_shared();
 
     int received = -1;
 
-    auto chain = notifier.chain()
+    auto chain = notifier->chain()
                      .to([](int const &value) { return value + 1; })
                      .perform([&received](int const &value) { received = value; })
                      .end();
 
-    notifier.notify(10);
+    notifier->notify(10);
 
     XCTAssertEqual(received, 11);
 }
 
 - (void)test_to_type {
-    chaining::notifier<int> notifier;
+    auto notifier = chaining::notifier<int>::make_shared();
 
     std::string received = "";
 
-    auto chain = notifier.chain()
+    auto chain = notifier->chain()
                      .guard([](int const &) { return true; })
                      .to([](int const &value) { return value > 0; })
                      .guard([](bool const &) { return true; })
@@ -51,76 +51,77 @@ using namespace yas;
                      .perform([&received](std::string const &value) { received = value; })
                      .end();
 
-    notifier.notify(0);
+    notifier->notify(0);
 
     XCTAssertEqual(received, "false");
 
-    notifier.notify(1);
+    notifier->notify(1);
 
     XCTAssertEqual(received, "true");
 }
 
 - (void)test_to_value {
-    chaining::notifier<int> notifier;
+    auto notifier = chaining::notifier<int>::make_shared();
 
     std::string received = "";
 
-    auto chain = notifier.chain()
+    auto chain = notifier->chain()
                      .to_value(std::string("test_value"))
                      .perform([&received](std::string const &value) { received = value; })
                      .end();
 
-    notifier.notify(0);
+    notifier->notify(0);
 
     XCTAssertEqual(received, "test_value");
 }
 
 - (void)test_to_null {
-    chaining::notifier<int> notifier;
+    auto notifier = chaining::notifier<int>::make_shared();
 
     bool called = false;
 
-    auto chain = notifier.chain().to_null().perform([&called](std::nullptr_t const &) { called = true; }).end();
+    auto chain = notifier->chain().to_null().perform([&called](std::nullptr_t const &) { called = true; }).end();
 
-    notifier.notify(1);
+    notifier->notify(1);
 
     XCTAssertTrue(called);
 }
 
 - (void)test_to_tuple {
-    chaining::notifier<int> notifier;
+    auto notifier = chaining::notifier<int>::make_shared();
 
     std::optional<std::tuple<int>> called;
 
-    auto chain = notifier.chain().to_tuple().perform([&called](std::tuple<int> const &value) { called = value; }).end();
+    auto chain =
+        notifier->chain().to_tuple().perform([&called](std::tuple<int> const &value) { called = value; }).end();
 
-    notifier.notify(1);
+    notifier->notify(1);
 
     XCTAssertTrue(called);
     XCTAssertEqual(std::get<0>(*called), 1);
 }
 
 - (void)test_to_tuple_from_tuple {
-    chaining::notifier<std::tuple<int>> notifier;
+    auto notifier = chaining::notifier<std::tuple<int>>::make_shared();
 
     std::optional<std::tuple<int>> called;
 
-    auto chain = notifier.chain().to_tuple().perform([&called](auto const &value) { called = value; }).end();
+    auto chain = notifier->chain().to_tuple().perform([&called](auto const &value) { called = value; }).end();
 
-    notifier.notify(std::make_tuple(int(1)));
+    notifier->notify(std::make_tuple(int(1)));
 
     XCTAssertTrue(called);
     XCTAssertEqual(std::get<0>(*called), 1);
 }
 
 - (void)test_to_tuple_from_pair {
-    chaining::notifier<std::pair<int, std::string>> notifier;
+    auto notifier = chaining::notifier<std::pair<int, std::string>>::make_shared();
 
     std::optional<std::tuple<int, std::string>> called;
 
-    auto chain = notifier.chain().to_tuple().perform([&called](auto const &value) { called = value; }).end();
+    auto chain = notifier->chain().to_tuple().perform([&called](auto const &value) { called = value; }).end();
 
-    notifier.notify(std::make_pair(int(1), std::string("2")));
+    notifier->notify(std::make_pair(int(1), std::string("2")));
 
     XCTAssertTrue(called);
     XCTAssertEqual(std::get<0>(*called), 1);

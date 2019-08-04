@@ -198,10 +198,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
 #pragma mark - multimap::holder
 
 template <typename Key, typename Value>
-holder<Key, Value>::holder() : sender<event>(std::make_shared<impl>()) {
-}
-
-template <typename Key, typename Value>
 holder<Key, Value>::holder(std::multimap<Key, Value> map) : sender<event>(std::make_shared<impl>()) {
     this->template impl_ptr<impl>()->prepare(std::move(map));
 }
@@ -271,5 +267,15 @@ typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::cha
 template <typename Key, typename Value>
 std::shared_ptr<weakable_impl> holder<Key, Value>::weakable_impl_ptr() const {
     return this->template impl_ptr<impl>();
+}
+
+template <typename Key, typename Value>
+std::shared_ptr<holder<Key, Value>> holder<Key, Value>::make_shared() {
+    return make_shared(std::multimap<Key, Value>{});
+}
+
+template <typename Key, typename Value>
+std::shared_ptr<holder<Key, Value>> holder<Key, Value>::make_shared(std::multimap<Key, Value> map) {
+    return std::shared_ptr<holder<Key, Value>>(new holder<Key, Value>{std::move(map)});
 }
 }  // namespace yas::chaining::multimap

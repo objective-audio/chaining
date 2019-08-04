@@ -62,8 +62,6 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<Key, Value
 
     using chain_t = chain<event, event, true>;
 
-    holder();
-    explicit holder(std::map<Key, Value>);
     explicit holder(std::shared_ptr<impl> &&);
 
     ~holder();
@@ -89,6 +87,13 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<Key, Value
     [[nodiscard]] chaining::receivable_ptr<event> receivable() override;
 
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
+
+   private:
+    explicit holder(std::map<Key, Value>);
+
+   public:
+    static std::shared_ptr<holder> make_shared();
+    static std::shared_ptr<holder> make_shared(std::map<Key, Value>);
 };
 }  // namespace yas::chaining::map
 

@@ -13,7 +13,6 @@ template <typename T>
 struct holder final : sender<T>, receiver<T>, weakable<holder<T>> {
     class impl;
 
-    holder(T);
     explicit holder(std::shared_ptr<impl> &&);
 
     ~holder();
@@ -28,6 +27,12 @@ struct holder final : sender<T>, receiver<T>, weakable<holder<T>> {
     [[nodiscard]] receivable_ptr<T> receivable() override;
 
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
+
+   private:
+    holder(T &&);
+
+   public:
+    static std::shared_ptr<holder> make_shared(T);
 };
 }  // namespace yas::chaining::value
 

@@ -22,16 +22,22 @@ using namespace yas;
     [super tearDown];
 }
 
+- (void)test_make_shared {
+    auto notifier = chaining::notifier<int>::make_shared();
+
+    XCTAssertTrue(notifier);
+}
+
 - (void)test_notifier_begin {
     int received = -1;
 
-    chaining::notifier<int> notifier;
+    auto notifier = chaining::notifier<int>::make_shared();
 
-    auto flow = notifier.chain().perform([&received](int const &value) { received = value; }).end();
+    auto flow = notifier->chain().perform([&received](int const &value) { received = value; }).end();
 
     XCTAssertEqual(received, -1);
 
-    notifier.notify(2);
+    notifier->notify(2);
 
     XCTAssertEqual(received, 2);
 }
@@ -40,12 +46,12 @@ using namespace yas;
     int received1 = -1;
     int received2 = -1;
 
-    chaining::notifier<int> notifier;
+    auto notifier = chaining::notifier<int>::make_shared();
 
-    auto flow1 = notifier.chain().perform([&received1](int const &value) { received1 = value; }).end();
-    auto flow2 = notifier.chain().perform([&received2](int const &value) { received2 = value; }).end();
+    auto flow1 = notifier->chain().perform([&received1](int const &value) { received1 = value; }).end();
+    auto flow2 = notifier->chain().perform([&received2](int const &value) { received2 = value; }).end();
 
-    notifier.notify(3);
+    notifier->notify(3);
 
     XCTAssertEqual(received1, 3);
     XCTAssertEqual(received2, 3);
@@ -54,13 +60,13 @@ using namespace yas;
 - (void)test_notifier_receiver {
     int received = -1;
 
-    chaining::notifier<int> notifier1;
-    chaining::notifier<int> notifier2;
+    auto notifier1 = chaining::notifier<int>::make_shared();
+    auto notifier2 = chaining::notifier<int>::make_shared();
 
-    auto flow1 = notifier1.chain().send_to(notifier2).end();
-    auto flow2 = notifier2.chain().perform([&received](int const &value) { received = value; }).end();
+    auto flow1 = notifier1->chain().send_to(*notifier2).end();
+    auto flow2 = notifier2->chain().perform([&received](int const &value) { received = value; }).end();
 
-    notifier1.notify(4);
+    notifier1->notify(4);
 
     XCTAssertEqual(received, 4);
 }
@@ -68,16 +74,16 @@ using namespace yas;
 - (void)test_notifier_block_recursive_call {
     int received = -1;
 
-    chaining::notifier<int> notifier;
+    auto notifier = chaining::notifier<int>::make_shared();
 
     auto receiver = chaining::perform_receiver<int>{[&notifier, &received](int const &value) {
         received = value;
-        notifier.notify(value + 1);
+        notifier->notify(value + 1);
     }};
 
-    auto flow = notifier.chain().send_to(receiver).end();
+    auto flow = notifier->chain().send_to(receiver).end();
 
-    notifier.notify(1);
+    notifier->notify(1);
 
     XCTAssertEqual(received, 1);
 }

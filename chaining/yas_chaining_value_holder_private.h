@@ -49,7 +49,7 @@ struct holder<T>::impl : sender<T>::impl, chaining::receivable<T>, weakable_impl
 };
 
 template <typename T>
-holder<T>::holder(T value) : sender<T>(std::make_shared<impl>(std::move(value))) {
+holder<T>::holder(T &&value) : sender<T>(std::make_shared<impl>(std::move(value))) {
 }
 
 template <typename T>
@@ -83,5 +83,10 @@ receivable_ptr<T> holder<T>::receivable() {
 template <typename T>
 std::shared_ptr<weakable_impl> holder<T>::weakable_impl_ptr() const {
     return this->template impl_ptr<impl>();
+}
+
+template <typename T>
+std::shared_ptr<holder<T>> holder<T>::make_shared(T value) {
+    return std::shared_ptr<holder<T>>(new holder<T>{std::move(value)});
 }
 }  // namespace yas::chaining::value

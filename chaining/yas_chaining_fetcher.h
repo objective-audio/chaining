@@ -14,7 +14,6 @@ template <typename T>
 struct fetcher final : sender<T>, receiver<>, weakable<fetcher<T>> {
     class impl;
 
-    explicit fetcher(std::function<std::optional<T>(void)>);
     explicit fetcher(std::shared_ptr<impl> &&);
 
     std::optional<T> fetched_value() const;
@@ -27,6 +26,12 @@ struct fetcher final : sender<T>, receiver<>, weakable<fetcher<T>> {
     [[nodiscard]] chaining::receivable_ptr<std::nullptr_t> receivable() override;
 
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
+
+   private:
+    explicit fetcher(std::function<std::optional<T>(void)> &&);
+
+   public:
+    static std::shared_ptr<fetcher> make_shared(std::function<std::optional<T>(void)>);
 };
 }  // namespace yas::chaining
 
