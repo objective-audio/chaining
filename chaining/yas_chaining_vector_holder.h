@@ -64,8 +64,6 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<T>> {
     using vector_t = std::vector<T>;
     using chain_t = chain<event, event, true>;
 
-    holder();
-    explicit holder(vector_t);
     explicit holder(std::shared_ptr<impl> &&);
 
     ~holder();
@@ -88,6 +86,10 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<T>> {
 
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
 
+   private:
+    explicit holder(vector_t);
+
+   public:
     static std::shared_ptr<holder> make_shared();
     static std::shared_ptr<holder> make_shared(vector_t);
 };

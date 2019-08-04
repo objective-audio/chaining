@@ -269,10 +269,6 @@ typename holder<T>::chain_t holder<T>::holder<T>::chain() const {
 }
 
 template <typename T>
-holder<T>::holder() : sender<event>(std::make_shared<impl>()) {
-}
-
-template <typename T>
 holder<T>::holder(std::vector<T> vec) : sender<event>(std::make_shared<impl>()) {
     this->template impl_ptr<impl>()->prepare(std::move(vec));
 }
