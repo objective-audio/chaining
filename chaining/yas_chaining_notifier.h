@@ -23,6 +23,8 @@ struct notifier final : sender<T>, receiver<T>, weakable<notifier<T>> {
     [[nodiscard]] chaining::receivable_ptr<T> receivable() override;
 
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
+
+    static std::shared_ptr<notifier> make_shared();
 };
 }  // namespace yas::chaining
 

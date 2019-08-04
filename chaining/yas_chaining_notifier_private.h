@@ -51,4 +51,9 @@ template <typename T>
 std::shared_ptr<weakable_impl> notifier<T>::weakable_impl_ptr() const {
     return this->template impl_ptr<impl>();
 }
+
+template <typename T>
+std::shared_ptr<notifier<T>> notifier<T>::make_shared() {
+    return std::shared_ptr<notifier<T>>(new notifier<T>{});
+}
 }  // namespace yas::chaining

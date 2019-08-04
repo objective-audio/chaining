@@ -22,6 +22,12 @@ using namespace yas;
     [super tearDown];
 }
 
+- (void)test_make_shared {
+    auto notifier = chaining::notifier<int>::make_shared();
+
+    XCTAssertTrue(notifier);
+}
+
 - (void)test_notifier_begin {
     int received = -1;
 
