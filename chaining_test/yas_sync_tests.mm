@@ -22,36 +22,36 @@ using namespace yas;
 }
 
 - (void)test_sync {
-    chaining::fetcher<int> fetcher{[] { return 100; }};
+    auto fetcher = chaining::fetcher<int>::make_shared([] { return 100; });
 
     int received = -1;
 
-    auto observer = fetcher.chain().perform([&received](int const &value) { received = value; }).end();
+    auto observer = fetcher->chain().perform([&received](int const &value) { received = value; }).end();
     observer->fetch();
 
     XCTAssertEqual(received, 100);
 }
 
 - (void)test_sync_by_observer {
-    chaining::fetcher<int> fetcher{[] { return 100; }};
+    auto fetcher = chaining::fetcher<int>::make_shared([] { return 100; });
 
     int received = -1;
 
     chaining::any_observer_ptr observer =
-        fetcher.chain().perform([&received](int const &value) { received = value; }).end();
+        fetcher->chain().perform([&received](int const &value) { received = value; }).end();
     observer->fetch();
 
     XCTAssertEqual(received, 100);
 }
 
 - (void)test_sync_many_chain {
-    chaining::fetcher<int> fetcher{[] { return 100; }};
+    auto fetcher = chaining::fetcher<int>::make_shared([] { return 100; });
 
     int received1 = -1;
     int received2 = -1;
 
-    auto observer1 = fetcher.chain().perform([&received1](int const &value) { received1 = value; }).end();
-    auto observer2 = fetcher.chain().perform([&received2](int const &value) { received2 = value; }).end();
+    auto observer1 = fetcher->chain().perform([&received1](int const &value) { received1 = value; }).end();
+    auto observer2 = fetcher->chain().perform([&received2](int const &value) { received2 = value; }).end();
 
     observer1->fetch();
 
@@ -60,23 +60,23 @@ using namespace yas;
 }
 
 - (void)test_sync_end {
-    chaining::fetcher<int> fetcher{[] { return 100; }};
+    auto fetcher = chaining::fetcher<int>::make_shared([] { return 100; });
 
     int received = -1;
 
-    auto chain = fetcher.chain().perform([&received](int const &value) { received = value; }).sync();
+    auto chain = fetcher->chain().perform([&received](int const &value) { received = value; }).sync();
 
     XCTAssertEqual(received, 100);
 }
 
 - (void)test_sync_with_combined_sub_sender {
-    chaining::fetcher<int> fetcher{[]() { return 123; }};
-    chaining::fetcher<int> sub_fetcher{[]() { return 456; }};
+    auto fetcher = chaining::fetcher<int>::make_shared([] { return 123; });
+    auto sub_fetcher = chaining::fetcher<int>::make_shared([] { return 456; });
 
     std::vector<std::pair<int, int>> received;
 
-    auto chain = fetcher.chain()
-                     .combine(sub_fetcher.chain())
+    auto chain = fetcher->chain()
+                     .combine(sub_fetcher->chain())
                      .perform([&received](auto const &pair) { received.emplace_back(pair); })
                      .sync();
 
@@ -87,13 +87,13 @@ using namespace yas;
 }
 
 - (void)test_sync_with_merged_sub_sender {
-    chaining::fetcher<int> fetcher{[]() { return 78; }};
-    chaining::fetcher<int> sub_fetcher{[]() { return 90; }};
+    auto fetcher = chaining::fetcher<int>::make_shared([] { return 78; });
+    auto sub_fetcher = chaining::fetcher<int>::make_shared([] { return 90; });
 
     std::vector<int> received;
 
-    auto chain = fetcher.chain()
-                     .merge(sub_fetcher.chain())
+    auto chain = fetcher->chain()
+                     .merge(sub_fetcher->chain())
                      .perform([&received](int const &value) { received.emplace_back(value); })
                      .sync();
 

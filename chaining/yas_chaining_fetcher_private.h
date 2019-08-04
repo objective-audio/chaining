@@ -38,7 +38,7 @@ struct fetcher<T>::impl : sender<T>::impl, chaining::receivable<std::nullptr_t>,
 };
 
 template <typename T>
-fetcher<T>::fetcher(std::function<std::optional<T>(void)> handler)
+fetcher<T>::fetcher(std::function<std::optional<T>(void)> &&handler)
     : sender<T>(std::make_shared<impl>(std::move(handler))) {
 }
 

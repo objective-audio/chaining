@@ -31,23 +31,23 @@ using namespace yas;
 - (void)test_fetched_value {
     int sending = 1;
 
-    chaining::fetcher<int> fetcher{[&sending] { return sending; }};
+    auto fetcher = chaining::fetcher<int>::make_shared([&sending] { return sending; });
 
-    XCTAssertEqual(fetcher.fetched_value(), 1);
+    XCTAssertEqual(fetcher->fetched_value(), 1);
 }
 
 - (void)test_broadcast {
     int sending = 1;
 
-    chaining::fetcher<int> fetcher{[&sending] { return sending; }};
+    auto fetcher = chaining::fetcher<int>::make_shared([&sending] { return sending; });
 
     int notified = -1;
 
-    auto flow = fetcher.chain().perform([&notified](int const &value) { notified = value; }).end();
+    auto flow = fetcher->chain().perform([&notified](int const &value) { notified = value; }).end();
 
     XCTAssertEqual(notified, -1);
 
-    fetcher.broadcast();
+    fetcher->broadcast();
 
     XCTAssertEqual(notified, 1);
 }
@@ -55,15 +55,15 @@ using namespace yas;
 - (void)test_broadcast_with_value {
     int sending = 1;
 
-    chaining::fetcher<int> fetcher{[&sending] { return sending; }};
+    auto fetcher = chaining::fetcher<int>::make_shared([&sending] { return sending; });
 
     int notified = -1;
 
-    auto flow = fetcher.chain().perform([&notified](int const &value) { notified = value; }).end();
+    auto flow = fetcher->chain().perform([&notified](int const &value) { notified = value; }).end();
 
     XCTAssertEqual(notified, -1);
 
-    fetcher.broadcast(2);
+    fetcher->broadcast(2);
 
     XCTAssertEqual(notified, 2);
 }
@@ -71,17 +71,17 @@ using namespace yas;
 - (void)test_sync {
     int sending = 1;
 
-    chaining::fetcher<int> fetcher{[&sending] { return sending; }};
+    auto fetcher = chaining::fetcher<int>::make_shared([&sending] { return sending; });
 
     int notified = -1;
 
-    auto flow = fetcher.chain().perform([&notified](int const &value) { notified = value; }).sync();
+    auto flow = fetcher->chain().perform([&notified](int const &value) { notified = value; }).sync();
 
     XCTAssertEqual(notified, 1);
 
     sending = 2;
 
-    fetcher.broadcast();
+    fetcher->broadcast();
 
     XCTAssertEqual(notified, 2);
 }
@@ -91,17 +91,17 @@ using namespace yas;
 
     int sending = 1;
 
-    chaining::fetcher<int> fetcher{[&sending] { return sending; }};
+    auto fetcher = chaining::fetcher<int>::make_shared([&sending] { return sending; });
 
     int notified = -1;
 
-    auto flow = fetcher.chain().perform([&notified](int const &value) { notified = value; }).sync();
+    auto flow = fetcher->chain().perform([&notified](int const &value) { notified = value; }).sync();
 
     XCTAssertEqual(notified, 1);
 
     sending = 2;
 
-    auto receive_flow = notifier.chain().send_to(fetcher).end();
+    auto receive_flow = notifier.chain().send_to(*fetcher).end();
 
     notifier.notify(nullptr);
 
