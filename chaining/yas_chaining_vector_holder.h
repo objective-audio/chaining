@@ -87,6 +87,9 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<T>> {
     [[nodiscard]] chaining::receivable_ptr<event> receivable() override;
 
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
+
+    static std::shared_ptr<holder> make_shared();
+    static std::shared_ptr<holder> make_shared(vector_t);
 };
 }  // namespace yas::chaining::vector
 
