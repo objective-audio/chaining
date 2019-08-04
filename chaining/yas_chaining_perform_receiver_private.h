@@ -31,16 +31,6 @@ chaining::perform_receiver<T>::perform_receiver(std::function<void(T const &)> &
 }
 
 template <typename T>
-chaining::perform_receiver<T>::perform_receiver(std::function<void(void)> const &handler)
-    : perform_receiver([handler](auto const &) { handler(); }) {
-}
-
-template <typename T>
-chaining::perform_receiver<T>::perform_receiver(std::function<void(void)> &&handler)
-    : perform_receiver([handler = std::move(handler)](auto const &) { handler(); }) {
-}
-
-template <typename T>
 chaining::receivable_ptr<T> chaining::perform_receiver<T>::receivable() {
     return this->_impl;
 }

@@ -76,12 +76,12 @@ using namespace yas;
 
     auto notifier = chaining::notifier<int>::make_shared();
 
-    auto receiver = chaining::perform_receiver<int>{[&notifier, &received](int const &value) {
+    auto receiver = chaining::perform_receiver<int>::make_shared([&notifier, &received](int const &value) {
         received = value;
         notifier->notify(value + 1);
-    }};
+    });
 
-    auto flow = notifier->chain().send_to(receiver).end();
+    auto flow = notifier->chain().send_to(*receiver).end();
 
     notifier->notify(1);
 
