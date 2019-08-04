@@ -22,6 +22,20 @@ using namespace yas;
     [super tearDown];
 }
 
+- (void)test_make_shared {
+    auto int_handler = [](int const &) {};
+    auto copy_int_receiver = chaining::perform_receiver<int>::make_shared(int_handler);
+    auto move_int_receiver = chaining::perform_receiver<int>::make_shared(std::move(int_handler));
+    auto empty_handler = [] {};
+    auto copy_empty_receiver = chaining::perform_receiver<int>::make_shared(empty_handler);
+    auto move_empty_receiver = chaining::perform_receiver<int>::make_shared(std::move(empty_handler));
+
+    XCTAssertTrue(copy_int_receiver);
+    XCTAssertTrue(move_int_receiver);
+    XCTAssertTrue(copy_empty_receiver);
+    XCTAssertTrue(move_empty_receiver);
+}
+
 - (void)test_receive {
     std::string received = "";
 
