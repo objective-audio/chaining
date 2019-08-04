@@ -55,13 +55,13 @@ using namespace yas::chaining;
 
 - (void)test_receive {
     value::holder<int> holder{100};
-    notifier<int> notifier;
+    auto notifier = chaining::notifier<int>::make_shared();
 
-    auto flow = notifier.chain().send_to(holder).end();
+    auto flow = notifier->chain().send_to(holder).end();
 
     XCTAssertEqual(holder.raw(), 100);
 
-    notifier.notify(200);
+    notifier->notify(200);
 
     XCTAssertEqual(holder.raw(), 200);
 }

@@ -25,19 +25,19 @@ using namespace yas;
 - (void)test_guard {
     float received = -1.0f;
 
-    chaining::notifier<int> notifier;
+    auto notifier = chaining::notifier<int>::make_shared();
 
-    auto chain = notifier.chain()
+    auto chain = notifier->chain()
                      .to([](int const &value) { return value; })
                      .guard([](float const &value) { return value > 2.5f; })
                      .perform([&received](float const &value) { received = value; })
                      .end();
 
-    notifier.notify(2);
+    notifier->notify(2);
 
     XCTAssertEqual(received, -1.0f);
 
-    notifier.notify(3);
+    notifier->notify(3);
 
     XCTAssertEqual(received, 3.0f);
 }
@@ -45,70 +45,70 @@ using namespace yas;
 - (void)test_merge {
     std::string received;
 
-    chaining::notifier<int> notifier;
-    chaining::notifier<float> sub_notifier;
+    auto notifier = chaining::notifier<int>::make_shared();
+    auto sub_notifier = chaining::notifier<float>::make_shared();
 
-    auto sub_chain = sub_notifier.chain().to([](float const &value) { return std::to_string(int(value)); });
+    auto sub_chain = sub_notifier->chain().to([](float const &value) { return std::to_string(int(value)); });
 
-    auto chain = notifier.chain()
+    auto chain = notifier->chain()
                      .to([](int const &value) { return std::to_string(value); })
                      .merge(std::move(sub_chain))
                      .perform([&received](std::string const &value) { received = value; })
                      .end();
 
-    notifier.notify(10);
+    notifier->notify(10);
 
     XCTAssertEqual(received, "10");
 
-    sub_notifier.notify(20.0f);
+    sub_notifier->notify(20.0f);
 
     XCTAssertEqual(received, "20");
 }
 
 - (void)test_pair {
-    chaining::notifier<int> main_notifier;
-    chaining::notifier<std::string> sub_notifier;
+    auto main_notifier = chaining::notifier<int>::make_shared();
+    auto sub_notifier = chaining::notifier<std::string>::make_shared();
 
     using opt_pair_t = std::pair<std::optional<int>, std::optional<std::string>>;
 
     opt_pair_t received;
 
-    auto sub_chain = sub_notifier.chain();
-    auto main_chain = main_notifier.chain()
+    auto sub_chain = sub_notifier->chain();
+    auto main_chain = main_notifier->chain()
                           .pair(std::move(sub_chain))
                           .perform([&received](auto const &value) { received = value; })
                           .end();
 
-    main_notifier.notify(1);
+    main_notifier->notify(1);
 
     XCTAssertEqual(*received.first, 1);
     XCTAssertFalse(!!received.second);
 
-    sub_notifier.notify("test_text");
+    sub_notifier->notify("test_text");
 
     XCTAssertFalse(!!received.first);
     XCTAssertEqual(*received.second, "test_text");
 }
 
 - (void)test_combine {
-    chaining::notifier<int> main_notifier;
-    chaining::notifier<std::string> sub_notifier;
+    auto main_notifier = chaining::notifier<int>::make_shared();
+    auto sub_notifier = chaining::notifier<std::string>::make_shared();
 
     using opt_pair_t = std::optional<std::pair<int, std::string>>;
 
     opt_pair_t received;
 
-    auto sub_chain = sub_notifier.chain();
-    auto main_chain = main_notifier.chain()
+    auto sub_chain = sub_notifier->chain();
+    auto main_chain = main_notifier->chain()
                           .combine(std::move(sub_chain))
                           .perform([&received](auto const &value) { received = value; })
                           .end();
 
-    main_notifier.notify(1);
+    main_notifier->notify(1);
 
     XCTAssertFalse(received);
 
-    sub_notifier.notify("test_text");
+    sub_notifier->notify("test_text");
 
     XCTAssertTrue(received);
     XCTAssertEqual(received->first, 1);
@@ -116,13 +116,13 @@ using namespace yas;
 }
 
 - (void)test_combine_tuples {
-    chaining::notifier<int> main_notifier;
-    chaining::notifier<std::string> sub_notifier;
-    chaining::notifier<float> sub_notifier2;
+    auto main_notifier = chaining::notifier<int>::make_shared();
+    auto sub_notifier = chaining::notifier<std::string>::make_shared();
+    auto sub_notifier2 = chaining::notifier<float>::make_shared();
 
-    auto sub_chain = sub_notifier.chain().to_tuple();
-    auto main_chain = main_notifier.chain().to_tuple();
-    auto sub_chain2 = sub_notifier2.chain().to_tuple();
+    auto sub_chain = sub_notifier->chain().to_tuple();
+    auto main_chain = main_notifier->chain().to_tuple();
+    auto sub_chain2 = sub_notifier2->chain().to_tuple();
 
     std::optional<std::tuple<int, std::string, float>> received;
 
@@ -131,9 +131,9 @@ using namespace yas;
                      .perform([&received](std::tuple<int, std::string, float> const &value) { received = value; })
                      .end();
 
-    main_notifier.notify(33);
-    sub_notifier.notify("44");
-    sub_notifier2.notify(55.0f);
+    main_notifier->notify(33);
+    sub_notifier->notify("44");
+    sub_notifier2->notify(55.0f);
 
     XCTAssertTrue(received);
     XCTAssertEqual(std::get<0>(*received), 33);

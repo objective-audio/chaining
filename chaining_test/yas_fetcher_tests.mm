@@ -87,7 +87,7 @@ using namespace yas;
 }
 
 - (void)test_receive {
-    chaining::notifier<std::nullptr_t> notifier;
+    auto notifier = chaining::notifier<std::nullptr_t>::make_shared();
 
     int sending = 1;
 
@@ -101,9 +101,9 @@ using namespace yas;
 
     sending = 2;
 
-    auto receive_flow = notifier.chain().send_to(*fetcher).end();
+    auto receive_flow = notifier->chain().send_to(*fetcher).end();
 
-    notifier.notify(nullptr);
+    notifier->notify(nullptr);
 
     XCTAssertEqual(notified, 2);
 }
