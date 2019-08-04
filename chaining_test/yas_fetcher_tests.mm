@@ -22,6 +22,12 @@ using namespace yas;
     [super tearDown];
 }
 
+- (void)test_make_shared {
+    auto fetcher = chaining::fetcher<int>::make_shared([]() { return 1; });
+
+    XCTAssertTrue(fetcher);
+}
+
 - (void)test_fetched_value {
     int sending = 1;
 
