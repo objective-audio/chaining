@@ -22,11 +22,26 @@ using namespace yas;
     [super tearDown];
 }
 
+- (void)test_make_shared {
+    auto int_handler = [](int const &) {};
+    auto copy_int_receiver = chaining::perform_receiver<int>::make_shared(int_handler);
+    auto move_int_receiver = chaining::perform_receiver<int>::make_shared(std::move(int_handler));
+    auto empty_handler = [] {};
+    auto copy_empty_receiver = chaining::perform_receiver<int>::make_shared(empty_handler);
+    auto move_empty_receiver = chaining::perform_receiver<int>::make_shared(std::move(empty_handler));
+
+    XCTAssertTrue(copy_int_receiver);
+    XCTAssertTrue(move_int_receiver);
+    XCTAssertTrue(copy_empty_receiver);
+    XCTAssertTrue(move_empty_receiver);
+}
+
 - (void)test_receive {
     std::string received = "";
 
     auto notifier = chaining::notifier<int>::make_shared();
-    chaining::perform_receiver<std::string> receiver{[&received](std::string const &value) { received = value; }};
+    auto receiver = chaining::perform_receiver<std::string>::make_shared(
+        [&received](std::string const &value) { received = value; });
 
     auto node = notifier->chain().to([](int const &value) { return std::to_string(value); }).send_to(receiver).end();
 
@@ -41,9 +56,10 @@ using namespace yas;
     int int_received = -1;
     std::string string_received = "";
 
-    chaining::perform_receiver<int> int_receiver{[&int_received](int const &value) { int_received = value; }};
-    chaining::perform_receiver<std::string> string_receiver{
-        [&string_received](std::string const &value) { string_received = value; }};
+    auto int_receiver =
+        chaining::perform_receiver<int>::make_shared([&int_received](int const &value) { int_received = value; });
+    auto string_receiver = chaining::perform_receiver<std::string>::make_shared(
+        [&string_received](std::string const &value) { string_received = value; });
 
     auto chain = notifier->chain().send_to<0>(int_receiver).send_to<1>(string_receiver).end();
 
@@ -57,9 +73,9 @@ using namespace yas;
     bool received = false;
 
     auto notifier = chaining::notifier<int>::make_shared();
-    chaining::perform_receiver<> receiver{[&received]() { received = true; }};
+    auto receiver = chaining::perform_receiver<>::make_shared([&received]() { received = true; });
 
-    auto chain = notifier->chain().send_null(receiver).end();
+    auto chain = notifier->chain().send_null_to(receiver).end();
 
     notifier->notify(4);
 
@@ -71,7 +87,7 @@ using namespace yas;
 
     auto notifier = chaining::notifier<int>::make_shared();
 
-    chaining::perform_receiver<int> receiver{[&received](int const &value) { received = value; }};
+    auto receiver = chaining::perform_receiver<int>::make_shared([&received](int const &value) { received = value; });
 
     auto chain = notifier->chain().send_to(receiver).end();
 
@@ -85,9 +101,11 @@ using namespace yas;
     int received0 = -1;
     int received1 = -1;
 
-    chaining::perform_receiver<int> receiver0{[&received0](int const &value) { received0 = value; }};
-    chaining::perform_receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
-    std::array<chaining::perform_receiver<int>, 2> receivers{receiver0, receiver1};
+    auto receiver0 =
+        chaining::perform_receiver<int>::make_shared([&received0](int const &value) { received0 = value; });
+    auto receiver1 =
+        chaining::perform_receiver<int>::make_shared([&received1](int const &value) { received1 = value; });
+    std::array<std::shared_ptr<chaining::perform_receiver<int>>, 2> receivers{receiver0, receiver1};
 
     chaining::any_observer_ptr observer = notifier->chain().send_to(receivers).end();
 
@@ -102,8 +120,10 @@ using namespace yas;
     int received0 = -1;
     int received1 = -1;
 
-    chaining::perform_receiver<int> receiver0{[&received0](int const &value) { received0 = value; }};
-    chaining::perform_receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
+    auto receiver0 =
+        chaining::perform_receiver<int>::make_shared([&received0](int const &value) { received0 = value; });
+    auto receiver1 =
+        chaining::perform_receiver<int>::make_shared([&received1](int const &value) { received1 = value; });
 
     chaining::any_observer_ptr observer = notifier->chain().send_to<0>(receiver0).send_to<1>(receiver1).end();
 
@@ -118,9 +138,11 @@ using namespace yas;
     int received0 = -1;
     int received1 = -1;
 
-    chaining::perform_receiver<int> receiver0{[&received0](int const &value) { received0 = value; }};
-    chaining::perform_receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
-    std::vector<chaining::perform_receiver<int>> receivers{receiver0, receiver1};
+    auto receiver0 =
+        chaining::perform_receiver<int>::make_shared([&received0](int const &value) { received0 = value; });
+    auto receiver1 =
+        chaining::perform_receiver<int>::make_shared([&received1](int const &value) { received1 = value; });
+    std::vector<std::shared_ptr<chaining::perform_receiver<int>>> receivers{receiver0, receiver1};
 
     chaining::any_observer_ptr observer = notifier->chain().send_to(receivers).end();
 
@@ -135,8 +157,10 @@ using namespace yas;
     int received0 = -1;
     int received1 = -1;
 
-    chaining::perform_receiver<int> receiver0{[&received0](int const &value) { received0 = value; }};
-    chaining::perform_receiver<int> receiver1{[&received1](int const &value) { received1 = value; }};
+    auto receiver0 =
+        chaining::perform_receiver<int>::make_shared([&received0](int const &value) { received0 = value; });
+    auto receiver1 =
+        chaining::perform_receiver<int>::make_shared([&received1](int const &value) { received1 = value; });
 
     chaining::any_observer_ptr observer = notifier->chain().send_to({receiver0, receiver1}).end();
 

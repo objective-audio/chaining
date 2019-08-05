@@ -16,6 +16,9 @@ struct receiver : any_receiver {
     using ReceiveType = T;
 
     virtual receivable_ptr<T> receivable() = 0;
+
+   protected:
+    receiver() = default;
 };
 
 template <typename T>

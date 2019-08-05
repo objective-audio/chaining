@@ -63,7 +63,7 @@ using namespace yas::chaining;
     auto holder = value::holder<int>::make_shared(100);
     auto notifier = chaining::notifier<int>::make_shared();
 
-    auto flow = notifier->chain().send_to(*holder).end();
+    auto flow = notifier->chain().send_to(holder).end();
 
     XCTAssertEqual(holder->raw(), 100);
 
@@ -76,12 +76,12 @@ using namespace yas::chaining;
     auto holder1 = value::holder<int>::make_shared(123);
     auto holder2 = value::holder<int>::make_shared(456);
 
-    auto flow1 = holder1->chain().send_to(*holder2).sync();
+    auto flow1 = holder1->chain().send_to(holder2).sync();
 
     XCTAssertEqual(holder1->raw(), 123);
     XCTAssertEqual(holder2->raw(), 123);
 
-    auto flow2 = holder2->chain().send_to(*holder1).sync();
+    auto flow2 = holder2->chain().send_to(holder1).sync();
 
     XCTAssertEqual(holder1->raw(), 123);
     XCTAssertEqual(holder2->raw(), 123);
