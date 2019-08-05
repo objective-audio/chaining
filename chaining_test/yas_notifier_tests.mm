@@ -63,7 +63,7 @@ using namespace yas;
     auto notifier1 = chaining::notifier<int>::make_shared();
     auto notifier2 = chaining::notifier<int>::make_shared();
 
-    auto flow1 = notifier1->chain().send_to(*notifier2).end();
+    auto flow1 = notifier1->chain().send_to(notifier2).end();
     auto flow2 = notifier2->chain().perform([&received](int const &value) { received = value; }).end();
 
     notifier1->notify(4);
@@ -81,7 +81,7 @@ using namespace yas;
         notifier->notify(value + 1);
     });
 
-    auto flow = notifier->chain().send_to(*receiver).end();
+    auto flow = notifier->chain().send_to(receiver).end();
 
     notifier->notify(1);
 

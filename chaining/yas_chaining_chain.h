@@ -21,14 +21,14 @@ struct [[nodiscard]] chain final {
     [[nodiscard]] chain<Out, Begin, Syncable> perform(std::function<void(Out const &)>);
 
     template <std::size_t N = 0, typename T>
-    [[nodiscard]] chain<Out, Begin, Syncable> send_to(receiver<T> &);
+    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::shared_ptr<T> const &);
     template <typename T, std::size_t N>
-    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::array<T, N>);
+    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::array<std::shared_ptr<T>, N> const &);
     template <typename T>
-    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::vector<T>);
+    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::vector<std::shared_ptr<T>> const &);
     template <typename T>
-    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::initializer_list<T>);
-    [[nodiscard]] chain<Out, Begin, Syncable> send_null(receiver<std::nullptr_t> &);
+    [[nodiscard]] chain<Out, Begin, Syncable> send_to(std::initializer_list<std::shared_ptr<T>> const &);
+    [[nodiscard]] chain<Out, Begin, Syncable> send_null_to(std::shared_ptr<receiver<std::nullptr_t>> const &);
 
     [[nodiscard]] chain<Out, Begin, Syncable> guard(std::function<bool(Out const &)>);
 
