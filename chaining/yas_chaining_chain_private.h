@@ -284,9 +284,9 @@ chain<Out, Begin, Syncable> chain<Out, Begin, Syncable>::send_to(
 
 template <typename Out, typename Begin, bool Syncable>
 chain<Out, Begin, Syncable> chain<Out, Begin, Syncable>::send_null_to(std::shared_ptr<receiver<>> const &receiver) {
-    return this->perform([weak_receivable = to_weak(receiver->receivable())](Out const &value) {
-        if (chaining::receivable_ptr<> receivable = weak_receivable.lock()) {
-            receivable->receive_value(nullptr);
+    return this->perform([weak_receiver = to_weak(receiver)](Out const &) {
+        if (std::shared_ptr<chaining::receiver<>> receiver = weak_receiver.lock()) {
+            receiver->receivable()->receive_value(nullptr);
         }
     });
 }
