@@ -16,7 +16,6 @@ struct receiver : any_receiver {
     using ReceiveType = T;
 
     virtual void receive_value(T const &) = 0;
-    virtual receivable_ptr<T> receivable() = 0;
 
    protected:
     receiver() = default;

@@ -72,11 +72,6 @@ void fetcher<T>::receive_value(std::nullptr_t const &) {
 }
 
 template <typename T>
-chaining::receivable_ptr<std::nullptr_t> fetcher<T>::receivable() {
-    return this->template impl_ptr<typename chaining::receivable<std::nullptr_t>>();
-}
-
-template <typename T>
 std::shared_ptr<weakable_impl> fetcher<T>::weakable_impl_ptr() const {
     return this->template impl_ptr<impl>();
 }

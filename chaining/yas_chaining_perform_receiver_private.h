@@ -36,11 +36,6 @@ void chaining::perform_receiver<T>::receive_value(T const &value) {
 }
 
 template <typename T>
-chaining::receivable_ptr<T> chaining::perform_receiver<T>::receivable() {
-    return this->_impl;
-}
-
-template <typename T>
 std::shared_ptr<chaining::perform_receiver<T>> chaining::perform_receiver<T>::make_shared(
     std::function<void(T const &)> const &handler) {
     return std::shared_ptr<chaining::perform_receiver<T>>(new chaining::perform_receiver<T>{handler});

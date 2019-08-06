@@ -48,11 +48,6 @@ void notifier<T>::receive_value(T const &value) {
 }
 
 template <typename T>
-chaining::receivable_ptr<T> notifier<T>::receivable() {
-    return this->template impl_ptr<typename chaining::receivable<T>>();
-}
-
-template <typename T>
 std::shared_ptr<weakable_impl> notifier<T>::weakable_impl_ptr() const {
     return this->template impl_ptr<impl>();
 }

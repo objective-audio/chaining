@@ -377,11 +377,6 @@ void holder<Key, Value>::receive_value(event const &value) {
 }
 
 template <typename Key, typename Value>
-chaining::receivable_ptr<event> holder<Key, Value>::receivable() {
-    return this->template impl_ptr<typename chaining::receivable<event>>();
-}
-
-template <typename Key, typename Value>
 std::shared_ptr<weakable_impl> holder<Key, Value>::weakable_impl_ptr() const {
     return this->template impl_ptr<impl>();
 }

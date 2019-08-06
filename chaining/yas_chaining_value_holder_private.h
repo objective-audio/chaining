@@ -81,11 +81,6 @@ void holder<T>::receive_value(T const &value) {
 }
 
 template <typename T>
-receivable_ptr<T> holder<T>::receivable() {
-    return this->template impl_ptr<typename chaining::receivable<T>>();
-}
-
-template <typename T>
 std::shared_ptr<weakable_impl> holder<T>::weakable_impl_ptr() const {
     return this->template impl_ptr<impl>();
 }

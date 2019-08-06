@@ -12,7 +12,6 @@ struct[[nodiscard]] perform_receiver final : receiver<T> {
     class impl;
 
     void receive_value(T const &) override;
-    [[nodiscard]] receivable_ptr<T> receivable() override;
 
    private:
     std::shared_ptr<impl> _impl;

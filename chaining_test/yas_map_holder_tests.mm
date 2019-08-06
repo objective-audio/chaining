@@ -140,18 +140,18 @@ using namespace yas::chaining;
 - (void)test_receiver {
     auto holder = map::holder<int, std::string>::make_shared({{0, "10"}, {1, "11"}});
 
-    holder->receivable()->receive_value(map::make_fetched_event(std::map<int, std::string>{{2, "12"}}));
+    holder->receive_value(map::make_fetched_event(std::map<int, std::string>{{2, "12"}}));
 
     XCTAssertEqual(holder->size(), 1);
     XCTAssertEqual(holder->at(2), "12");
 
-    holder->receivable()->receive_value(map::make_any_event(std::map<int, std::string>{{3, "13"}, {4, "14"}}));
+    holder->receive_value(map::make_any_event(std::map<int, std::string>{{3, "13"}, {4, "14"}}));
 
     XCTAssertEqual(holder->size(), 2);
     XCTAssertEqual(holder->at(3), "13");
     XCTAssertEqual(holder->at(4), "14");
 
-    holder->receivable()->receive_value(map::make_inserted_event(std::map<int, std::string>{{5, "15"}, {6, "16"}}));
+    holder->receive_value(map::make_inserted_event(std::map<int, std::string>{{5, "15"}, {6, "16"}}));
 
     XCTAssertEqual(holder->size(), 4);
     XCTAssertEqual(holder->at(3), "13");
@@ -159,13 +159,13 @@ using namespace yas::chaining;
     XCTAssertEqual(holder->at(5), "15");
     XCTAssertEqual(holder->at(6), "16");
 
-    holder->receivable()->receive_value(map::make_erased_event(std::map<int, std::string>{{4, "14"}, {5, "15"}}));
+    holder->receive_value(map::make_erased_event(std::map<int, std::string>{{4, "14"}, {5, "15"}}));
 
     XCTAssertEqual(holder->size(), 2);
     XCTAssertEqual(holder->at(3), "13");
     XCTAssertEqual(holder->at(6), "16");
 
-    holder->receivable()->receive_value(map::make_replaced_event<int, std::string>(3, "23"));
+    holder->receive_value(map::make_replaced_event<int, std::string>(3, "23"));
 
     XCTAssertEqual(holder->size(), 2);
     XCTAssertEqual(holder->at(3), "23");
