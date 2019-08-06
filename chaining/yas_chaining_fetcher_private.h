@@ -19,17 +19,6 @@ struct fetcher<T>::impl : sender<T>::impl, weakable_impl {
         }
     }
 
-    std::optional<T> fetched_value() {
-        return this->_fetching_handler();
-    }
-
-    void _broadcast() {
-        if (auto value = this->_fetching_handler()) {
-            this->broadcast(*value);
-        }
-    }
-
-   private:
     std::function<std::optional<T>(void)> _fetching_handler;
 };
 
@@ -44,12 +33,14 @@ fetcher<T>::fetcher(std::shared_ptr<impl> &&impl) : sender<T>(std::move(impl)) {
 
 template <typename T>
 std::optional<T> fetcher<T>::fetched_value() const {
-    return this->template impl_ptr<impl>()->fetched_value();
+    return this->template impl_ptr<impl>()->_fetching_handler();
 }
 
 template <typename T>
 void fetcher<T>::broadcast() const {
-    this->template impl_ptr<impl>()->_broadcast();
+    if (auto value = this->fetched_value()) {
+        this->template impl_ptr<impl>()->broadcast(*value);
+    }
 }
 
 template <typename T>
