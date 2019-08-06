@@ -11,7 +11,7 @@ template <typename T = std::nullptr_t>
 struct[[nodiscard]] perform_receiver final : receiver<T> {
     class impl;
 
-    [[nodiscard]] receivable_ptr<T> receivable() override;
+    void receive_value(T const &) override;
 
    private:
     std::shared_ptr<impl> _impl;

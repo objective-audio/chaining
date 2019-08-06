@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include "yas_chaining_receiver_protocol.h"
-
 namespace yas::chaining {
 struct any_receiver {
     virtual ~any_receiver() = default;
@@ -15,7 +13,7 @@ template <typename T = std::nullptr_t>
 struct receiver : any_receiver {
     using ReceiveType = T;
 
-    virtual receivable_ptr<T> receivable() = 0;
+    virtual void receive_value(T const &) = 0;
 
    protected:
     receiver() = default;

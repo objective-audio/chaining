@@ -41,7 +41,7 @@ event make_relayed_event(Key const &key, Value const &value, typename Value::Sen
 #pragma mark - map::holder::impl
 
 template <typename Key, typename Value>
-struct holder<Key, Value>::impl : sender<event>::impl, chaining::receivable<event>, weakable_impl {
+struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
     struct observer_wrapper {
         any_observer_ptr observer = nullptr;
         Value *value = nullptr;
@@ -152,33 +152,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, chaining::receivable<even
 
     void fetch_for(any_joint const &joint) override {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
-    }
-
-    void receive_value(event const &event) override {
-        switch (event.type()) {
-            case event_type::fetched: {
-                auto const &fetched = event.get<map::fetched_event<Key, Value>>();
-                this->replace_all(fetched.elements);
-            } break;
-            case event_type::any: {
-                auto const &any = event.get<map::any_event<Key, Value>>();
-                this->replace_all(any.elements);
-            } break;
-            case event_type::inserted: {
-                auto const &inserted = event.get<map::inserted_event<Key, Value>>();
-                this->insert(inserted.elements);
-            } break;
-            case event_type::erased: {
-                auto const &erased = event.get<map::erased_event<Key, Value>>();
-                this->erase_if([&erased](Key const &key, Value const &) { return erased.elements.count(key) > 0; });
-            } break;
-            case event_type::replaced: {
-                auto const &replaced = event.get<map::replaced_event<Key, Value>>();
-                this->insert_or_replace(replaced.key, replaced.value);
-            } break;
-            case event_type::relayed:
-                break;
-        }
     }
 
    private:
@@ -372,8 +345,31 @@ typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::cha
 }
 
 template <typename Key, typename Value>
-chaining::receivable_ptr<event> holder<Key, Value>::receivable() {
-    return this->template impl_ptr<typename chaining::receivable<event>>();
+void holder<Key, Value>::receive_value(map::event const &event) {
+    switch (event.type()) {
+        case event_type::fetched: {
+            auto const &fetched = event.get<map::fetched_event<Key, Value>>();
+            this->replace_all(fetched.elements);
+        } break;
+        case event_type::any: {
+            auto const &any = event.get<map::any_event<Key, Value>>();
+            this->replace_all(any.elements);
+        } break;
+        case event_type::inserted: {
+            auto const &inserted = event.get<map::inserted_event<Key, Value>>();
+            this->insert(inserted.elements);
+        } break;
+        case event_type::erased: {
+            auto const &erased = event.get<map::erased_event<Key, Value>>();
+            this->erase_if([&erased](Key const &key, Value const &) { return erased.elements.count(key) > 0; });
+        } break;
+        case event_type::replaced: {
+            auto const &replaced = event.get<map::replaced_event<Key, Value>>();
+            this->insert_or_replace(replaced.key, replaced.value);
+        } break;
+        case event_type::relayed:
+            break;
+    }
 }
 
 template <typename Key, typename Value>

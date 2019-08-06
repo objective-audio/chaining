@@ -39,7 +39,7 @@ event make_relayed_event(T const &element, std::size_t const idx, typename T::Se
 }
 
 template <typename T>
-struct holder<T>::impl : sender<event>::impl, chaining::receivable<event>, weakable_impl {
+struct holder<T>::impl : sender<event>::impl, weakable_impl {
     struct observer_wrapper {
         any_observer_ptr observer = nullptr;
     };
@@ -134,33 +134,6 @@ struct holder<T>::impl : sender<event>::impl, chaining::receivable<event>, weaka
 
     void fetch_for(any_joint const &joint) override {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
-    }
-
-    void receive_value(event const &event) override {
-        switch (event.type()) {
-            case event_type::fetched: {
-                auto const &fetched = event.get<vector::fetched_event<T>>();
-                this->replace_all(fetched.elements);
-            } break;
-            case event_type::any: {
-                auto const &any = event.get<vector::any_event<T>>();
-                this->replace_all(any.elements);
-            } break;
-            case event_type::inserted: {
-                auto const &inserted = event.get<vector::inserted_event<T>>();
-                this->insert(inserted.element, inserted.index);
-            } break;
-            case event_type::erased: {
-                auto const &erased = event.get<vector::erased_event<T>>();
-                this->erase_at(erased.index);
-            } break;
-            case event_type::replaced: {
-                auto const &replaced = event.get<vector::replaced_event<T>>();
-                this->replace(replaced.element, replaced.index);
-            } break;
-            case event_type::relayed:
-                break;
-        }
     }
 
    private:
@@ -311,8 +284,31 @@ void holder<T>::clear() {
 }
 
 template <typename T>
-receivable_ptr<event> holder<T>::receivable() {
-    return this->template impl_ptr<typename chaining::receivable<event>>();
+void holder<T>::receive_value(vector::event const &event) {
+    switch (event.type()) {
+        case event_type::fetched: {
+            auto const &fetched = event.get<vector::fetched_event<T>>();
+            this->template impl_ptr<impl>()->replace_all(fetched.elements);
+        } break;
+        case event_type::any: {
+            auto const &any = event.get<vector::any_event<T>>();
+            this->template impl_ptr<impl>()->replace_all(any.elements);
+        } break;
+        case event_type::inserted: {
+            auto const &inserted = event.get<vector::inserted_event<T>>();
+            this->insert(inserted.element, inserted.index);
+        } break;
+        case event_type::erased: {
+            auto const &erased = event.get<vector::erased_event<T>>();
+            this->erase_at(erased.index);
+        } break;
+        case event_type::replaced: {
+            auto const &replaced = event.get<vector::replaced_event<T>>();
+            this->replace(replaced.element, replaced.index);
+        } break;
+        case event_type::relayed:
+            break;
+    }
 }
 
 template <typename T>

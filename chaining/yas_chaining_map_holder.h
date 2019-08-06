@@ -84,7 +84,7 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<Key, Value
 
     [[nodiscard]] chain_t chain() const;
 
-    [[nodiscard]] chaining::receivable_ptr<event> receivable() override;
+    void receive_value(event const &) override;
 
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
 
