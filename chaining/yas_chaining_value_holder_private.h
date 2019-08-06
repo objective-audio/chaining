@@ -13,19 +13,6 @@ struct holder<T>::impl : sender<T>::impl, weakable_impl {
     impl(T &&value) : _value(std::move(value)) {
     }
 
-    T &value() {
-        return this->_value;
-    }
-
-    void locked_set_value(T &&value) {
-        if (auto lock = std::unique_lock<std::mutex>(this->_set_mutex, std::try_to_lock); lock.owns_lock()) {
-            if (this->_value != value) {
-                this->_value = std::move(value);
-                this->broadcast(this->_value);
-            }
-        }
-    }
-
     void fetch_for(any_joint const &joint) override {
         this->send_value_to_target(this->_value, joint.identifier());
     }
@@ -38,7 +25,6 @@ struct holder<T>::impl : sender<T>::impl, weakable_impl {
         }
     }
 
-   private:
     T _value;
     std::mutex _set_mutex;
 };
@@ -55,15 +41,27 @@ template <typename T>
 holder<T>::~holder() = default;
 
 template <typename T>
-void holder<T>::set_value(T value) {
-    this->template impl_ptr<impl>()->locked_set_value(std::move(value));
+void holder<T>::set_value(T &&value) {
+    auto impl_ptr = this->template impl_ptr<impl>();
+    if (auto lock = std::unique_lock<std::mutex>(impl_ptr->_set_mutex, std::try_to_lock); lock.owns_lock()) {
+        if (impl_ptr->_value != value) {
+            impl_ptr->_value = std::move(value);
+            impl_ptr->broadcast(impl_ptr->_value);
+        }
+    }
 }
 
 template <typename T>
-[[nodiscard]] T const &holder<T>::raw() const { return this->template impl_ptr<impl>()->value(); }
+void holder<T>::set_value(T const &value) {
+    T copied = value;
+    this->set_value(std::move(copied));
+}
 
 template <typename T>
-[[nodiscard]] T &holder<T>::raw() { return this->template impl_ptr<impl>()->value(); }
+[[nodiscard]] T const &holder<T>::raw() const { return this->template impl_ptr<impl>()->_value; }
+
+template <typename T>
+[[nodiscard]] T &holder<T>::raw() { return this->template impl_ptr<impl>()->_value; }
 
 template <typename T>
 chain_sync_t<T> holder<T>::chain() const {
@@ -72,8 +70,7 @@ chain_sync_t<T> holder<T>::chain() const {
 
 template <typename T>
 void holder<T>::receive_value(T const &value) {
-    T copied = value;
-    this->template impl_ptr<impl>()->locked_set_value(std::move(copied));
+    this->set_value(value);
 }
 
 template <typename T>

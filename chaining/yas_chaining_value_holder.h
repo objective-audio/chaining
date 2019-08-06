@@ -17,7 +17,8 @@ struct holder final : sender<T>, receiver<T>, weakable<holder<T>> {
 
     ~holder();
 
-    void set_value(T);
+    void set_value(T &&);
+    void set_value(T const &);
 
     [[nodiscard]] T const &raw() const;
     [[nodiscard]] T &raw();
