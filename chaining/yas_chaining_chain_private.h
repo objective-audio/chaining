@@ -8,7 +8,6 @@
 #include <optional>
 #include <vector>
 #include "yas_chaining_observer.h"
-#include "yas_chaining_receiver_protocol.h"
 
 namespace yas::chaining {
 template <typename Out, typename Begin, bool Syncable>

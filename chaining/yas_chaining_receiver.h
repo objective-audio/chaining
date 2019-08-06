@@ -4,8 +4,6 @@
 
 #pragma once
 
-#include "yas_chaining_receiver_protocol.h"
-
 namespace yas::chaining {
 struct any_receiver {
     virtual ~any_receiver() = default;
