@@ -123,22 +123,22 @@ struct chain<Out, Begin, Syncable>::impl {
     auto send_to(chaining::chain<Out, Begin, Syncable> &chain, std::vector<std::shared_ptr<T>> const &receivers) {
         std::size_t const count = receivers.size();
 
-        std::vector<std::weak_ptr<receivable<typename T::ReceiveType>>> weak_receivables;
-        weak_receivables.reserve(count);
+        std::vector<std::weak_ptr<T>> weak_receivers;
+        weak_receivers.reserve(count);
 
         auto each = make_fast_each(count);
         while (yas_each_next(each)) {
             auto const &idx = yas_each_index(each);
-            weak_receivables.emplace_back(to_weak(receivers.at(idx)->receivable()));
+            weak_receivers.emplace_back(to_weak(receivers.at(idx)));
         }
 
-        return chain.perform([weak_receivables = std::move(weak_receivables)](Out const &values) {
-            std::size_t const count = std::min(values.size(), weak_receivables.size());
+        return chain.perform([weak_receivers = std::move(weak_receivers)](Out const &values) {
+            std::size_t const count = std::min(values.size(), weak_receivers.size());
             auto each = make_fast_each(count);
             while (yas_each_next(each)) {
                 auto const &idx = yas_each_index(each);
-                if (receivable_ptr<typename T::ReceiveType> receivable = weak_receivables.at(idx).lock()) {
-                    receivable->receive_value(values.at(idx));
+                if (auto receiver = weak_receivers.at(idx).lock()) {
+                    receiver->receivable()->receive_value(values.at(idx));
                 }
             }
         });
