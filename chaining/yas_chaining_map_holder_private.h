@@ -154,33 +154,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
 
-    void receive_value(event const &event) {
-        switch (event.type()) {
-            case event_type::fetched: {
-                auto const &fetched = event.get<map::fetched_event<Key, Value>>();
-                this->replace_all(fetched.elements);
-            } break;
-            case event_type::any: {
-                auto const &any = event.get<map::any_event<Key, Value>>();
-                this->replace_all(any.elements);
-            } break;
-            case event_type::inserted: {
-                auto const &inserted = event.get<map::inserted_event<Key, Value>>();
-                this->insert(inserted.elements);
-            } break;
-            case event_type::erased: {
-                auto const &erased = event.get<map::erased_event<Key, Value>>();
-                this->erase_if([&erased](Key const &key, Value const &) { return erased.elements.count(key) > 0; });
-            } break;
-            case event_type::replaced: {
-                auto const &replaced = event.get<map::replaced_event<Key, Value>>();
-                this->insert_or_replace(replaced.key, replaced.value);
-            } break;
-            case event_type::relayed:
-                break;
-        }
-    }
-
    private:
     std::map<Key, Value> _raw;
     std::map<Key, wrapper_ptr> _observers;
@@ -372,8 +345,31 @@ typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::cha
 }
 
 template <typename Key, typename Value>
-void holder<Key, Value>::receive_value(event const &value) {
-    return this->template impl_ptr<impl>()->receive_value(value);
+void holder<Key, Value>::receive_value(map::event const &event) {
+    switch (event.type()) {
+        case event_type::fetched: {
+            auto const &fetched = event.get<map::fetched_event<Key, Value>>();
+            this->replace_all(fetched.elements);
+        } break;
+        case event_type::any: {
+            auto const &any = event.get<map::any_event<Key, Value>>();
+            this->replace_all(any.elements);
+        } break;
+        case event_type::inserted: {
+            auto const &inserted = event.get<map::inserted_event<Key, Value>>();
+            this->insert(inserted.elements);
+        } break;
+        case event_type::erased: {
+            auto const &erased = event.get<map::erased_event<Key, Value>>();
+            this->erase_if([&erased](Key const &key, Value const &) { return erased.elements.count(key) > 0; });
+        } break;
+        case event_type::replaced: {
+            auto const &replaced = event.get<map::replaced_event<Key, Value>>();
+            this->insert_or_replace(replaced.key, replaced.value);
+        } break;
+        case event_type::relayed:
+            break;
+    }
 }
 
 template <typename Key, typename Value>
