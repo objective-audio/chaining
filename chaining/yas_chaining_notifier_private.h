@@ -16,10 +16,6 @@ struct notifier<T>::impl : sender<T>::impl, weakable_impl {
         }
     }
 
-    void receive_value(T const &value) {
-        this->locked_send_value(value);
-    }
-
    private:
     std::mutex _send_mutex;
 };
@@ -44,7 +40,7 @@ chain_unsync_t<T> notifier<T>::chain() const {
 
 template <typename T>
 void notifier<T>::receive_value(T const &value) {
-    return this->template impl_ptr<impl>()->receive_value(value);
+    return this->template impl_ptr<impl>()->locked_send_value(value);
 }
 
 template <typename T>

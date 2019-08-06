@@ -38,11 +38,6 @@ struct holder<T>::impl : sender<T>::impl, weakable_impl {
         }
     }
 
-    void receive_value(T const &value) {
-        T copied = value;
-        this->locked_set_value(std::move(copied));
-    }
-
    private:
     T _value;
     std::mutex _set_mutex;
@@ -77,7 +72,8 @@ chain_sync_t<T> holder<T>::chain() const {
 
 template <typename T>
 void holder<T>::receive_value(T const &value) {
-    this->template impl_ptr<impl>()->receive_value(value);
+    T copied = value;
+    this->template impl_ptr<impl>()->locked_set_value(std::move(copied));
 }
 
 template <typename T>

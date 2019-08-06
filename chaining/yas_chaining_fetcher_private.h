@@ -29,10 +29,6 @@ struct fetcher<T>::impl : sender<T>::impl, weakable_impl {
         }
     }
 
-    void receive_value(std::nullptr_t const &) {
-        this->_broadcast();
-    }
-
    private:
     std::function<std::optional<T>(void)> _fetching_handler;
 };
@@ -68,7 +64,7 @@ chain_sync_t<T> fetcher<T>::chain() const {
 
 template <typename T>
 void fetcher<T>::receive_value(std::nullptr_t const &) {
-    return this->template impl_ptr<impl>()->receive_value(nullptr);
+    return this->broadcast();
 }
 
 template <typename T>
