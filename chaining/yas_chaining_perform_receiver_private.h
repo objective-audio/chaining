@@ -31,6 +31,11 @@ chaining::perform_receiver<T>::perform_receiver(std::function<void(T const &)> &
 }
 
 template <typename T>
+void chaining::perform_receiver<T>::receive_value(T const &value) {
+    this->_impl->receive_value(value);
+}
+
+template <typename T>
 chaining::receivable_ptr<T> chaining::perform_receiver<T>::receivable() {
     return this->_impl;
 }

@@ -76,6 +76,11 @@ chain_sync_t<T> holder<T>::chain() const {
 }
 
 template <typename T>
+void holder<T>::receive_value(T const &value) {
+    this->template impl_ptr<impl>()->receive_value(value);
+}
+
+template <typename T>
 receivable_ptr<T> holder<T>::receivable() {
     return this->template impl_ptr<typename chaining::receivable<T>>();
 }

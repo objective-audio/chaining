@@ -23,6 +23,7 @@ struct fetcher final : sender<T>, receiver<>, weakable<fetcher<T>> {
 
     [[nodiscard]] chain_sync_t<T> chain() const;
 
+    void receive_value(std::nullptr_t const &) override;
     [[nodiscard]] chaining::receivable_ptr<std::nullptr_t> receivable() override;
 
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;

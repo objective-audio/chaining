@@ -43,6 +43,11 @@ chain_unsync_t<T> notifier<T>::chain() const {
 }
 
 template <typename T>
+void notifier<T>::receive_value(T const &value) {
+    return this->template impl_ptr<impl>()->receive_value(value);
+}
+
+template <typename T>
 chaining::receivable_ptr<T> notifier<T>::receivable() {
     return this->template impl_ptr<typename chaining::receivable<T>>();
 }

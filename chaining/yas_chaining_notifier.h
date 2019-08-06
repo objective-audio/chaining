@@ -19,6 +19,7 @@ struct notifier final : sender<T>, receiver<T>, weakable<notifier<T>> {
 
     [[nodiscard]] chain_unsync_t<T> chain() const;
 
+    void receive_value(T const &) override;
     [[nodiscard]] chaining::receivable_ptr<T> receivable() override;
 
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;

@@ -372,6 +372,11 @@ typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::cha
 }
 
 template <typename Key, typename Value>
+void holder<Key, Value>::receive_value(event const &value) {
+    return this->template impl_ptr<impl>()->receive_value(value);
+}
+
+template <typename Key, typename Value>
 chaining::receivable_ptr<event> holder<Key, Value>::receivable() {
     return this->template impl_ptr<typename chaining::receivable<event>>();
 }

@@ -26,6 +26,7 @@ struct holder final : sender<T>, receiver<T>, weakable<holder<T>> {
 
     [[nodiscard]] receivable_ptr<T> receivable() override;
 
+    void receive_value(T const &) override;
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
 
    private:
