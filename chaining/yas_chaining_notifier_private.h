@@ -9,7 +9,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct notifier<T>::impl : sender<T>::impl, chaining::receivable<T>, weakable_impl {
+struct notifier<T>::impl : sender<T>::impl, weakable_impl {
     void locked_send_value(T const &value) {
         if (auto lock = std::unique_lock<std::mutex>(this->_send_mutex, std::try_to_lock); lock.owns_lock()) {
             this->broadcast(value);

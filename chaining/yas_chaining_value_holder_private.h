@@ -9,7 +9,7 @@
 
 namespace yas::chaining::value {
 template <typename T>
-struct holder<T>::impl : sender<T>::impl, chaining::receivable<T>, weakable_impl {
+struct holder<T>::impl : sender<T>::impl, weakable_impl {
     impl(T &&value) : _value(std::move(value)) {
     }
 
@@ -38,7 +38,7 @@ struct holder<T>::impl : sender<T>::impl, chaining::receivable<T>, weakable_impl
         }
     }
 
-    void receive_value(T const &value) override {
+    void receive_value(T const &value) {
         T copied = value;
         this->locked_set_value(std::move(copied));
     }

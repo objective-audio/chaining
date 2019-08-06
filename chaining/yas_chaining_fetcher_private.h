@@ -9,7 +9,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct fetcher<T>::impl : sender<T>::impl, chaining::receivable<std::nullptr_t>, weakable_impl {
+struct fetcher<T>::impl : sender<T>::impl, weakable_impl {
     impl(std::function<std::optional<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {
     }
 
@@ -29,7 +29,7 @@ struct fetcher<T>::impl : sender<T>::impl, chaining::receivable<std::nullptr_t>,
         }
     }
 
-    void receive_value(std::nullptr_t const &) override {
+    void receive_value(std::nullptr_t const &) {
         this->_broadcast();
     }
 

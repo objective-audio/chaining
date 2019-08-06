@@ -41,7 +41,7 @@ event make_relayed_event(Key const &key, Value const &value, typename Value::Sen
 #pragma mark - map::holder::impl
 
 template <typename Key, typename Value>
-struct holder<Key, Value>::impl : sender<event>::impl, chaining::receivable<event>, weakable_impl {
+struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
     struct observer_wrapper {
         any_observer_ptr observer = nullptr;
         Value *value = nullptr;
@@ -154,7 +154,7 @@ struct holder<Key, Value>::impl : sender<event>::impl, chaining::receivable<even
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
 
-    void receive_value(event const &event) override {
+    void receive_value(event const &event) {
         switch (event.type()) {
             case event_type::fetched: {
                 auto const &fetched = event.get<map::fetched_event<Key, Value>>();
