@@ -72,7 +72,7 @@ struct chain<Out, Begin, Syncable>::impl {
     auto send_to(chaining::chain<Out, Begin, Syncable> &chain, std::shared_ptr<T> const &receiver) {
         return chain.perform([weak_receiver = to_weak(receiver)](Out const &value) {
             if (std::shared_ptr<T> receiver = weak_receiver.lock()) {
-                receiver->receivable()->receive_value(value);
+                receiver->receive_value(value);
             }
         });
     }
@@ -82,7 +82,7 @@ struct chain<Out, Begin, Syncable>::impl {
     auto send_to(chaining::chain<Out, Begin, Syncable> &chain, std::shared_ptr<T> const &receiver) {
         return chain.perform([weak_receiver = to_weak(receiver)](Out const &value) {
             if (std::shared_ptr<T> receiver = weak_receiver.lock()) {
-                receiver->receivable()->receive_value(std::get<N>(value));
+                receiver->receive_value(std::get<N>(value));
             }
         });
     }
@@ -92,7 +92,7 @@ struct chain<Out, Begin, Syncable>::impl {
     auto send_to(chaining::chain<Out, Begin, Syncable> &chain, std::shared_ptr<T> const &receiver) {
         return chain.perform([weak_receiver = to_weak(receiver)](Out const &value) {
             if (std::shared_ptr<T> receiver = weak_receiver.lock()) {
-                receiver->receivable()->receive_value(std::get<N>(value));
+                receiver->receive_value(std::get<N>(value));
             }
         });
     }
@@ -113,7 +113,7 @@ struct chain<Out, Begin, Syncable>::impl {
             while (yas_each_next(each)) {
                 auto const &idx = yas_each_index(each);
                 if (std::shared_ptr<T> receiver = weak_receivers.at(idx).lock()) {
-                    receiver->receivable()->receive_value(values.at(idx));
+                    receiver->receive_value(values.at(idx));
                 }
             }
         });
@@ -138,7 +138,7 @@ struct chain<Out, Begin, Syncable>::impl {
             while (yas_each_next(each)) {
                 auto const &idx = yas_each_index(each);
                 if (std::shared_ptr<T> receiver = weak_receivers.at(idx).lock()) {
-                    receiver->receivable()->receive_value(values.at(idx));
+                    receiver->receive_value(values.at(idx));
                 }
             }
         });
@@ -286,7 +286,7 @@ template <typename Out, typename Begin, bool Syncable>
 chain<Out, Begin, Syncable> chain<Out, Begin, Syncable>::send_null_to(std::shared_ptr<receiver<>> const &receiver) {
     return this->perform([weak_receiver = to_weak(receiver)](Out const &) {
         if (std::shared_ptr<chaining::receiver<>> receiver = weak_receiver.lock()) {
-            receiver->receivable()->receive_value(nullptr);
+            receiver->receive_value(nullptr);
         }
     });
 }
