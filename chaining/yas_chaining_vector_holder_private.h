@@ -153,6 +153,20 @@ struct holder<T>::impl : sender<event>::impl, weakable_impl {
     }
 };
 
+namespace utils {
+    template <typename T, enable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
+    void replace_all(vector::holder<T> &holder, std::vector<T> vec) {
+        auto impl_ptr = holder.template impl_ptr<typename vector::holder<T>::impl>();
+        impl_ptr->_replace(std::move(vec), impl_ptr->_element_chaining());
+    }
+
+    template <typename T, disable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
+    void replace_all(vector::holder<T> &holder, std::vector<T> vec) {
+        auto impl_ptr = holder.template impl_ptr<typename vector::holder<T>::impl>();
+        impl_ptr->_replace(std::move(vec), nullptr);
+    }
+}  // namespace utils
+
 template <typename T>
 typename holder<T>::vector_t const &holder<T>::raw() const {
     return this->template impl_ptr<impl>()->_raw;
@@ -192,7 +206,7 @@ holder<T>::~holder() = default;
 
 template <typename T>
 void holder<T>::replace(std::vector<T> vec) {
-    this->template impl_ptr<impl>()->replace_all(std::move(vec));
+    utils::replace_all(*this, std::move(vec));
 }
 
 template <typename T>
