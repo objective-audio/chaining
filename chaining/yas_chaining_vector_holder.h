@@ -6,6 +6,7 @@
 
 #include <cpp_utils/yas_weakable.h>
 #include <vector>
+#include "yas_chaining_any_observer.h"
 #include "yas_chaining_event.h"
 #include "yas_chaining_receiver.h"
 #include "yas_chaining_sender.h"
@@ -87,11 +88,20 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<T>> {
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
 
    private:
+    struct observer_wrapper {
+        any_observer_ptr observer = nullptr;
+    };
+
+    using wrapper_ptr = std::shared_ptr<observer_wrapper>;
+    using wrapper_wptr = std::weak_ptr<observer_wrapper>;
+    using chaining_f = std::function<void(T &, wrapper_ptr &)>;
+
     explicit holder(vector_t);
 
     bool is_equal(sender<event> const &rhs) const override;
 
     void _prepare(std::vector<T> &&);
+    T _erase_at(std::size_t const idx);
 
    public:
     static std::shared_ptr<holder> make_shared();
