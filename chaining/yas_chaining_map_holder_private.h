@@ -141,10 +141,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
         this->broadcast(make_any_event(this->_raw));
     }
 
-    std::map<Key, Value> &raw() {
-        return this->_raw;
-    }
-
     void fetch_for(any_joint const &joint) override {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
@@ -267,12 +263,12 @@ holder<Key, Value>::~holder() = default;
 
 template <typename Key, typename Value>
 std::map<Key, Value> const &holder<Key, Value>::raw() const {
-    return this->template impl_ptr<impl>()->raw();
+    return this->template impl_ptr<impl>()->_raw;
 }
 
 template <typename Key, typename Value>
 std::map<Key, Value> &holder<Key, Value>::raw() {
-    return this->template impl_ptr<impl>()->raw();
+    return this->template impl_ptr<impl>()->_raw;
 }
 
 template <typename Key, typename Value>
@@ -287,7 +283,7 @@ Value const &holder<Key, Value>::at(Key const &key) const {
 
 template <typename Key, typename Value>
 Value &holder<Key, Value>::at(Key const &key) {
-    return this->template impl_ptr<impl>()->raw().at(key);
+    return this->raw().at(key);
 }
 
 template <typename Key, typename Value>

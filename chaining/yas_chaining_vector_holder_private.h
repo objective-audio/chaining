@@ -123,10 +123,6 @@ struct holder<T>::impl : sender<event>::impl, weakable_impl {
         this->broadcast(make_any_event(this->_raw));
     }
 
-    std::vector<T> &raw() {
-        return this->_raw;
-    }
-
     void fetch_for(any_joint const &joint) override {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
@@ -209,12 +205,12 @@ struct holder<T>::impl : sender<event>::impl, weakable_impl {
 
 template <typename T>
 typename holder<T>::vector_t const &holder<T>::raw() const {
-    return this->template impl_ptr<impl>()->raw();
+    return this->template impl_ptr<impl>()->_raw;
 }
 
 template <typename T>
 typename holder<T>::vector_t &holder<T>::raw() {
-    return this->template impl_ptr<impl>()->raw();
+    return this->template impl_ptr<impl>()->_raw;
 }
 
 template <typename T>
