@@ -91,6 +91,8 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<T>> {
 
     bool is_equal(sender<event> const &rhs) const override;
 
+    void _prepare(std::vector<T> &&);
+
    public:
     static std::shared_ptr<holder> make_shared();
     static std::shared_ptr<holder> make_shared(vector_t);

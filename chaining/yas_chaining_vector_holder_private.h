@@ -51,10 +51,6 @@ struct holder<T>::impl : sender<event>::impl, weakable_impl {
     std::vector<T> _raw;
     std::vector<wrapper_ptr> _observers;
 
-    void prepare(std::vector<T> &&vec) {
-        this->replace_all(std::move(vec));
-    }
-
     template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     void replace_all(std::vector<T> vec) {
         this->_replace(std::move(vec), this->_element_chaining());
@@ -230,7 +226,7 @@ typename holder<T>::chain_t holder<T>::holder<T>::chain() const {
 
 template <typename T>
 holder<T>::holder(std::vector<T> vec) : sender<event>(std::make_shared<impl>()) {
-    this->template impl_ptr<impl>()->prepare(std::move(vec));
+    this->_prepare(std::move(vec));
 }
 
 template <typename T>
@@ -312,6 +308,11 @@ bool holder<T>::is_equal(sender<event> const &rhs) const {
     } else {
         return false;
     }
+}
+
+template <typename T>
+void holder<T>::_prepare(std::vector<T> &&vec) {
+    this->template impl_ptr<impl>()->replace_all(std::move(vec));
 }
 
 template <typename T>
