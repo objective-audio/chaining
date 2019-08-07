@@ -78,21 +78,6 @@ struct holder<T>::impl : sender<event>::impl, weakable_impl {
         this->_insert(std::move(element), idx, nullptr);
     }
 
-    void clear() {
-        for (wrapper_ptr &wrapper : this->_observers) {
-            if (wrapper) {
-                if (any_observer_ptr &observer = wrapper->observer) {
-                    observer->invalidate();
-                }
-            }
-        }
-
-        this->_raw.clear();
-        this->_observers.clear();
-
-        this->broadcast(make_any_event(this->_raw));
-    }
-
     void fetch_for(any_joint const &joint) override {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
@@ -237,7 +222,7 @@ T holder<T>::erase_at(std::size_t const idx) {
 
 template <typename T>
 void holder<T>::clear() {
-    this->template impl_ptr<impl>()->clear();
+    this->_clear();
 }
 
 template <typename T>
@@ -307,6 +292,23 @@ T holder<T>::_erase_at(std::size_t const idx) {
     impl_ptr->broadcast(make_erased_event<T>(idx));
 
     return removed;
+}
+
+template <typename T>
+void holder<T>::_clear() {
+    auto impl_ptr = this->template impl_ptr<impl>();
+    for (wrapper_ptr &wrapper : impl_ptr->_observers) {
+        if (wrapper) {
+            if (any_observer_ptr &observer = wrapper->observer) {
+                observer->invalidate();
+            }
+        }
+    }
+
+    impl_ptr->_raw.clear();
+    impl_ptr->_observers.clear();
+
+    impl_ptr->broadcast(make_any_event(impl_ptr->_raw));
 }
 
 template <typename T>

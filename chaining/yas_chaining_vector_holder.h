@@ -102,6 +102,7 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<T>> {
 
     void _prepare(std::vector<T> &&);
     T _erase_at(std::size_t const idx);
+    void _clear();
 
    public:
     static std::shared_ptr<holder> make_shared();
