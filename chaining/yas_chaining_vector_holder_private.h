@@ -202,7 +202,9 @@ void holder<T>::replace(T value, std::size_t const idx) {
 
 template <typename T>
 void holder<T>::push_back(T value) {
-    this->_push_back(std::move(value));
+    auto impl_ptr = this->template impl_ptr<impl>();
+    std::size_t const idx = impl_ptr->_raw.size();
+    impl_ptr->insert(std::move(value), idx);
 }
 
 template <typename T>
@@ -294,13 +296,6 @@ bool holder<T>::is_equal(sender<event> const &rhs) const {
 template <typename T>
 void holder<T>::_prepare(std::vector<T> &&vec) {
     this->template impl_ptr<impl>()->replace_all(std::move(vec));
-}
-
-template <typename T>
-void holder<T>::_push_back(T &&element) {
-    auto impl_ptr = this->template impl_ptr<impl>();
-    std::size_t const idx = impl_ptr->_raw.size();
-    impl_ptr->insert(std::move(element), idx);
 }
 
 template <typename T>
