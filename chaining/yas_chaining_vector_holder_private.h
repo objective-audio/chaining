@@ -63,11 +63,6 @@ struct holder<T>::impl : sender<event>::impl, weakable_impl {
         this->_replace(std::move(element), idx, nullptr);
     }
 
-    void push_back(T &&element) {
-        std::size_t const idx = this->_raw.size();
-        this->insert(std::move(element), idx);
-    }
-
     template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     void insert(T element, std::size_t const idx) {
         this->_insert(std::move(element), idx, this->_element_chaining());
@@ -207,7 +202,7 @@ void holder<T>::replace(T value, std::size_t const idx) {
 
 template <typename T>
 void holder<T>::push_back(T value) {
-    this->template impl_ptr<impl>()->push_back(std::move(value));
+    this->_push_back(std::move(value));
 }
 
 template <typename T>
@@ -304,6 +299,13 @@ void holder<T>::_clear() {
     impl_ptr->_observers.clear();
 
     impl_ptr->broadcast(make_any_event(impl_ptr->_raw));
+}
+
+template <typename T>
+void holder<T>::_push_back(T &&element) {
+    auto impl_ptr = this->template impl_ptr<impl>();
+    std::size_t const idx = impl_ptr->_raw.size();
+    impl_ptr->insert(std::move(element), idx);
 }
 
 template <typename T>
