@@ -232,7 +232,19 @@ T holder<T>::erase_at(std::size_t const idx) {
 
 template <typename T>
 void holder<T>::clear() {
-    this->_clear();
+    auto impl_ptr = this->template impl_ptr<impl>();
+    for (wrapper_ptr &wrapper : impl_ptr->_observers) {
+        if (wrapper) {
+            if (any_observer_ptr &observer = wrapper->observer) {
+                observer->invalidate();
+            }
+        }
+    }
+
+    impl_ptr->_raw.clear();
+    impl_ptr->_observers.clear();
+
+    impl_ptr->broadcast(make_any_event(impl_ptr->_raw));
 }
 
 template <typename T>
@@ -282,23 +294,6 @@ bool holder<T>::is_equal(sender<event> const &rhs) const {
 template <typename T>
 void holder<T>::_prepare(std::vector<T> &&vec) {
     this->template impl_ptr<impl>()->replace_all(std::move(vec));
-}
-
-template <typename T>
-void holder<T>::_clear() {
-    auto impl_ptr = this->template impl_ptr<impl>();
-    for (wrapper_ptr &wrapper : impl_ptr->_observers) {
-        if (wrapper) {
-            if (any_observer_ptr &observer = wrapper->observer) {
-                observer->invalidate();
-            }
-        }
-    }
-
-    impl_ptr->_raw.clear();
-    impl_ptr->_observers.clear();
-
-    impl_ptr->broadcast(make_any_event(impl_ptr->_raw));
 }
 
 template <typename T>

@@ -101,7 +101,6 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<T>> {
     bool is_equal(sender<event> const &rhs) const override;
 
     void _prepare(std::vector<T> &&);
-    void _clear();
     void _push_back(T &&element);
 
    public:
