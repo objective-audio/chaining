@@ -44,16 +44,6 @@ struct holder<T>::impl : sender<event>::impl, weakable_impl {
     std::vector<wrapper_ptr> _observers;
 
     template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(T element, std::size_t const idx) {
-        this->_replace(std::move(element), idx, this->_element_chaining());
-    }
-
-    template <typename Element = T, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(T element, std::size_t const idx) {
-        this->_replace(std::move(element), idx, nullptr);
-    }
-
-    template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     void insert(T element, std::size_t const idx) {
         this->_insert(std::move(element), idx, this->_element_chaining());
     }
@@ -155,6 +145,18 @@ namespace utils {
         auto impl_ptr = holder.template impl_ptr<typename vector::holder<T>::impl>();
         impl_ptr->_replace(std::move(vec), nullptr);
     }
+
+    template <typename T, enable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
+    void replace(vector::holder<T> &holder, T element, std::size_t const idx) {
+        auto impl_ptr = holder.template impl_ptr<typename vector::holder<T>::impl>();
+        impl_ptr->_replace(std::move(element), idx, impl_ptr->_element_chaining());
+    }
+
+    template <typename T, disable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
+    void replace(vector::holder<T> &holder, T element, std::size_t const idx) {
+        auto impl_ptr = holder.template impl_ptr<typename vector::holder<T>::impl>();
+        impl_ptr->_replace(std::move(element), idx, nullptr);
+    }
 }  // namespace utils
 
 template <typename T>
@@ -201,7 +203,7 @@ void holder<T>::replace(std::vector<T> vec) {
 
 template <typename T>
 void holder<T>::replace(T value, std::size_t const idx) {
-    this->template impl_ptr<impl>()->replace(std::move(value), idx);
+    utils::replace(*this, std::move(value), idx);
 }
 
 template <typename T>
