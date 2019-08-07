@@ -43,16 +43,6 @@ struct holder<T>::impl : sender<event>::impl, weakable_impl {
     std::vector<T> _raw;
     std::vector<wrapper_ptr> _observers;
 
-    template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void insert(T element, std::size_t const idx) {
-        this->_insert(std::move(element), idx, this->_element_chaining());
-    }
-
-    template <typename Element = T, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void insert(T element, std::size_t const idx) {
-        this->_insert(std::move(element), idx, nullptr);
-    }
-
     void fetch_for(any_joint const &joint) override {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
@@ -157,6 +147,18 @@ namespace utils {
         auto impl_ptr = holder.template impl_ptr<typename vector::holder<T>::impl>();
         impl_ptr->_replace(std::move(element), idx, nullptr);
     }
+
+    template <typename T, enable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
+    void insert(vector::holder<T> &holder, T element, std::size_t const idx) {
+        auto impl_ptr = holder.template impl_ptr<typename vector::holder<T>::impl>();
+        impl_ptr->_insert(std::move(element), idx, impl_ptr->_element_chaining());
+    }
+
+    template <typename T, disable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
+    void insert(vector::holder<T> &holder, T element, std::size_t const idx) {
+        auto impl_ptr = holder.template impl_ptr<typename vector::holder<T>::impl>();
+        impl_ptr->_insert(std::move(element), idx, nullptr);
+    }
 }  // namespace utils
 
 template <typename T>
@@ -210,12 +212,12 @@ template <typename T>
 void holder<T>::push_back(T value) {
     auto impl_ptr = this->template impl_ptr<impl>();
     std::size_t const idx = impl_ptr->_raw.size();
-    impl_ptr->insert(std::move(value), idx);
+    utils::insert(*this, std::move(value), idx);
 }
 
 template <typename T>
 void holder<T>::insert(T value, std::size_t const idx) {
-    this->template impl_ptr<impl>()->insert(std::move(value), idx);
+    utils::insert(*this, std::move(value), idx);
 }
 
 template <typename T>
