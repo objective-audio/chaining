@@ -28,6 +28,8 @@ struct sender : any_sender {
     template <typename Impl = impl>
     std::shared_ptr<Impl> impl_ptr() const;
 
+    uintptr_t identifier() const;
+
    protected:
     sender(std::shared_ptr<impl> &&);
 

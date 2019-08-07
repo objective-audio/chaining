@@ -13,10 +13,6 @@ template <typename T>
 struct sender<T>::impl : chaining::sendable<T> {
     void fetch_for(any_joint const &joint) override {
     }
-
-    uintptr_t identifier() const {
-        return reinterpret_cast<uintptr_t>(this);
-    }
 };
 
 template <typename T>
@@ -55,7 +51,12 @@ std::shared_ptr<Impl> sender<T>::impl_ptr() const {
 }
 
 template <typename T>
+uintptr_t sender<T>::identifier() const {
+    return reinterpret_cast<uintptr_t>(this->_impl.get());
+}
+
+template <typename T>
 bool sender<T>::is_equal(sender<T> const &rhs) const {
-    return this->_impl->identifier() == rhs._impl->identifier();
+    return this->identifier() == rhs.identifier();
 }
 }  // namespace yas::chaining
