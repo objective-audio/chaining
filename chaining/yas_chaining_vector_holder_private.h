@@ -44,16 +44,6 @@ struct holder<T>::impl : sender<event>::impl, weakable_impl {
     std::vector<wrapper_ptr> _observers;
 
     template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace_all(std::vector<T> vec) {
-        this->_replace(std::move(vec), this->_element_chaining());
-    }
-
-    template <typename Element = T, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace_all(std::vector<T> vec) {
-        this->_replace(std::move(vec), nullptr);
-    }
-
-    template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     void replace(T element, std::size_t const idx) {
         this->_replace(std::move(element), idx, this->_element_chaining());
     }
@@ -268,11 +258,11 @@ void holder<T>::receive_value(vector::event const &event) {
     switch (event.type()) {
         case event_type::fetched: {
             auto const &fetched = event.get<vector::fetched_event<T>>();
-            this->template impl_ptr<impl>()->replace_all(fetched.elements);
+            utils::replace_all(*this, fetched.elements);
         } break;
         case event_type::any: {
             auto const &any = event.get<vector::any_event<T>>();
-            this->template impl_ptr<impl>()->replace_all(any.elements);
+            utils::replace_all(*this, any.elements);
         } break;
         case event_type::inserted: {
             auto const &inserted = event.get<vector::inserted_event<T>>();
@@ -309,7 +299,7 @@ bool holder<T>::is_equal(sender<event> const &rhs) const {
 
 template <typename T>
 void holder<T>::_prepare(std::vector<T> &&vec) {
-    this->template impl_ptr<impl>()->replace_all(std::move(vec));
+    utils::replace_all(*this, std::move(vec));
 }
 
 template <typename T>
