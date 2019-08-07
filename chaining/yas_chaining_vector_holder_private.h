@@ -217,7 +217,22 @@ void holder<T>::insert(T value, std::size_t const idx) {
 
 template <typename T>
 T holder<T>::erase_at(std::size_t const idx) {
-    return this->_erase_at(idx);
+    auto impl_ptr = this->template impl_ptr<impl>();
+    if (impl_ptr->_observers.size() > idx) {
+        if (wrapper_ptr &wrapper = impl_ptr->_observers.at(idx)) {
+            if (any_observer_ptr &observer = wrapper->observer) {
+                observer->invalidate();
+            }
+        }
+        yas::erase_at(impl_ptr->_observers, idx);
+    }
+
+    T removed = impl_ptr->_raw.at(idx);
+    yas::erase_at(impl_ptr->_raw, idx);
+
+    impl_ptr->broadcast(make_erased_event<T>(idx));
+
+    return removed;
 }
 
 template <typename T>
@@ -242,7 +257,7 @@ void holder<T>::receive_value(vector::event const &event) {
         } break;
         case event_type::erased: {
             auto const &erased = event.get<vector::erased_event<T>>();
-            this->_erase_at(erased.index);
+            this->erase_at(erased.index);
         } break;
         case event_type::replaced: {
             auto const &replaced = event.get<vector::replaced_event<T>>();
@@ -272,26 +287,6 @@ bool holder<T>::is_equal(sender<event> const &rhs) const {
 template <typename T>
 void holder<T>::_prepare(std::vector<T> &&vec) {
     this->template impl_ptr<impl>()->replace_all(std::move(vec));
-}
-
-template <typename T>
-T holder<T>::_erase_at(std::size_t const idx) {
-    auto impl_ptr = this->template impl_ptr<impl>();
-    if (impl_ptr->_observers.size() > idx) {
-        if (wrapper_ptr &wrapper = impl_ptr->_observers.at(idx)) {
-            if (any_observer_ptr &observer = wrapper->observer) {
-                observer->invalidate();
-            }
-        }
-        yas::erase_at(impl_ptr->_observers, idx);
-    }
-
-    T removed = impl_ptr->_raw.at(idx);
-    yas::erase_at(impl_ptr->_raw, idx);
-
-    impl_ptr->broadcast(make_erased_event<T>(idx));
-
-    return removed;
 }
 
 template <typename T>
