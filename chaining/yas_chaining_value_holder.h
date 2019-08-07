@@ -32,6 +32,8 @@ struct holder final : sender<T>, receiver<T>, weakable<holder<T>> {
    private:
     holder(T &&);
 
+    bool is_equal(sender<T> const &rhs) const override;
+
    public:
     static std::shared_ptr<holder> make_shared(T);
 };

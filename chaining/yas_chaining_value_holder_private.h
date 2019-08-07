@@ -17,14 +17,6 @@ struct holder<T>::impl : sender<T>::impl, weakable_impl {
         this->send_value_to_target(this->_value, joint.identifier());
     }
 
-    virtual bool is_equal(std::shared_ptr<typename sender<T>::impl> const &rhs) const override {
-        if (auto rhs_impl = std::dynamic_pointer_cast<typename value::holder<T>::impl>(rhs)) {
-            return this->_value == rhs_impl->_value;
-        } else {
-            return false;
-        }
-    }
-
     T _value;
     std::mutex _set_mutex;
 };
@@ -76,6 +68,17 @@ void holder<T>::receive_value(T const &value) {
 template <typename T>
 std::shared_ptr<weakable_impl> holder<T>::weakable_impl_ptr() const {
     return this->template impl_ptr<impl>();
+}
+
+template <typename T>
+bool holder<T>::is_equal(sender<T> const &rhs) const {
+    auto lhs_impl = this->template impl_ptr<impl>();
+    auto rhs_impl = rhs.template impl_ptr<impl>();
+    if (lhs_impl && rhs_impl) {
+        return lhs_impl->_value == rhs_impl->_value;
+    } else {
+        return false;
+    }
 }
 
 template <typename T>

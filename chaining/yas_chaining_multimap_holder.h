@@ -84,6 +84,8 @@ struct holder final : sender<event>, weakable<holder<Key, Value>> {
    private:
     explicit holder(std::multimap<Key, Value>);
 
+    bool is_equal(sender<event> const &rhs) const override;
+
    public:
     static std::shared_ptr<holder> make_shared();
     static std::shared_ptr<holder> make_shared(std::multimap<Key, Value>);

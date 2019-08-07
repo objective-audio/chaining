@@ -48,6 +48,9 @@ struct holder<T>::impl : sender<event>::impl, weakable_impl {
     using wrapper_wptr = std::weak_ptr<observer_wrapper>;
     using chaining_f = std::function<void(T &, wrapper_ptr &)>;
 
+    std::vector<T> _raw;
+    std::vector<wrapper_ptr> _observers;
+
     void prepare(std::vector<T> &&vec) {
         this->replace_all(std::move(vec));
     }
@@ -124,21 +127,9 @@ struct holder<T>::impl : sender<event>::impl, weakable_impl {
         return this->_raw;
     }
 
-    virtual bool is_equal(std::shared_ptr<sender::impl> const &rhs) const override {
-        if (auto rhs_impl = std::dynamic_pointer_cast<typename holder<T>::impl>(rhs)) {
-            return this->_raw == rhs_impl->_raw;
-        } else {
-            return false;
-        }
-    }
-
     void fetch_for(any_joint const &joint) override {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
-
-   private:
-    std::vector<T> _raw;
-    std::vector<wrapper_ptr> _observers;
 
     template <typename Element = T, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     chaining_f _element_chaining() {
@@ -314,6 +305,17 @@ void holder<T>::receive_value(vector::event const &event) {
 template <typename T>
 std::shared_ptr<weakable_impl> holder<T>::weakable_impl_ptr() const {
     return this->template impl_ptr<impl>();
+}
+
+template <typename T>
+bool holder<T>::is_equal(sender<event> const &rhs) const {
+    auto lhs_impl = this->template impl_ptr<impl>();
+    auto rhs_impl = rhs.template impl_ptr<impl>();
+    if (lhs_impl && rhs_impl) {
+        return lhs_impl->_raw == rhs_impl->_raw;
+    } else {
+        return false;
+    }
 }
 
 template <typename T>

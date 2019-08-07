@@ -31,6 +31,8 @@ struct sender : any_sender {
    protected:
     sender(std::shared_ptr<impl> &&);
 
+    virtual bool is_equal(sender<T> const &rhs) const;
+
    private:
     std::shared_ptr<impl> _impl;
 };
