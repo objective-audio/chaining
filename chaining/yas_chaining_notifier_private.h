@@ -10,13 +10,6 @@
 namespace yas::chaining {
 template <typename T>
 struct notifier<T>::impl : sender<T>::impl, weakable_impl {
-    void locked_send_value(T const &value) {
-        if (auto lock = std::unique_lock<std::mutex>(this->_send_mutex, std::try_to_lock); lock.owns_lock()) {
-            this->broadcast(value);
-        }
-    }
-
-   private:
     std::mutex _send_mutex;
 };
 
@@ -30,7 +23,10 @@ notifier<T>::notifier(std::shared_ptr<impl> &&impl) : sender<T>(std::move(impl))
 
 template <typename T>
 void notifier<T>::notify(T const &value) {
-    this->template impl_ptr<impl>()->locked_send_value(value);
+    auto impl_ptr = this->template impl_ptr<impl>();
+    if (auto lock = std::unique_lock<std::mutex>(impl_ptr->_send_mutex, std::try_to_lock); lock.owns_lock()) {
+        impl_ptr->broadcast(value);
+    }
 }
 
 template <typename T>
@@ -40,7 +36,7 @@ chain_unsync_t<T> notifier<T>::chain() const {
 
 template <typename T>
 void notifier<T>::receive_value(T const &value) {
-    return this->template impl_ptr<impl>()->locked_send_value(value);
+    return this->notify(value);
 }
 
 template <typename T>

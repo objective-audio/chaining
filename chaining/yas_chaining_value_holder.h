@@ -17,7 +17,8 @@ struct holder final : sender<T>, receiver<T>, weakable<holder<T>> {
 
     ~holder();
 
-    void set_value(T);
+    void set_value(T &&);
+    void set_value(T const &);
 
     [[nodiscard]] T const &raw() const;
     [[nodiscard]] T &raw();
@@ -30,6 +31,8 @@ struct holder final : sender<T>, receiver<T>, weakable<holder<T>> {
 
    private:
     holder(T &&);
+
+    bool is_equal(sender<T> const &rhs) const override;
 
    public:
     static std::shared_ptr<holder> make_shared(T);

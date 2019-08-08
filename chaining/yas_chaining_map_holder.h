@@ -91,6 +91,8 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<Key, Value
    private:
     explicit holder(std::map<Key, Value>);
 
+    bool is_equal(sender<event> const &rhs) const override;
+
    public:
     static std::shared_ptr<holder> make_shared();
     static std::shared_ptr<holder> make_shared(std::map<Key, Value>);

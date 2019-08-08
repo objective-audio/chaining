@@ -28,8 +28,12 @@ struct sender : any_sender {
     template <typename Impl = impl>
     std::shared_ptr<Impl> impl_ptr() const;
 
+    uintptr_t identifier() const;
+
    protected:
     sender(std::shared_ptr<impl> &&);
+
+    virtual bool is_equal(sender<T> const &rhs) const;
 
    private:
     std::shared_ptr<impl> _impl;
