@@ -55,16 +55,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
     std::map<Key, wrapper_ptr> _observers;
 
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void insert_or_replace(Key key, Value value) {
-        this->_insert_or_replace(std::move(key), std::move(value), this->_element_chaining());
-    }
-
-    template <typename Element = Value, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void insert_or_replace(Key key, Value value) {
-        this->_insert_or_replace(std::move(key), std::move(value), nullptr);
-    }
-
-    template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     void insert(std::map<Key, Value> map) {
         this->_insert(std::move(map), this->_element_chaining());
     }
@@ -192,6 +182,18 @@ namespace utils {
         auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
         impl_ptr->_replace(std::move(map), nullptr);
     }
+
+    template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    void insert_or_replace(holder<Key, Value> &holder, Key key, Value value) {
+        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
+        impl_ptr->_insert_or_replace(std::move(key), std::move(value), impl_ptr->_element_chaining());
+    }
+
+    template <typename Key, typename Value, disable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    void insert_or_replace(holder<Key, Value> &holder, Key key, Value value) {
+        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
+        impl_ptr->_insert_or_replace(std::move(key), std::move(value), nullptr);
+    }
 }  // namespace utils
 
 #pragma mark - map::holder
@@ -245,7 +247,7 @@ void holder<Key, Value>::replace_all(std::map<Key, Value> map) {
 
 template <typename Key, typename Value>
 void holder<Key, Value>::insert_or_replace(Key key, Value value) {
-    this->template impl_ptr<impl>()->insert_or_replace(std::move(key), std::move(value));
+    utils::insert_or_replace(*this, std::move(key), std::move(value));
 }
 
 template <typename Key, typename Value>
@@ -299,7 +301,7 @@ void holder<Key, Value>::receive_value(map::event const &event) {
         } break;
         case event_type::replaced: {
             auto const &replaced = event.get<map::replaced_event<Key, Value>>();
-            this->insert_or_replace(replaced.key, replaced.value);
+            utils::insert_or_replace(*this, replaced.key, replaced.value);
         } break;
         case event_type::relayed:
             break;
