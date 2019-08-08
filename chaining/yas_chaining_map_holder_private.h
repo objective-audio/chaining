@@ -54,10 +54,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
     std::map<Key, Value> _raw;
     std::map<Key, wrapper_ptr> _observers;
 
-    void prepare(std::map<Key, Value> &&map) {
-        this->replace_all(std::move(map));
-    }
-
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     void replace_all(std::map<Key, Element> map) {
         this->_replace(std::move(map), this->_element_chaining());
@@ -253,7 +249,7 @@ namespace utils {}
 
 template <typename Key, typename Value>
 holder<Key, Value>::holder(std::map<Key, Value> map) : sender<event>(std::make_shared<impl>()) {
-    this->template impl_ptr<impl>()->prepare(std::move(map));
+    this->_prepare(std::move(map));
 }
 
 template <typename Key, typename Value>
@@ -375,6 +371,11 @@ bool holder<Key, Value>::is_equal(sender<event> const &rhs) const {
     } else {
         return false;
     }
+}
+
+template <typename Key, typename Value>
+void holder<Key, Value>::_prepare(std::map<Key, Value> &&map) {
+    this->template impl_ptr<impl>()->replace_all(std::move(map));
 }
 
 template <typename Key, typename Value>
