@@ -247,6 +247,8 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
     }
 };
 
+namespace utils {}
+
 #pragma mark - map::holder
 
 template <typename Key, typename Value>

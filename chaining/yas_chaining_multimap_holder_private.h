@@ -182,6 +182,8 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
     }
 };
 
+namespace utils {}
+
 #pragma mark - multimap::holder
 
 template <typename Key, typename Value>
