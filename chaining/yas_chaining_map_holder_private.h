@@ -84,21 +84,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
         this->_insert(std::move(map), nullptr);
     }
 
-    std::map<Key, Value> erase_for_key(Key const &key) {
-        this->_erase_observer_for_key(key);
-
-        std::map<Key, Value> erased;
-
-        if (this->_raw.count(key)) {
-            erased.emplace(key, std::move(this->_raw.at(key)));
-            this->_raw.erase(key);
-        }
-
-        this->broadcast(make_erased_event(erased));
-
-        return erased;
-    }
-
     void clear() {
         for (auto &pair : this->_observers) {
             if (auto &wrapper = pair.second) {
@@ -293,7 +278,7 @@ std::map<Key, Value> holder<Key, Value>::erase_for_value(Value const &value) {
 
 template <typename Key, typename Value>
 std::map<Key, Value> holder<Key, Value>::erase_for_key(Key const &key) {
-    return this->template impl_ptr<impl>()->erase_for_key(key);
+    return this->_erase_for_key(key);
 }
 
 template <typename Key, typename Value>
@@ -375,6 +360,24 @@ std::map<Key, Value> holder<Key, Value>::_erase_if(std::function<bool(Key const 
             return false;
         }
     });
+
+    impl_ptr->broadcast(make_erased_event(erased));
+
+    return erased;
+}
+
+template <typename Key, typename Value>
+std::map<Key, Value> holder<Key, Value>::_erase_for_key(Key const &key) {
+    auto impl_ptr = this->template impl_ptr<impl>();
+
+    impl_ptr->_erase_observer_for_key(key);
+
+    std::map<Key, Value> erased;
+
+    if (impl_ptr->_raw.count(key)) {
+        erased.emplace(key, std::move(impl_ptr->_raw.at(key)));
+        impl_ptr->_raw.erase(key);
+    }
 
     impl_ptr->broadcast(make_erased_event(erased));
 
