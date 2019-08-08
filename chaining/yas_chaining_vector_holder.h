@@ -87,14 +87,6 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<T>> {
 
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
 
-    struct observer_wrapper {
-        any_observer_ptr observer = nullptr;
-    };
-
-    using wrapper_ptr = std::shared_ptr<observer_wrapper>;
-    using wrapper_wptr = std::weak_ptr<observer_wrapper>;
-    using chaining_f = std::function<void(T &, wrapper_ptr &)>;
-
    private:
     explicit holder(vector_t);
 
