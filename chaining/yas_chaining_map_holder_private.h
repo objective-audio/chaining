@@ -58,33 +58,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
 
-    void _replace(std::map<Key, Value> &&map, chaining_f chaining) {
-        for (auto &wrapper_pair : this->_observers) {
-            if (any_observer_ptr &observer = wrapper_pair.second->observer) {
-                observer->invalidate();
-            }
-        }
-
-        this->_observers.clear();
-        this->_raw.clear();
-
-        if (chaining) {
-            for (auto &pair : map) {
-                auto inserted = this->_raw.emplace(pair.first, pair.second);
-                if (inserted.second) {
-                    wrapper_ptr wrapper = std::make_shared<observer_wrapper>();
-                    wrapper->value = &inserted.first->second;
-                    chaining(pair.first, pair.second, wrapper);
-                    this->_observers.emplace(pair.first, std::move(wrapper));
-                }
-            }
-        } else {
-            this->_raw = std::move(map);
-        }
-
-        this->broadcast(make_any_event(this->_raw));
-    }
-
     void _insert_or_replace(Key &&key, Value &&value, chaining_f chaining) {
         this->_erase_observer_for_key(key);
 
@@ -164,16 +137,46 @@ namespace utils {
         };
     }
 
+    template <typename Key, typename Value>
+    void _replace(holder<Key, Value> &holder, std::map<Key, Value> &&map,
+                  typename map::holder<Key, Value>::impl::chaining_f chaining) {
+        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
+
+        for (auto &wrapper_pair : impl_ptr->_observers) {
+            if (any_observer_ptr &observer = wrapper_pair.second->observer) {
+                observer->invalidate();
+            }
+        }
+
+        impl_ptr->_observers.clear();
+        impl_ptr->_raw.clear();
+
+        if (chaining) {
+            for (auto &pair : map) {
+                auto inserted = impl_ptr->_raw.emplace(pair.first, pair.second);
+                if (inserted.second) {
+                    typename map::holder<Key, Value>::impl::wrapper_ptr wrapper =
+                        std::make_shared<typename map::holder<Key, Value>::impl::observer_wrapper>();
+                    wrapper->value = &inserted.first->second;
+                    chaining(pair.first, pair.second, wrapper);
+                    impl_ptr->_observers.emplace(pair.first, std::move(wrapper));
+                }
+            }
+        } else {
+            impl_ptr->_raw = std::move(map);
+        }
+
+        impl_ptr->broadcast(make_any_event(impl_ptr->_raw));
+    }
+
     template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
     void replace_all(holder<Key, Value> &holder, std::map<Key, Value> map) {
-        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
-        impl_ptr->_replace(std::move(map), utils::element_chaining(holder));
+        utils::_replace(holder, std::move(map), utils::element_chaining(holder));
     }
 
     template <typename Key, typename Value, disable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
     void replace_all(holder<Key, Value> &holder, std::map<Key, Value> map) {
-        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
-        impl_ptr->_replace(std::move(map), nullptr);
+        utils::_replace(holder, std::move(map), nullptr);
     }
 
     template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
