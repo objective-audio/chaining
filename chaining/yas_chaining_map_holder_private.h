@@ -55,16 +55,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
     std::map<Key, wrapper_ptr> _observers;
 
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace_all(std::map<Key, Element> map) {
-        this->_replace(std::move(map), this->_element_chaining());
-    }
-
-    template <typename Element = Value, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace_all(std::map<Key, Element> map) {
-        this->_replace(std::move(map), nullptr);
-    }
-
-    template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     void insert_or_replace(Key key, Value value) {
         this->_insert_or_replace(std::move(key), std::move(value), this->_element_chaining());
     }
@@ -190,7 +180,19 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
     }
 };
 
-namespace utils {}
+namespace utils {
+    template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    void replace_all(holder<Key, Value> &holder, std::map<Key, Value> map) {
+        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
+        impl_ptr->_replace(std::move(map), impl_ptr->_element_chaining());
+    }
+
+    template <typename Key, typename Value, disable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    void replace_all(holder<Key, Value> &holder, std::map<Key, Value> map) {
+        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
+        impl_ptr->_replace(std::move(map), nullptr);
+    }
+}  // namespace utils
 
 #pragma mark - map::holder
 
@@ -238,7 +240,7 @@ std::size_t holder<Key, Value>::size() const {
 
 template <typename Key, typename Value>
 void holder<Key, Value>::replace_all(std::map<Key, Value> map) {
-    this->template impl_ptr<impl>()->replace_all(std::move(map));
+    utils::replace_all(*this, std::move(map));
 }
 
 template <typename Key, typename Value>
@@ -322,7 +324,7 @@ bool holder<Key, Value>::is_equal(sender<event> const &rhs) const {
 
 template <typename Key, typename Value>
 void holder<Key, Value>::_prepare(std::map<Key, Value> &&map) {
-    this->template impl_ptr<impl>()->replace_all(std::move(map));
+    utils::replace_all(*this, std::move(map));
 }
 
 template <typename Key, typename Value>
