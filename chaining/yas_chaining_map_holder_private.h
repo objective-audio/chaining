@@ -57,16 +57,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
     void fetch_for(any_joint const &joint) override {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
-
-    void _erase_observer_for_key(Key const &key) {
-        if (this->_observers.count(key) > 0) {
-            auto &wrapper = this->_observers.at(key);
-            if (any_observer_ptr &observer = wrapper->observer) {
-                observer->invalidate();
-            }
-            this->_observers.erase(key);
-        }
-    }
 };
 
 namespace utils {
@@ -126,11 +116,24 @@ namespace utils {
     }
 
     template <typename Key, typename Value>
+    void _erase_observer_for_key(holder<Key, Value> &holder, Key const &key) {
+        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
+
+        if (impl_ptr->_observers.count(key) > 0) {
+            auto &wrapper = impl_ptr->_observers.at(key);
+            if (any_observer_ptr &observer = wrapper->observer) {
+                observer->invalidate();
+            }
+            impl_ptr->_observers.erase(key);
+        }
+    }
+
+    template <typename Key, typename Value>
     void _insert_or_replace(holder<Key, Value> &holder, Key &&key, Value &&value,
                             typename map::holder<Key, Value>::impl::chaining_f chaining) {
         auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
 
-        impl_ptr->_erase_observer_for_key(key);
+        utils::_erase_observer_for_key(holder, key);
 
         bool isErased = false;
         if (impl_ptr->_raw.count(key) > 0) {
@@ -375,7 +378,7 @@ template <typename Key, typename Value>
 std::map<Key, Value> holder<Key, Value>::_erase_for_key(Key const &key) {
     auto impl_ptr = this->template impl_ptr<impl>();
 
-    impl_ptr->_erase_observer_for_key(key);
+    utils::_erase_observer_for_key(*this, key);
 
     std::map<Key, Value> erased;
 
