@@ -291,7 +291,20 @@ std::map<Key, Value> holder<Key, Value>::erase_for_key(Key const &key) {
 
 template <typename Key, typename Value>
 void holder<Key, Value>::clear() {
-    this->_clear();
+    auto impl_ptr = this->template impl_ptr<impl>();
+
+    for (auto &pair : impl_ptr->_observers) {
+        if (auto &wrapper = pair.second) {
+            if (any_observer_ptr &observer = wrapper->observer) {
+                observer->invalidate();
+            }
+        }
+    }
+
+    impl_ptr->_observers.clear();
+    impl_ptr->_raw.clear();
+
+    impl_ptr->broadcast(make_any_event(impl_ptr->_raw));
 }
 
 template <typename Key, typename Value>
@@ -390,24 +403,6 @@ std::map<Key, Value> holder<Key, Value>::_erase_for_key(Key const &key) {
     impl_ptr->broadcast(make_erased_event(erased));
 
     return erased;
-}
-
-template <typename Key, typename Value>
-void holder<Key, Value>::_clear() {
-    auto impl_ptr = this->template impl_ptr<impl>();
-
-    for (auto &pair : impl_ptr->_observers) {
-        if (auto &wrapper = pair.second) {
-            if (any_observer_ptr &observer = wrapper->observer) {
-                observer->invalidate();
-            }
-        }
-    }
-
-    impl_ptr->_observers.clear();
-    impl_ptr->_raw.clear();
-
-    impl_ptr->broadcast(make_any_event(impl_ptr->_raw));
 }
 
 template <typename Key, typename Value>
