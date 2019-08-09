@@ -74,29 +74,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
         this->_insert(std::move(map), nullptr);
     }
 
-    std::multimap<Key, Value> erase_if(std::function<bool(Key const &, Value const &)> const &handler) {
-        std::multimap<Key, Value> erased;
-
-        if (this->_observers.size() > 0) {
-            yas::erase_if(this->_observers, [&handler](std::pair<Key, wrapper_ptr> const &pair) {
-                return handler(pair.first, *pair.second->value);
-            });
-        }
-
-        yas::erase_if(this->_raw, [&handler, &erased](std::pair<Key, Value> const &pair) {
-            if (handler(pair.first, pair.second)) {
-                erased.insert(pair);
-                return true;
-            } else {
-                return false;
-            }
-        });
-
-        this->broadcast(make_erased_event(erased));
-
-        return erased;
-    }
-
     void clear() {
         for (auto &pair : this->_observers) {
             if (auto &wrapper = pair.second) {
@@ -226,7 +203,7 @@ void holder<Key, Value>::insert(Key key, Value value) {
 
 template <typename Key, typename Value>
 std::multimap<Key, Value> holder<Key, Value>::erase_if(std::function<bool(Key const &, Value const &)> const &handler) {
-    return this->template impl_ptr<impl>()->erase_if(handler);
+    return this->_erase_if(handler);
 }
 
 template <typename Key, typename Value>
@@ -269,6 +246,33 @@ template <typename Key, typename Value>
 void holder<Key, Value>::_prepare(std::multimap<Key, Value> &&map) {
     auto impl_ptr = this->template impl_ptr<impl>();
     impl_ptr->replace(std::move(map));
+}
+
+template <typename Key, typename Value>
+std::multimap<Key, Value> holder<Key, Value>::_erase_if(
+    std::function<bool(Key const &, Value const &)> const &handler) {
+    auto impl_ptr = this->template impl_ptr<impl>();
+
+    std::multimap<Key, Value> erased;
+
+    if (impl_ptr->_observers.size() > 0) {
+        yas::erase_if(impl_ptr->_observers, [&handler](std::pair<Key, typename impl::wrapper_ptr> const &pair) {
+            return handler(pair.first, *pair.second->value);
+        });
+    }
+
+    yas::erase_if(impl_ptr->_raw, [&handler, &erased](std::pair<Key, Value> const &pair) {
+        if (handler(pair.first, pair.second)) {
+            erased.insert(pair);
+            return true;
+        } else {
+            return false;
+        }
+    });
+
+    impl_ptr->broadcast(make_erased_event(erased));
+
+    return erased;
 }
 
 template <typename Key, typename Value>
