@@ -54,84 +54,27 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
     std::multimap<Key, Value> _raw;
     std::multimap<Key, wrapper_ptr> _observers;
 
-    void prepare(std::multimap<Key, Value> &&map) {
-        this->replace(std::move(map));
-    }
-
-    template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(std::multimap<Key, Value> &&map) {
-        this->_replace(std::move(map), this->_element_chaining());
-    }
-
-    template <typename Element = Value, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(std::multimap<Key, Value> &&map) {
-        this->_replace(std::move(map), nullptr);
-    }
-
-    template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void insert(std::multimap<Key, Value> &&map) {
-        this->_insert(std::move(map), this->_element_chaining());
-    }
-
-    template <typename Element = Value, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void insert(std::multimap<Key, Value> &&map) {
-        this->_insert(std::move(map), nullptr);
-    }
-
-    std::multimap<Key, Value> erase_if(std::function<bool(Key const &, Value const &)> const &handler) {
-        std::multimap<Key, Value> erased;
-
-        if (this->_observers.size() > 0) {
-            yas::erase_if(this->_observers, [&handler](std::pair<Key, wrapper_ptr> const &pair) {
-                return handler(pair.first, *pair.second->value);
-            });
-        }
-
-        yas::erase_if(this->_raw, [&handler, &erased](std::pair<Key, Value> const &pair) {
-            if (handler(pair.first, pair.second)) {
-                erased.insert(pair);
-                return true;
-            } else {
-                return false;
-            }
-        });
-
-        this->broadcast(make_erased_event(erased));
-
-        return erased;
-    }
-
-    void clear() {
-        for (auto &pair : this->_observers) {
-            if (auto &wrapper = pair.second) {
-                if (any_observer_ptr &observer = wrapper->observer) {
-                    observer->invalidate();
-                }
-            }
-        }
-
-        this->_observers.clear();
-        this->_raw.clear();
-
-        this->broadcast(make_any_event(this->_raw));
-    }
-
     void fetch_for(any_joint const &joint) override {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
+};
 
-    template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    chaining_f _element_chaining() {
-        auto weak_holder_impl = to_weak(std::dynamic_pointer_cast<holder<Key, Value>::impl>(shared_from_this()));
-        return [weak_holder_impl](Key const &key, Value &value, wrapper_ptr &wrapper) {
-            wrapper_wptr weak_wrapper = wrapper;
+namespace utils {
+    template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    typename multimap::holder<Key, Value>::impl::chaining_f _element_chaining(holder<Key, Value> &holder) {
+        auto impl_ptr = holder.template impl_ptr<typename multimap::holder<Key, Value>::impl>();
+        auto weak_holder_impl = to_weak(impl_ptr);
+        return [weak_holder_impl](Key const &key, Value &value,
+                                  typename multimap::holder<Key, Value>::impl::wrapper_ptr &wrapper) {
+            typename multimap::holder<Key, Value>::impl::wrapper_wptr weak_wrapper = wrapper;
             auto weak_value = to_weak(value);
             wrapper->observer = value.sendable()
                                     ->chain_unsync()
                                     .perform([weak_holder_impl, weak_wrapper, key, weak_value](auto const &relayed) {
                                         auto holder_impl = weak_holder_impl.lock();
                                         auto value = weak_value.lock();
-                                        wrapper_ptr wrapper = weak_wrapper.lock();
+                                        typename multimap::holder<Key, Value>::impl::wrapper_ptr wrapper =
+                                            weak_wrapper.lock();
                                         if (holder_impl && wrapper && value) {
                                             holder_impl->broadcast(make_relayed_event(key, *value, relayed));
                                         }
@@ -140,55 +83,83 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
         };
     }
 
-    void _replace(std::multimap<Key, Value> &&map, chaining_f chaining) {
-        for (auto &wrapper_pair : this->_observers) {
+    template <typename Key, typename Value>
+    void _replace(holder<Key, Value> &holder, std::multimap<Key, Value> &&map,
+                  typename multimap::holder<Key, Value>::impl::chaining_f chaining) {
+        auto impl_ptr = holder.template impl_ptr<typename multimap::holder<Key, Value>::impl>();
+
+        for (auto &wrapper_pair : impl_ptr->_observers) {
             if (any_observer_ptr &observer = wrapper_pair.second->observer) {
                 observer->invalidate();
             }
         }
 
-        this->_observers.clear();
-        this->_raw.clear();
+        impl_ptr->_observers.clear();
+        impl_ptr->_raw.clear();
 
         if (chaining) {
             for (auto &pair : map) {
-                auto inserted = this->_raw.emplace(pair.first, pair.second);
-                wrapper_ptr wrapper = std::make_shared<observer_wrapper>();
+                auto inserted = impl_ptr->_raw.emplace(pair.first, pair.second);
+                typename multimap::holder<Key, Value>::impl::wrapper_ptr wrapper =
+                    std::make_shared<typename multimap::holder<Key, Value>::impl::observer_wrapper>();
                 wrapper->value = &inserted->second;
                 chaining(pair.first, pair.second, wrapper);
-                this->_observers.emplace(pair.first, std::move(wrapper));
+                impl_ptr->_observers.emplace(pair.first, std::move(wrapper));
             }
         } else {
-            this->_raw = std::move(map);
+            impl_ptr->_raw = std::move(map);
         }
 
-        this->broadcast(make_any_event(this->_raw));
+        impl_ptr->broadcast(make_any_event(impl_ptr->_raw));
     }
 
-    void _insert(std::multimap<Key, Value> &&map, chaining_f chaining) {
+    template <typename Key, typename Value>
+    void _insert(holder<Key, Value> &holder, std::multimap<Key, Value> &&map,
+                 typename multimap::holder<Key, Value>::impl::chaining_f chaining) {
+        auto impl_ptr = holder.template impl_ptr<typename multimap::holder<Key, Value>::impl>();
+
         if (chaining) {
             for (auto &pair : map) {
-                auto inserted = this->_raw.emplace(pair.first, pair.second);
-                wrapper_ptr wrapper = std::make_shared<observer_wrapper>();
+                auto inserted = impl_ptr->_raw.emplace(pair.first, pair.second);
+                typename multimap::holder<Key, Value>::impl::wrapper_ptr wrapper =
+                    std::make_shared<typename multimap::holder<Key, Value>::impl::observer_wrapper>();
                 wrapper->value = &inserted->second;
                 chaining(pair.first, pair.second, wrapper);
-                this->_observers.emplace(pair.first, std::move(wrapper));
+                impl_ptr->_observers.emplace(pair.first, std::move(wrapper));
             }
         } else {
-            this->_raw.insert(map.begin(), map.end());
+            impl_ptr->_raw.insert(map.begin(), map.end());
         }
 
-        this->broadcast(make_inserted_event(map));
+        impl_ptr->broadcast(make_inserted_event(map));
     }
-};
 
-namespace utils {}
+    template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    void replace(holder<Key, Value> &holder, std::multimap<Key, Value> &&map) {
+        utils::_replace(holder, std::move(map), utils::_element_chaining(holder));
+    }
+
+    template <typename Key, typename Value, disable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    void replace(holder<Key, Value> &holder, std::multimap<Key, Value> &&map) {
+        utils::_replace(holder, std::move(map), nullptr);
+    }
+
+    template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    void insert(holder<Key, Value> &holder, std::multimap<Key, Value> &&map) {
+        utils::_insert(holder, std::move(map), utils::_element_chaining(holder));
+    }
+
+    template <typename Key, typename Value, disable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    void insert(holder<Key, Value> &holder, std::multimap<Key, Value> &&map) {
+        utils::_insert(holder, std::move(map), nullptr);
+    }
+}  // namespace utils
 
 #pragma mark - multimap::holder
 
 template <typename Key, typename Value>
 holder<Key, Value>::holder(std::multimap<Key, Value> map) : sender<event>(std::make_shared<impl>()) {
-    this->template impl_ptr<impl>()->prepare(std::move(map));
+    this->_prepare(std::move(map));
 }
 
 template <typename Key, typename Value>
@@ -215,12 +186,12 @@ std::size_t holder<Key, Value>::size() const {
 
 template <typename Key, typename Value>
 void holder<Key, Value>::replace(std::multimap<Key, Value> map) {
-    this->template impl_ptr<impl>()->replace(std::move(map));
+    utils::replace(*this, std::move(map));
 }
 
 template <typename Key, typename Value>
 void holder<Key, Value>::insert(std::multimap<Key, Value> map) {
-    this->template impl_ptr<impl>()->insert(std::move(map));
+    utils::insert(*this, std::move(map));
 }
 
 template <typename Key, typename Value>
@@ -230,7 +201,28 @@ void holder<Key, Value>::insert(Key key, Value value) {
 
 template <typename Key, typename Value>
 std::multimap<Key, Value> holder<Key, Value>::erase_if(std::function<bool(Key const &, Value const &)> const &handler) {
-    return this->template impl_ptr<impl>()->erase_if(handler);
+    auto impl_ptr = this->template impl_ptr<impl>();
+
+    std::multimap<Key, Value> erased;
+
+    if (impl_ptr->_observers.size() > 0) {
+        yas::erase_if(impl_ptr->_observers, [&handler](std::pair<Key, typename impl::wrapper_ptr> const &pair) {
+            return handler(pair.first, *pair.second->value);
+        });
+    }
+
+    yas::erase_if(impl_ptr->_raw, [&handler, &erased](std::pair<Key, Value> const &pair) {
+        if (handler(pair.first, pair.second)) {
+            erased.insert(pair);
+            return true;
+        } else {
+            return false;
+        }
+    });
+
+    impl_ptr->broadcast(make_erased_event(erased));
+
+    return erased;
 }
 
 template <typename Key, typename Value>
@@ -245,7 +237,20 @@ std::multimap<Key, Value> holder<Key, Value>::erase_for_key(Key const &key) {
 
 template <typename Key, typename Value>
 void holder<Key, Value>::clear() {
-    this->template impl_ptr<impl>()->clear();
+    auto impl_ptr = this->template impl_ptr<impl>();
+
+    for (auto &pair : impl_ptr->_observers) {
+        if (auto &wrapper = pair.second) {
+            if (any_observer_ptr &observer = wrapper->observer) {
+                observer->invalidate();
+            }
+        }
+    }
+
+    impl_ptr->_observers.clear();
+    impl_ptr->_raw.clear();
+
+    impl_ptr->broadcast(make_any_event(impl_ptr->_raw));
 }
 
 template <typename Key, typename Value>
@@ -267,6 +272,12 @@ bool holder<Key, Value>::is_equal(sender<event> const &rhs) const {
     } else {
         return false;
     }
+}
+
+template <typename Key, typename Value>
+void holder<Key, Value>::_prepare(std::multimap<Key, Value> &&map) {
+    auto impl_ptr = this->template impl_ptr<impl>();
+    utils::replace(*this, std::move(map));
 }
 
 template <typename Key, typename Value>

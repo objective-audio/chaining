@@ -276,7 +276,28 @@ void holder<Key, Value>::insert(std::map<Key, Value> map) {
 
 template <typename Key, typename Value>
 std::map<Key, Value> holder<Key, Value>::erase_if(std::function<bool(Key const &, Value const &)> const &handler) {
-    return this->_erase_if(handler);
+    auto impl_ptr = this->template impl_ptr<impl>();
+
+    std::map<Key, Value> erased;
+
+    if (impl_ptr->_observers.size() > 0) {
+        yas::erase_if(impl_ptr->_observers, [&handler](std::pair<Key, typename impl::wrapper_ptr> const &pair) {
+            return handler(pair.first, *pair.second->value);
+        });
+    }
+
+    yas::erase_if(impl_ptr->_raw, [&handler, &erased](std::pair<Key, Value> const &pair) {
+        if (handler(pair.first, pair.second)) {
+            erased.insert(pair);
+            return true;
+        } else {
+            return false;
+        }
+    });
+
+    impl_ptr->broadcast(make_erased_event(erased));
+
+    return erased;
 }
 
 template <typename Key, typename Value>
@@ -286,12 +307,38 @@ std::map<Key, Value> holder<Key, Value>::erase_for_value(Value const &value) {
 
 template <typename Key, typename Value>
 std::map<Key, Value> holder<Key, Value>::erase_for_key(Key const &key) {
-    return this->_erase_for_key(key);
+    auto impl_ptr = this->template impl_ptr<impl>();
+
+    utils::_erase_observer_for_key(*this, key);
+
+    std::map<Key, Value> erased;
+
+    if (impl_ptr->_raw.count(key)) {
+        erased.emplace(key, std::move(impl_ptr->_raw.at(key)));
+        impl_ptr->_raw.erase(key);
+    }
+
+    impl_ptr->broadcast(make_erased_event(erased));
+
+    return erased;
 }
 
 template <typename Key, typename Value>
 void holder<Key, Value>::clear() {
-    this->_clear();
+    auto impl_ptr = this->template impl_ptr<impl>();
+
+    for (auto &pair : impl_ptr->_observers) {
+        if (auto &wrapper = pair.second) {
+            if (any_observer_ptr &observer = wrapper->observer) {
+                observer->invalidate();
+            }
+        }
+    }
+
+    impl_ptr->_observers.clear();
+    impl_ptr->_raw.clear();
+
+    impl_ptr->broadcast(make_any_event(impl_ptr->_raw));
 }
 
 template <typename Key, typename Value>
@@ -346,68 +393,6 @@ bool holder<Key, Value>::is_equal(sender<event> const &rhs) const {
 template <typename Key, typename Value>
 void holder<Key, Value>::_prepare(std::map<Key, Value> &&map) {
     utils::replace_all(*this, std::move(map));
-}
-
-template <typename Key, typename Value>
-std::map<Key, Value> holder<Key, Value>::_erase_if(std::function<bool(Key const &, Value const &)> const &handler) {
-    auto impl_ptr = this->template impl_ptr<impl>();
-
-    std::map<Key, Value> erased;
-
-    if (impl_ptr->_observers.size() > 0) {
-        yas::erase_if(impl_ptr->_observers, [&handler](std::pair<Key, typename impl::wrapper_ptr> const &pair) {
-            return handler(pair.first, *pair.second->value);
-        });
-    }
-
-    yas::erase_if(impl_ptr->_raw, [&handler, &erased](std::pair<Key, Value> const &pair) {
-        if (handler(pair.first, pair.second)) {
-            erased.insert(pair);
-            return true;
-        } else {
-            return false;
-        }
-    });
-
-    impl_ptr->broadcast(make_erased_event(erased));
-
-    return erased;
-}
-
-template <typename Key, typename Value>
-std::map<Key, Value> holder<Key, Value>::_erase_for_key(Key const &key) {
-    auto impl_ptr = this->template impl_ptr<impl>();
-
-    utils::_erase_observer_for_key(*this, key);
-
-    std::map<Key, Value> erased;
-
-    if (impl_ptr->_raw.count(key)) {
-        erased.emplace(key, std::move(impl_ptr->_raw.at(key)));
-        impl_ptr->_raw.erase(key);
-    }
-
-    impl_ptr->broadcast(make_erased_event(erased));
-
-    return erased;
-}
-
-template <typename Key, typename Value>
-void holder<Key, Value>::_clear() {
-    auto impl_ptr = this->template impl_ptr<impl>();
-
-    for (auto &pair : impl_ptr->_observers) {
-        if (auto &wrapper = pair.second) {
-            if (any_observer_ptr &observer = wrapper->observer) {
-                observer->invalidate();
-            }
-        }
-    }
-
-    impl_ptr->_observers.clear();
-    impl_ptr->_raw.clear();
-
-    impl_ptr->broadcast(make_any_event(impl_ptr->_raw));
 }
 
 template <typename Key, typename Value>
