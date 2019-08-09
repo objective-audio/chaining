@@ -55,16 +55,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
     std::multimap<Key, wrapper_ptr> _observers;
 
     template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(std::multimap<Key, Value> &&map) {
-        this->_replace(std::move(map), this->_element_chaining());
-    }
-
-    template <typename Element = Value, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void replace(std::multimap<Key, Value> &&map) {
-        this->_replace(std::move(map), nullptr);
-    }
-
-    template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
     void insert(std::multimap<Key, Value> &&map) {
         this->_insert(std::move(map), this->_element_chaining());
     }
@@ -140,7 +130,19 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
     }
 };
 
-namespace utils {}
+namespace utils {
+    template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    void replace(holder<Key, Value> &holder, std::multimap<Key, Value> &&map) {
+        auto impl_ptr = holder.template impl_ptr<typename multimap::holder<Key, Value>::impl>();
+        impl_ptr->_replace(std::move(map), impl_ptr->_element_chaining());
+    }
+
+    template <typename Key, typename Value, disable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    void replace(holder<Key, Value> &holder, std::multimap<Key, Value> &&map) {
+        auto impl_ptr = holder.template impl_ptr<typename multimap::holder<Key, Value>::impl>();
+        impl_ptr->_replace(std::move(map), nullptr);
+    }
+}  // namespace utils
 
 #pragma mark - multimap::holder
 
@@ -173,7 +175,7 @@ std::size_t holder<Key, Value>::size() const {
 
 template <typename Key, typename Value>
 void holder<Key, Value>::replace(std::multimap<Key, Value> map) {
-    this->template impl_ptr<impl>()->replace(std::move(map));
+    utils::replace(*this, std::move(map));
 }
 
 template <typename Key, typename Value>
@@ -264,7 +266,7 @@ bool holder<Key, Value>::is_equal(sender<event> const &rhs) const {
 template <typename Key, typename Value>
 void holder<Key, Value>::_prepare(std::multimap<Key, Value> &&map) {
     auto impl_ptr = this->template impl_ptr<impl>();
-    impl_ptr->replace(std::move(map));
+    utils::replace(*this, std::move(map));
 }
 
 template <typename Key, typename Value>
