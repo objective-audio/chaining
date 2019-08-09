@@ -54,16 +54,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
     std::multimap<Key, Value> _raw;
     std::multimap<Key, wrapper_ptr> _observers;
 
-    template <typename Element = Value, enable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void insert(std::multimap<Key, Value> &&map) {
-        this->_insert(std::move(map), this->_element_chaining());
-    }
-
-    template <typename Element = Value, disable_if_base_of_sender_t<Element, std::nullptr_t> = nullptr>
-    void insert(std::multimap<Key, Value> &&map) {
-        this->_insert(std::move(map), nullptr);
-    }
-
     void fetch_for(any_joint const &joint) override {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
@@ -142,6 +132,18 @@ namespace utils {
         auto impl_ptr = holder.template impl_ptr<typename multimap::holder<Key, Value>::impl>();
         impl_ptr->_replace(std::move(map), nullptr);
     }
+
+    template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    void insert(holder<Key, Value> &holder, std::multimap<Key, Value> &&map) {
+        auto impl_ptr = holder.template impl_ptr<typename multimap::holder<Key, Value>::impl>();
+        impl_ptr->_insert(std::move(map), impl_ptr->_element_chaining());
+    }
+
+    template <typename Key, typename Value, disable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    void insert(holder<Key, Value> &holder, std::multimap<Key, Value> &&map) {
+        auto impl_ptr = holder.template impl_ptr<typename multimap::holder<Key, Value>::impl>();
+        impl_ptr->_insert(std::move(map), nullptr);
+    }
 }  // namespace utils
 
 #pragma mark - multimap::holder
@@ -180,7 +182,7 @@ void holder<Key, Value>::replace(std::multimap<Key, Value> map) {
 
 template <typename Key, typename Value>
 void holder<Key, Value>::insert(std::multimap<Key, Value> map) {
-    this->template impl_ptr<impl>()->insert(std::move(map));
+    utils::insert(*this, std::move(map));
 }
 
 template <typename Key, typename Value>
