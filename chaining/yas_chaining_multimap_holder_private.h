@@ -74,21 +74,6 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
         this->_insert(std::move(map), nullptr);
     }
 
-    void clear() {
-        for (auto &pair : this->_observers) {
-            if (auto &wrapper = pair.second) {
-                if (any_observer_ptr &observer = wrapper->observer) {
-                    observer->invalidate();
-                }
-            }
-        }
-
-        this->_observers.clear();
-        this->_raw.clear();
-
-        this->broadcast(make_any_event(this->_raw));
-    }
-
     void fetch_for(any_joint const &joint) override {
         this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
     }
@@ -239,7 +224,20 @@ std::multimap<Key, Value> holder<Key, Value>::erase_for_key(Key const &key) {
 
 template <typename Key, typename Value>
 void holder<Key, Value>::clear() {
-    this->template impl_ptr<impl>()->clear();
+    auto impl_ptr = this->template impl_ptr<impl>();
+
+    for (auto &pair : impl_ptr->_observers) {
+        if (auto &wrapper = pair.second) {
+            if (any_observer_ptr &observer = wrapper->observer) {
+                observer->invalidate();
+            }
+        }
+    }
+
+    impl_ptr->_observers.clear();
+    impl_ptr->_raw.clear();
+
+    impl_ptr->broadcast(make_any_event(impl_ptr->_raw));
 }
 
 template <typename Key, typename Value>
