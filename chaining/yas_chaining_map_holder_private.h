@@ -195,7 +195,6 @@ namespace utils {
 
     template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
     void insert_or_replace(holder<Key, std::shared_ptr<Value>> &holder, Key key, std::shared_ptr<Value> value) {
-        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, std::shared_ptr<Value>>::impl>();
         utils::_insert_or_replace(holder, std::move(key), std::move(value), utils::element_chaining(holder));
     }
 
@@ -206,7 +205,6 @@ namespace utils {
 
     template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
     void insert(holder<Key, std::shared_ptr<Value>> &holder, std::map<Key, std::shared_ptr<Value>> map) {
-        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, std::shared_ptr<Value>>::impl>();
         utils::_insert(holder, std::move(map), utils::element_chaining(holder));
     }
 
