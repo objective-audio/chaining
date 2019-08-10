@@ -165,17 +165,19 @@ using namespace yas::chaining;
 - (void)test_chain_relayed {
     auto holder1 = value::holder<std::string>::make_shared("1");
     auto holder2 = value::holder<std::string>::make_shared("2");
-    auto map_holder = map::holder<int, value::holder<std::string>>::make_shared({{1, *holder1}, {2, *holder2}});
+    auto map_holder =
+        map::holder<int, std::shared_ptr<value::holder<std::string>>>::make_shared({{1, holder1}, {2, holder2}});
 
     std::vector<event> received_events;
-    std::vector<std::tuple<int, value::holder<std::string>, std::string>> received_relayed_events;
+    std::vector<std::tuple<int, std::shared_ptr<value::holder<std::string>>, std::string>> received_relayed_events;
 
     auto chain =
         map_holder->chain()
             .perform([&received_events, &received_relayed_events](auto const &event) {
                 received_events.push_back(event);
                 if (event.type() == event_type::relayed) {
-                    auto const &relayed = event.template get<map::relayed_event<int, value::holder<std::string>>>();
+                    auto const &relayed =
+                        event.template get<map::relayed_event<int, std::shared_ptr<value::holder<std::string>>>>();
                     received_relayed_events.push_back(std::make_tuple(relayed.key, relayed.value, relayed.relayed));
                 }
             })
@@ -187,7 +189,7 @@ using namespace yas::chaining;
     XCTAssertEqual(received_events.at(0).type(), event_type::relayed);
     XCTAssertEqual(received_relayed_events.size(), 1);
     XCTAssertEqual(std::get<0>(received_relayed_events.at(0)), 1);
-    XCTAssertEqual(std::get<1>(received_relayed_events.at(0)), *value::holder<std::string>::make_shared("3"));
+    XCTAssertEqual(std::get<1>(received_relayed_events.at(0)), holder1);
     XCTAssertEqual(std::get<2>(received_relayed_events.at(0)), "3");
 
     holder2->set_value("4");
@@ -196,28 +198,29 @@ using namespace yas::chaining;
     XCTAssertEqual(received_events.at(1).type(), event_type::relayed);
     XCTAssertEqual(received_relayed_events.size(), 2);
     XCTAssertEqual(std::get<0>(received_relayed_events.at(1)), 2);
-    XCTAssertEqual(std::get<1>(received_relayed_events.at(1)), *value::holder<std::string>::make_shared("4"));
+    XCTAssertEqual(std::get<1>(received_relayed_events.at(1)), holder2);
     XCTAssertEqual(std::get<2>(received_relayed_events.at(1)), "4");
 }
 
 - (void)test_chain_relayed_after_inserted {
-    auto map_holder = map::holder<int, value::holder<std::string>>::make_shared();
+    auto map_holder = map::holder<int, std::shared_ptr<value::holder<std::string>>>::make_shared();
 
     auto holder1 = value::holder<std::string>::make_shared("1");
-    map_holder->insert_or_replace(1, *holder1);
+    map_holder->insert_or_replace(1, holder1);
 
     auto holder2 = value::holder<std::string>::make_shared("2");
-    map_holder->insert_or_replace(2, *holder2);
+    map_holder->insert_or_replace(2, holder2);
 
     std::vector<event> received_events;
-    std::vector<std::tuple<int, value::holder<std::string>, std::string>> received_relayed_events;
+    std::vector<std::tuple<int, std::shared_ptr<value::holder<std::string>>, std::string>> received_relayed_events;
 
     auto chain =
         map_holder->chain()
             .perform([&received_events, &received_relayed_events](auto const &event) {
                 received_events.push_back(event);
                 if (event.type() == event_type::relayed) {
-                    auto const &relayed = event.template get<map::relayed_event<int, value::holder<std::string>>>();
+                    auto const &relayed =
+                        event.template get<map::relayed_event<int, std::shared_ptr<value::holder<std::string>>>>();
                     received_relayed_events.push_back(std::make_tuple(relayed.key, relayed.value, relayed.relayed));
                 }
             })
@@ -229,7 +232,7 @@ using namespace yas::chaining;
     XCTAssertEqual(received_events.at(0).type(), event_type::relayed);
     XCTAssertEqual(received_relayed_events.size(), 1);
     XCTAssertEqual(std::get<0>(received_relayed_events.at(0)), 1);
-    XCTAssertEqual(std::get<1>(received_relayed_events.at(0)), *value::holder<std::string>::make_shared("3"));
+    XCTAssertEqual(std::get<1>(received_relayed_events.at(0)), holder1);
     XCTAssertEqual(std::get<2>(received_relayed_events.at(0)), "3");
 
     holder2->set_value("4");
@@ -238,28 +241,29 @@ using namespace yas::chaining;
     XCTAssertEqual(received_events.at(1).type(), event_type::relayed);
     XCTAssertEqual(received_relayed_events.size(), 2);
     XCTAssertEqual(std::get<0>(received_relayed_events.at(1)), 2);
-    XCTAssertEqual(std::get<1>(received_relayed_events.at(1)), *value::holder<std::string>::make_shared("4"));
+    XCTAssertEqual(std::get<1>(received_relayed_events.at(1)), holder2);
     XCTAssertEqual(std::get<2>(received_relayed_events.at(1)), "4");
 }
 
 - (void)test_chain_relayed_after_replaced {
     auto holder1 = value::holder<int>::make_shared(1);
     auto holder2 = value::holder<int>::make_shared(2);
-    auto map_holder = map::holder<int, value::holder<int>>::make_shared({{1, *holder1}, {2, *holder2}});
+    auto map_holder = map::holder<int, std::shared_ptr<value::holder<int>>>::make_shared({{1, holder1}, {2, holder2}});
 
     auto holder3 = value::holder<int>::make_shared(3);
     auto holder4 = value::holder<int>::make_shared(4);
-    map_holder->replace_all({{3, *holder3}, {4, *holder4}});
+    map_holder->replace_all({{3, holder3}, {4, holder4}});
 
     std::vector<event> received_events;
-    std::vector<std::tuple<int, value::holder<int>, int>> received_relayed_events;
+    std::vector<std::tuple<int, std::shared_ptr<value::holder<int>>, int>> received_relayed_events;
 
     auto chain =
         map_holder->chain()
             .perform([&received_events, &received_relayed_events](auto const &event) {
                 received_events.push_back(event);
                 if (event.type() == event_type::relayed) {
-                    auto const &relayed = event.template get<map::relayed_event<int, value::holder<int>>>();
+                    auto const &relayed =
+                        event.template get<map::relayed_event<int, std::shared_ptr<value::holder<int>>>>();
                     received_relayed_events.push_back(std::make_tuple(relayed.key, relayed.value, relayed.relayed));
                 }
             })
@@ -276,7 +280,7 @@ using namespace yas::chaining;
     XCTAssertEqual(received_events.at(0).type(), event_type::relayed);
     XCTAssertEqual(received_relayed_events.size(), 1);
     XCTAssertEqual(std::get<0>(received_relayed_events.at(0)), 3);
-    XCTAssertEqual(std::get<1>(received_relayed_events.at(0)), (*value::holder<int>::make_shared(30)));
+    XCTAssertEqual(std::get<1>(received_relayed_events.at(0)), holder3);
     XCTAssertEqual(std::get<2>(received_relayed_events.at(0)), 30);
 
     holder4->set_value(40);
@@ -285,26 +289,27 @@ using namespace yas::chaining;
     XCTAssertEqual(received_events.at(1).type(), event_type::relayed);
     XCTAssertEqual(received_relayed_events.size(), 2);
     XCTAssertEqual(std::get<0>(received_relayed_events.at(1)), 4);
-    XCTAssertEqual(std::get<1>(received_relayed_events.at(1)), (*value::holder<int>::make_shared(40)));
+    XCTAssertEqual(std::get<1>(received_relayed_events.at(1)), holder4);
     XCTAssertEqual(std::get<2>(received_relayed_events.at(1)), 40);
 }
 
 - (void)test_chain_not_relayed_after_erased {
     auto holder1 = value::holder<int>::make_shared(1);
     auto holder2 = value::holder<int>::make_shared(2);
-    auto map_holder = map::holder<int, value::holder<int>>::make_shared({{1, *holder1}, {2, *holder2}});
+    auto map_holder = map::holder<int, std::shared_ptr<value::holder<int>>>::make_shared({{1, holder1}, {2, holder2}});
 
     map_holder->erase_for_key(1);
 
     std::vector<event> received_events;
-    std::vector<std::tuple<int, value::holder<int>, int>> received_relayed_events;
+    std::vector<std::tuple<int, std::shared_ptr<value::holder<int>>, int>> received_relayed_events;
 
     auto chain =
         map_holder->chain()
             .perform([&received_events, &received_relayed_events](auto const &event) {
                 received_events.push_back(event);
                 if (event.type() == event_type::relayed) {
-                    auto const &relayed = event.template get<map::relayed_event<int, value::holder<int>>>();
+                    auto const &relayed =
+                        event.template get<map::relayed_event<int, std::shared_ptr<value::holder<int>>>>();
                     received_relayed_events.push_back(std::make_tuple(relayed.key, relayed.value, relayed.relayed));
                 }
             })
@@ -322,7 +327,7 @@ using namespace yas::chaining;
 - (void)test_chain_not_relayed_after_clear {
     auto holder1 = value::holder<int>::make_shared(1);
     auto holder2 = value::holder<int>::make_shared(2);
-    auto map_holder = map::holder<int, value::holder<int>>::make_shared({{1, *holder1}, {2, *holder2}});
+    auto map_holder = map::holder<int, std::shared_ptr<value::holder<int>>>::make_shared({{1, holder1}, {2, holder2}});
 
     map_holder->clear();
 
@@ -340,10 +345,10 @@ using namespace yas::chaining;
 - (void)test_chain_not_relayed_after_replaced {
     auto holder1 = value::holder<int>::make_shared(1);
     auto holder2 = value::holder<int>::make_shared(2);
-    auto map_holder = map::holder<int, value::holder<int>>::make_shared({{1, *holder1}, {2, *holder2}});
+    auto map_holder = map::holder<int, std::shared_ptr<value::holder<int>>>::make_shared({{1, holder1}, {2, holder2}});
 
     auto holder3 = value::holder<int>::make_shared(3);
-    map_holder->replace_all({{3, *holder3}});
+    map_holder->replace_all({{3, holder3}});
 
     std::vector<event> received_events;
 

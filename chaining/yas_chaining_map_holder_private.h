@@ -33,8 +33,8 @@ event make_replaced_event(Key const &key, Value const &value) {
     return event{replaced_event<Key, Value>{.key = key, .value = value}};
 }
 
-template <typename Key, typename Value>
-event make_relayed_event(Key const &key, Value const &value, typename Value::SendType const &relayed) {
+template <typename Key, typename Value, enable_if_shared_ptr_t<Value, std::nullptr_t> = nullptr>
+event make_relayed_event(Key const &key, Value const &value, typename Value::element_type::SendType const &relayed) {
     return event{relayed_event<Key, Value>{.key = key, .value = value, .relayed = relayed}};
 }
 
@@ -61,22 +61,23 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
 
 namespace utils {
     template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
-    typename holder<Key, Value>::impl::chaining_f element_chaining(holder<Key, Value> &holder) {
-        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
+    typename holder<Key, std::shared_ptr<Value>>::impl::chaining_f element_chaining(
+        holder<Key, std::shared_ptr<Value>> &holder) {
+        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, std::shared_ptr<Value>>::impl>();
         auto weak_holder_impl = to_weak(impl_ptr);
-        return [weak_holder_impl](Key const &key, Value &value,
-                                  typename map::holder<Key, Value>::impl::wrapper_ptr &wrapper) {
+        return [weak_holder_impl](Key const &key, std::shared_ptr<Value> &value,
+                                  typename map::holder<Key, std::shared_ptr<Value>>::impl::wrapper_ptr &wrapper) {
             auto weak_value = to_weak(value);
-            typename map::holder<Key, Value>::impl::wrapper_wptr weak_wrapper = wrapper;
-            wrapper->observer = value.sendable()
+            typename map::holder<Key, std::shared_ptr<Value>>::impl::wrapper_wptr weak_wrapper = wrapper;
+            wrapper->observer = value->sendable()
                                     ->chain_unsync()
                                     .perform([weak_holder_impl, weak_wrapper, key, weak_value](auto const &relayed) {
                                         auto holder_impl = weak_holder_impl.lock();
                                         auto value = weak_value.lock();
-                                        typename map::holder<Key, Value>::impl::wrapper_ptr wrapper =
+                                        typename map::holder<Key, std::shared_ptr<Value>>::impl::wrapper_ptr wrapper =
                                             weak_wrapper.lock();
                                         if (holder_impl && wrapper && value) {
-                                            holder_impl->broadcast(make_relayed_event(key, *value, relayed));
+                                            holder_impl->broadcast(make_relayed_event(key, value, relayed));
                                         }
                                     })
                                     .end();
@@ -183,33 +184,33 @@ namespace utils {
     }
 
     template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
-    void replace_all(holder<Key, Value> &holder, std::map<Key, Value> map) {
+    void replace_all(holder<Key, std::shared_ptr<Value>> &holder, std::map<Key, std::shared_ptr<Value>> map) {
         utils::_replace(holder, std::move(map), utils::element_chaining(holder));
     }
 
-    template <typename Key, typename Value, disable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    template <typename Key, typename Value>
     void replace_all(holder<Key, Value> &holder, std::map<Key, Value> map) {
         utils::_replace(holder, std::move(map), nullptr);
     }
 
     template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
-    void insert_or_replace(holder<Key, Value> &holder, Key key, Value value) {
-        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
+    void insert_or_replace(holder<Key, std::shared_ptr<Value>> &holder, Key key, std::shared_ptr<Value> value) {
+        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, std::shared_ptr<Value>>::impl>();
         utils::_insert_or_replace(holder, std::move(key), std::move(value), utils::element_chaining(holder));
     }
 
-    template <typename Key, typename Value, disable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    template <typename Key, typename Value>
     void insert_or_replace(holder<Key, Value> &holder, Key key, Value value) {
         utils::_insert_or_replace(holder, std::move(key), std::move(value), nullptr);
     }
 
     template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
-    void insert(holder<Key, Value> &holder, std::map<Key, Value> map) {
-        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
+    void insert(holder<Key, std::shared_ptr<Value>> &holder, std::map<Key, std::shared_ptr<Value>> map) {
+        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, std::shared_ptr<Value>>::impl>();
         utils::_insert(holder, std::move(map), utils::element_chaining(holder));
     }
 
-    template <typename Key, typename Value, disable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    template <typename Key, typename Value>
     void insert(holder<Key, Value> &holder, std::map<Key, Value> map) {
         utils::_insert(holder, std::move(map), nullptr);
     }
