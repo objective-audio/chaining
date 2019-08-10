@@ -33,8 +33,8 @@ event make_replaced_event(T const &element, std::size_t const idx) {
     return event{replaced_event<T>{.element = element, .index = idx}};
 }
 
-template <typename T>
-event make_relayed_event(T const &element, std::size_t const idx, typename T::SendType const &relayed) {
+template <typename T, enable_if_shared_ptr_t<T, std::nullptr_t> = nullptr>
+event make_relayed_event(T const &element, std::size_t const idx, typename T::element_type::SendType const &relayed) {
     return event{relayed_event<T>{.element = element, .index = idx, .relayed = relayed}};
 }
 
@@ -58,25 +58,29 @@ struct holder<T>::impl : sender<event>::impl, weakable_impl {
 
 namespace utils {
     template <typename T, enable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
-    typename vector::holder<T>::impl::chaining_f element_chaining(vector::holder<T> &holder) {
-        auto impl_ptr = holder.template impl_ptr<typename vector::holder<T>::impl>();
-        auto weak_holder_impl = to_weak(impl_ptr);
-        return [weak_holder_impl](T &element, typename vector::holder<T>::impl::wrapper_ptr &wrapper) {
+    typename vector::holder<std::shared_ptr<T>>::impl::chaining_f element_chaining(
+        vector::holder<std::shared_ptr<T>> &holder) {
+        auto weak_holder = to_weak(holder);
+        return [weak_holder](std::shared_ptr<T> &element,
+                             typename vector::holder<std::shared_ptr<T>>::impl::wrapper_ptr &wrapper) {
             auto weak_element = to_weak(element);
-            typename vector::holder<T>::impl::wrapper_wptr weak_wrapper = wrapper;
-            wrapper->observer = element.sendable()
-                                    ->chain_unsync()
-                                    .perform([weak_holder_impl, weak_wrapper, weak_element](auto const &relayed) {
-                                        auto holder_impl = weak_holder_impl.lock();
-                                        auto element = weak_element.lock();
-                                        typename vector::holder<T>::impl::wrapper_ptr wrapper = weak_wrapper.lock();
-                                        if (holder_impl && wrapper && element) {
-                                            if (auto idx = yas::index(holder_impl->_observers, wrapper)) {
-                                                holder_impl->broadcast(make_relayed_event(*element, *idx, relayed));
-                                            }
-                                        }
-                                    })
-                                    .end();
+            typename vector::holder<std::shared_ptr<T>>::impl::wrapper_wptr weak_wrapper = wrapper;
+            wrapper->observer =
+                element->sendable()
+                    ->chain_unsync()
+                    .perform([weak_holder, weak_wrapper, weak_element](auto const &relayed) {
+                        auto holder = weak_holder.lock();
+                        auto element = weak_element.lock();
+                        typename vector::holder<std::shared_ptr<T>>::impl::wrapper_ptr wrapper = weak_wrapper.lock();
+                        if (holder && wrapper && element) {
+                            auto holder_impl =
+                                holder->template impl_ptr<typename vector::holder<std::shared_ptr<T>>::impl>();
+                            if (auto idx = yas::index(holder_impl->_observers, wrapper)) {
+                                holder_impl->broadcast(make_relayed_event(element, *idx, relayed));
+                            }
+                        }
+                    })
+                    .end();
         };
     }
 
@@ -146,31 +150,31 @@ namespace utils {
     }
 
     template <typename T, enable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
-    void replace_all(vector::holder<T> &holder, std::vector<T> vec) {
+    void replace_all(vector::holder<std::shared_ptr<T>> &holder, std::vector<std::shared_ptr<T>> vec) {
         _replace(holder, std::move(vec), utils::element_chaining(holder));
     }
 
-    template <typename T, disable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
+    template <typename T>
     void replace_all(vector::holder<T> &holder, std::vector<T> vec) {
         _replace(holder, std::move(vec), nullptr);
     }
 
     template <typename T, enable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
-    void replace(vector::holder<T> &holder, T element, std::size_t const idx) {
+    void replace(vector::holder<std::shared_ptr<T>> &holder, std::shared_ptr<T> element, std::size_t const idx) {
         _replace(holder, std::move(element), idx, utils::element_chaining(holder));
     }
 
-    template <typename T, disable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
+    template <typename T>
     void replace(vector::holder<T> &holder, T element, std::size_t const idx) {
         _replace(holder, std::move(element), idx, nullptr);
     }
 
     template <typename T, enable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
-    void insert(vector::holder<T> &holder, T element, std::size_t const idx) {
+    void insert(vector::holder<std::shared_ptr<T>> &holder, std::shared_ptr<T> element, std::size_t const idx) {
         _insert(holder, std::move(element), idx, utils::element_chaining(holder));
     }
 
-    template <typename T, disable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
+    template <typename T>
     void insert(vector::holder<T> &holder, T element, std::size_t const idx) {
         _insert(holder, std::move(element), idx, nullptr);
     }
