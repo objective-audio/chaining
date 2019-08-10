@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <cpp_utils/yas_weakable.h>
 #include <map>
 #include "yas_chaining_event.h"
 #include "yas_chaining_sender.h"
@@ -56,7 +55,7 @@ struct relayed_event {
 };
 
 template <typename Key, typename Value>
-struct holder final : sender<event>, weakable<holder<Key, Value>> {
+struct holder final : sender<event> {
     class impl;
 
     using chain_t = chain<event, event, true>;
@@ -78,8 +77,6 @@ struct holder final : sender<event>, weakable<holder<Key, Value>> {
     void clear();
 
     [[nodiscard]] chain_t chain() const;
-
-    std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
 
    private:
     explicit holder(std::multimap<Key, Value>);

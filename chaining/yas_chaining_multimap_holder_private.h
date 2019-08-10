@@ -41,7 +41,7 @@ event make_relayed_event(Key const &key, Value const &value, typename Value::ele
 #pragma mark - multimap::holder::impl
 
 template <typename Key, typename Value>
-struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
+struct holder<Key, Value>::impl : sender<event>::impl {
     struct observer_wrapper {
         any_observer_ptr observer = nullptr;
         Value *value = nullptr;
@@ -258,11 +258,6 @@ void holder<Key, Value>::clear() {
 template <typename Key, typename Value>
 typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::chain() const {
     return this->template impl_ptr<impl>()->chain_sync();
-}
-
-template <typename Key, typename Value>
-std::shared_ptr<weakable_impl> holder<Key, Value>::weakable_impl_ptr() const {
-    return this->template impl_ptr<impl>();
 }
 
 template <typename Key, typename Value>

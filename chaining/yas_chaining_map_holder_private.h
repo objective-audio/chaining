@@ -41,7 +41,7 @@ event make_relayed_event(Key const &key, Value const &value, typename Value::ele
 #pragma mark - map::holder::impl
 
 template <typename Key, typename Value>
-struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
+struct holder<Key, Value>::impl : sender<event>::impl {
     struct observer_wrapper {
         any_observer_ptr observer = nullptr;
         Value *value = nullptr;
@@ -371,11 +371,6 @@ void holder<Key, Value>::receive_value(map::event const &event) {
         case event_type::relayed:
             break;
     }
-}
-
-template <typename Key, typename Value>
-std::shared_ptr<weakable_impl> holder<Key, Value>::weakable_impl_ptr() const {
-    return this->template impl_ptr<impl>();
 }
 
 template <typename Key, typename Value>
