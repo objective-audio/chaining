@@ -59,7 +59,7 @@ struct relayed_event {
 };
 
 template <typename T>
-struct holder final : sender<event>, receiver<event>, weakable<holder<T>> {
+struct holder final : sender<event>, receiver<event>, weakable<holder<T>>, std::enable_shared_from_this<holder<T>> {
     class impl;
 
     using vector_t = std::vector<T>;
@@ -88,7 +88,7 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<T>> {
     std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
 
    private:
-    explicit holder(vector_t);
+    explicit holder();
 
     holder(holder const &) = delete;
     holder(holder &&) = delete;

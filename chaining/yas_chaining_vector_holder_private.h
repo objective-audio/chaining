@@ -60,7 +60,7 @@ namespace utils {
     template <typename T, enable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
     typename vector::holder<std::shared_ptr<T>>::impl::chaining_f element_chaining(
         vector::holder<std::shared_ptr<T>> &holder) {
-        auto weak_holder = to_weak(holder);
+        auto weak_holder = to_weak(holder.shared_from_this());
         return [weak_holder](std::shared_ptr<T> &element,
                              typename vector::holder<std::shared_ptr<T>>::impl::wrapper_ptr &wrapper) {
             auto weak_element = to_weak(element);
@@ -206,8 +206,7 @@ typename holder<T>::chain_t holder<T>::holder<T>::chain() const {
 }
 
 template <typename T>
-holder<T>::holder(std::vector<T> vec) : sender<event>(std::make_shared<impl>()) {
-    this->_prepare(std::move(vec));
+holder<T>::holder() : sender<event>(std::make_shared<impl>()) {
 }
 
 template <typename T>
@@ -332,6 +331,8 @@ std::shared_ptr<holder<T>> holder<T>::make_shared() {
 
 template <typename T>
 std::shared_ptr<holder<T>> holder<T>::make_shared(vector_t vec) {
-    return std::shared_ptr<holder<T>>(new holder<T>{std::move(vec)});
+    auto shared = std::shared_ptr<holder<T>>(new holder<T>{});
+    shared->_prepare(std::move(vec));
+    return shared;
 }
 }  // namespace yas::chaining::vector
