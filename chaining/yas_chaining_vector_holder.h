@@ -90,6 +90,11 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<T>> {
    private:
     explicit holder(vector_t);
 
+    holder(holder const &) = delete;
+    holder(holder &&) = delete;
+    holder &operator=(holder const &) = delete;
+    holder &operator=(holder &&) = delete;
+
     bool is_equal(sender<event> const &rhs) const override;
 
     void _prepare(std::vector<T> &&);
