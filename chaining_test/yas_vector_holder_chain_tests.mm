@@ -254,4 +254,14 @@ using namespace yas::chaining;
     XCTAssertEqual(received.size(), 0);
 }
 
+- (void)test_chain_unrelayed_shared {
+    auto value1 = std::make_shared<int>(1);
+    auto value2 = std::make_shared<int>(2);
+    auto vector_holder = vector::holder<std::shared_ptr<int>>::make_shared({value1, value2});
+
+    std::vector<event> received;
+
+    auto chain = vector_holder->chain().perform([&received](auto const &event) { received.push_back(event); }).end();
+}
+
 @end
