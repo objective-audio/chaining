@@ -84,6 +84,11 @@ struct holder final : sender<event>, weakable<holder<Key, Value>> {
    private:
     explicit holder(std::multimap<Key, Value>);
 
+    holder(holder const &) = delete;
+    holder(holder &&) = delete;
+    holder &operator=(holder const &) = delete;
+    holder &operator=(holder &&) = delete;
+
     bool is_equal(sender<event> const &rhs) const override;
 
     void _prepare(std::multimap<Key, Value> &&);
