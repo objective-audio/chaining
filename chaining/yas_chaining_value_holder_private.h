@@ -9,7 +9,7 @@
 
 namespace yas::chaining::value {
 template <typename T>
-struct holder<T>::impl : sender<T>::impl, weakable_impl {
+struct holder<T>::impl : sender<T>::impl {
     impl(T &&value) : _value(std::move(value)) {
     }
 
@@ -63,11 +63,6 @@ chain_sync_t<T> holder<T>::chain() const {
 template <typename T>
 void holder<T>::receive_value(T const &value) {
     this->set_value(value);
-}
-
-template <typename T>
-std::shared_ptr<weakable_impl> holder<T>::weakable_impl_ptr() const {
-    return this->template impl_ptr<impl>();
 }
 
 template <typename T>
