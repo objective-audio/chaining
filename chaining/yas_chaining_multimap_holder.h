@@ -52,7 +52,7 @@ struct relayed_event {
     static event_type const type = event_type::relayed;
     Key const &key;
     Value const &value;
-    typename Value::SendType const &relayed;
+    typename Value::element_type::SendType const &relayed;
 };
 
 template <typename Key, typename Value>

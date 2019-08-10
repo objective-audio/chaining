@@ -33,8 +33,8 @@ event make_replaced_event(Key const &key, Value const &value) {
     return event{replaced_event<Key, Value>{.key = key, .value = value}};
 }
 
-template <typename Key, typename Value>
-event make_relayed_event(Key const &key, Value const &value, typename Value::SendType const &relayed) {
+template <typename Key, typename Value, enable_if_shared_ptr_t<Value, std::nullptr_t> = nullptr>
+event make_relayed_event(Key const &key, Value const &value, typename Value::element_type::SendType const &relayed) {
     return event{relayed_event<Key, Value>{.key = key, .value = value, .relayed = relayed}};
 }
 
@@ -61,25 +61,27 @@ struct holder<Key, Value>::impl : sender<event>::impl, weakable_impl {
 
 namespace utils {
     template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
-    typename multimap::holder<Key, Value>::impl::chaining_f _element_chaining(holder<Key, Value> &holder) {
-        auto impl_ptr = holder.template impl_ptr<typename multimap::holder<Key, Value>::impl>();
+    typename multimap::holder<Key, std::shared_ptr<Value>>::impl::chaining_f _element_chaining(
+        holder<Key, std::shared_ptr<Value>> &holder) {
+        auto impl_ptr = holder.template impl_ptr<typename multimap::holder<Key, std::shared_ptr<Value>>::impl>();
         auto weak_holder_impl = to_weak(impl_ptr);
-        return [weak_holder_impl](Key const &key, Value &value,
-                                  typename multimap::holder<Key, Value>::impl::wrapper_ptr &wrapper) {
-            typename multimap::holder<Key, Value>::impl::wrapper_wptr weak_wrapper = wrapper;
+        return [weak_holder_impl](Key const &key, std::shared_ptr<Value> &value,
+                                  typename multimap::holder<Key, std::shared_ptr<Value>>::impl::wrapper_ptr &wrapper) {
+            typename multimap::holder<Key, std::shared_ptr<Value>>::impl::wrapper_wptr weak_wrapper = wrapper;
             auto weak_value = to_weak(value);
-            wrapper->observer = value.sendable()
-                                    ->chain_unsync()
-                                    .perform([weak_holder_impl, weak_wrapper, key, weak_value](auto const &relayed) {
-                                        auto holder_impl = weak_holder_impl.lock();
-                                        auto value = weak_value.lock();
-                                        typename multimap::holder<Key, Value>::impl::wrapper_ptr wrapper =
-                                            weak_wrapper.lock();
-                                        if (holder_impl && wrapper && value) {
-                                            holder_impl->broadcast(make_relayed_event(key, *value, relayed));
-                                        }
-                                    })
-                                    .end();
+            wrapper->observer =
+                value->sendable()
+                    ->chain_unsync()
+                    .perform([weak_holder_impl, weak_wrapper, key, weak_value](auto const &relayed) {
+                        auto holder_impl = weak_holder_impl.lock();
+                        auto value = weak_value.lock();
+                        typename multimap::holder<Key, std::shared_ptr<Value>>::impl::wrapper_ptr wrapper =
+                            weak_wrapper.lock();
+                        if (holder_impl && wrapper && value) {
+                            holder_impl->broadcast(make_relayed_event(key, value, relayed));
+                        }
+                    })
+                    .end();
         };
     }
 
@@ -135,21 +137,21 @@ namespace utils {
     }
 
     template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
-    void replace(holder<Key, Value> &holder, std::multimap<Key, Value> &&map) {
+    void replace(holder<Key, std::shared_ptr<Value>> &holder, std::multimap<Key, std::shared_ptr<Value>> &&map) {
         utils::_replace(holder, std::move(map), utils::_element_chaining(holder));
     }
 
-    template <typename Key, typename Value, disable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    template <typename Key, typename Value>
     void replace(holder<Key, Value> &holder, std::multimap<Key, Value> &&map) {
         utils::_replace(holder, std::move(map), nullptr);
     }
 
     template <typename Key, typename Value, enable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
-    void insert(holder<Key, Value> &holder, std::multimap<Key, Value> &&map) {
+    void insert(holder<Key, std::shared_ptr<Value>> &holder, std::multimap<Key, std::shared_ptr<Value>> &&map) {
         utils::_insert(holder, std::move(map), utils::_element_chaining(holder));
     }
 
-    template <typename Key, typename Value, disable_if_base_of_sender_t<Value, std::nullptr_t> = nullptr>
+    template <typename Key, typename Value>
     void insert(holder<Key, Value> &holder, std::multimap<Key, Value> &&map) {
         utils::_insert(holder, std::move(map), nullptr);
     }
