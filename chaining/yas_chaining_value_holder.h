@@ -32,6 +32,11 @@ struct holder final : sender<T>, receiver<T>, weakable<holder<T>> {
    private:
     holder(T &&);
 
+    holder(holder const &) = delete;
+    holder(holder &&) = delete;
+    holder &operator=(holder const &) = delete;
+    holder &operator=(holder &&) = delete;
+
     bool is_equal(sender<T> const &rhs) const override;
 
    public:

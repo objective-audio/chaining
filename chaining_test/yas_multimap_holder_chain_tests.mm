@@ -278,7 +278,8 @@ using namespace yas::chaining;
 - (void)test_chain_not_relayed_after_clear {
     auto holder1 = value::holder<int>::make_shared(1);
     auto holder2 = value::holder<int>::make_shared(2);
-    auto map_holder = multimap::holder<int, value::holder<int>>::make_shared({{1, *holder1}, {2, *holder2}});
+    auto map_holder =
+        multimap::holder<int, std::shared_ptr<value::holder<int>>>::make_shared({{1, holder1}, {2, holder2}});
 
     map_holder->clear();
 
