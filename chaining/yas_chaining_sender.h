@@ -12,7 +12,9 @@
 namespace yas::chaining {
 class any_joint;
 
-struct any_sender {};
+struct any_sender {
+    virtual ~any_sender() = default;
+};
 
 template <typename T>
 struct sender : any_sender, std::enable_shared_from_this<sender<T>> {
