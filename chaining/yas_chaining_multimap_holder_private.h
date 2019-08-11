@@ -156,7 +156,7 @@ namespace utils {
 #pragma mark - multimap::holder
 
 template <typename Key, typename Value>
-holder<Key, Value>::holder() : _impl(std::make_shared<impl>()) {
+holder<Key, Value>::holder() : _impl(std::make_unique<impl>()) {
 }
 
 template <typename Key, typename Value>

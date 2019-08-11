@@ -193,7 +193,7 @@ typename holder<T>::chain_t holder<T>::holder<T>::chain() {
 }
 
 template <typename T>
-holder<T>::holder() : _impl(std::make_shared<impl>()) {
+holder<T>::holder() : _impl(std::make_unique<impl>()) {
 }
 
 template <typename T>
