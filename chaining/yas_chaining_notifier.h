@@ -26,6 +26,8 @@ struct notifier final : sender<T>, receiver<T> {
     notifier &operator=(notifier const &) = delete;
     notifier &operator=(notifier &&) = delete;
 
+    void fetch_for(any_joint const &joint) override;
+
    public:
     static std::shared_ptr<notifier> make_shared();
 };

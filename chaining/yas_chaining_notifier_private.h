@@ -30,6 +30,11 @@ void notifier<T>::receive_value(T const &value) {
 }
 
 template <typename T>
+void notifier<T>::fetch_for(any_joint const &) {
+    // do nothing
+}
+
+template <typename T>
 std::shared_ptr<notifier<T>> notifier<T>::make_shared() {
     return std::shared_ptr<notifier<T>>(new notifier<T>{});
 }

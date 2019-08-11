@@ -18,7 +18,7 @@ template <typename T>
 struct sender : any_sender, std::enable_shared_from_this<sender<T>> {
     using SendType = T;
 
-    virtual void fetch_for(any_joint const &joint);
+    virtual void fetch_for(any_joint const &joint) = 0;
 
     void broadcast(T const &value) {
         for (std::weak_ptr<joint<T>> const &weak_joint : this->_joints) {
