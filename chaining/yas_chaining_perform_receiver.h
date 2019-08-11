@@ -9,12 +9,10 @@
 namespace yas::chaining {
 template <typename T = std::nullptr_t>
 struct[[nodiscard]] perform_receiver final : receiver<T> {
-    class impl;
-
     void receive_value(T const &) override;
 
    private:
-    std::shared_ptr<impl> _impl;
+    std::function<void(T const &)> _handler;
 
     perform_receiver(std::function<void(T const &)> const &);
     perform_receiver(std::function<void(T const &)> &&);

@@ -13,8 +13,8 @@ template <typename T>
 struct fetcher final : sender<T>, receiver<> {
     std::optional<T> fetched_value() const;
 
-    void broadcast();
-    void broadcast(T const &value);
+    void push();
+    void push(T const &value);
 
     [[nodiscard]] chain_sync_t<T> chain();
 
