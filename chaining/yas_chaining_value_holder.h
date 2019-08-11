@@ -22,7 +22,7 @@ struct holder final : sender<T>, receiver<T> {
     [[nodiscard]] T const &raw() const;
     [[nodiscard]] T &raw();
 
-    [[nodiscard]] chain_sync_t<T> chain() const;
+    [[nodiscard]] chain_sync_t<T> chain();
 
     void receive_value(T const &) override;
 
@@ -35,6 +35,7 @@ struct holder final : sender<T>, receiver<T> {
     holder &operator=(holder &&) = delete;
 
     bool is_equal(sender<T> const &rhs) const override;
+    void fetch_for(any_joint const &joint) override;
 
    public:
     static std::shared_ptr<holder> make_shared(T);

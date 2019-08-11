@@ -58,7 +58,7 @@ struct relayed_event {
 };
 
 template <typename T>
-struct holder final : sender<event>, receiver<event>, std::enable_shared_from_this<holder<T>> {
+struct holder final : sender<event>, receiver<event> {
     class impl;
 
     using vector_t = std::vector<T>;
@@ -80,12 +80,12 @@ struct holder final : sender<event>, receiver<event>, std::enable_shared_from_th
     T erase_at(std::size_t const);
     void clear();
 
-    [[nodiscard]] chain_t chain() const;
+    [[nodiscard]] chain_t chain();
 
     void receive_value(event const &) override;
 
    private:
-    explicit holder();
+    holder();
 
     holder(holder const &) = delete;
     holder(holder &&) = delete;
@@ -93,6 +93,7 @@ struct holder final : sender<event>, receiver<event>, std::enable_shared_from_th
     holder &operator=(holder &&) = delete;
 
     bool is_equal(sender<event> const &rhs) const override;
+    void fetch_for(any_joint const &joint) override;
 
     void _prepare(std::vector<T> &&);
 

@@ -25,13 +25,13 @@ template <typename T>
 void notifier<T>::notify(T const &value) {
     auto impl_ptr = this->template impl_ptr<impl>();
     if (auto lock = std::unique_lock<std::mutex>(impl_ptr->_send_mutex, std::try_to_lock); lock.owns_lock()) {
-        impl_ptr->broadcast(value);
+        this->broadcast(value);
     }
 }
 
 template <typename T>
-chain_unsync_t<T> notifier<T>::chain() const {
-    return this->template impl_ptr<impl>()->chain_unsync();
+chain_unsync_t<T> notifier<T>::chain() {
+    return this->chain_unsync();
 }
 
 template <typename T>

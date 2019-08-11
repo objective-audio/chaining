@@ -10,9 +10,8 @@
 
 namespace yas::chaining {
 template <typename T>
-struct sender<T>::impl : chaining::sendable<T> {
-    void fetch_for(any_joint const &joint) override {
-    }
+struct sender<T>::impl {
+    virtual ~impl() = default;
 };
 
 template <typename T>
@@ -21,7 +20,7 @@ sender<T>::sender(std::shared_ptr<impl> &&impl) : _impl(std::move(impl)) {
 
 template <typename T>
 std::shared_ptr<sendable<T>> sender<T>::sendable() {
-    return this->_impl;
+    return this->shared_from_this();
 }
 
 template <typename T>
@@ -58,5 +57,9 @@ uintptr_t sender<T>::identifier() const {
 template <typename T>
 bool sender<T>::is_equal(sender<T> const &rhs) const {
     return this->identifier() == rhs.identifier();
+}
+
+template <typename T>
+void sender<T>::fetch_for(any_joint const &joint) {
 }
 }  // namespace yas::chaining

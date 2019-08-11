@@ -50,17 +50,14 @@ struct holder<T>::impl : sender<event>::impl {
 
     std::vector<T> _raw;
     std::vector<wrapper_ptr> _observers;
-
-    void fetch_for(any_joint const &joint) override {
-        this->send_value_to_target(make_fetched_event(this->_raw), joint.identifier());
-    }
 };
 
 namespace utils {
     template <typename T, enable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
     typename vector::holder<std::shared_ptr<T>>::impl::chaining_f element_chaining(
         vector::holder<std::shared_ptr<T>> &holder) {
-        auto weak_holder = to_weak(holder.shared_from_this());
+        auto weak_holder =
+            to_weak(std::dynamic_pointer_cast<typename vector::holder<std::shared_ptr<T>>>(holder.shared_from_this()));
         return [weak_holder](std::shared_ptr<T> &element,
                              typename vector::holder<std::shared_ptr<T>>::impl::wrapper_ptr &wrapper) {
             auto weak_element = to_weak(element);
@@ -76,7 +73,7 @@ namespace utils {
                             auto holder_impl =
                                 holder->template impl_ptr<typename vector::holder<std::shared_ptr<T>>::impl>();
                             if (auto idx = yas::index(holder_impl->_observers, wrapper)) {
-                                holder_impl->broadcast(make_relayed_event(element, *idx, relayed));
+                                holder->broadcast(make_relayed_event(element, *idx, relayed));
                             }
                         }
                     })
@@ -108,7 +105,7 @@ namespace utils {
 
         impl_ptr->_raw = std::move(vec);
 
-        impl_ptr->broadcast(make_any_event(impl_ptr->_raw));
+        holder.broadcast(make_any_event(impl_ptr->_raw));
     }
 
     template <typename T>
@@ -130,7 +127,7 @@ namespace utils {
 
         impl_ptr->_raw.at(idx) = std::move(element);
 
-        impl_ptr->broadcast(make_replaced_event(impl_ptr->_raw.at(idx), idx));
+        holder.broadcast(make_replaced_event(impl_ptr->_raw.at(idx), idx));
     }
 
     template <typename T>
@@ -146,7 +143,7 @@ namespace utils {
 
         impl_ptr->_raw.insert(impl_ptr->_raw.begin() + idx, std::move(element));
 
-        impl_ptr->broadcast(make_inserted_event(impl_ptr->_raw.at(idx), idx));
+        holder.broadcast(make_inserted_event(impl_ptr->_raw.at(idx), idx));
     }
 
     template <typename T, enable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
@@ -201,8 +198,8 @@ std::size_t holder<T>::size() const {
 }
 
 template <typename T>
-typename holder<T>::chain_t holder<T>::holder<T>::chain() const {
-    return this->template impl_ptr<impl>()->chain_sync();
+typename holder<T>::chain_t holder<T>::holder<T>::chain() {
+    return this->chain_sync();
 }
 
 template <typename T>
@@ -253,7 +250,7 @@ T holder<T>::erase_at(std::size_t const idx) {
     T removed = impl_ptr->_raw.at(idx);
     yas::erase_at(impl_ptr->_raw, idx);
 
-    impl_ptr->broadcast(make_erased_event<T>(idx));
+    this->broadcast(make_erased_event<T>(idx));
 
     return removed;
 }
@@ -272,7 +269,7 @@ void holder<T>::clear() {
     impl_ptr->_raw.clear();
     impl_ptr->_observers.clear();
 
-    impl_ptr->broadcast(make_any_event(impl_ptr->_raw));
+    this->broadcast(make_any_event(impl_ptr->_raw));
 }
 
 template <typename T>
@@ -312,6 +309,11 @@ bool holder<T>::is_equal(sender<event> const &rhs) const {
     } else {
         return false;
     }
+}
+
+template <typename T>
+void holder<T>::fetch_for(any_joint const &joint) {
+    this->send_value_to_target(make_fetched_event(this->raw()), joint.identifier());
 }
 
 template <typename T>

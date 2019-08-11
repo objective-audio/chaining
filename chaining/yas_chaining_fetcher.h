@@ -17,15 +17,17 @@ struct fetcher final : sender<T>, receiver<> {
 
     std::optional<T> fetched_value() const;
 
-    void broadcast() const;
-    void broadcast(T const &) const;
+    void broadcast();
+    void broadcast(T const &value);
 
-    [[nodiscard]] chain_sync_t<T> chain() const;
+    [[nodiscard]] chain_sync_t<T> chain();
 
     void receive_value(std::nullptr_t const &) override;
 
    private:
     explicit fetcher(std::function<std::optional<T>(void)> &&);
+
+    void fetch_for(any_joint const &joint) override;
 
    public:
     static std::shared_ptr<fetcher> make_shared(std::function<std::optional<T>(void)>);

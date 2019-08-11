@@ -9,11 +9,12 @@
 namespace yas::chaining {
 template <typename T>
 class sendable;
+class any_joint;
 
 struct any_sender {};
 
 template <typename T>
-struct sender : any_sender {
+struct sender : any_sender, sendable<T> {
     using SendType = T;
 
     class impl;
@@ -34,6 +35,8 @@ struct sender : any_sender {
     sender(std::shared_ptr<impl> &&);
 
     virtual bool is_equal(sender<T> const &rhs) const;
+
+    void fetch_for(any_joint const &joint) override;
 
    private:
     std::shared_ptr<impl> _impl;

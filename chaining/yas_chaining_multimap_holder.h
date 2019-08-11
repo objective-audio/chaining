@@ -76,10 +76,10 @@ struct holder final : sender<event> {
     std::multimap<Key, Value> erase_for_key(Key const &);
     void clear();
 
-    [[nodiscard]] chain_t chain() const;
+    [[nodiscard]] chain_t chain();
 
    private:
-    explicit holder(std::multimap<Key, Value>);
+    holder();
 
     holder(holder const &) = delete;
     holder(holder &&) = delete;
@@ -87,6 +87,7 @@ struct holder final : sender<event> {
     holder &operator=(holder &&) = delete;
 
     bool is_equal(sender<event> const &rhs) const override;
+    void fetch_for(any_joint const &joint) override;
 
     void _prepare(std::multimap<Key, Value> &&);
 

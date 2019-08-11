@@ -16,7 +16,7 @@ struct notifier final : sender<T>, receiver<T> {
 
     void notify(T const &);
 
-    [[nodiscard]] chain_unsync_t<T> chain() const;
+    [[nodiscard]] chain_unsync_t<T> chain();
 
     void receive_value(T const &) override;
 

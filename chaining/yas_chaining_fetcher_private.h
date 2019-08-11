@@ -13,12 +13,6 @@ struct fetcher<T>::impl : sender<T>::impl {
     impl(std::function<std::optional<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {
     }
 
-    void fetch_for(any_joint const &joint) override {
-        if (auto value = this->_fetching_handler()) {
-            this->send_value_to_target(*value, joint.identifier());
-        }
-    }
-
     std::function<std::optional<T>(void)> _fetching_handler;
 };
 
@@ -37,25 +31,32 @@ std::optional<T> fetcher<T>::fetched_value() const {
 }
 
 template <typename T>
-void fetcher<T>::broadcast() const {
+void fetcher<T>::broadcast() {
     if (auto value = this->fetched_value()) {
-        this->template impl_ptr<impl>()->broadcast(*value);
+        this->broadcast(*value);
     }
 }
 
 template <typename T>
-void fetcher<T>::broadcast(T const &value) const {
-    this->template impl_ptr<impl>()->broadcast(value);
+void fetcher<T>::broadcast(T const &value) {
+    this->sendable<T>::broadcast(value);
 }
 
 template <typename T>
-chain_sync_t<T> fetcher<T>::chain() const {
-    return this->template impl_ptr<impl>()->chain_sync();
+chain_sync_t<T> fetcher<T>::chain() {
+    return this->chain_sync();
 }
 
 template <typename T>
 void fetcher<T>::receive_value(std::nullptr_t const &) {
     return this->broadcast();
+}
+
+template <typename T>
+void fetcher<T>::fetch_for(any_joint const &joint) {
+    if (auto value = this->fetched_value()) {
+        this->send_value_to_target(*value, joint.identifier());
+    }
 }
 
 template <typename T>
