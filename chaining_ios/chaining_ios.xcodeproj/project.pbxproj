@@ -14,7 +14,6 @@
 		B652396C21DC60160035E7E2 /* yas_chaining_value_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394921DC60150035E7E2 /* yas_chaining_value_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B652396D21DC60160035E7E2 /* yas_chaining_observer.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394A21DC60150035E7E2 /* yas_chaining_observer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B652396E21DC60160035E7E2 /* yas_chaining_notifier.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394B21DC60150035E7E2 /* yas_chaining_notifier.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B652396F21DC60160035E7E2 /* yas_chaining_sender_protocol.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394C21DC60150035E7E2 /* yas_chaining_sender_protocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B652397121DC60160035E7E2 /* yas_chaining_perform_receiver_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394E21DC60150035E7E2 /* yas_chaining_perform_receiver_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B652397221DC60160035E7E2 /* yas_chaining_fetcher.h in Headers */ = {isa = PBXBuildFile; fileRef = B652394F21DC60150035E7E2 /* yas_chaining_fetcher.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B652397421DC60160035E7E2 /* yas_chaining_types.h in Headers */ = {isa = PBXBuildFile; fileRef = B652395121DC60150035E7E2 /* yas_chaining_types.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -60,7 +59,6 @@
 		B652394921DC60150035E7E2 /* yas_chaining_value_holder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_value_holder.h; sourceTree = "<group>"; };
 		B652394A21DC60150035E7E2 /* yas_chaining_observer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_observer.h; sourceTree = "<group>"; };
 		B652394B21DC60150035E7E2 /* yas_chaining_notifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_notifier.h; sourceTree = "<group>"; };
-		B652394C21DC60150035E7E2 /* yas_chaining_sender_protocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_sender_protocol.h; sourceTree = "<group>"; };
 		B652394E21DC60150035E7E2 /* yas_chaining_perform_receiver_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_perform_receiver_private.h; sourceTree = "<group>"; };
 		B652394F21DC60150035E7E2 /* yas_chaining_fetcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_fetcher.h; sourceTree = "<group>"; };
 		B652395121DC60150035E7E2 /* yas_chaining_types.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_types.h; sourceTree = "<group>"; };
@@ -172,7 +170,6 @@
 				B652395F21DC60160035E7E2 /* yas_chaining_perform_receiver.h */,
 				B6F8437322B4C18A00A90717 /* yas_chaining_receiver.h */,
 				B652396821DC60160035E7E2 /* yas_chaining_sender_private.h */,
-				B652394C21DC60150035E7E2 /* yas_chaining_sender_protocol.h */,
 				B652396021DC60160035E7E2 /* yas_chaining_sender.h */,
 				B652395121DC60150035E7E2 /* yas_chaining_types.h */,
 				B652395B21DC60150035E7E2 /* yas_chaining_umbrella.h */,
@@ -208,7 +205,6 @@
 				B652397821DC60160035E7E2 /* yas_chaining_chain_private.h in Headers */,
 				B652397421DC60160035E7E2 /* yas_chaining_types.h in Headers */,
 				B652397F21DC60160035E7E2 /* yas_chaining_vector_holder.h in Headers */,
-				B652396F21DC60160035E7E2 /* yas_chaining_sender_protocol.h in Headers */,
 				B652398821DC60160035E7E2 /* yas_chaining_notifier_private.h in Headers */,
 				B652396D21DC60160035E7E2 /* yas_chaining_observer.h in Headers */,
 				B652397E21DC60160035E7E2 /* yas_chaining_umbrella.h in Headers */,

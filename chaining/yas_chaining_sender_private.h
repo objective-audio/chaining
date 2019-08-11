@@ -6,7 +6,6 @@
 
 #include <cpp_utils/yas_stl_utils.h>
 #include <vector>
-#include "yas_chaining_sender_protocol.h"
 
 namespace yas::chaining {
 template <typename T>
