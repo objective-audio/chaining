@@ -251,17 +251,6 @@ typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::cha
 }
 
 template <typename Key, typename Value>
-bool holder<Key, Value>::is_equal(sender<event> const &rhs) const {
-    auto sender_ptr = rhs.shared_from_this();
-    auto rhs_ptr = std::dynamic_pointer_cast<typename multimap::holder<Key, Value> const>(sender_ptr);
-    if (rhs_ptr) {
-        return this->_impl->_raw == rhs_ptr->_impl->_raw;
-    } else {
-        return false;
-    }
-}
-
-template <typename Key, typename Value>
 void holder<Key, Value>::fetch_for(any_joint const &joint) {
     this->send_value_to_target(make_fetched_event(this->raw()), joint.identifier());
 }

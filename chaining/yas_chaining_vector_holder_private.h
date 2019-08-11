@@ -287,17 +287,6 @@ void holder<T>::receive_value(vector::event const &event) {
 }
 
 template <typename T>
-bool holder<T>::is_equal(sender<event> const &rhs) const {
-    auto sender_ptr = rhs.shared_from_this();
-    auto rhs_ptr = std::dynamic_pointer_cast<typename vector::holder<T> const>(sender_ptr);
-    if (rhs_ptr) {
-        return this->_impl->_raw == rhs_ptr->_impl->_raw;
-    } else {
-        return false;
-    }
-}
-
-template <typename T>
 void holder<T>::fetch_for(any_joint const &joint) {
     this->send_value_to_target(make_fetched_event(this->raw()), joint.identifier());
 }

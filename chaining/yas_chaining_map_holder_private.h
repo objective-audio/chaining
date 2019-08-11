@@ -362,17 +362,6 @@ void holder<Key, Value>::receive_value(map::event const &event) {
 }
 
 template <typename Key, typename Value>
-bool holder<Key, Value>::is_equal(sender<event> const &rhs) const {
-    auto sender_ptr = rhs.shared_from_this();
-    auto rhs_ptr = std::dynamic_pointer_cast<typename map::holder<Key, Value> const>(sender_ptr);
-    if (rhs_ptr) {
-        return this->_impl->_raw == rhs_ptr->_impl->_raw;
-    } else {
-        return false;
-    }
-}
-
-template <typename Key, typename Value>
 void holder<Key, Value>::fetch_for(any_joint const &joint) {
     this->send_value_to_target(make_fetched_event(this->raw()), joint.identifier());
 }

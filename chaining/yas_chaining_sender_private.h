@@ -9,24 +9,9 @@
 
 namespace yas::chaining {
 template <typename T>
-bool sender<T>::operator==(sender const &rhs) const {
-    return this->is_equal(rhs);
-}
-
-template <typename T>
-bool sender<T>::operator!=(sender const &rhs) const {
-    return !this->is_equal(rhs);
-}
-
-template <typename T>
 uintptr_t sender<T>::identifier() const {
     auto shared = this->shared_from_this();
     return reinterpret_cast<uintptr_t>(shared.get());
-}
-
-template <typename T>
-bool sender<T>::is_equal(sender<T> const &rhs) const {
-    return this->identifier() == rhs.identifier();
 }
 
 template <typename T>

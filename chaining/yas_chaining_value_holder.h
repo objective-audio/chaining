@@ -33,7 +33,6 @@ struct holder final : sender<T>, receiver<T> {
     holder &operator=(holder const &) = delete;
     holder &operator=(holder &&) = delete;
 
-    bool is_equal(sender<T> const &rhs) const override;
     void fetch_for(any_joint const &joint) override;
 
    public:

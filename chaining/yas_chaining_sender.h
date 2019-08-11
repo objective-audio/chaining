@@ -18,9 +18,6 @@ template <typename T>
 struct sender : any_sender, std::enable_shared_from_this<sender<T>> {
     using SendType = T;
 
-    bool operator==(sender const &rhs) const;
-    bool operator!=(sender const &rhs) const;
-
     uintptr_t identifier() const;
 
     virtual void fetch_for(any_joint const &joint);
@@ -52,8 +49,6 @@ struct sender : any_sender, std::enable_shared_from_this<sender<T>> {
     }
 
    protected:
-    virtual bool is_equal(sender<T> const &rhs) const;
-
     void send_value_to_target(T const &value, std::uintptr_t const key) {
         for (std::weak_ptr<joint<T>> const &weak_joint : this->_joints) {
             if (joint_ptr<T> joint = weak_joint.lock(); joint && joint->identifier() == key) {
