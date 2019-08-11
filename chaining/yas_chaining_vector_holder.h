@@ -59,22 +59,8 @@ struct relayed_event {
 
 template <typename T>
 struct holder final : sender<event>, receiver<event> {
-    class impl;
-
-    struct observer_wrapper {
-        any_observer_ptr observer = nullptr;
-    };
-
-    using wrapper_ptr = std::shared_ptr<observer_wrapper>;
-    using wrapper_wptr = std::weak_ptr<observer_wrapper>;
-    using chaining_f = std::function<void(T &, wrapper_ptr &)>;
-
     using vector_t = std::vector<T>;
     using chain_t = chain<event, event, true>;
-
-    explicit holder(std::shared_ptr<impl> &&);
-
-    ~holder();
 
     [[nodiscard]] vector_t const &raw() const;
     [[nodiscard]] vector_t &raw();
@@ -92,9 +78,18 @@ struct holder final : sender<event>, receiver<event> {
 
     void receive_value(event const &) override;
 
-    std::unique_ptr<impl> _impl;
-
    private:
+    struct observer_wrapper {
+        any_observer_ptr observer = nullptr;
+    };
+
+    using wrapper_ptr = std::shared_ptr<observer_wrapper>;
+    using wrapper_wptr = std::weak_ptr<observer_wrapper>;
+    using chaining_f = std::function<void(T &, wrapper_ptr &)>;
+
+    std::vector<T> _raw;
+    std::vector<wrapper_ptr> _observers;
+
     holder();
 
     holder(holder const &) = delete;
@@ -105,6 +100,41 @@ struct holder final : sender<event>, receiver<event> {
     void fetch_for(any_joint const &joint) override;
 
     void _prepare(std::vector<T> &&);
+
+    chaining_f _element_chaining();
+    void _replace(std::vector<T> &&vec, chaining_f chaining);
+    void _replace(T &&element, std::size_t const idx, chaining_f chaining);
+    void _insert(T &&element, std::size_t const idx, chaining_f chaining);
+
+    template <typename U, enable_if_base_of_sender_t<U, std::nullptr_t> = nullptr>
+    void replace_all(std::vector<std::shared_ptr<U>> vec) {
+        this->_replace(std::move(vec), this->_element_chaining());
+    }
+
+    template <typename U>
+    void replace_all(std::vector<U> vec) {
+        this->_replace(std::move(vec), nullptr);
+    }
+
+    template <typename U, enable_if_base_of_sender_t<U, std::nullptr_t> = nullptr>
+    void replace(vector::holder<std::shared_ptr<U>> &holder, std::shared_ptr<U> element, std::size_t const idx) {
+        this->_replace(std::move(element), idx, this->_element_chaining());
+    }
+
+    template <typename U>
+    void replace(vector::holder<U> &holder, U element, std::size_t const idx) {
+        this->_replace(std::move(element), idx, nullptr);
+    }
+
+    template <typename U, enable_if_base_of_sender_t<U, std::nullptr_t> = nullptr>
+    void insert(vector::holder<std::shared_ptr<U>> &holder, std::shared_ptr<U> element, std::size_t const idx) {
+        this->_insert(std::move(element), idx, this->_element_chaining());
+    }
+
+    template <typename U>
+    void insert(vector::holder<U> &holder, U element, std::size_t const idx) {
+        this->_insert(std::move(element), idx, nullptr);
+    }
 
    public:
     static std::shared_ptr<holder> make_shared();
