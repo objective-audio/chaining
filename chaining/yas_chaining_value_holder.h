@@ -10,8 +10,6 @@
 namespace yas::chaining::value {
 template <typename T>
 struct holder final : sender<T>, receiver<T> {
-    class impl;
-
     ~holder();
 
     void set_value(T &&);
