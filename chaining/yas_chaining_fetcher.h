@@ -25,6 +25,11 @@ struct fetcher final : sender<T>, receiver<> {
 
     explicit fetcher(std::function<std::optional<T>(void)> &&);
 
+    fetcher(fetcher const &) = delete;
+    fetcher(fetcher &&) = delete;
+    fetcher &operator=(fetcher const &) = delete;
+    fetcher &operator=(fetcher &&) = delete;
+
     void fetch_for(any_joint const &joint) override;
 
    public:

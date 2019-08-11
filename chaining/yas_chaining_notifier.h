@@ -21,6 +21,11 @@ struct notifier final : sender<T>, receiver<T> {
 
     notifier();
 
+    notifier(notifier const &) = delete;
+    notifier(notifier &&) = delete;
+    notifier &operator=(notifier const &) = delete;
+    notifier &operator=(notifier &&) = delete;
+
    public:
     static std::shared_ptr<notifier> make_shared();
 };
