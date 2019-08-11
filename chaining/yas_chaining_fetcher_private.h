@@ -9,7 +9,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct fetcher<T>::impl : sender<T>::impl, weakable_impl {
+struct fetcher<T>::impl : sender<T>::impl {
     impl(std::function<std::optional<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {
     }
 
@@ -56,11 +56,6 @@ chain_sync_t<T> fetcher<T>::chain() const {
 template <typename T>
 void fetcher<T>::receive_value(std::nullptr_t const &) {
     return this->broadcast();
-}
-
-template <typename T>
-std::shared_ptr<weakable_impl> fetcher<T>::weakable_impl_ptr() const {
-    return this->template impl_ptr<impl>();
 }
 
 template <typename T>

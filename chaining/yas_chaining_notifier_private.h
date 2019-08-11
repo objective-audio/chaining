@@ -9,7 +9,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct notifier<T>::impl : sender<T>::impl, weakable_impl {
+struct notifier<T>::impl : sender<T>::impl {
     std::mutex _send_mutex;
 };
 
@@ -37,11 +37,6 @@ chain_unsync_t<T> notifier<T>::chain() const {
 template <typename T>
 void notifier<T>::receive_value(T const &value) {
     return this->notify(value);
-}
-
-template <typename T>
-std::shared_ptr<weakable_impl> notifier<T>::weakable_impl_ptr() const {
-    return this->template impl_ptr<impl>();
 }
 
 template <typename T>

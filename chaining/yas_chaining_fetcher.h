@@ -4,14 +4,13 @@
 
 #pragma once
 
-#include <cpp_utils/yas_weakable.h>
 #include <optional>
 #include "yas_chaining_receiver.h"
 #include "yas_chaining_sender.h"
 
 namespace yas::chaining {
 template <typename T>
-struct fetcher final : sender<T>, receiver<>, weakable<fetcher<T>> {
+struct fetcher final : sender<T>, receiver<> {
     class impl;
 
     explicit fetcher(std::shared_ptr<impl> &&);
@@ -24,8 +23,6 @@ struct fetcher final : sender<T>, receiver<>, weakable<fetcher<T>> {
     [[nodiscard]] chain_sync_t<T> chain() const;
 
     void receive_value(std::nullptr_t const &) override;
-
-    std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
 
    private:
     explicit fetcher(std::function<std::optional<T>(void)> &&);
