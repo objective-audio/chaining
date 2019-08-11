@@ -18,15 +18,15 @@ std::optional<T> fetcher<T>::fetched_value() const {
 }
 
 template <typename T>
-void fetcher<T>::broadcast() {
+void fetcher<T>::push() {
     if (auto value = this->fetched_value()) {
-        this->broadcast(*value);
+        this->push(*value);
     }
 }
 
 template <typename T>
-void fetcher<T>::broadcast(T const &value) {
-    this->sender<T>::broadcast(value);
+void fetcher<T>::push(T const &value) {
+    this->broadcast(value);
 }
 
 template <typename T>
@@ -36,7 +36,7 @@ chain_sync_t<T> fetcher<T>::chain() {
 
 template <typename T>
 void fetcher<T>::receive_value(std::nullptr_t const &) {
-    return this->broadcast();
+    return this->push();
 }
 
 template <typename T>

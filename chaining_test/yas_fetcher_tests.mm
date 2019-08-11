@@ -36,7 +36,7 @@ using namespace yas;
     XCTAssertEqual(fetcher->fetched_value(), 1);
 }
 
-- (void)test_broadcast {
+- (void)test_push {
     int sending = 1;
 
     auto fetcher = chaining::fetcher<int>::make_shared([&sending] { return sending; });
@@ -47,12 +47,12 @@ using namespace yas;
 
     XCTAssertEqual(notified, -1);
 
-    fetcher->broadcast();
+    fetcher->push();
 
     XCTAssertEqual(notified, 1);
 }
 
-- (void)test_broadcast_with_value {
+- (void)test_push_with_value {
     int sending = 1;
 
     auto fetcher = chaining::fetcher<int>::make_shared([&sending] { return sending; });
@@ -63,7 +63,7 @@ using namespace yas;
 
     XCTAssertEqual(notified, -1);
 
-    fetcher->broadcast(2);
+    fetcher->push(2);
 
     XCTAssertEqual(notified, 2);
 }
@@ -81,7 +81,7 @@ using namespace yas;
 
     sending = 2;
 
-    fetcher->broadcast();
+    fetcher->push();
 
     XCTAssertEqual(notified, 2);
 }
