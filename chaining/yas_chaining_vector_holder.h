@@ -61,6 +61,14 @@ template <typename T>
 struct holder final : sender<event>, receiver<event> {
     class impl;
 
+    struct observer_wrapper {
+        any_observer_ptr observer = nullptr;
+    };
+
+    using wrapper_ptr = std::shared_ptr<observer_wrapper>;
+    using wrapper_wptr = std::weak_ptr<observer_wrapper>;
+    using chaining_f = std::function<void(T &, wrapper_ptr &)>;
+
     using vector_t = std::vector<T>;
     using chain_t = chain<event, event, true>;
 

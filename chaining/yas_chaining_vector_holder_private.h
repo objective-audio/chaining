@@ -40,34 +40,26 @@ event make_relayed_event(T const &element, std::size_t const idx, typename T::el
 
 template <typename T>
 struct holder<T>::impl {
-    struct observer_wrapper {
-        any_observer_ptr observer = nullptr;
-    };
-
-    using wrapper_ptr = std::shared_ptr<observer_wrapper>;
-    using wrapper_wptr = std::weak_ptr<observer_wrapper>;
-    using chaining_f = std::function<void(T &, wrapper_ptr &)>;
-
     std::vector<T> _raw;
     std::vector<wrapper_ptr> _observers;
 };
 
 namespace utils {
     template <typename T, enable_if_base_of_sender_t<T, std::nullptr_t> = nullptr>
-    typename vector::holder<std::shared_ptr<T>>::impl::chaining_f element_chaining(
+    typename vector::holder<std::shared_ptr<T>>::chaining_f element_chaining(
         vector::holder<std::shared_ptr<T>> &holder) {
         auto weak_holder =
             to_weak(std::dynamic_pointer_cast<typename vector::holder<std::shared_ptr<T>>>(holder.shared_from_this()));
         return [weak_holder](std::shared_ptr<T> &element,
-                             typename vector::holder<std::shared_ptr<T>>::impl::wrapper_ptr &wrapper) {
+                             typename vector::holder<std::shared_ptr<T>>::wrapper_ptr &wrapper) {
             auto weak_element = to_weak(element);
-            typename vector::holder<std::shared_ptr<T>>::impl::wrapper_wptr weak_wrapper = wrapper;
+            typename vector::holder<std::shared_ptr<T>>::wrapper_wptr weak_wrapper = wrapper;
             wrapper->observer = element->sendable()
                                     ->chain_unsync()
                                     .perform([weak_holder, weak_wrapper, weak_element](auto const &relayed) {
                                         auto holder = weak_holder.lock();
                                         auto element = weak_element.lock();
-                                        typename vector::holder<std::shared_ptr<T>>::impl::wrapper_ptr wrapper =
+                                        typename vector::holder<std::shared_ptr<T>>::wrapper_ptr wrapper =
                                             weak_wrapper.lock();
                                         if (holder && wrapper && element) {
                                             auto &holder_impl = holder->_impl;
@@ -81,8 +73,7 @@ namespace utils {
     }
 
     template <typename T>
-    void _replace(vector::holder<T> &holder, std::vector<T> &&vec,
-                  typename vector::holder<T>::impl::chaining_f chaining) {
+    void _replace(vector::holder<T> &holder, std::vector<T> &&vec, typename vector::holder<T>::chaining_f chaining) {
         auto &impl_ptr = holder._impl;
 
         for (auto &wrapper : impl_ptr->_observers) {
@@ -96,7 +87,7 @@ namespace utils {
 
         if (chaining) {
             for (T &element : vec) {
-                auto wrapper = std::make_shared<typename vector::holder<T>::impl::observer_wrapper>();
+                auto wrapper = std::make_shared<typename vector::holder<T>::observer_wrapper>();
                 chaining(element, wrapper);
                 impl_ptr->_observers.emplace_back(std::move(wrapper));
             }
@@ -109,7 +100,7 @@ namespace utils {
 
     template <typename T>
     void _replace(vector::holder<T> &holder, T &&element, std::size_t const idx,
-                  typename vector::holder<T>::impl::chaining_f chaining) {
+                  typename vector::holder<T>::chaining_f chaining) {
         auto &impl_ptr = holder._impl;
 
         if (idx < impl_ptr->_observers.size()) {
@@ -119,7 +110,7 @@ namespace utils {
         }
 
         if (chaining) {
-            auto wrapper = std::make_shared<typename vector::holder<T>::impl::observer_wrapper>();
+            auto wrapper = std::make_shared<typename vector::holder<T>::observer_wrapper>();
             chaining(element, wrapper);
             impl_ptr->_observers.at(idx) = std::move(wrapper);
         }
@@ -131,11 +122,11 @@ namespace utils {
 
     template <typename T>
     void _insert(vector::holder<T> &holder, T &&element, std::size_t const idx,
-                 typename vector::holder<T>::impl::chaining_f chaining) {
+                 typename vector::holder<T>::chaining_f chaining) {
         auto &impl_ptr = holder._impl;
 
         if (chaining) {
-            auto wrapper = std::make_shared<typename vector::holder<T>::impl::observer_wrapper>();
+            auto wrapper = std::make_shared<typename vector::holder<T>::observer_wrapper>();
             chaining(element, wrapper);
             impl_ptr->_observers.insert(impl_ptr->_observers.begin() + idx, std::move(wrapper));
         }
@@ -236,7 +227,7 @@ void holder<T>::insert(T value, std::size_t const idx) {
 template <typename T>
 T holder<T>::erase_at(std::size_t const idx) {
     if (this->_impl->_observers.size() > idx) {
-        if (typename vector::holder<T>::impl::wrapper_ptr &wrapper = this->_impl->_observers.at(idx)) {
+        if (typename vector::holder<T>::wrapper_ptr &wrapper = this->_impl->_observers.at(idx)) {
             if (any_observer_ptr &observer = wrapper->observer) {
                 observer->invalidate();
             }
@@ -254,7 +245,7 @@ T holder<T>::erase_at(std::size_t const idx) {
 
 template <typename T>
 void holder<T>::clear() {
-    for (typename vector::holder<T>::impl::wrapper_ptr &wrapper : this->_impl->_observers) {
+    for (typename vector::holder<T>::wrapper_ptr &wrapper : this->_impl->_observers) {
         if (wrapper) {
             if (any_observer_ptr &observer = wrapper->observer) {
                 observer->invalidate();
