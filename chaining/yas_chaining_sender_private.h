@@ -6,36 +6,52 @@
 
 #include <cpp_utils/yas_stl_utils.h>
 #include <vector>
-#include "yas_chaining_sender_protocol.h"
 
 namespace yas::chaining {
 template <typename T>
-std::shared_ptr<sendable<T>> sender<T>::sendable() {
-    return this->shared_from_this();
+void sender<T>::broadcast(T const &value) {
+    for (std::weak_ptr<joint<T>> const &weak_joint : this->_joints) {
+        if (joint_ptr<T> joint = weak_joint.lock()) {
+            joint->call_first(value);
+        }
+    }
 }
 
 template <typename T>
-bool sender<T>::operator==(sender const &rhs) const {
-    return this->is_equal(rhs);
+void sender<T>::erase_joint(std::uintptr_t const key) {
+    erase_if(this->_joints, [key](auto const &weak_joint) {
+        if (auto joint = weak_joint.lock()) {
+            return joint->identifier() == key;
+        } else {
+            return false;
+        }
+    });
 }
 
 template <typename T>
-bool sender<T>::operator!=(sender const &rhs) const {
-    return !this->is_equal(rhs);
+chain_unsync_t<T> sender<T>::chain_unsync() {
+    return this->_chain<false>();
 }
 
 template <typename T>
-uintptr_t sender<T>::identifier() const {
-    auto shared = this->shared_from_this();
-    return reinterpret_cast<uintptr_t>(shared.get());
+chain_sync_t<T> sender<T>::chain_sync() {
+    return this->_chain<true>();
 }
 
 template <typename T>
-bool sender<T>::is_equal(sender<T> const &rhs) const {
-    return this->identifier() == rhs.identifier();
+void sender<T>::send_value_to_target(T const &value, std::uintptr_t const key) {
+    for (std::weak_ptr<joint<T>> const &weak_joint : this->_joints) {
+        if (joint_ptr<T> joint = weak_joint.lock(); joint && joint->identifier() == key) {
+            joint->call_first(value);
+        }
+    }
 }
 
 template <typename T>
-void sender<T>::fetch_for(any_joint const &joint) {
+template <bool Syncable>
+chain<T, T, Syncable> sender<T>::_chain() {
+    auto joint = make_joint(to_weak(this->shared_from_this()));
+    this->_joints.emplace_back(to_weak(joint));
+    return chaining::chain<T, T, Syncable>{std::move(joint)};
 }
 }  // namespace yas::chaining

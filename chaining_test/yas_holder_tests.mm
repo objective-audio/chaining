@@ -97,18 +97,4 @@ using namespace yas::chaining;
     XCTAssertEqual(holder2->raw(), 0);
 }
 
-- (void)test_is_equal {
-    auto holder1a = value::holder<int>::make_shared(1);
-    auto holder1b = value::holder<int>::make_shared(1);
-    auto holder2 = value::holder<int>::make_shared(2);
-
-    XCTAssertTrue(*holder1a == *holder1a);
-    XCTAssertTrue(*holder1a == *holder1b);
-    XCTAssertFalse(*holder1a == *holder2);
-
-    XCTAssertFalse(*holder1a != *holder1a);
-    XCTAssertFalse(*holder1a != *holder1b);
-    XCTAssertTrue(*holder1a != *holder2);
-}
-
 @end

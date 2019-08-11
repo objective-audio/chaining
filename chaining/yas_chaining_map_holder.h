@@ -95,7 +95,6 @@ struct holder final : sender<event>, receiver<event> {
     holder &operator=(holder const &) = delete;
     holder &operator=(holder &&) = delete;
 
-    bool is_equal(sender<event> const &rhs) const override;
     void fetch_for(any_joint const &joint) override;
 
     void _prepare(std::map<Key, Value> &&);

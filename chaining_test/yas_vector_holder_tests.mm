@@ -38,20 +38,6 @@ using namespace yas::chaining;
     XCTAssertEqual(holder3->size(), 3);
 }
 
-- (void)test_equal {
-    auto holder1a = vector::holder<int>::make_shared({1, 2});
-    auto holder1b = vector::holder<int>::make_shared({1, 2});
-    auto holder2 = vector::holder<int>::make_shared({2, 3});
-
-    XCTAssertTrue(*holder1a == *holder1a);
-    XCTAssertTrue(*holder1a == *holder1b);
-    XCTAssertFalse(*holder1a == *holder2);
-
-    XCTAssertFalse(*holder1a != *holder1a);
-    XCTAssertFalse(*holder1a != *holder1b);
-    XCTAssertTrue(*holder1a != *holder2);
-}
-
 - (void)test_clear {
     auto holder = vector::holder<int>::make_shared(std::vector<int>{0, 1, 2});
 

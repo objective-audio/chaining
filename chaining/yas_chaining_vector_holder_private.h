@@ -54,8 +54,7 @@ namespace utils {
                              typename vector::holder<std::shared_ptr<T>>::wrapper_ptr &wrapper) {
             auto weak_element = to_weak(element);
             typename vector::holder<std::shared_ptr<T>>::wrapper_wptr weak_wrapper = wrapper;
-            wrapper->observer = element->sendable()
-                                    ->chain_unsync()
+            wrapper->observer = element->chain_unsync()
                                     .perform([weak_holder, weak_wrapper, weak_element](auto const &relayed) {
                                         auto holder = weak_holder.lock();
                                         auto element = weak_element.lock();
@@ -284,17 +283,6 @@ void holder<T>::receive_value(vector::event const &event) {
         } break;
         case event_type::relayed:
             break;
-    }
-}
-
-template <typename T>
-bool holder<T>::is_equal(sender<event> const &rhs) const {
-    auto sendable_ptr = rhs.shared_from_this();
-    auto rhs_ptr = std::dynamic_pointer_cast<typename vector::holder<T> const>(sendable_ptr);
-    if (rhs_ptr) {
-        return this->_impl->_raw == rhs_ptr->_impl->_raw;
-    } else {
-        return false;
     }
 }
 

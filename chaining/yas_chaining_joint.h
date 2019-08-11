@@ -9,7 +9,7 @@
 
 namespace yas::chaining {
 template <typename T>
-class sendable;
+class sender;
 
 struct any_joint {
     virtual ~any_joint();
@@ -40,7 +40,7 @@ using any_joint_ptr = std::shared_ptr<any_joint>;
 
 template <typename T>
 struct[[nodiscard]] joint final : any_joint {
-    joint(std::weak_ptr<sendable<T>> &&);
+    joint(std::weak_ptr<sender<T>> &&);
 
     ~joint();
 
@@ -56,7 +56,7 @@ struct[[nodiscard]] joint final : any_joint {
     void add_sub_joint(any_joint_ptr);
 
    private:
-    std::weak_ptr<sendable<T>> _weak_sendable;
+    std::weak_ptr<sender<T>> _weak_sender;
     std::vector<std::any> _handlers;
     std::vector<any_joint_ptr> _sub_joints;
 
@@ -67,7 +67,7 @@ template <typename T>
 using joint_ptr = std::shared_ptr<joint<T>>;
 
 template <typename T>
-joint_ptr<T> make_joint(std::weak_ptr<sendable<T>>);
+joint_ptr<T> make_joint(std::weak_ptr<sender<T>>);
 }  // namespace yas::chaining
 
 #include "yas_chaining_joint_private.h"

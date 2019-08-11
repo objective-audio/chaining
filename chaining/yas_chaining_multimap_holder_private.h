@@ -66,8 +66,7 @@ namespace utils {
             typename multimap::holder<Key, std::shared_ptr<Value>>::impl::wrapper_wptr weak_wrapper = wrapper;
             auto weak_value = to_weak(value);
             wrapper->observer =
-                value->sendable()
-                    ->chain_unsync()
+                value->chain_unsync()
                     .perform([weak_holder, weak_wrapper, key, weak_value](auto const &relayed) {
                         auto holder = weak_holder.lock();
                         auto value = weak_value.lock();
@@ -249,17 +248,6 @@ void holder<Key, Value>::clear() {
 template <typename Key, typename Value>
 typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::chain() {
     return this->chain_sync();
-}
-
-template <typename Key, typename Value>
-bool holder<Key, Value>::is_equal(sender<event> const &rhs) const {
-    auto sendable_ptr = rhs.shared_from_this();
-    auto rhs_ptr = std::dynamic_pointer_cast<typename multimap::holder<Key, Value> const>(sendable_ptr);
-    if (rhs_ptr) {
-        return this->_impl->_raw == rhs_ptr->_impl->_raw;
-    } else {
-        return false;
-    }
 }
 
 template <typename Key, typename Value>

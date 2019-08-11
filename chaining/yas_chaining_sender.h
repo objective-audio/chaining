@@ -4,30 +4,38 @@
 
 #pragma once
 
+#include <cpp_utils/yas_stl_utils.h>
 #include <memory>
+#include "yas_chaining_joint.h"
+#include "yas_chaining_types.h"
 
 namespace yas::chaining {
-template <typename T>
-class sendable;
 class any_joint;
 
-struct any_sender {};
+struct any_sender {
+    virtual ~any_sender() = default;
+};
 
 template <typename T>
-struct sender : any_sender, sendable<T> {
+struct sender : any_sender, std::enable_shared_from_this<sender<T>> {
     using SendType = T;
 
-    [[nodiscard]] std::shared_ptr<sendable<T>> sendable();
+    virtual void fetch_for(any_joint const &joint) = 0;
 
-    bool operator==(sender const &rhs) const;
-    bool operator!=(sender const &rhs) const;
+    void broadcast(T const &value);
+    void erase_joint(std::uintptr_t const key);
 
-    uintptr_t identifier() const;
+    chain_unsync_t<T> chain_unsync();
+    chain_sync_t<T> chain_sync();
 
    protected:
-    virtual bool is_equal(sender<T> const &rhs) const;
+    void send_value_to_target(T const &value, std::uintptr_t const key);
 
-    void fetch_for(any_joint const &joint) override;
+   private:
+    std::vector<std::weak_ptr<joint<T>>> _joints;
+
+    template <bool Syncable>
+    chain<T, T, Syncable> _chain();
 };
 
 template <typename T>

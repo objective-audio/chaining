@@ -26,7 +26,7 @@ void fetcher<T>::broadcast() {
 
 template <typename T>
 void fetcher<T>::broadcast(T const &value) {
-    this->sendable<T>::broadcast(value);
+    this->sender<T>::broadcast(value);
 }
 
 template <typename T>
