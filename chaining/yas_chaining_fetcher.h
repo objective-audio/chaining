@@ -11,10 +11,6 @@
 namespace yas::chaining {
 template <typename T>
 struct fetcher final : sender<T>, receiver<> {
-    class impl;
-
-    explicit fetcher(std::shared_ptr<impl> &&);
-
     std::optional<T> fetched_value() const;
 
     void broadcast();

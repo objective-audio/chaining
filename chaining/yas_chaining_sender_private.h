@@ -10,48 +10,24 @@
 
 namespace yas::chaining {
 template <typename T>
-struct sender<T>::impl {
-    virtual ~impl() = default;
-};
-
-template <typename T>
-sender<T>::sender(std::shared_ptr<impl> &&impl) : _impl(std::move(impl)) {
-}
-
-template <typename T>
 std::shared_ptr<sendable<T>> sender<T>::sendable() {
     return this->shared_from_this();
 }
 
 template <typename T>
 bool sender<T>::operator==(sender const &rhs) const {
-    return _impl && rhs._impl && (_impl == rhs._impl || this->is_equal(rhs));
+    return this->is_equal(rhs);
 }
 
 template <typename T>
 bool sender<T>::operator!=(sender const &rhs) const {
-    return !_impl || !rhs._impl || (_impl != rhs._impl && !this->is_equal(rhs));
-}
-
-template <typename T>
-bool sender<T>::operator==(std::nullptr_t) const {
-    return _impl == nullptr;
-}
-
-template <typename T>
-bool sender<T>::operator!=(std::nullptr_t) const {
-    return _impl != nullptr;
-}
-
-template <typename T>
-template <typename Impl>
-std::shared_ptr<Impl> sender<T>::impl_ptr() const {
-    return std::dynamic_pointer_cast<Impl>(_impl);
+    return !this->is_equal(rhs);
 }
 
 template <typename T>
 uintptr_t sender<T>::identifier() const {
-    return reinterpret_cast<uintptr_t>(this->_impl.get());
+    auto shared = this->shared_from_this();
+    return reinterpret_cast<uintptr_t>(shared.get());
 }
 
 template <typename T>

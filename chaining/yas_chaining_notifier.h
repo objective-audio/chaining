@@ -10,10 +10,6 @@
 namespace yas::chaining {
 template <typename T>
 struct notifier final : sender<T>, receiver<T> {
-    class impl;
-
-    notifier(std::shared_ptr<impl> &&);
-
     void notify(T const &);
 
     [[nodiscard]] chain_unsync_t<T> chain();

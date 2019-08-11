@@ -12,8 +12,6 @@ template <typename T>
 struct holder final : sender<T>, receiver<T> {
     class impl;
 
-    explicit holder(std::shared_ptr<impl> &&);
-
     ~holder();
 
     void set_value(T &&);

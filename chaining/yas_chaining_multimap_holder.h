@@ -78,6 +78,9 @@ struct holder final : sender<event> {
 
     [[nodiscard]] chain_t chain();
 
+#warning todo
+    std::shared_ptr<impl> _impl;
+
    private:
     holder();
 

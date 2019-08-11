@@ -9,14 +9,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct notifier<T>::impl : sender<T>::impl {};
-
-template <typename T>
-notifier<T>::notifier() : sender<T>(std::make_shared<impl>()) {
-}
-
-template <typename T>
-notifier<T>::notifier(std::shared_ptr<impl> &&impl) : sender<T>(std::move(impl)) {
+notifier<T>::notifier() {
 }
 
 template <typename T>

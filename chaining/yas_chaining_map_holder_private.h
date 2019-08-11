@@ -41,7 +41,7 @@ event make_relayed_event(Key const &key, Value const &value, typename Value::ele
 #pragma mark - map::holder::impl
 
 template <typename Key, typename Value>
-struct holder<Key, Value>::impl : sender<event>::impl {
+struct holder<Key, Value>::impl {
     struct observer_wrapper {
         any_observer_ptr observer = nullptr;
         Value *value = nullptr;
@@ -83,7 +83,7 @@ namespace utils {
     template <typename Key, typename Value>
     void _replace(holder<Key, Value> &holder, std::map<Key, Value> &&map,
                   typename map::holder<Key, Value>::impl::chaining_f chaining) {
-        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
+        auto &impl_ptr = holder._impl;
 
         for (auto &wrapper_pair : impl_ptr->_observers) {
             if (any_observer_ptr &observer = wrapper_pair.second->observer) {
@@ -114,7 +114,7 @@ namespace utils {
 
     template <typename Key, typename Value>
     void _erase_observer_for_key(holder<Key, Value> &holder, Key const &key) {
-        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
+        auto &impl_ptr = holder._impl;
 
         if (impl_ptr->_observers.count(key) > 0) {
             auto &wrapper = impl_ptr->_observers.at(key);
@@ -128,7 +128,7 @@ namespace utils {
     template <typename Key, typename Value>
     void _insert_or_replace(holder<Key, Value> &holder, Key &&key, Value &&value,
                             typename map::holder<Key, Value>::impl::chaining_f chaining) {
-        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
+        auto &impl_ptr = holder._impl;
 
         utils::_erase_observer_for_key(holder, key);
 
@@ -159,7 +159,7 @@ namespace utils {
     template <typename Key, typename Value>
     void _insert(holder<Key, Value> &holder, std::map<Key, Value> &&map,
                  typename map::holder<Key, Value>::impl::chaining_f chaining) {
-        auto impl_ptr = holder.template impl_ptr<typename map::holder<Key, Value>::impl>();
+        auto &impl_ptr = holder._impl;
 
         if (chaining) {
             for (auto &pair : map) {
@@ -213,7 +213,7 @@ namespace utils {
 #pragma mark - map::holder
 
 template <typename Key, typename Value>
-holder<Key, Value>::holder() : sender<event>(std::make_shared<impl>()) {
+holder<Key, Value>::holder() : _impl(std::make_shared<impl>()) {
 }
 
 template <typename Key, typename Value>
@@ -225,12 +225,12 @@ holder<Key, Value>::~holder() = default;
 
 template <typename Key, typename Value>
 std::map<Key, Value> const &holder<Key, Value>::raw() const {
-    return this->template impl_ptr<impl>()->_raw;
+    return this->_impl->_raw;
 }
 
 template <typename Key, typename Value>
 std::map<Key, Value> &holder<Key, Value>::raw() {
-    return this->template impl_ptr<impl>()->_raw;
+    return this->_impl->_raw;
 }
 
 template <typename Key, typename Value>
@@ -270,17 +270,15 @@ void holder<Key, Value>::insert(std::map<Key, Value> map) {
 
 template <typename Key, typename Value>
 std::map<Key, Value> holder<Key, Value>::erase_if(std::function<bool(Key const &, Value const &)> const &handler) {
-    auto impl_ptr = this->template impl_ptr<impl>();
-
     std::map<Key, Value> erased;
 
-    if (impl_ptr->_observers.size() > 0) {
-        yas::erase_if(impl_ptr->_observers, [&handler](std::pair<Key, typename impl::wrapper_ptr> const &pair) {
+    if (this->_impl->_observers.size() > 0) {
+        yas::erase_if(this->_impl->_observers, [&handler](std::pair<Key, typename impl::wrapper_ptr> const &pair) {
             return handler(pair.first, *pair.second->value);
         });
     }
 
-    yas::erase_if(impl_ptr->_raw, [&handler, &erased](std::pair<Key, Value> const &pair) {
+    yas::erase_if(this->_impl->_raw, [&handler, &erased](std::pair<Key, Value> const &pair) {
         if (handler(pair.first, pair.second)) {
             erased.insert(pair);
             return true;
@@ -301,15 +299,13 @@ std::map<Key, Value> holder<Key, Value>::erase_for_value(Value const &value) {
 
 template <typename Key, typename Value>
 std::map<Key, Value> holder<Key, Value>::erase_for_key(Key const &key) {
-    auto impl_ptr = this->template impl_ptr<impl>();
-
     utils::_erase_observer_for_key(*this, key);
 
     std::map<Key, Value> erased;
 
-    if (impl_ptr->_raw.count(key)) {
-        erased.emplace(key, std::move(impl_ptr->_raw.at(key)));
-        impl_ptr->_raw.erase(key);
+    if (this->_impl->_raw.count(key)) {
+        erased.emplace(key, std::move(this->_impl->_raw.at(key)));
+        this->_impl->_raw.erase(key);
     }
 
     this->broadcast(make_erased_event(erased));
@@ -319,9 +315,7 @@ std::map<Key, Value> holder<Key, Value>::erase_for_key(Key const &key) {
 
 template <typename Key, typename Value>
 void holder<Key, Value>::clear() {
-    auto impl_ptr = this->template impl_ptr<impl>();
-
-    for (auto &pair : impl_ptr->_observers) {
+    for (auto &pair : this->_impl->_observers) {
         if (auto &wrapper = pair.second) {
             if (any_observer_ptr &observer = wrapper->observer) {
                 observer->invalidate();
@@ -329,10 +323,10 @@ void holder<Key, Value>::clear() {
         }
     }
 
-    impl_ptr->_observers.clear();
-    impl_ptr->_raw.clear();
+    this->_impl->_observers.clear();
+    this->_impl->_raw.clear();
 
-    this->broadcast(make_any_event(impl_ptr->_raw));
+    this->broadcast(make_any_event(this->_impl->_raw));
 }
 
 template <typename Key, typename Value>
@@ -370,10 +364,10 @@ void holder<Key, Value>::receive_value(map::event const &event) {
 
 template <typename Key, typename Value>
 bool holder<Key, Value>::is_equal(sender<event> const &rhs) const {
-    auto lhs_impl = this->template impl_ptr<impl>();
-    auto rhs_impl = rhs.template impl_ptr<impl>();
-    if (lhs_impl && rhs_impl) {
-        return lhs_impl->_raw == rhs_impl->_raw;
+    auto sendable_ptr = rhs.shared_from_this();
+    auto rhs_ptr = std::dynamic_pointer_cast<typename map::holder<Key, Value> const>(sendable_ptr);
+    if (rhs_ptr) {
+        return this->_impl->_raw == rhs_ptr->_impl->_raw;
     } else {
         return false;
     }

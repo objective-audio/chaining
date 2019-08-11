@@ -84,6 +84,9 @@ struct holder final : sender<event>, receiver<event> {
 
     void receive_value(event const &) override;
 
+#warning todo
+    std::shared_ptr<impl> _impl;
+
    private:
     holder();
 

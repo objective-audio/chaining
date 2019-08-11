@@ -9,14 +9,7 @@
 
 namespace yas::chaining::value {
 template <typename T>
-struct holder<T>::impl : sender<T>::impl {};
-
-template <typename T>
-holder<T>::holder(T &&value) : sender<T>(std::make_shared<impl>()), _value(std::move(value)) {
-}
-
-template <typename T>
-holder<T>::holder(std::shared_ptr<impl> &&impl) : sender<T>(std::move(impl)) {
+holder<T>::holder(T &&value) : _value(std::move(value)) {
 }
 
 template <typename T>
