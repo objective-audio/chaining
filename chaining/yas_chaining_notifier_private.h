@@ -9,9 +9,7 @@
 
 namespace yas::chaining {
 template <typename T>
-struct notifier<T>::impl : sender<T>::impl {
-    std::mutex _send_mutex;
-};
+struct notifier<T>::impl : sender<T>::impl {};
 
 template <typename T>
 notifier<T>::notifier() : sender<T>(std::make_shared<impl>()) {
@@ -23,8 +21,7 @@ notifier<T>::notifier(std::shared_ptr<impl> &&impl) : sender<T>(std::move(impl))
 
 template <typename T>
 void notifier<T>::notify(T const &value) {
-    auto impl_ptr = this->template impl_ptr<impl>();
-    if (auto lock = std::unique_lock<std::mutex>(impl_ptr->_send_mutex, std::try_to_lock); lock.owns_lock()) {
+    if (auto lock = std::unique_lock<std::mutex>(this->_send_mutex, std::try_to_lock); lock.owns_lock()) {
         this->broadcast(value);
     }
 }

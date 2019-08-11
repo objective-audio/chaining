@@ -21,6 +21,8 @@ struct notifier final : sender<T>, receiver<T> {
     void receive_value(T const &) override;
 
    private:
+    std::mutex _send_mutex;
+
     notifier();
 
    public:
