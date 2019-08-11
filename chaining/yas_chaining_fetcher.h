@@ -25,6 +25,8 @@ struct fetcher final : sender<T>, receiver<> {
     void receive_value(std::nullptr_t const &) override;
 
    private:
+    std::function<std::optional<T>(void)> _fetching_handler;
+
     explicit fetcher(std::function<std::optional<T>(void)> &&);
 
     void fetch_for(any_joint const &joint) override;
