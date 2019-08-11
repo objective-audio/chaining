@@ -9,16 +9,10 @@
 
 namespace yas::chaining::value {
 template <typename T>
-struct holder<T>::impl : sender<T>::impl {
-    impl(T &&value) : _value(std::move(value)) {
-    }
-
-    T _value;
-    std::mutex _set_mutex;
-};
+struct holder<T>::impl : sender<T>::impl {};
 
 template <typename T>
-holder<T>::holder(T &&value) : sender<T>(std::make_shared<impl>(std::move(value))) {
+holder<T>::holder(T &&value) : sender<T>(std::make_shared<impl>()), _value(std::move(value)) {
 }
 
 template <typename T>
@@ -30,11 +24,10 @@ holder<T>::~holder() = default;
 
 template <typename T>
 void holder<T>::set_value(T &&value) {
-    auto impl_ptr = this->template impl_ptr<impl>();
-    if (auto lock = std::unique_lock<std::mutex>(impl_ptr->_set_mutex, std::try_to_lock); lock.owns_lock()) {
-        if (impl_ptr->_value != value) {
-            impl_ptr->_value = std::move(value);
-            this->broadcast(impl_ptr->_value);
+    if (auto lock = std::unique_lock<std::mutex>(this->_set_mutex, std::try_to_lock); lock.owns_lock()) {
+        if (this->_value != value) {
+            this->_value = std::move(value);
+            this->broadcast(this->_value);
         }
     }
 }
@@ -46,10 +39,10 @@ void holder<T>::set_value(T const &value) {
 }
 
 template <typename T>
-[[nodiscard]] T const &holder<T>::raw() const { return this->template impl_ptr<impl>()->_value; }
+[[nodiscard]] T const &holder<T>::raw() const { return this->_value; }
 
 template <typename T>
-[[nodiscard]] T &holder<T>::raw() { return this->template impl_ptr<impl>()->_value; }
+[[nodiscard]] T &holder<T>::raw() { return this->_value; }
 
 template <typename T>
 chain_sync_t<T> holder<T>::chain() {
@@ -63,10 +56,10 @@ void holder<T>::receive_value(T const &value) {
 
 template <typename T>
 bool holder<T>::is_equal(sender<T> const &rhs) const {
-    auto lhs_impl = this->template impl_ptr<impl>();
-    auto rhs_impl = rhs.template impl_ptr<impl>();
-    if (lhs_impl && rhs_impl) {
-        return lhs_impl->_value == rhs_impl->_value;
+    auto sendable_ptr = rhs.shared_from_this();
+    auto rhs_ptr = std::dynamic_pointer_cast<typename value::holder<T> const>(sendable_ptr);
+    if (rhs_ptr) {
+        return this->_value == rhs_ptr->_value;
     } else {
         return false;
     }

@@ -27,6 +27,9 @@ struct holder final : sender<T>, receiver<T> {
     void receive_value(T const &) override;
 
    private:
+    T _value;
+    std::mutex _set_mutex;
+
     holder(T &&);
 
     holder(holder const &) = delete;
