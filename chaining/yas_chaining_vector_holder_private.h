@@ -39,7 +39,7 @@ event make_relayed_event(T const &element, std::size_t const idx, typename T::el
 }
 
 template <typename T>
-struct holder<T>::impl : sender<event>::impl, weakable_impl {
+struct holder<T>::impl : sender<event>::impl {
     struct observer_wrapper {
         any_observer_ptr observer = nullptr;
     };
@@ -301,11 +301,6 @@ void holder<T>::receive_value(vector::event const &event) {
         case event_type::relayed:
             break;
     }
-}
-
-template <typename T>
-std::shared_ptr<weakable_impl> holder<T>::weakable_impl_ptr() const {
-    return this->template impl_ptr<impl>();
 }
 
 template <typename T>
