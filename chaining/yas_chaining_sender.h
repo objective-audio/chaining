@@ -18,8 +18,6 @@ template <typename T>
 struct sender : any_sender, std::enable_shared_from_this<sender<T>> {
     using SendType = T;
 
-    uintptr_t identifier() const;
-
     virtual void fetch_for(any_joint const &joint);
 
     void broadcast(T const &value) {
