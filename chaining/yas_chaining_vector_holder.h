@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <cpp_utils/yas_weakable.h>
 #include <vector>
 #include "yas_chaining_any_observer.h"
 #include "yas_chaining_event.h"
@@ -55,12 +54,20 @@ struct relayed_event {
     static event_type const type = event_type::relayed;
     T const &element;
     std::size_t const index;
-    typename T::SendType const &relayed;
+    typename T::element_type::SendType const &relayed;
 };
 
 template <typename T>
-struct holder final : sender<event>, receiver<event>, weakable<holder<T>> {
+struct holder final : sender<event>, receiver<event> {
     class impl;
+
+    struct observer_wrapper {
+        any_observer_ptr observer = nullptr;
+    };
+
+    using wrapper_ptr = std::shared_ptr<observer_wrapper>;
+    using wrapper_wptr = std::weak_ptr<observer_wrapper>;
+    using chaining_f = std::function<void(T &, wrapper_ptr &)>;
 
     using vector_t = std::vector<T>;
     using chain_t = chain<event, event, true>;
@@ -81,16 +88,22 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<T>> {
     T erase_at(std::size_t const);
     void clear();
 
-    [[nodiscard]] chain_t chain() const;
+    [[nodiscard]] chain_t chain();
 
     void receive_value(event const &) override;
 
-    std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
+    std::shared_ptr<impl> _impl;
 
    private:
-    explicit holder(vector_t);
+    holder();
+
+    holder(holder const &) = delete;
+    holder(holder &&) = delete;
+    holder &operator=(holder const &) = delete;
+    holder &operator=(holder &&) = delete;
 
     bool is_equal(sender<event> const &rhs) const override;
+    void fetch_for(any_joint const &joint) override;
 
     void _prepare(std::vector<T> &&);
 

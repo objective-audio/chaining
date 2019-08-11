@@ -66,13 +66,12 @@ using namespace yas::chaining;
 
 - (void)test_make_relayed_event {
     auto const element = value::holder<int>::make_shared(6);
-    auto event = vector::make_relayed_event(*element, 7, 8);
+    auto event = vector::make_relayed_event(element, 7, 8);
 
-    auto holder6 = value::holder<int>::make_shared(6);
     XCTAssertEqual(event.type(), event_type::relayed);
-    XCTAssertEqual(event.get<vector::relayed_event<value::holder<int>>>().element, *holder6);
-    XCTAssertEqual(event.get<vector::relayed_event<value::holder<int>>>().index, 7);
-    XCTAssertEqual(event.get<vector::relayed_event<value::holder<int>>>().relayed, 8);
+    XCTAssertEqual(event.get<vector::relayed_event<std::shared_ptr<value::holder<int>>>>().element, element);
+    XCTAssertEqual(event.get<vector::relayed_event<std::shared_ptr<value::holder<int>>>>().index, 7);
+    XCTAssertEqual(event.get<vector::relayed_event<std::shared_ptr<value::holder<int>>>>().relayed, 8);
 }
 
 @end

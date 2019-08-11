@@ -9,48 +9,29 @@
 
 namespace yas::chaining {
 template <typename T>
-struct fetcher<T>::impl : sender<T>::impl, weakable_impl {
-    impl(std::function<std::optional<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {
-    }
-
-    void fetch_for(any_joint const &joint) override {
-        if (auto value = this->_fetching_handler()) {
-            this->send_value_to_target(*value, joint.identifier());
-        }
-    }
-
-    std::function<std::optional<T>(void)> _fetching_handler;
-};
-
-template <typename T>
-fetcher<T>::fetcher(std::function<std::optional<T>(void)> &&handler)
-    : sender<T>(std::make_shared<impl>(std::move(handler))) {
-}
-
-template <typename T>
-fetcher<T>::fetcher(std::shared_ptr<impl> &&impl) : sender<T>(std::move(impl)) {
+fetcher<T>::fetcher(std::function<std::optional<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {
 }
 
 template <typename T>
 std::optional<T> fetcher<T>::fetched_value() const {
-    return this->template impl_ptr<impl>()->_fetching_handler();
+    return this->_fetching_handler();
 }
 
 template <typename T>
-void fetcher<T>::broadcast() const {
+void fetcher<T>::broadcast() {
     if (auto value = this->fetched_value()) {
-        this->template impl_ptr<impl>()->broadcast(*value);
+        this->broadcast(*value);
     }
 }
 
 template <typename T>
-void fetcher<T>::broadcast(T const &value) const {
-    this->template impl_ptr<impl>()->broadcast(value);
+void fetcher<T>::broadcast(T const &value) {
+    this->sendable<T>::broadcast(value);
 }
 
 template <typename T>
-chain_sync_t<T> fetcher<T>::chain() const {
-    return this->template impl_ptr<impl>()->chain_sync();
+chain_sync_t<T> fetcher<T>::chain() {
+    return this->chain_sync();
 }
 
 template <typename T>
@@ -59,8 +40,10 @@ void fetcher<T>::receive_value(std::nullptr_t const &) {
 }
 
 template <typename T>
-std::shared_ptr<weakable_impl> fetcher<T>::weakable_impl_ptr() const {
-    return this->template impl_ptr<impl>();
+void fetcher<T>::fetch_for(any_joint const &joint) {
+    if (auto value = this->fetched_value()) {
+        this->send_value_to_target(*value, joint.identifier());
+    }
 }
 
 template <typename T>

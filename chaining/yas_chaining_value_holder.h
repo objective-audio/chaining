@@ -4,17 +4,12 @@
 
 #pragma once
 
-#include <cpp_utils/yas_weakable.h>
 #include "yas_chaining_receiver.h"
 #include "yas_chaining_sender.h"
 
 namespace yas::chaining::value {
 template <typename T>
-struct holder final : sender<T>, receiver<T>, weakable<holder<T>> {
-    class impl;
-
-    explicit holder(std::shared_ptr<impl> &&);
-
+struct holder final : sender<T>, receiver<T> {
     ~holder();
 
     void set_value(T &&);
@@ -23,16 +18,23 @@ struct holder final : sender<T>, receiver<T>, weakable<holder<T>> {
     [[nodiscard]] T const &raw() const;
     [[nodiscard]] T &raw();
 
-    [[nodiscard]] chain_sync_t<T> chain() const;
+    [[nodiscard]] chain_sync_t<T> chain();
 
     void receive_value(T const &) override;
 
-    std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
-
    private:
+    T _value;
+    std::mutex _set_mutex;
+
     holder(T &&);
 
+    holder(holder const &) = delete;
+    holder(holder &&) = delete;
+    holder &operator=(holder const &) = delete;
+    holder &operator=(holder &&) = delete;
+
     bool is_equal(sender<T> const &rhs) const override;
+    void fetch_for(any_joint const &joint) override;
 
    public:
     static std::shared_ptr<holder> make_shared(T);

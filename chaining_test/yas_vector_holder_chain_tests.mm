@@ -109,7 +109,7 @@ using namespace yas::chaining;
 
 - (void)test_chain_relayed {
     auto holder = value::holder<int>::make_shared(1);
-    auto vector_holder = vector::holder<value::holder<int>>::make_shared({*holder});
+    auto vector_holder = vector::holder<std::shared_ptr<value::holder<int>>>::make_shared({holder});
 
     std::vector<event> received;
     std::vector<int> relayed;
@@ -117,7 +117,8 @@ using namespace yas::chaining;
     auto chain = vector_holder->chain()
                      .perform([&received, &relayed](vector::event const &event) {
                          received.push_back(event);
-                         relayed.push_back(event.template get<vector::relayed_event<value::holder<int>>>().relayed);
+                         relayed.push_back(
+                             event.template get<vector::relayed_event<std::shared_ptr<value::holder<int>>>>().relayed);
                      })
                      .end();
 
@@ -130,10 +131,10 @@ using namespace yas::chaining;
 }
 
 - (void)test_chain_relayed_after_inserted {
-    auto vector_holder = vector::holder<value::holder<int>>::make_shared();
+    auto vector_holder = vector::holder<std::shared_ptr<value::holder<int>>>::make_shared();
 
     auto holder = value::holder<int>::make_shared(1);
-    vector_holder->insert(*holder, 0);
+    vector_holder->insert(holder, 0);
 
     std::vector<event> received;
 
@@ -146,10 +147,10 @@ using namespace yas::chaining;
 
 - (void)test_chain_relayed_after_replaced {
     auto holder1 = value::holder<int>::make_shared(1);
-    auto vector_holder = vector::holder<value::holder<int>>::make_shared({*holder1});
+    auto vector_holder = vector::holder<std::shared_ptr<value::holder<int>>>::make_shared({holder1});
 
     auto holder2 = value::holder<int>::make_shared(2);
-    vector_holder->replace(*holder2, 0);
+    vector_holder->replace(holder2, 0);
 
     std::vector<event> received;
 
@@ -163,10 +164,10 @@ using namespace yas::chaining;
 - (void)test_chain_relayed_after_replaced_all {
     auto holder1 = value::holder<int>::make_shared(1);
     auto holder2 = value::holder<int>::make_shared(2);
-    auto vector_holder = vector::holder<value::holder<int>>::make_shared({*holder1, *holder2});
+    auto vector_holder = vector::holder<std::shared_ptr<value::holder<int>>>::make_shared({holder1, holder2});
 
     auto holder3 = value::holder<int>::make_shared(3);
-    vector_holder->replace({*holder3});
+    vector_holder->replace({holder3});
 
     std::vector<event> received;
 
@@ -180,7 +181,7 @@ using namespace yas::chaining;
 - (void)test_chain_not_relayed_after_erased {
     auto holder1 = value::holder<int>::make_shared(1);
     auto holder2 = value::holder<int>::make_shared(2);
-    auto vector_holder = vector::holder<value::holder<int>>::make_shared({*holder1, *holder2});
+    auto vector_holder = vector::holder<std::shared_ptr<value::holder<int>>>::make_shared({holder1, holder2});
 
     vector_holder->erase_at(0);
 
@@ -200,7 +201,7 @@ using namespace yas::chaining;
 - (void)test_chain_not_relayed_after_clear {
     auto holder1 = value::holder<int>::make_shared(1);
     auto holder2 = value::holder<int>::make_shared(2);
-    auto vector_holder = vector::holder<value::holder<int>>::make_shared({*holder1, *holder2});
+    auto vector_holder = vector::holder<std::shared_ptr<value::holder<int>>>::make_shared({holder1, holder2});
 
     vector_holder->clear();
 
@@ -217,10 +218,10 @@ using namespace yas::chaining;
 - (void)test_chain_not_relayed_after_replaced {
     auto holder1 = value::holder<int>::make_shared(1);
     auto holder2 = value::holder<int>::make_shared(2);
-    auto vector_holder = vector::holder<value::holder<int>>::make_shared({*holder1, *holder2});
+    auto vector_holder = vector::holder<std::shared_ptr<value::holder<int>>>::make_shared({holder1, holder2});
 
     auto holder3 = value::holder<int>::make_shared(10);
-    vector_holder->replace(*holder3, 0);
+    vector_holder->replace(holder3, 0);
 
     std::vector<event> received;
 
@@ -238,10 +239,10 @@ using namespace yas::chaining;
 - (void)test_chain_not_relayed_after_replaced_all {
     auto holder1 = value::holder<int>::make_shared(1);
     auto holder2 = value::holder<int>::make_shared(2);
-    auto vector_holder = vector::holder<value::holder<int>>::make_shared({*holder1, *holder2});
+    auto vector_holder = vector::holder<std::shared_ptr<value::holder<int>>>::make_shared({holder1, holder2});
 
     auto holder3 = value::holder<int>::make_shared(10);
-    vector_holder->replace({*holder3});
+    vector_holder->replace({holder3});
 
     std::vector<event> received;
 
@@ -251,6 +252,16 @@ using namespace yas::chaining;
     holder2->set_value(4);
 
     XCTAssertEqual(received.size(), 0);
+}
+
+- (void)test_chain_unrelayed_shared {
+    auto value1 = std::make_shared<int>(1);
+    auto value2 = std::make_shared<int>(2);
+    auto vector_holder = vector::holder<std::shared_ptr<int>>::make_shared({value1, value2});
+
+    std::vector<event> received;
+
+    auto chain = vector_holder->chain().perform([&received](auto const &event) { received.push_back(event); }).end();
 }
 
 @end

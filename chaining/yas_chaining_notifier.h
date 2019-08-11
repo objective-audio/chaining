@@ -4,26 +4,21 @@
 
 #pragma once
 
-#include <cpp_utils/yas_weakable.h>
 #include "yas_chaining_receiver.h"
 #include "yas_chaining_sender.h"
 
 namespace yas::chaining {
 template <typename T>
-struct notifier final : sender<T>, receiver<T>, weakable<notifier<T>> {
-    class impl;
-
-    notifier(std::shared_ptr<impl> &&);
-
+struct notifier final : sender<T>, receiver<T> {
     void notify(T const &);
 
-    [[nodiscard]] chain_unsync_t<T> chain() const;
+    [[nodiscard]] chain_unsync_t<T> chain();
 
     void receive_value(T const &) override;
 
-    std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
-
    private:
+    std::mutex _send_mutex;
+
     notifier();
 
    public:

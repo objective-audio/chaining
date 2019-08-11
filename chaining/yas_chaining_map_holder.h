@@ -4,7 +4,6 @@
 
 #pragma once
 
-#include <cpp_utils/yas_weakable.h>
 #include <map>
 #include "yas_chaining_event.h"
 #include "yas_chaining_receiver.h"
@@ -53,11 +52,11 @@ struct relayed_event {
     static event_type const type = event_type::relayed;
     Key const &key;
     Value const &value;
-    typename Value::SendType const &relayed;
+    typename Value::element_type::SendType const &relayed;
 };
 
 template <typename Key, typename Value>
-struct holder final : sender<event>, receiver<event>, weakable<holder<Key, Value>> {
+struct holder final : sender<event>, receiver<event> {
     class impl;
 
     using chain_t = chain<event, event, true>;
@@ -82,16 +81,22 @@ struct holder final : sender<event>, receiver<event>, weakable<holder<Key, Value
     std::map<Key, Value> erase_for_key(Key const &);
     void clear();
 
-    [[nodiscard]] chain_t chain() const;
+    [[nodiscard]] chain_t chain();
 
     void receive_value(event const &) override;
 
-    std::shared_ptr<weakable_impl> weakable_impl_ptr() const override;
+    std::shared_ptr<impl> _impl;
 
    private:
-    explicit holder(std::map<Key, Value>);
+    holder();
+
+    holder(holder const &) = delete;
+    holder(holder &&) = delete;
+    holder &operator=(holder const &) = delete;
+    holder &operator=(holder &&) = delete;
 
     bool is_equal(sender<event> const &rhs) const override;
+    void fetch_for(any_joint const &joint) override;
 
     void _prepare(std::map<Key, Value> &&);
 
