@@ -10,11 +10,6 @@
 
 namespace yas::chaining {
 template <typename T>
-std::shared_ptr<sendable<T>> sender<T>::sendable() {
-    return this->shared_from_this();
-}
-
-template <typename T>
 bool sender<T>::operator==(sender const &rhs) const {
     return this->is_equal(rhs);
 }

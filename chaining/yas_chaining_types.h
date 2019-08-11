@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <optional>
+
 namespace yas::chaining {
 template <typename Out, typename Begin, bool Syncable>
 class chain;

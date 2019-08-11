@@ -49,8 +49,8 @@ void holder<T>::receive_value(T const &value) {
 
 template <typename T>
 bool holder<T>::is_equal(sender<T> const &rhs) const {
-    auto sendable_ptr = rhs.shared_from_this();
-    auto rhs_ptr = std::dynamic_pointer_cast<typename value::holder<T> const>(sendable_ptr);
+    auto sender_ptr = rhs.shared_from_this();
+    auto rhs_ptr = std::dynamic_pointer_cast<typename value::holder<T> const>(sender_ptr);
     if (rhs_ptr) {
         return this->_value == rhs_ptr->_value;
     } else {

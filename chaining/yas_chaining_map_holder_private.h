@@ -65,8 +65,7 @@ namespace utils {
                              typename map::holder<Key, std::shared_ptr<Value>>::impl::wrapper_ptr &wrapper) {
             auto weak_value = to_weak(value);
             typename map::holder<Key, std::shared_ptr<Value>>::impl::wrapper_wptr weak_wrapper = wrapper;
-            wrapper->observer = value->sendable()
-                                    ->chain_unsync()
+            wrapper->observer = value->chain_unsync()
                                     .perform([weak_holder, weak_wrapper, key, weak_value](auto const &relayed) {
                                         auto holder = weak_holder.lock();
                                         auto value = weak_value.lock();
@@ -364,8 +363,8 @@ void holder<Key, Value>::receive_value(map::event const &event) {
 
 template <typename Key, typename Value>
 bool holder<Key, Value>::is_equal(sender<event> const &rhs) const {
-    auto sendable_ptr = rhs.shared_from_this();
-    auto rhs_ptr = std::dynamic_pointer_cast<typename map::holder<Key, Value> const>(sendable_ptr);
+    auto sender_ptr = rhs.shared_from_this();
+    auto rhs_ptr = std::dynamic_pointer_cast<typename map::holder<Key, Value> const>(sender_ptr);
     if (rhs_ptr) {
         return this->_impl->_raw == rhs_ptr->_impl->_raw;
     } else {

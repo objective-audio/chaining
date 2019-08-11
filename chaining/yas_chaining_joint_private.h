@@ -13,13 +13,13 @@ any_joint::handler_f<P> const &any_joint::handler(std::size_t const idx) const {
 }
 
 template <typename T>
-joint<T>::joint(std::weak_ptr<sendable<T>> &&weak_sendable) : any_joint(), _weak_sendable(std::move(weak_sendable)) {
+joint<T>::joint(std::weak_ptr<sender<T>> &&weak_sender) : any_joint(), _weak_sender(std::move(weak_sender)) {
 }
 
 template <typename T>
 joint<T>::~joint() {
-    if (auto sendable = this->_weak_sendable.lock()) {
-        sendable->erase_joint(this->identifier());
+    if (auto sender = this->_weak_sender.lock()) {
+        sender->erase_joint(this->identifier());
     }
 }
 
@@ -38,11 +38,11 @@ void joint<T>::invalidate() {
         sub_joint->invalidate();
     }
 
-    if (auto sendable = this->_weak_sendable.lock()) {
-        sendable->erase_joint(this->identifier());
+    if (auto sender = this->_weak_sender.lock()) {
+        sender->erase_joint(this->identifier());
     }
 
-    this->_weak_sendable.reset();
+    this->_weak_sender.reset();
     this->_handlers.clear();
     this->_sub_joints.clear();
 }
@@ -65,8 +65,8 @@ void joint<T>::add_sub_joint(any_joint_ptr sub_joint) {
 
 template <typename T>
 void joint<T>::fetch() {
-    if (auto sendable = this->_weak_sendable.lock()) {
-        sendable->fetch_for(*this);
+    if (auto sender = this->_weak_sender.lock()) {
+        sender->fetch_for(*this);
     }
 
     for (any_joint_ptr &sub_joint : this->_sub_joints) {
@@ -80,7 +80,7 @@ std::any const &joint<T>::any_handler(std::size_t const idx) const {
 }
 
 template <typename T>
-joint_ptr<T> make_joint(std::weak_ptr<sendable<T>> weak_sender) {
+joint_ptr<T> make_joint(std::weak_ptr<sender<T>> weak_sender) {
     return std::make_shared<joint<T>>(std::move(weak_sender));
 }
 }  // namespace yas::chaining
