@@ -52,7 +52,7 @@ struct relayed_event {
     static event_type const type = event_type::relayed;
     Key const &key;
     Value const &value;
-    typename Value::element_type::SendType const &relayed;
+    typename Value::element_type::send_type const &relayed;
 };
 
 template <typename Key, typename Value>
@@ -95,7 +95,7 @@ struct holder final : sender<event> {
     holder &operator=(holder const &) = delete;
     holder &operator=(holder &&) = delete;
 
-    void fetch_for(any_joint const &joint) override;
+    void fetch_for(any_joint const &joint) const override;
 
     void _prepare(std::multimap<Key, Value> &&);
 

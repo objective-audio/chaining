@@ -48,7 +48,7 @@ void holder<T>::receive_value(T const &value) {
 }
 
 template <typename T>
-void holder<T>::fetch_for(any_joint const &joint) {
+void holder<T>::fetch_for(any_joint const &joint) const {
     this->send_value_to_target(this->raw(), joint.identifier());
 }
 

@@ -34,7 +34,7 @@ event make_replaced_event(Key const &key, Value const &value) {
 }
 
 template <typename Key, typename Value, enable_if_shared_ptr_t<Value, std::nullptr_t> = nullptr>
-event make_relayed_event(Key const &key, Value const &value, typename Value::element_type::SendType const &relayed) {
+event make_relayed_event(Key const &key, Value const &value, typename Value::element_type::send_type const &relayed) {
     return event{relayed_event<Key, Value>{.key = key, .value = value, .relayed = relayed}};
 }
 
@@ -133,7 +133,7 @@ typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::cha
 }
 
 template <typename Key, typename Value>
-void holder<Key, Value>::fetch_for(any_joint const &joint) {
+void holder<Key, Value>::fetch_for(any_joint const &joint) const {
     this->send_value_to_target(make_fetched_event(this->raw()), joint.identifier());
 }
 

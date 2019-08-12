@@ -33,7 +33,7 @@ struct holder final : sender<T>, receiver<T> {
     holder &operator=(holder const &) = delete;
     holder &operator=(holder &&) = delete;
 
-    void fetch_for(any_joint const &joint) override;
+    void fetch_for(any_joint const &joint) const override;
 
    public:
     static std::shared_ptr<holder> make_shared(T);

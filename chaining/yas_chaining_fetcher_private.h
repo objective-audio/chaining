@@ -40,7 +40,7 @@ void fetcher<T>::receive_value(std::nullptr_t const &) {
 }
 
 template <typename T>
-void fetcher<T>::fetch_for(any_joint const &joint) {
+void fetcher<T>::fetch_for(any_joint const &joint) const {
     if (auto value = this->fetched_value()) {
         this->send_value_to_target(*value, joint.identifier());
     }

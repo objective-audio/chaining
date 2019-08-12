@@ -54,7 +54,7 @@ struct relayed_event {
     static event_type const type = event_type::relayed;
     T const &element;
     std::size_t const index;
-    typename T::element_type::SendType const &relayed;
+    typename T::element_type::send_type const &relayed;
 };
 
 template <typename T>
@@ -97,7 +97,7 @@ struct holder final : sender<event>, receiver<event> {
     holder &operator=(holder const &) = delete;
     holder &operator=(holder &&) = delete;
 
-    void fetch_for(any_joint const &joint) override;
+    void fetch_for(any_joint const &joint) const override;
 
     void _prepare(std::vector<T> &&);
 

@@ -30,7 +30,7 @@ void notifier<T>::receive_value(T const &value) {
 }
 
 template <typename T>
-void notifier<T>::fetch_for(any_joint const &) {
+void notifier<T>::fetch_for(any_joint const &) const {
     // do nothing
 }
 

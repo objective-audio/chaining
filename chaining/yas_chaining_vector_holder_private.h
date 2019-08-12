@@ -34,7 +34,7 @@ event make_replaced_event(T const &element, std::size_t const idx) {
 }
 
 template <typename T, enable_if_shared_ptr_t<T, std::nullptr_t> = nullptr>
-event make_relayed_event(T const &element, std::size_t const idx, typename T::element_type::SendType const &relayed) {
+event make_relayed_event(T const &element, std::size_t const idx, typename T::element_type::send_type const &relayed) {
     return event{relayed_event<T>{.element = element, .index = idx, .relayed = relayed}};
 }
 
@@ -152,7 +152,7 @@ void holder<T>::receive_value(vector::event const &event) {
 }
 
 template <typename T>
-void holder<T>::fetch_for(any_joint const &joint) {
+void holder<T>::fetch_for(any_joint const &joint) const {
     this->send_value_to_target(make_fetched_event(this->raw()), joint.identifier());
 }
 
