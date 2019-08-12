@@ -69,9 +69,9 @@ using namespace yas::chaining;
     auto event = vector::make_relayed_event(element, 7, 8);
 
     XCTAssertEqual(event.type(), event_type::relayed);
-    XCTAssertEqual(event.get<vector::relayed_event<std::shared_ptr<value::holder<int>>>>().element, element);
-    XCTAssertEqual(event.get<vector::relayed_event<std::shared_ptr<value::holder<int>>>>().index, 7);
-    XCTAssertEqual(event.get<vector::relayed_event<std::shared_ptr<value::holder<int>>>>().relayed, 8);
+    XCTAssertEqual(event.get<vector::relayed_event<value::holder_ptr<int>>>().element, element);
+    XCTAssertEqual(event.get<vector::relayed_event<value::holder_ptr<int>>>().index, 7);
+    XCTAssertEqual(event.get<vector::relayed_event<value::holder_ptr<int>>>().relayed, 8);
 }
 
 @end

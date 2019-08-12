@@ -165,19 +165,17 @@ using namespace yas::chaining;
 - (void)test_chain_relayed {
     auto holder1 = value::holder<std::string>::make_shared("1");
     auto holder2 = value::holder<std::string>::make_shared("2");
-    auto map_holder =
-        map::holder<int, std::shared_ptr<value::holder<std::string>>>::make_shared({{1, holder1}, {2, holder2}});
+    auto map_holder = map::holder<int, value::holder_ptr<std::string>>::make_shared({{1, holder1}, {2, holder2}});
 
     std::vector<event> received_events;
-    std::vector<std::tuple<int, std::shared_ptr<value::holder<std::string>>, std::string>> received_relayed_events;
+    std::vector<std::tuple<int, value::holder_ptr<std::string>, std::string>> received_relayed_events;
 
     auto chain =
         map_holder->chain()
             .perform([&received_events, &received_relayed_events](auto const &event) {
                 received_events.push_back(event);
                 if (event.type() == event_type::relayed) {
-                    auto const &relayed =
-                        event.template get<map::relayed_event<int, std::shared_ptr<value::holder<std::string>>>>();
+                    auto const &relayed = event.template get<map::relayed_event<int, value::holder_ptr<std::string>>>();
                     received_relayed_events.push_back(std::make_tuple(relayed.key, relayed.value, relayed.relayed));
                 }
             })
@@ -203,7 +201,7 @@ using namespace yas::chaining;
 }
 
 - (void)test_chain_relayed_after_inserted {
-    auto map_holder = map::holder<int, std::shared_ptr<value::holder<std::string>>>::make_shared();
+    auto map_holder = map::holder<int, value::holder_ptr<std::string>>::make_shared();
 
     auto holder1 = value::holder<std::string>::make_shared("1");
     map_holder->insert_or_replace(1, holder1);
@@ -212,15 +210,14 @@ using namespace yas::chaining;
     map_holder->insert_or_replace(2, holder2);
 
     std::vector<event> received_events;
-    std::vector<std::tuple<int, std::shared_ptr<value::holder<std::string>>, std::string>> received_relayed_events;
+    std::vector<std::tuple<int, value::holder_ptr<std::string>, std::string>> received_relayed_events;
 
     auto chain =
         map_holder->chain()
             .perform([&received_events, &received_relayed_events](auto const &event) {
                 received_events.push_back(event);
                 if (event.type() == event_type::relayed) {
-                    auto const &relayed =
-                        event.template get<map::relayed_event<int, std::shared_ptr<value::holder<std::string>>>>();
+                    auto const &relayed = event.template get<map::relayed_event<int, value::holder_ptr<std::string>>>();
                     received_relayed_events.push_back(std::make_tuple(relayed.key, relayed.value, relayed.relayed));
                 }
             })
@@ -248,22 +245,21 @@ using namespace yas::chaining;
 - (void)test_chain_relayed_after_replaced {
     auto holder1 = value::holder<int>::make_shared(1);
     auto holder2 = value::holder<int>::make_shared(2);
-    auto map_holder = map::holder<int, std::shared_ptr<value::holder<int>>>::make_shared({{1, holder1}, {2, holder2}});
+    auto map_holder = map::holder<int, value::holder_ptr<int>>::make_shared({{1, holder1}, {2, holder2}});
 
     auto holder3 = value::holder<int>::make_shared(3);
     auto holder4 = value::holder<int>::make_shared(4);
     map_holder->replace_all({{3, holder3}, {4, holder4}});
 
     std::vector<event> received_events;
-    std::vector<std::tuple<int, std::shared_ptr<value::holder<int>>, int>> received_relayed_events;
+    std::vector<std::tuple<int, value::holder_ptr<int>, int>> received_relayed_events;
 
     auto chain =
         map_holder->chain()
             .perform([&received_events, &received_relayed_events](auto const &event) {
                 received_events.push_back(event);
                 if (event.type() == event_type::relayed) {
-                    auto const &relayed =
-                        event.template get<map::relayed_event<int, std::shared_ptr<value::holder<int>>>>();
+                    auto const &relayed = event.template get<map::relayed_event<int, value::holder_ptr<int>>>();
                     received_relayed_events.push_back(std::make_tuple(relayed.key, relayed.value, relayed.relayed));
                 }
             })
@@ -296,20 +292,19 @@ using namespace yas::chaining;
 - (void)test_chain_not_relayed_after_erased {
     auto holder1 = value::holder<int>::make_shared(1);
     auto holder2 = value::holder<int>::make_shared(2);
-    auto map_holder = map::holder<int, std::shared_ptr<value::holder<int>>>::make_shared({{1, holder1}, {2, holder2}});
+    auto map_holder = map::holder<int, value::holder_ptr<int>>::make_shared({{1, holder1}, {2, holder2}});
 
     map_holder->erase_for_key(1);
 
     std::vector<event> received_events;
-    std::vector<std::tuple<int, std::shared_ptr<value::holder<int>>, int>> received_relayed_events;
+    std::vector<std::tuple<int, value::holder_ptr<int>, int>> received_relayed_events;
 
     auto chain =
         map_holder->chain()
             .perform([&received_events, &received_relayed_events](auto const &event) {
                 received_events.push_back(event);
                 if (event.type() == event_type::relayed) {
-                    auto const &relayed =
-                        event.template get<map::relayed_event<int, std::shared_ptr<value::holder<int>>>>();
+                    auto const &relayed = event.template get<map::relayed_event<int, value::holder_ptr<int>>>();
                     received_relayed_events.push_back(std::make_tuple(relayed.key, relayed.value, relayed.relayed));
                 }
             })
@@ -327,7 +322,7 @@ using namespace yas::chaining;
 - (void)test_chain_not_relayed_after_clear {
     auto holder1 = value::holder<int>::make_shared(1);
     auto holder2 = value::holder<int>::make_shared(2);
-    auto map_holder = map::holder<int, std::shared_ptr<value::holder<int>>>::make_shared({{1, holder1}, {2, holder2}});
+    auto map_holder = map::holder<int, value::holder_ptr<int>>::make_shared({{1, holder1}, {2, holder2}});
 
     map_holder->clear();
 
@@ -345,7 +340,7 @@ using namespace yas::chaining;
 - (void)test_chain_not_relayed_after_replaced {
     auto holder1 = value::holder<int>::make_shared(1);
     auto holder2 = value::holder<int>::make_shared(2);
-    auto map_holder = map::holder<int, std::shared_ptr<value::holder<int>>>::make_shared({{1, holder1}, {2, holder2}});
+    auto map_holder = map::holder<int, value::holder_ptr<int>>::make_shared({{1, holder1}, {2, holder2}});
 
     auto holder3 = value::holder<int>::make_shared(3);
     map_holder->replace_all({{3, holder3}});
