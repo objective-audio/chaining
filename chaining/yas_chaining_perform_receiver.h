@@ -24,7 +24,7 @@ struct[[nodiscard]] perform_receiver final : receiver<T> {
     static std::shared_ptr<perform_receiver> make_shared(std::function<void(void)> &&);
 };
 
-template <typename T>
+template <typename T = std::nullptr_t>
 using perform_receiver_ptr = std::shared_ptr<perform_receiver<T>>;
 }  // namespace yas::chaining
 
