@@ -5,6 +5,7 @@
 #pragma once
 
 #include <map>
+#include "yas_chaining_any_observer.h"
 #include "yas_chaining_event.h"
 #include "yas_chaining_sender.h"
 
@@ -56,11 +57,7 @@ struct relayed_event {
 
 template <typename Key, typename Value>
 struct holder final : sender<event> {
-    class impl;
-
     using chain_t = chain<event, event, true>;
-
-    explicit holder(std::shared_ptr<impl> &&);
 
     ~holder();
 
@@ -78,9 +75,19 @@ struct holder final : sender<event> {
 
     [[nodiscard]] chain_t chain();
 
-    std::unique_ptr<impl> _impl;
-
    private:
+    struct observer_wrapper {
+        any_observer_ptr observer = nullptr;
+        Value *value = nullptr;
+    };
+
+    using wrapper_ptr = std::shared_ptr<observer_wrapper>;
+    using wrapper_wptr = std::weak_ptr<observer_wrapper>;
+    using chaining_f = std::function<void(Key const &, Value &, wrapper_ptr &)>;
+
+    std::multimap<Key, Value> _raw;
+    std::multimap<Key, wrapper_ptr> _observers;
+
     holder();
 
     holder(holder const &) = delete;
@@ -91,6 +98,30 @@ struct holder final : sender<event> {
     void fetch_for(any_joint const &joint) override;
 
     void _prepare(std::multimap<Key, Value> &&);
+
+    chaining_f _element_chaining();
+    void _replace(std::multimap<Key, Value> &&map, chaining_f chaining);
+    void _insert(std::multimap<Key, Value> &&map, chaining_f chaining);
+
+    template <typename SenderValue, enable_if_base_of_sender_t<SenderValue, std::nullptr_t> = nullptr>
+    void _replace(std::multimap<Key, std::shared_ptr<SenderValue>> &&map) {
+        this->_replace(std::move(map), this->_element_chaining());
+    }
+
+    template <typename NonSenderValue>
+    void _replace(std::multimap<Key, NonSenderValue> &&map) {
+        this->_replace(std::move(map), nullptr);
+    }
+
+    template <typename SenderValue, enable_if_base_of_sender_t<SenderValue, std::nullptr_t> = nullptr>
+    void _insert(std::multimap<Key, std::shared_ptr<SenderValue>> &&map) {
+        this->_insert(std::move(map), this->_element_chaining());
+    }
+
+    template <typename NonSenderValue>
+    void _insert(std::multimap<Key, NonSenderValue> &&map) {
+        this->_insert(std::move(map), nullptr);
+    }
 
    public:
     static std::shared_ptr<holder> make_shared();
