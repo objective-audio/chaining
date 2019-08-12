@@ -5,6 +5,7 @@
 #pragma once
 
 #include <map>
+#include "yas_chaining_any_observer.h"
 #include "yas_chaining_event.h"
 #include "yas_chaining_receiver.h"
 #include "yas_chaining_sender.h"
@@ -57,11 +58,7 @@ struct relayed_event {
 
 template <typename Key, typename Value>
 struct holder final : sender<event>, receiver<event> {
-    class impl;
-
     using chain_t = chain<event, event, true>;
-
-    explicit holder(std::shared_ptr<impl> &&);
 
     ~holder();
 
@@ -85,9 +82,19 @@ struct holder final : sender<event>, receiver<event> {
 
     void receive_value(event const &) override;
 
-    std::unique_ptr<impl> _impl;
-
    private:
+    struct observer_wrapper {
+        any_observer_ptr observer = nullptr;
+        Value *value = nullptr;
+    };
+
+    using wrapper_ptr = std::shared_ptr<observer_wrapper>;
+    using wrapper_wptr = std::weak_ptr<observer_wrapper>;
+    using chaining_f = std::function<void(Key const &, Value &, wrapper_ptr &)>;
+
+    std::map<Key, Value> _raw;
+    std::map<Key, wrapper_ptr> _observers;
+
     holder();
 
     holder(holder const &) = delete;
@@ -98,6 +105,42 @@ struct holder final : sender<event>, receiver<event> {
     void fetch_for(any_joint const &joint) override;
 
     void _prepare(std::map<Key, Value> &&);
+
+    chaining_f _element_chaining();
+    void _replace(std::map<Key, Value> &&map, chaining_f chaining);
+    void _erase_observer_for_key(Key const &key);
+    void _insert_or_replace(Key &&key, Value &&value, chaining_f chaining);
+    void _insert(std::map<Key, Value> &&map, chaining_f chaining);
+
+    template <typename SenderValue, enable_if_base_of_sender_t<SenderValue, std::nullptr_t> = nullptr>
+    void _replace_all(std::map<Key, std::shared_ptr<SenderValue>> map) {
+        this->_replace(std::move(map), this->_element_chaining());
+    }
+
+    template <typename NonSenderValue>
+    void _replace_all(std::map<Key, NonSenderValue> map) {
+        this->_replace(std::move(map), nullptr);
+    }
+
+    template <typename SenderValue, enable_if_base_of_sender_t<SenderValue, std::nullptr_t> = nullptr>
+    void _insert_or_replace(Key key, std::shared_ptr<SenderValue> value) {
+        this->_insert_or_replace(std::move(key), std::move(value), this->_element_chaining());
+    }
+
+    template <typename NonSenderValue>
+    void _insert_or_replace(Key key, NonSenderValue value) {
+        this->_insert_or_replace(std::move(key), std::move(value), nullptr);
+    }
+
+    template <typename SenderValue, enable_if_base_of_sender_t<SenderValue, std::nullptr_t> = nullptr>
+    void _insert(std::map<Key, std::shared_ptr<SenderValue>> map) {
+        this->_insert(std::move(map), this->_element_chaining());
+    }
+
+    template <typename NonSenderValue>
+    void _insert(std::map<Key, NonSenderValue> map) {
+        this->_insert(std::move(map), nullptr);
+    }
 
    public:
     static std::shared_ptr<holder> make_shared();

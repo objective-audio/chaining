@@ -69,23 +69,23 @@ holder<T>::holder() {
 
 template <typename T>
 void holder<T>::replace(std::vector<T> vec) {
-    this->replace_all(std::move(vec));
+    this->_replace_all(std::move(vec));
 }
 
 template <typename T>
 void holder<T>::replace(T value, std::size_t const idx) {
-    this->replace(*this, std::move(value), idx);
+    this->_replace(std::move(value), idx);
 }
 
 template <typename T>
 void holder<T>::push_back(T value) {
     std::size_t const idx = this->_raw.size();
-    this->insert(*this, std::move(value), idx);
+    this->_insert(std::move(value), idx);
 }
 
 template <typename T>
 void holder<T>::insert(T value, std::size_t const idx) {
-    this->insert(*this, std::move(value), idx);
+    this->_insert(std::move(value), idx);
 }
 
 template <typename T>
@@ -128,11 +128,11 @@ void holder<T>::receive_value(vector::event const &event) {
     switch (event.type()) {
         case event_type::fetched: {
             auto const &fetched = event.get<vector::fetched_event<T>>();
-            this->replace_all(fetched.elements);
+            this->_replace_all(fetched.elements);
         } break;
         case event_type::any: {
             auto const &any = event.get<vector::any_event<T>>();
-            this->replace_all(any.elements);
+            this->_replace_all(any.elements);
         } break;
         case event_type::inserted: {
             auto const &inserted = event.get<vector::inserted_event<T>>();
@@ -158,7 +158,7 @@ void holder<T>::fetch_for(any_joint const &joint) {
 
 template <typename T>
 void holder<T>::_prepare(std::vector<T> &&vec) {
-    this->replace_all(std::move(vec));
+    this->_replace_all(std::move(vec));
 }
 
 template <typename T>
