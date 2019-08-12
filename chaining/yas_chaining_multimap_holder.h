@@ -127,6 +127,9 @@ struct holder final : sender<event> {
     static std::shared_ptr<holder> make_shared();
     static std::shared_ptr<holder> make_shared(std::multimap<Key, Value>);
 };
+
+template <typename Key, typename Value>
+using holder_ptr = std::shared_ptr<multimap::holder<Key, Value>>;
 }  // namespace yas::chaining::multimap
 
 #include "yas_chaining_multimap_holder_private.h"

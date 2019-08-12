@@ -38,6 +38,9 @@ struct holder final : sender<T>, receiver<T> {
    public:
     static std::shared_ptr<holder> make_shared(T);
 };
+
+template <typename T>
+using holder_ptr = std::shared_ptr<value::holder<T>>;
 }  // namespace yas::chaining::value
 
 #include "yas_chaining_value_holder_private.h"

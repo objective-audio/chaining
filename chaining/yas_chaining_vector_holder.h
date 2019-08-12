@@ -140,6 +140,9 @@ struct holder final : sender<event>, receiver<event> {
     static std::shared_ptr<holder> make_shared();
     static std::shared_ptr<holder> make_shared(vector_t);
 };
+
+template <typename T>
+using holder_ptr = std::shared_ptr<vector::holder<T>>;
 }  // namespace yas::chaining::vector
 
 #include "yas_chaining_vector_holder_private.h"
