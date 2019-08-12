@@ -35,6 +35,9 @@ struct fetcher final : sender<T>, receiver<> {
    public:
     static std::shared_ptr<fetcher> make_shared(std::function<std::optional<T>(void)>);
 };
+
+template <typename T>
+using fetcher_ptr = std::shared_ptr<fetcher<T>>;
 }  // namespace yas::chaining
 
 #include "yas_chaining_fetcher_private.h"
