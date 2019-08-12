@@ -57,8 +57,6 @@ struct relayed_event {
 
 template <typename Key, typename Value>
 struct holder final : sender<event> {
-    class impl;
-
     using chain_t = chain<event, event, true>;
 
     ~holder();
