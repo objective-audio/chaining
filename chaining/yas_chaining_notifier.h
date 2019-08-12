@@ -31,6 +31,9 @@ struct notifier final : sender<T>, receiver<T> {
    public:
     static std::shared_ptr<notifier> make_shared();
 };
+
+template <typename T>
+using notifier_ptr = std::shared_ptr<notifier<T>>;
 }  // namespace yas::chaining
 
 #include "yas_chaining_notifier_private.h"
