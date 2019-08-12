@@ -22,13 +22,12 @@ struct sender : any_sender, std::enable_shared_from_this<sender<T>> {
 
     virtual void fetch_for(any_joint const &joint) const = 0;
 
-    void broadcast(T const &value) const;
-    void erase_joint(std::uintptr_t const key) const;
-
     chain_unsync_t<T> chain_unsync() const;
     chain_sync_t<T> chain_sync() const;
 
    protected:
+    void broadcast(T const &value) const;
+    void erase_joint(std::uintptr_t const key) const;
     void send_value_to_target(T const &value, std::uintptr_t const key) const;
 
    private:
@@ -36,6 +35,9 @@ struct sender : any_sender, std::enable_shared_from_this<sender<T>> {
 
     template <bool Syncable>
     chain<T, T, Syncable> _chain() const;
+
+    template <typename U>
+    friend class joint;
 };
 
 template <typename T>
