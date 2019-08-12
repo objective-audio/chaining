@@ -187,7 +187,7 @@ void holder<Key, Value>::receive_value(map::event const &event) {
 }
 
 template <typename Key, typename Value>
-void holder<Key, Value>::fetch_for(any_joint const &joint) {
+void holder<Key, Value>::fetch_for(any_joint const &joint) const {
     this->send_value_to_target(make_fetched_event(this->raw()), joint.identifier());
 }
 

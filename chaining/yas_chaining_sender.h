@@ -20,22 +20,22 @@ template <typename T>
 struct sender : any_sender, std::enable_shared_from_this<sender<T>> {
     using SendType = T;
 
-    virtual void fetch_for(any_joint const &joint) = 0;
+    virtual void fetch_for(any_joint const &joint) const = 0;
 
-    void broadcast(T const &value);
-    void erase_joint(std::uintptr_t const key);
+    void broadcast(T const &value) const;
+    void erase_joint(std::uintptr_t const key) const;
 
-    chain_unsync_t<T> chain_unsync();
-    chain_sync_t<T> chain_sync();
+    chain_unsync_t<T> chain_unsync() const;
+    chain_sync_t<T> chain_sync() const;
 
    protected:
-    void send_value_to_target(T const &value, std::uintptr_t const key);
+    void send_value_to_target(T const &value, std::uintptr_t const key) const;
 
    private:
-    std::vector<std::weak_ptr<joint<T>>> _joints;
+    mutable std::vector<std::weak_ptr<joint<T>>> _joints;
 
     template <bool Syncable>
-    chain<T, T, Syncable> _chain();
+    chain<T, T, Syncable> _chain() const;
 };
 
 template <typename T>

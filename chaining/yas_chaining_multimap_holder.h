@@ -95,7 +95,7 @@ struct holder final : sender<event> {
     holder &operator=(holder const &) = delete;
     holder &operator=(holder &&) = delete;
 
-    void fetch_for(any_joint const &joint) override;
+    void fetch_for(any_joint const &joint) const override;
 
     void _prepare(std::multimap<Key, Value> &&);
 

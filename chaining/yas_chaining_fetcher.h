@@ -30,7 +30,7 @@ struct fetcher final : sender<T>, receiver<> {
     fetcher &operator=(fetcher const &) = delete;
     fetcher &operator=(fetcher &&) = delete;
 
-    void fetch_for(any_joint const &joint) override;
+    void fetch_for(any_joint const &joint) const override;
 
    public:
     static std::shared_ptr<fetcher> make_shared(std::function<std::optional<T>(void)>);

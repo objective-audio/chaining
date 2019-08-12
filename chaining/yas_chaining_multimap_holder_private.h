@@ -133,7 +133,7 @@ typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::cha
 }
 
 template <typename Key, typename Value>
-void holder<Key, Value>::fetch_for(any_joint const &joint) {
+void holder<Key, Value>::fetch_for(any_joint const &joint) const {
     this->send_value_to_target(make_fetched_event(this->raw()), joint.identifier());
 }
 

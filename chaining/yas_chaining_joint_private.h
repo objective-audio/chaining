@@ -13,7 +13,7 @@ any_joint::handler_f<P> const &any_joint::handler(std::size_t const idx) const {
 }
 
 template <typename T>
-joint<T>::joint(std::weak_ptr<sender<T>> &&weak_sender) : any_joint(), _weak_sender(std::move(weak_sender)) {
+joint<T>::joint(std::weak_ptr<sender<T> const> &&weak_sender) : any_joint(), _weak_sender(std::move(weak_sender)) {
 }
 
 template <typename T>
@@ -80,7 +80,7 @@ std::any const &joint<T>::any_handler(std::size_t const idx) const {
 }
 
 template <typename T>
-joint_ptr<T> make_joint(std::weak_ptr<sender<T>> weak_sender) {
+joint_ptr<T> make_joint(std::weak_ptr<sender<T> const> weak_sender) {
     return std::make_shared<joint<T>>(std::move(weak_sender));
 }
 }  // namespace yas::chaining

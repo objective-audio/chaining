@@ -152,7 +152,7 @@ void holder<T>::receive_value(vector::event const &event) {
 }
 
 template <typename T>
-void holder<T>::fetch_for(any_joint const &joint) {
+void holder<T>::fetch_for(any_joint const &joint) const {
     this->send_value_to_target(make_fetched_event(this->raw()), joint.identifier());
 }
 

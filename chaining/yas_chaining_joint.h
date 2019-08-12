@@ -40,7 +40,7 @@ using any_joint_ptr = std::shared_ptr<any_joint>;
 
 template <typename T>
 struct[[nodiscard]] joint final : any_joint {
-    joint(std::weak_ptr<sender<T>> &&);
+    joint(std::weak_ptr<sender<T> const> &&);
 
     ~joint();
 
@@ -56,7 +56,7 @@ struct[[nodiscard]] joint final : any_joint {
     void add_sub_joint(any_joint_ptr);
 
    private:
-    std::weak_ptr<sender<T>> _weak_sender;
+    std::weak_ptr<sender<T> const> _weak_sender;
     std::vector<std::any> _handlers;
     std::vector<any_joint_ptr> _sub_joints;
 
