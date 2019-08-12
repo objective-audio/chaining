@@ -146,6 +146,9 @@ struct holder final : sender<event>, receiver<event> {
     static std::shared_ptr<holder> make_shared();
     static std::shared_ptr<holder> make_shared(std::map<Key, Value>);
 };
+
+template <typename Key, typename Value>
+using holder_ptr = std::shared_ptr<map::holder<Key, Value>>;
 }  // namespace yas::chaining::map
 
 #include "yas_chaining_map_holder_private.h"
