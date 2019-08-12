@@ -54,7 +54,7 @@ struct relayed_event {
     static event_type const type = event_type::relayed;
     T const &element;
     std::size_t const index;
-    typename T::element_type::SendType const &relayed;
+    typename T::element_type::send_type const &relayed;
 };
 
 template <typename T>

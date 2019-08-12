@@ -18,7 +18,7 @@ struct any_sender {
 
 template <typename T>
 struct sender : any_sender, std::enable_shared_from_this<sender<T>> {
-    using SendType = T;
+    using send_type = T;
 
     chain_unsync_t<T> chain_unsync() const;
     chain_sync_t<T> chain_sync() const;
