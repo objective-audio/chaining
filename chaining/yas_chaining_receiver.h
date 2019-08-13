@@ -4,6 +4,8 @@
 
 #pragma once
 
+#include <memory>
+
 namespace yas::chaining {
 struct any_receiver {
     virtual ~any_receiver() = default;
@@ -18,6 +20,9 @@ struct receiver : any_receiver {
    protected:
     receiver() = default;
 };
+
+template <typename T>
+using receiver_ptr = std::shared_ptr<receiver<T>>;
 
 template <typename T>
 using is_base_of_receiver = std::is_base_of<any_receiver, T>;
