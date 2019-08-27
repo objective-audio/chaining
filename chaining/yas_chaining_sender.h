@@ -20,15 +20,15 @@ template <typename T>
 struct sender : any_sender, std::enable_shared_from_this<sender<T>> {
     using send_type = T;
 
-    chain_unsync_t<T> chain_unsync() const;
-    chain_sync_t<T> chain_sync() const;
+    virtual chain_unsync_t<T> chain_unsync() const;
+    virtual chain_sync_t<T> chain_sync() const;
 
    protected:
     virtual void fetch_for(any_joint const &joint) const = 0;
 
-    void broadcast(T const &value) const;
-    void erase_joint(std::uintptr_t const key) const;
-    void send_value_to_target(T const &value, std::uintptr_t const key) const;
+    virtual void broadcast(T const &value) const;
+    virtual void erase_joint(std::uintptr_t const key) const;
+    virtual void send_value_to_target(T const &value, std::uintptr_t const key) const;
 
    private:
     mutable std::vector<std::weak_ptr<joint<T>>> _joints;
