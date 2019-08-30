@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B6D2C0FC231907C500067968 /* yas_sender_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6D2C0FB231907C500067968 /* yas_sender_tests.mm */; };
 		B6D4C60F21EDC96D004A95A8 /* yas_vector_holder_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DE360321E7843800E49BCB /* yas_vector_holder_chain_tests.mm */; };
 		B6D4C61221EDDF37004A95A8 /* yas_vector_event_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DE360821E7843800E49BCB /* yas_vector_event_tests.mm */; };
 		B6DE361021E7843800E49BCB /* yas_map_holder_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DE35FF21E7843800E49BCB /* yas_map_holder_chain_tests.mm */; };
@@ -29,6 +30,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B6D2C0FB231907C500067968 /* yas_sender_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_sender_tests.mm; sourceTree = "<group>"; };
 		B6DE35F521E783E100E49BCB /* chaining_mac_tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chaining_mac_tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6DE35FA21E783E100E49BCB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B6DE35FF21E7843800E49BCB /* yas_map_holder_chain_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_map_holder_chain_tests.mm; sourceTree = "<group>"; };
@@ -112,6 +114,7 @@
 				B6DE360821E7843800E49BCB /* yas_vector_event_tests.mm */,
 				B6DE360321E7843800E49BCB /* yas_vector_holder_chain_tests.mm */,
 				B6DE360421E7843800E49BCB /* yas_vector_holder_tests.mm */,
+				B6D2C0FB231907C500067968 /* yas_sender_tests.mm */,
 			);
 			name = chaining_test;
 			path = ../../chaining_test;
@@ -215,6 +218,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B6D4C60F21EDC96D004A95A8 /* yas_vector_holder_chain_tests.mm in Sources */,
+				B6D2C0FC231907C500067968 /* yas_sender_tests.mm in Sources */,
 				B6DE361F21E7843800E49BCB /* yas_multimap_holder_chain_tests.mm in Sources */,
 				B6DE361E21E7843800E49BCB /* yas_multimap_holder_tests.mm in Sources */,
 				B6DE361821E7843800E49BCB /* yas_receiver_tests.mm in Sources */,
