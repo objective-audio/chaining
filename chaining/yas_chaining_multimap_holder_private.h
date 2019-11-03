@@ -114,10 +114,8 @@ std::multimap<Key, Value> holder<Key, Value>::erase_for_key(Key const &key) {
 template <typename Key, typename Value>
 void holder<Key, Value>::clear() {
     for (auto &pair : this->_observers) {
-        if (auto &wrapper = pair.second) {
-            if (any_observer_ptr &observer = wrapper->observer) {
-                observer->invalidate();
-            }
+        if (auto const &observer = pair.second->observer) {
+            observer.value()->invalidate();
         }
     }
 
@@ -165,8 +163,8 @@ typename multimap::holder<Key, Value>::chaining_f holder<Key, Value>::_element_c
 template <typename Key, typename Value>
 void holder<Key, Value>::_replace(std::multimap<Key, Value> &&map, chaining_f chaining) {
     for (auto &wrapper_pair : this->_observers) {
-        if (any_observer_ptr &observer = wrapper_pair.second->observer) {
-            observer->invalidate();
+        if (auto const &observer = wrapper_pair.second->observer) {
+            observer.value()->invalidate();
         }
     }
 
