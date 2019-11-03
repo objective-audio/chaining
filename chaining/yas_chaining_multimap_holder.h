@@ -5,6 +5,7 @@
 #pragma once
 
 #include <map>
+#include <optional>
 #include "yas_chaining_any_observer.h"
 #include "yas_chaining_event.h"
 #include "yas_chaining_sender.h"
@@ -77,7 +78,7 @@ struct holder final : sender<event> {
 
    private:
     struct observer_wrapper {
-        any_observer_ptr observer = nullptr;
+        std::optional<any_observer_ptr> observer = std::nullopt;
         Value *value = nullptr;
     };
 
