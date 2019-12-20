@@ -16,6 +16,7 @@ struct any_joint {
 
     virtual void fetch() = 0;
     virtual void invalidate() = 0;
+    [[nodiscard]] virtual std::size_t handlers_size() const = 0;
     virtual std::any const &any_handler(std::size_t const idx) const = 0;
 
     uintptr_t identifier() const;
@@ -51,7 +52,7 @@ struct[[nodiscard]] joint final : any_joint {
     template <typename P>
     void push_handler(any_joint::handler_f<P>);
 
-    [[nodiscard]] std::size_t handlers_size() const;
+    [[nodiscard]] std::size_t handlers_size() const override;
 
     void add_sub_joint(any_joint_ptr);
 

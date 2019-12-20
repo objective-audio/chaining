@@ -22,8 +22,10 @@ struct chain<Out, Begin, Syncable>::impl {
 
         auto handler = [next_idx, perform_handler = std::move(perform_handler)](Out const &value, any_joint &joint) {
             perform_handler(value);
-            if (auto const &next_handler = joint.handler<Out>(next_idx)) {
-                next_handler(value, joint);
+            if (next_idx < joint.handlers_size()) {
+                if (auto const &next_handler = joint.handler<Out>(next_idx)) {
+                    next_handler(value, joint);
+                }
             }
         };
 
@@ -39,8 +41,10 @@ struct chain<Out, Begin, Syncable>::impl {
 
         auto handler = [next_idx, to_handler = std::move(to_handler)](Out const &value, any_joint &joint) mutable {
             return_t<F> next_value = to_handler(value);
-            if (auto const &next_handler = joint.template handler<return_t<F>>(next_idx)) {
-                next_handler(next_value, joint);
+            if (next_idx < joint.handlers_size()) {
+                if (auto const &next_handler = joint.template handler<return_t<F>>(next_idx)) {
+                    next_handler(next_value, joint);
+                }
             }
         };
 
