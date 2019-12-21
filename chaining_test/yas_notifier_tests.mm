@@ -71,7 +71,7 @@ using namespace yas;
     XCTAssertEqual(received, 4);
 }
 
-- (void)test_notifier_block_recursive_call {
+- (void)test_notifier_ignore_recursive_call {
     int received = -1;
 
     auto notifier = chaining::notifier<int>::make_shared();
