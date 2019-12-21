@@ -5,6 +5,7 @@
 #pragma once
 
 #include <any>
+#include <mutex>
 #include <vector>
 
 namespace yas::chaining {
@@ -60,6 +61,7 @@ struct[[nodiscard]] joint final : any_joint {
     std::weak_ptr<sender<T> const> _weak_sender;
     std::vector<std::any> _handlers;
     std::vector<any_joint_ptr> _sub_joints;
+    std::mutex _send_mutex;
     bool _pushed = false;
 
     std::any const &any_handler(std::size_t const idx) const override;

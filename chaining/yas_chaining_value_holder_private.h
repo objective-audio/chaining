@@ -17,11 +17,9 @@ holder<T>::~holder() = default;
 
 template <typename T>
 void holder<T>::set_value(T &&value) {
-    if (auto lock = std::unique_lock<std::mutex>(this->_set_mutex, std::try_to_lock); lock.owns_lock()) {
-        if (this->_value != value) {
-            this->_value = std::move(value);
-            this->broadcast(this->_value);
-        }
+    if (this->_value != value) {
+        this->_value = std::move(value);
+        this->broadcast(this->_value);
     }
 }
 

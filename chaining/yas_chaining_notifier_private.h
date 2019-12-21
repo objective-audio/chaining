@@ -14,9 +14,7 @@ notifier<T>::notifier() {
 
 template <typename T>
 void notifier<T>::notify(T const &value) {
-    if (auto lock = std::unique_lock<std::mutex>(this->_send_mutex, std::try_to_lock); lock.owns_lock()) {
-        this->broadcast(value);
-    }
+    this->broadcast(value);
 }
 
 template <typename T>
