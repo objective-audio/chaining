@@ -1,5 +1,5 @@
 //
-//  yas_flow_holder_tests.mm
+//  yas_value_holder_tests.mm
 //
 
 #import <XCTest/XCTest.h>
@@ -9,11 +9,11 @@
 using namespace yas;
 using namespace yas::chaining;
 
-@interface yas_flow_holder_tests : XCTestCase
+@interface yas_value_holder_tests : XCTestCase
 
 @end
 
-@implementation yas_flow_holder_tests
+@implementation yas_value_holder_tests
 
 - (void)setUp {
     [super setUp];
@@ -72,7 +72,7 @@ using namespace yas::chaining;
     XCTAssertEqual(holder->raw(), 200);
 }
 
-- (void)test_recursive_flow {
+- (void)test_ignore_recursive {
     auto holder1 = value::holder<int>::make_shared(123);
     auto holder2 = value::holder<int>::make_shared(456);
 

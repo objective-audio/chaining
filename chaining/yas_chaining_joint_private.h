@@ -25,10 +25,12 @@ joint<T>::~joint() {
 
 template <typename T>
 void joint<T>::call_first(T const &value) {
-    if (this->_handlers.size() > 0) {
-        this->handler<T>(0)(value, *this);
-    } else if (!this->_pushed) {
-        throw std::runtime_error("handler not pushed. must call the end.");
+    if (auto lock = std::unique_lock<std::mutex>(this->_send_mutex, std::try_to_lock); lock.owns_lock()) {
+        if (this->_handlers.size() > 0) {
+            this->handler<T>(0)(value, *this);
+        } else if (!this->_pushed) {
+            throw std::runtime_error("handler not pushed. must call the end.");
+        }
     }
 }
 
