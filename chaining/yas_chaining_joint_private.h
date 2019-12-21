@@ -27,8 +27,8 @@ template <typename T>
 void joint<T>::call_first(T const &value) {
     if (this->_handlers.size() > 0) {
         this->handler<T>(0)(value, *this);
-    } else {
-        throw std::runtime_error("handler not found. must call the end.");
+    } else if (!this->_pushed) {
+        throw std::runtime_error("handler not pushed. must call the end.");
     }
 }
 
@@ -51,6 +51,7 @@ template <typename T>
 template <typename P>
 void joint<T>::push_handler(any_joint::handler_f<P> handler) {
     this->_handlers.emplace_back(std::move(handler));
+    this->_pushed = true;
 }
 
 template <typename T>
