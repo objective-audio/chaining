@@ -186,4 +186,11 @@ using namespace yas;
     [self waitForExpectations:@[expectation] timeout:0.0];
 }
 
+- (void)test_throws_end_not_called {
+    auto notifier = chaining::notifier<int>::make_shared();
+    auto chain = notifier->chain();
+
+    XCTAssertThrows(notifier->notify(0));
+}
+
 @end
