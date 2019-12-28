@@ -27,6 +27,7 @@
 		B6DE362021E7843800E49BCB /* yas_fetcher_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DE360F21E7843800E49BCB /* yas_fetcher_tests.mm */; };
 		B6DE362321E7844600E49BCB /* chaining.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6DE362221E7844600E49BCB /* chaining.framework */; };
 		B6DE362821E7849200E49BCB /* cpp_utils.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = B6DE362421E7844600E49BCB /* cpp_utils.framework */; };
+		B6FBAF6323B6F7400080DAF1 /* yas_invalidatable_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6FBAF6223B6F7400080DAF1 /* yas_invalidatable_tests.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,6 +54,7 @@
 		B6DE362221E7844600E49BCB /* chaining.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = chaining.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6DE362421E7844600E49BCB /* cpp_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = cpp_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6DE362621E7844600E49BCB /* objc_utils.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = objc_utils.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6FBAF6223B6F7400080DAF1 /* yas_invalidatable_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_invalidatable_tests.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -115,6 +117,7 @@
 				B6DE360321E7843800E49BCB /* yas_vector_holder_chain_tests.mm */,
 				B6DE360421E7843800E49BCB /* yas_vector_holder_tests.mm */,
 				B6D2C0FB231907C500067968 /* yas_sender_tests.mm */,
+				B6FBAF6223B6F7400080DAF1 /* yas_invalidatable_tests.mm */,
 			);
 			name = chaining_test;
 			path = ../../chaining_test;
@@ -225,6 +228,7 @@
 				B6DE361721E7843800E49BCB /* yas_to_tests.mm in Sources */,
 				B6DE361A21E7843800E49BCB /* yas_sync_tests.mm in Sources */,
 				B6DE361B21E7843800E49BCB /* yas_notifier_tests.mm in Sources */,
+				B6FBAF6323B6F7400080DAF1 /* yas_invalidatable_tests.mm in Sources */,
 				B6DE361521E7843800E49BCB /* yas_vector_holder_tests.mm in Sources */,
 				B6DE362021E7843800E49BCB /* yas_fetcher_tests.mm in Sources */,
 				B6DE361321E7843800E49BCB /* yas_map_holder_tests.mm in Sources */,
