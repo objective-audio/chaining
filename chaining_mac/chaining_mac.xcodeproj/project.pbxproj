@@ -43,6 +43,7 @@
 		B68AE95421EF61A4004E2983 /* yas_chaining_event.h in Headers */ = {isa = PBXBuildFile; fileRef = B68AE95221EF61A4004E2983 /* yas_chaining_event.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B68AE95621EF6353004E2983 /* yas_chaining_event_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B68AE95521EF6293004E2983 /* yas_chaining_event_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6F8437222B4C11700A90717 /* yas_chaining_receiver.h in Headers */ = {isa = PBXBuildFile; fileRef = B6F8437122B4C07F00A90717 /* yas_chaining_receiver.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6FBAF6123B6F4E20080DAF1 /* yas_chaining_invalidatable.h in Headers */ = {isa = PBXBuildFile; fileRef = B6FBAF5F23B6F4E20080DAF1 /* yas_chaining_invalidatable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -87,6 +88,7 @@
 		B68AE95221EF61A4004E2983 /* yas_chaining_event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_event.h; sourceTree = "<group>"; };
 		B68AE95521EF6293004E2983 /* yas_chaining_event_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_event_private.h; sourceTree = "<group>"; };
 		B6F8437122B4C07F00A90717 /* yas_chaining_receiver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver.h; sourceTree = "<group>"; };
+		B6FBAF5F23B6F4E20080DAF1 /* yas_chaining_invalidatable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_invalidatable.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 				B623BA0121DC4D7000D16037 /* yas_chaining_value_holder.h */,
 				B623BA1B21DC4D7000D16037 /* yas_chaining_vector_holder_private.h */,
 				B623BA1421DC4D7000D16037 /* yas_chaining_vector_holder.h */,
+				B6FBAF5F23B6F4E20080DAF1 /* yas_chaining_invalidatable.h */,
 			);
 			name = chaining;
 			path = ../../chaining;
@@ -215,6 +218,7 @@
 				B623BA3E21DC4D7000D16037 /* yas_chaining_vector_holder_private.h in Headers */,
 				B623BA3921DC4D7000D16037 /* yas_chaining_map_holder.h in Headers */,
 				B623BA3A21DC4D7000D16037 /* yas_chaining_perform_receiver.h in Headers */,
+				B6FBAF6123B6F4E20080DAF1 /* yas_chaining_invalidatable.h in Headers */,
 				B623BA3F21DC4D7000D16037 /* yas_chaining_fetcher_private.h in Headers */,
 				B68AE95421EF61A4004E2983 /* yas_chaining_event.h in Headers */,
 				B6F8437222B4C11700A90717 /* yas_chaining_receiver.h in Headers */,
