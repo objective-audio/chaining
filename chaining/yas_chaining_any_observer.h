@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include <memory>
+#include "yas_chaining_invalidatable.h"
 
 namespace yas::chaining {
-struct any_observer {
+struct any_observer : invalidatable {
     virtual void fetch() = 0;
     virtual void invalidate() = 0;
 

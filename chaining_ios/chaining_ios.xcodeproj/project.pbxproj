@@ -43,6 +43,7 @@
 		B68AE95B21EF63FA004E2983 /* yas_chaining_event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B68AE95821EF63FA004E2983 /* yas_chaining_event.cpp */; };
 		B68AE95C21EF63FA004E2983 /* yas_chaining_event_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B68AE95921EF63FA004E2983 /* yas_chaining_event_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6F8437422B4C18B00A90717 /* yas_chaining_receiver.h in Headers */ = {isa = PBXBuildFile; fileRef = B6F8437322B4C18A00A90717 /* yas_chaining_receiver.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6FBAF6523B6FF250080DAF1 /* yas_chaining_invalidatable.h in Headers */ = {isa = PBXBuildFile; fileRef = B6FBAF6423B6FF250080DAF1 /* yas_chaining_invalidatable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -88,6 +89,7 @@
 		B68AE95821EF63FA004E2983 /* yas_chaining_event.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_event.cpp; sourceTree = "<group>"; };
 		B68AE95921EF63FA004E2983 /* yas_chaining_event_private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_event_private.h; sourceTree = "<group>"; };
 		B6F8437322B4C18A00A90717 /* yas_chaining_receiver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver.h; sourceTree = "<group>"; };
+		B6FBAF6423B6FF250080DAF1 /* yas_chaining_invalidatable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = yas_chaining_invalidatable.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -153,6 +155,7 @@
 				B68AE95721EF63F9004E2983 /* yas_chaining_event.h */,
 				B652396421DC60160035E7E2 /* yas_chaining_fetcher_private.h */,
 				B652394F21DC60150035E7E2 /* yas_chaining_fetcher.h */,
+				B6FBAF6423B6FF250080DAF1 /* yas_chaining_invalidatable.h */,
 				B652395721DC60150035E7E2 /* yas_chaining_joint_private.h */,
 				B630B995223BEC650007FEE9 /* yas_chaining_joint.cpp */,
 				B652394821DC60150035E7E2 /* yas_chaining_joint.h */,
@@ -204,6 +207,7 @@
 				B652398021DC60160035E7E2 /* yas_chaining_any_observer.h in Headers */,
 				B652397821DC60160035E7E2 /* yas_chaining_chain_private.h in Headers */,
 				B652397421DC60160035E7E2 /* yas_chaining_types.h in Headers */,
+				B6FBAF6523B6FF250080DAF1 /* yas_chaining_invalidatable.h in Headers */,
 				B652397F21DC60160035E7E2 /* yas_chaining_vector_holder.h in Headers */,
 				B652398821DC60160035E7E2 /* yas_chaining_notifier_private.h in Headers */,
 				B652396D21DC60160035E7E2 /* yas_chaining_observer.h in Headers */,
