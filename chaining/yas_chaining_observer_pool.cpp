@@ -36,3 +36,7 @@ observer_pool &observer_pool::operator+=(any_observer_ptr observer) {
     this->add_observer(std::move(observer));
     return *this;
 }
+
+observer_pool_ptr observer_pool::make_shared() {
+    return std::make_shared<observer_pool>();
+}
