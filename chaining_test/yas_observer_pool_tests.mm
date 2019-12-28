@@ -101,4 +101,25 @@ using namespace yas::chaining;
     XCTAssertEqual(received, 2);
 }
 
+- (void)test_make_shared {
+    auto holder = value::holder<int>::make_shared(1);
+    int received = 0;
+
+    auto pool = observer_pool::make_shared();
+
+    pool->add_observer(holder->chain().perform([&received](int const &value) { received = value; }).sync());
+
+    XCTAssertEqual(received, 1);
+
+    holder->set_value(2);
+
+    XCTAssertEqual(received, 2);
+
+    pool.reset();
+
+    holder->set_value(3);
+
+    XCTAssertEqual(received, 2);
+}
+
 @end
