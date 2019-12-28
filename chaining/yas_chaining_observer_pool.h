@@ -8,7 +8,7 @@
 #include "yas_chaining_any_observer.h"
 
 namespace yas::chaining {
-struct observer_pool final {
+struct observer_pool final : invalidatable {
     observer_pool();
 
     observer_pool(observer_pool &&) = default;
@@ -19,7 +19,7 @@ struct observer_pool final {
     void add_observer(any_observer_ptr);
     void remove_observer(any_observer_ptr &);
 
-    void invalidate();
+    void invalidate() override;
 
     observer_pool &operator+=(any_observer_ptr);
 
