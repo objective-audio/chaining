@@ -233,7 +233,7 @@ struct chain<Out, Begin, Syncable>::impl {
 
     chaining::observer_ptr<Begin> _end() {
         this->_joint->template push_handler<Out>([](Out const &, any_joint &) {});
-        return make_observer<Begin>(this->_joint);
+        return observer<Begin>::make_shared(this->_joint);
     }
 
     chaining::observer_ptr<Begin> end() {
