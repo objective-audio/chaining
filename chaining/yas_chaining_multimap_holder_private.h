@@ -204,12 +204,12 @@ void holder<Key, Value>::_insert(std::multimap<Key, Value> &&map, chaining_f cha
 }
 
 template <typename Key, typename Value>
-std::shared_ptr<holder<Key, Value>> holder<Key, Value>::make_shared() {
+holder_ptr<Key, Value> holder<Key, Value>::make_shared() {
     return make_shared(std::multimap<Key, Value>{});
 }
 
 template <typename Key, typename Value>
-std::shared_ptr<holder<Key, Value>> holder<Key, Value>::make_shared(std::multimap<Key, Value> map) {
+holder_ptr<Key, Value> holder<Key, Value>::make_shared(std::multimap<Key, Value> map) {
     auto shared = std::shared_ptr<holder<Key, Value>>(new holder<Key, Value>{});
     shared->_prepare(std::move(map));
     return shared;

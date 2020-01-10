@@ -57,6 +57,12 @@ struct relayed_event {
 };
 
 template <typename Key, typename Value>
+class holder;
+
+template <typename Key, typename Value>
+using holder_ptr = std::shared_ptr<multimap::holder<Key, Value>>;
+
+template <typename Key, typename Value>
 struct holder final : sender<event> {
     using chain_t = chain<event, event, true>;
 
@@ -75,6 +81,9 @@ struct holder final : sender<event> {
     void clear();
 
     [[nodiscard]] chain_t chain();
+
+    static holder_ptr<Key, Value> make_shared();
+    static holder_ptr<Key, Value> make_shared(std::multimap<Key, Value>);
 
    private:
     struct observer_wrapper {
@@ -123,14 +132,7 @@ struct holder final : sender<event> {
     void _insert(std::multimap<Key, NonSenderValue> &&map) {
         this->_insert(std::move(map), nullptr);
     }
-
-   public:
-    static std::shared_ptr<holder> make_shared();
-    static std::shared_ptr<holder> make_shared(std::multimap<Key, Value>);
 };
-
-template <typename Key, typename Value>
-using holder_ptr = std::shared_ptr<multimap::holder<Key, Value>>;
 }  // namespace yas::chaining::multimap
 
 #include "yas_chaining_multimap_holder_private.h"
