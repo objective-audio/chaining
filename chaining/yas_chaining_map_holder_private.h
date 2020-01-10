@@ -302,12 +302,12 @@ void holder<Key, Value>::_insert(std::map<Key, Value> &&map, chaining_f chaining
 }
 
 template <typename Key, typename Value>
-std::shared_ptr<holder<Key, Value>> holder<Key, Value>::make_shared() {
+holder_ptr<Key, Value> holder<Key, Value>::make_shared() {
     return make_shared(std::map<Key, Value>{});
 }
 
 template <typename Key, typename Value>
-std::shared_ptr<holder<Key, Value>> holder<Key, Value>::make_shared(std::map<Key, Value> map) {
+holder_ptr<Key, Value> holder<Key, Value>::make_shared(std::map<Key, Value> map) {
     auto shared = std::shared_ptr<holder<Key, Value>>(new holder<Key, Value>{});
     shared->_prepare(std::move(map));
     return shared;

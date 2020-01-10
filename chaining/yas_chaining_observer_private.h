@@ -28,7 +28,9 @@ void observer<Begin>::invalidate() {
 }
 
 template <typename Begin>
-std::shared_ptr<observer<Begin>> make_observer(std::shared_ptr<joint<Begin>> joint) {
-    return std::make_shared<observer<Begin>>(std::move(joint));
+observer_ptr<Begin> observer<Begin>::make_shared(std::shared_ptr<joint<Begin>> joint) {
+    auto shared = std::shared_ptr<observer<Begin>>{new observer<Begin>{std::move(joint)}};
+    shared->_prepare(shared);
+    return shared;
 }
 }  // namespace yas::chaining

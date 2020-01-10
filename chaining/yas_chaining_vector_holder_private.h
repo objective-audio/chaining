@@ -239,12 +239,12 @@ void holder<T>::_insert(T &&element, std::size_t const idx, chaining_f chaining)
 }
 
 template <typename T>
-std::shared_ptr<holder<T>> holder<T>::make_shared() {
+holder_ptr<T> holder<T>::make_shared() {
     return make_shared(vector_t{});
 }
 
 template <typename T>
-std::shared_ptr<holder<T>> holder<T>::make_shared(vector_t vec) {
+holder_ptr<T> holder<T>::make_shared(vector_t vec) {
     auto shared = std::shared_ptr<holder<T>>(new holder<T>{});
     shared->_prepare(std::move(vec));
     return shared;

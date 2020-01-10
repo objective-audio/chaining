@@ -51,7 +51,7 @@ void holder<T>::fetch_for(any_joint const &joint) const {
 }
 
 template <typename T>
-std::shared_ptr<holder<T>> holder<T>::make_shared(T value) {
+holder_ptr<T> holder<T>::make_shared(T value) {
     return std::shared_ptr<holder<T>>(new holder<T>{std::move(value)});
 }
 }  // namespace yas::chaining::value

@@ -5,6 +5,7 @@
 #import <XCTest/XCTest.h>
 #import <chaining/yas_chaining_notifier.h>
 #import <chaining/yas_chaining_observer.h>
+#import <chaining/yas_chaining_observer_pool.h>
 #import <chaining/yas_chaining_value_holder.h>
 
 using namespace yas;
@@ -107,6 +108,27 @@ using namespace yas::chaining;
     notifier->notify(0);
 
     [self waitForExpectations:@[expectation] timeout:0.0];
+}
+
+- (void)test_add_to {
+    chaining::observer_pool pool;
+
+    auto notifier = chaining::notifier<int>::make_shared();
+
+    std::vector<int> received;
+
+    notifier->chain().perform([&received](int const &value) { received.push_back(value); }).end()->add_to(pool);
+
+    notifier->notify(10);
+
+    XCTAssertEqual(received.size(), 1);
+    XCTAssertEqual(received.at(0), 10);
+
+    pool.invalidate();
+
+    notifier->notify(20);
+
+    XCTAssertEqual(received.size(), 1);
 }
 
 @end
