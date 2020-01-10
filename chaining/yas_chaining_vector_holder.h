@@ -56,6 +56,11 @@ struct relayed_event {
     std::size_t const index;
     typename T::element_type::send_type const &relayed;
 };
+template <typename T>
+class holder;
+
+template <typename T>
+using holder_ptr = std::shared_ptr<holder<T>>;
 
 template <typename T>
 struct holder final : sender<event>, receiver<event> {
@@ -77,6 +82,9 @@ struct holder final : sender<event>, receiver<event> {
     [[nodiscard]] chain_t chain();
 
     void receive_value(event const &) override;
+
+    static holder_ptr<T> make_shared();
+    static holder_ptr<T> make_shared(vector_t);
 
    private:
     struct observer_wrapper {
@@ -135,14 +143,7 @@ struct holder final : sender<event>, receiver<event> {
     void _insert(U element, std::size_t const idx) {
         this->_insert(std::move(element), idx, nullptr);
     }
-
-   public:
-    static std::shared_ptr<holder> make_shared();
-    static std::shared_ptr<holder> make_shared(vector_t);
 };
-
-template <typename T>
-using holder_ptr = std::shared_ptr<vector::holder<T>>;
 }  // namespace yas::chaining::vector
 
 #include "yas_chaining_vector_holder_private.h"
