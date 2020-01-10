@@ -10,6 +10,12 @@
 
 namespace yas::chaining {
 template <typename T>
+class fetcher;
+
+template <typename T>
+using fetcher_ptr = std::shared_ptr<fetcher<T>>;
+
+template <typename T>
 struct fetcher final : sender<T>, receiver<> {
     std::optional<T> fetched_value() const;
 
@@ -19,6 +25,8 @@ struct fetcher final : sender<T>, receiver<> {
     [[nodiscard]] chain_sync_t<T> chain();
 
     void receive_value(std::nullptr_t const &) override;
+
+    static fetcher_ptr<T> make_shared(std::function<std::optional<T>(void)>);
 
    private:
     std::function<std::optional<T>(void)> _fetching_handler;
@@ -31,13 +39,7 @@ struct fetcher final : sender<T>, receiver<> {
     fetcher &operator=(fetcher &&) = delete;
 
     void fetch_for(any_joint const &joint) const override;
-
-   public:
-    static std::shared_ptr<fetcher> make_shared(std::function<std::optional<T>(void)>);
 };
-
-template <typename T>
-using fetcher_ptr = std::shared_ptr<fetcher<T>>;
 }  // namespace yas::chaining
 
 #include "yas_chaining_fetcher_private.h"

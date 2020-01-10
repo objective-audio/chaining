@@ -47,7 +47,7 @@ void fetcher<T>::fetch_for(any_joint const &joint) const {
 }
 
 template <typename T>
-std::shared_ptr<fetcher<T>> fetcher<T>::make_shared(std::function<std::optional<T>(void)> handler) {
-    return std::shared_ptr<fetcher<T>>(new fetcher<T>{std::move(handler)});
+fetcher_ptr<T> fetcher<T>::make_shared(std::function<std::optional<T>(void)> handler) {
+    return fetcher_ptr<T>(new fetcher<T>{std::move(handler)});
 }
 }  // namespace yas::chaining
