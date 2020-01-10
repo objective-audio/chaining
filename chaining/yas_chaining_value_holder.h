@@ -9,6 +9,12 @@
 
 namespace yas::chaining::value {
 template <typename T>
+class holder;
+
+template <typename T>
+using holder_ptr = std::shared_ptr<holder<T>>;
+
+template <typename T>
 struct holder final : sender<T>, receiver<T> {
     ~holder();
 
@@ -22,6 +28,8 @@ struct holder final : sender<T>, receiver<T> {
 
     void receive_value(T const &) override;
 
+    static holder_ptr<T> make_shared(T);
+
    private:
     T _value;
     std::mutex _set_mutex;
@@ -34,13 +42,7 @@ struct holder final : sender<T>, receiver<T> {
     holder &operator=(holder &&) = delete;
 
     void fetch_for(any_joint const &joint) const override;
-
-   public:
-    static std::shared_ptr<holder> make_shared(T);
 };
-
-template <typename T>
-using holder_ptr = std::shared_ptr<value::holder<T>>;
 }  // namespace yas::chaining::value
 
 #include "yas_chaining_value_holder_private.h"
