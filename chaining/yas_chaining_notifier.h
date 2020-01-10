@@ -9,12 +9,20 @@
 
 namespace yas::chaining {
 template <typename T>
+class notifier;
+
+template <typename T>
+using notifier_ptr = std::shared_ptr<notifier<T>>;
+
+template <typename T>
 struct notifier final : sender<T>, receiver<T> {
     void notify(T const &);
 
     [[nodiscard]] chain_unsync_t<T> chain();
 
     void receive_value(T const &) override;
+
+    static notifier_ptr<T> make_shared();
 
    private:
     std::mutex _send_mutex;
@@ -27,13 +35,7 @@ struct notifier final : sender<T>, receiver<T> {
     notifier &operator=(notifier &&) = delete;
 
     void fetch_for(any_joint const &joint) const override;
-
-   public:
-    static std::shared_ptr<notifier> make_shared();
 };
-
-template <typename T>
-using notifier_ptr = std::shared_ptr<notifier<T>>;
 }  // namespace yas::chaining
 
 #include "yas_chaining_notifier_private.h"
