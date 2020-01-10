@@ -57,6 +57,12 @@ struct relayed_event {
 };
 
 template <typename Key, typename Value>
+class holder;
+
+template <typename Key, typename Value>
+using holder_ptr = std::shared_ptr<map::holder<Key, Value>>;
+
+template <typename Key, typename Value>
 struct holder final : sender<event>, receiver<event> {
     using chain_t = chain<event, event, true>;
 
@@ -81,6 +87,9 @@ struct holder final : sender<event>, receiver<event> {
     [[nodiscard]] chain_t chain();
 
     void receive_value(event const &) override;
+
+    static holder_ptr<Key, Value> make_shared();
+    static holder_ptr<Key, Value> make_shared(std::map<Key, Value>);
 
    private:
     struct observer_wrapper {
@@ -141,14 +150,7 @@ struct holder final : sender<event>, receiver<event> {
     void _insert(std::map<Key, NonSenderValue> map) {
         this->_insert(std::move(map), nullptr);
     }
-
-   public:
-    static std::shared_ptr<holder> make_shared();
-    static std::shared_ptr<holder> make_shared(std::map<Key, Value>);
 };
-
-template <typename Key, typename Value>
-using holder_ptr = std::shared_ptr<map::holder<Key, Value>>;
 }  // namespace yas::chaining::map
 
 #include "yas_chaining_map_holder_private.h"
