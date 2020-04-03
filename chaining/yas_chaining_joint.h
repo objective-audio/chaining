@@ -41,7 +41,7 @@ struct any_joint {
 using any_joint_ptr = std::shared_ptr<any_joint>;
 
 template <typename T>
-struct[[nodiscard]] joint final : any_joint {
+struct [[nodiscard]] joint final : any_joint {
     joint(std::weak_ptr<sender<T> const> &&);
 
     ~joint();

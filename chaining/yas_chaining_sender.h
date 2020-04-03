@@ -5,7 +5,9 @@
 #pragma once
 
 #include <cpp_utils/yas_stl_utils.h>
+
 #include <memory>
+
 #include "yas_chaining_joint.h"
 #include "yas_chaining_types.h"
 

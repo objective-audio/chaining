@@ -17,7 +17,7 @@ template <typename Begin>
 using observer_ptr = std::shared_ptr<observer<Begin>>;
 
 template <typename Begin>
-struct[[nodiscard]] observer final : any_observer {
+struct [[nodiscard]] observer final : any_observer {
     ~observer();
 
     virtual void fetch() override;

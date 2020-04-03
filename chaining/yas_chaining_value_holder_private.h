@@ -5,6 +5,7 @@
 #pragma once
 
 #include <mutex>
+
 #include "yas_chaining_chain.h"
 
 namespace yas::chaining::value {
@@ -30,10 +31,14 @@ void holder<T>::set_value(T const &value) {
 }
 
 template <typename T>
-[[nodiscard]] T const &holder<T>::raw() const { return this->_value; }
+[[nodiscard]] T const &holder<T>::raw() const {
+    return this->_value;
+}
 
 template <typename T>
-[[nodiscard]] T &holder<T>::raw() { return this->_value; }
+[[nodiscard]] T &holder<T>::raw() {
+    return this->_value;
+}
 
 template <typename T>
 chain_sync_t<T> holder<T>::chain() {
