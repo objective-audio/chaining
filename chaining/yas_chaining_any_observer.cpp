@@ -3,6 +3,7 @@
 //
 
 #include "yas_chaining_any_observer.h"
+
 #include "yas_chaining_observer_pool.h"
 
 using namespace yas;

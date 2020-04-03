@@ -5,6 +5,7 @@
 #pragma once
 
 #include <vector>
+
 #include "yas_chaining_any_observer.h"
 #include "yas_chaining_event.h"
 #include "yas_chaining_receiver.h"

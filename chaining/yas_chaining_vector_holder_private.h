@@ -5,6 +5,7 @@
 #pragma once
 
 #include <cpp_utils/yas_stl_utils.h>
+
 #include "yas_chaining_chain.h"
 
 namespace yas::chaining::vector {

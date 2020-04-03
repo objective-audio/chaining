@@ -14,7 +14,7 @@ template <typename T = std::nullptr_t>
 using perform_receiver_ptr = std::shared_ptr<perform_receiver<T>>;
 
 template <typename T = std::nullptr_t>
-struct[[nodiscard]] perform_receiver final : receiver<T> {
+struct [[nodiscard]] perform_receiver final : receiver<T> {
     void receive_value(T const &) override;
 
     static perform_receiver_ptr<T> make_shared(std::function<void(T const &)> const &);
