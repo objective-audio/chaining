@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "yas_chaining_receiver.h"
+#include <chaining/yas_chaining_receiver.h>
 
 namespace yas::chaining {
 template <typename T>
@@ -30,4 +30,4 @@ struct [[nodiscard]] perform_receiver final : receiver<T> {
 };
 }  // namespace yas::chaining
 
-#include "yas_chaining_perform_receiver_private.h"
+#include <chaining/yas_chaining_perform_receiver_private.h>

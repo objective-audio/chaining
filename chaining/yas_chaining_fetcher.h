@@ -4,10 +4,10 @@
 
 #pragma once
 
-#include <optional>
+#include <chaining/yas_chaining_receiver.h>
+#include <chaining/yas_chaining_sender.h>
 
-#include "yas_chaining_receiver.h"
-#include "yas_chaining_sender.h"
+#include <optional>
 
 namespace yas::chaining {
 template <typename T>
@@ -43,4 +43,4 @@ struct fetcher final : sender<T>, receiver<> {
 };
 }  // namespace yas::chaining
 
-#include "yas_chaining_fetcher_private.h"
+#include <chaining/yas_chaining_fetcher_private.h>

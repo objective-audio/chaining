@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "yas_chaining_receiver.h"
-#include "yas_chaining_sender.h"
+#include <chaining/yas_chaining_receiver.h>
+#include <chaining/yas_chaining_sender.h>
 
 namespace yas::chaining {
 template <typename T>
@@ -38,4 +38,4 @@ struct notifier final : sender<T>, receiver<T> {
 };
 }  // namespace yas::chaining
 
-#include "yas_chaining_notifier_private.h"
+#include <chaining/yas_chaining_notifier_private.h>

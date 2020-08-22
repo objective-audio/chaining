@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "yas_chaining_any_observer.h"
+#include <chaining/yas_chaining_any_observer.h>
 
 namespace yas::chaining {
 template <typename T>
@@ -32,4 +32,4 @@ struct [[nodiscard]] observer final : any_observer {
 };
 }  // namespace yas::chaining
 
-#include "yas_chaining_observer_private.h"
+#include <chaining/yas_chaining_observer_private.h>

@@ -74,4 +74,4 @@ template <typename T>
 joint_ptr<T> make_joint(std::weak_ptr<sender<T>>);
 }  // namespace yas::chaining
 
-#include "yas_chaining_joint_private.h"
+#include <chaining/yas_chaining_joint_private.h>
