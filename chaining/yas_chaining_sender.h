@@ -4,12 +4,11 @@
 
 #pragma once
 
+#include <chaining/yas_chaining_joint.h>
+#include <chaining/yas_chaining_types.h>
 #include <cpp_utils/yas_stl_utils.h>
 
 #include <memory>
-
-#include "yas_chaining_joint.h"
-#include "yas_chaining_types.h"
 
 namespace yas::chaining {
 class any_joint;
@@ -59,4 +58,4 @@ template <typename T, typename V = void>
 using disable_if_base_of_sender_t = typename std::enable_if_t<!is_base_of_sender<T>::value, V>;
 }  // namespace yas::chaining
 
-#include "yas_chaining_sender_private.h"
+#include <chaining/yas_chaining_sender_private.h>

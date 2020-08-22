@@ -4,9 +4,8 @@
 
 #pragma once
 
+#include <chaining/yas_chaining_chain.h>
 #include <cpp_utils/yas_stl_utils.h>
-
-#include "yas_chaining_chain.h"
 
 namespace yas::chaining::map {
 template <typename Key, typename Value>

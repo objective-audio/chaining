@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include "yas_chaining_invalidatable.h"
+#include <chaining/yas_chaining_invalidatable.h>
 
 namespace yas::chaining {
 class any_observer;

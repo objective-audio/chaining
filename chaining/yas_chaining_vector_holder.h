@@ -4,12 +4,12 @@
 
 #pragma once
 
-#include <vector>
+#include <chaining/yas_chaining_any_observer.h>
+#include <chaining/yas_chaining_event.h>
+#include <chaining/yas_chaining_receiver.h>
+#include <chaining/yas_chaining_sender.h>
 
-#include "yas_chaining_any_observer.h"
-#include "yas_chaining_event.h"
-#include "yas_chaining_receiver.h"
-#include "yas_chaining_sender.h"
+#include <vector>
 
 namespace yas::chaining::vector {
 struct event : chaining::event {
@@ -147,4 +147,4 @@ struct holder final : sender<event>, receiver<event> {
 };
 }  // namespace yas::chaining::vector
 
-#include "yas_chaining_vector_holder_private.h"
+#include <chaining/yas_chaining_vector_holder_private.h>

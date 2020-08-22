@@ -37,4 +37,4 @@ struct event {
 };
 }  // namespace yas::chaining
 
-#include "yas_chaining_event_private.h"
+#include <chaining/yas_chaining_event_private.h>

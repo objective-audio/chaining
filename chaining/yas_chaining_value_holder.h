@@ -4,8 +4,8 @@
 
 #pragma once
 
-#include "yas_chaining_receiver.h"
-#include "yas_chaining_sender.h"
+#include <chaining/yas_chaining_receiver.h>
+#include <chaining/yas_chaining_sender.h>
 
 namespace yas::chaining::value {
 template <typename T>
@@ -45,4 +45,4 @@ struct holder final : sender<T>, receiver<T> {
 };
 }  // namespace yas::chaining::value
 
-#include "yas_chaining_value_holder_private.h"
+#include <chaining/yas_chaining_value_holder_private.h>

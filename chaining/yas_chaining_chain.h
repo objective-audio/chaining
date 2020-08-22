@@ -4,11 +4,10 @@
 
 #pragma once
 
+#include <chaining/yas_chaining_receiver.h>
 #include <cpp_utils/yas_type_traits.h>
 
 #include <functional>
-
-#include "yas_chaining_receiver.h"
 
 namespace yas::chaining {
 template <typename T>
@@ -58,4 +57,4 @@ struct [[nodiscard]] chain final {
 };
 }  // namespace yas::chaining
 
-#include "yas_chaining_chain_private.h"
+#include <chaining/yas_chaining_chain_private.h>

@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include <vector>
+#include <chaining/yas_chaining_joint.h>
 
-#include "yas_chaining_joint.h"
+#include <vector>
 
 namespace yas::chaining {
 template <typename Begin>
