@@ -33,4 +33,4 @@ jobs:
         xcodebuild -workspace chaining_mac.xcworkspace -scheme chaining_mac_tests -configuration Debug OBJROOT=build -sdk macosx clean test
     - name: Run iOS tests
       run:
-        xcodebuild -workspace chaining_ios.xcworkspace -scheme chaining_ios_tests -configuration Debug OBJROOT=build -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 8' clean test
+        xcodebuild -workspace chaining_ios.xcworkspace -scheme chaining_ios_tests -configuration Debug OBJROOT=build -sdk iphonesimulator -destination 'platform=iOS Simulator,name=iPhone 11' clean test
