@@ -6,8 +6,6 @@
 
 #include <chaining/yas_chaining_chain.h>
 
-#include <mutex>
-
 namespace yas::chaining {
 template <typename T>
 fetcher<T>::fetcher(std::function<std::optional<T>(void)> &&handler) : _fetching_handler(std::move(handler)) {

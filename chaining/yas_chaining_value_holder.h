@@ -32,7 +32,6 @@ struct holder final : sender<T>, receiver<T> {
 
    private:
     T _value;
-    std::mutex _set_mutex;
 
     holder(T &&);
 

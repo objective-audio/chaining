@@ -6,8 +6,6 @@
 
 #include <chaining/yas_chaining_chain.h>
 
-#include <mutex>
-
 namespace yas::chaining::value {
 template <typename T>
 holder<T>::holder(T &&value) : _value(std::move(value)) {

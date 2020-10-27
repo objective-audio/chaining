@@ -6,8 +6,6 @@
 
 #include <chaining/yas_chaining_chain.h>
 
-#include <mutex>
-
 namespace yas::chaining {
 template <typename T>
 notifier<T>::notifier() {
