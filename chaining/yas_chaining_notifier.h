@@ -25,8 +25,6 @@ struct notifier final : sender<T>, receiver<T> {
     static notifier_ptr<T> make_shared();
 
    private:
-    std::mutex _send_mutex;
-
     notifier();
 
     notifier(notifier const &) = delete;
