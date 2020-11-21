@@ -5,6 +5,7 @@
 #pragma once
 
 #include <chaining/yas_chaining_fetcher.h>
+#include <chaining/yas_chaining_handler.h>
 #include <chaining/yas_chaining_map_holder.h>
 #include <chaining/yas_chaining_multimap_holder.h>
 #include <chaining/yas_chaining_notifier.h>

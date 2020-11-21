@@ -8,8 +8,8 @@
 
 namespace yas::chaining {
 template <typename P>
-any_joint::handler_f<P> const &any_joint::handler(std::size_t const idx) const {
-    return *std::any_cast<handler_f<P>>(&this->any_handler(idx));
+joint_handler_f<P> const &any_joint::handler(std::size_t const idx) const {
+    return this->any_handler(idx)->get<P>();
 }
 
 template <typename T>
@@ -27,7 +27,11 @@ template <typename T>
 void joint<T>::call_first(T const &value) {
     if (auto lock = std::unique_lock<std::mutex>(this->_send_mutex, std::try_to_lock); lock.owns_lock()) {
         if (this->_handlers.size() > 0) {
-            this->handler<T>(0)(value, *this);
+            if (auto const &handler = this->handler<T>(0)) {
+                handler(value, *this);
+            } else {
+                throw std::runtime_error("handler type do not match.");
+            }
         } else if (!this->_pushed) {
             throw std::runtime_error("handler not pushed. must call the end.");
         }
@@ -51,8 +55,8 @@ void joint<T>::invalidate() {
 
 template <typename T>
 template <typename P>
-void joint<T>::push_handler(any_joint::handler_f<P> handler) {
-    this->_handlers.emplace_back(std::move(handler));
+void joint<T>::push_handler(joint_handler_f<P> handler) {
+    this->_handlers.emplace_back(any_handler::make_shared(std::move(handler)));
     this->_pushed = true;
 }
 
@@ -78,7 +82,7 @@ void joint<T>::fetch() {
 }
 
 template <typename T>
-std::any const &joint<T>::any_handler(std::size_t const idx) const {
+any_handler_ptr const &joint<T>::any_handler(std::size_t const idx) const {
     return this->_handlers.at(idx);
 }
 
