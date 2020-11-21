@@ -3,8 +3,7 @@
 //
 
 #import <XCTest/XCTest.h>
-#import <chaining/yas_chaining_notifier.h>
-#import <chaining/yas_chaining_perform_receiver.h>
+#import <chaining/chaining.h>
 
 using namespace yas;
 
