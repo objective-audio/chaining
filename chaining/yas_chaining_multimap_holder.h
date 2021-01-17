@@ -69,8 +69,8 @@ struct holder final : sender<event> {
 
     ~holder();
 
-    [[nodiscard]] std::multimap<Key, Value> const &raw() const;
-    [[nodiscard]] std::multimap<Key, Value> &raw();
+    [[nodiscard]] std::multimap<Key, Value> const &value() const;
+    [[nodiscard]] std::multimap<Key, Value> &value();
 
     [[nodiscard]] std::size_t size() const;
     void replace(std::multimap<Key, Value>);

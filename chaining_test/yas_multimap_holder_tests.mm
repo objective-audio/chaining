@@ -29,7 +29,7 @@ using namespace yas::chaining;
 - (void)test_get_raw {
     auto holder = multimap::holder<int, std::string>::make_shared({{0, "10"}, {1, "11"}, {2, "12"}});
 
-    XCTAssertEqual(holder->raw(), (std::multimap<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));
+    XCTAssertEqual(holder->value(), (std::multimap<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));
 }
 
 - (void)test_size {
@@ -46,36 +46,36 @@ using namespace yas::chaining;
     auto holder = multimap::holder<int, std::string>::make_shared({{0, "10"}, {1, "11"}});
 
     XCTAssertEqual(holder->size(), 2);
-    XCTAssertEqual(holder->raw(), (std::multimap<int, std::string>{{0, "10"}, {1, "11"}}));
+    XCTAssertEqual(holder->value(), (std::multimap<int, std::string>{{0, "10"}, {1, "11"}}));
 
     holder->replace({{2, "12"}});
 
     XCTAssertEqual(holder->size(), 1);
-    XCTAssertEqual(holder->raw(), (std::multimap<int, std::string>{{2, "12"}}));
+    XCTAssertEqual(holder->value(), (std::multimap<int, std::string>{{2, "12"}}));
 }
 
 - (void)test_insert_multimap {
     auto holder = multimap::holder<int, std::string>::make_shared({{1, "11"}});
 
     XCTAssertEqual(holder->size(), 1);
-    XCTAssertEqual(holder->raw(), (std::multimap<int, std::string>{{1, "11"}}));
+    XCTAssertEqual(holder->value(), (std::multimap<int, std::string>{{1, "11"}}));
 
     holder->insert(std::multimap<int, std::string>{{{0, "10"}, {2, "12"}}});
 
     XCTAssertEqual(holder->size(), 3);
-    XCTAssertEqual(holder->raw(), (std::multimap<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));
+    XCTAssertEqual(holder->value(), (std::multimap<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));
 }
 
 - (void)test_insert_single {
     auto holder = multimap::holder<int, std::string>::make_shared({{0, "10"}, {2, "12"}});
 
     XCTAssertEqual(holder->size(), 2);
-    XCTAssertEqual(holder->raw(), (std::multimap<int, std::string>{{0, "10"}, {2, "12"}}));
+    XCTAssertEqual(holder->value(), (std::multimap<int, std::string>{{0, "10"}, {2, "12"}}));
 
     holder->insert(1, "11");
 
     XCTAssertEqual(holder->size(), 3);
-    XCTAssertEqual(holder->raw(), (std::multimap<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));
+    XCTAssertEqual(holder->value(), (std::multimap<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));
 }
 
 - (void)test_erase_if {
