@@ -21,8 +21,8 @@ struct holder final : sender<T>, receiver<T> {
     void set_value(T &&);
     void set_value(T const &);
 
-    [[nodiscard]] T const &raw() const;
-    [[nodiscard]] T &raw();
+    [[nodiscard]] T const &value() const;
+    [[nodiscard]] T &value();
 
     [[nodiscard]] chain_sync_t<T> chain();
 

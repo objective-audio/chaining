@@ -48,33 +48,33 @@ template <typename Key, typename Value>
 holder<Key, Value>::~holder() = default;
 
 template <typename Key, typename Value>
-std::map<Key, Value> const &holder<Key, Value>::raw() const {
+std::map<Key, Value> const &holder<Key, Value>::value() const {
     return this->_raw;
 }
 
 template <typename Key, typename Value>
-std::map<Key, Value> &holder<Key, Value>::raw() {
+std::map<Key, Value> &holder<Key, Value>::value() {
     return this->_raw;
 }
 
 template <typename Key, typename Value>
 bool holder<Key, Value>::has_value(Key const &key) const {
-    return this->raw().count(key) > 0;
+    return this->value().count(key) > 0;
 }
 
 template <typename Key, typename Value>
 Value const &holder<Key, Value>::at(Key const &key) const {
-    return this->raw().at(key);
+    return this->value().at(key);
 }
 
 template <typename Key, typename Value>
 Value &holder<Key, Value>::at(Key const &key) {
-    return this->raw().at(key);
+    return this->value().at(key);
 }
 
 template <typename Key, typename Value>
 std::size_t holder<Key, Value>::size() const {
-    return this->raw().size();
+    return this->value().size();
 }
 
 template <typename Key, typename Value>
@@ -188,7 +188,7 @@ void holder<Key, Value>::receive_value(map::event const &event) {
 
 template <typename Key, typename Value>
 void holder<Key, Value>::fetch_for(any_joint const &joint) const {
-    this->send_value_to_target(make_fetched_event(this->raw()), joint.identifier());
+    this->send_value_to_target(make_fetched_event(this->value()), joint.identifier());
 }
 
 template <typename Key, typename Value>

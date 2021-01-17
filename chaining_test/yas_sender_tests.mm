@@ -10,7 +10,7 @@ using namespace yas;
 namespace yas::test {
 struct wrapped_sender : chaining::sender<int> {
     int value() const {
-        return this->_holder->raw();
+        return this->_holder->value();
     }
 
     void set_value(int const value) {

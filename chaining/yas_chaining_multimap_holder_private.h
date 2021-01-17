@@ -48,18 +48,18 @@ template <typename Key, typename Value>
 holder<Key, Value>::~holder() = default;
 
 template <typename Key, typename Value>
-std::multimap<Key, Value> const &holder<Key, Value>::raw() const {
+std::multimap<Key, Value> const &holder<Key, Value>::value() const {
     return this->_raw;
 }
 
 template <typename Key, typename Value>
-std::multimap<Key, Value> &holder<Key, Value>::raw() {
+std::multimap<Key, Value> &holder<Key, Value>::value() {
     return this->_raw;
 }
 
 template <typename Key, typename Value>
 std::size_t holder<Key, Value>::size() const {
-    return this->raw().size();
+    return this->_raw.size();
 }
 
 template <typename Key, typename Value>
@@ -132,7 +132,7 @@ typename holder<Key, Value>::chain_t holder<Key, Value>::holder<Key, Value>::cha
 
 template <typename Key, typename Value>
 void holder<Key, Value>::fetch_for(any_joint const &joint) const {
-    this->send_value_to_target(make_fetched_event(this->raw()), joint.identifier());
+    this->send_value_to_target(make_fetched_event(this->value()), joint.identifier());
 }
 
 template <typename Key, typename Value>
