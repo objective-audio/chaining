@@ -39,23 +39,23 @@ event make_relayed_event(T const &element, std::size_t const idx, typename T::el
 }
 
 template <typename T>
-typename holder<T>::vector_t const &holder<T>::raw() const {
+typename holder<T>::vector_t const &holder<T>::value() const {
     return this->_raw;
 }
 
 template <typename T>
-typename holder<T>::vector_t &holder<T>::raw() {
+typename holder<T>::vector_t &holder<T>::value() {
     return this->_raw;
 }
 
 template <typename T>
 T const &holder<T>::at(std::size_t const idx) const {
-    return this->raw().at(idx);
+    return this->value().at(idx);
 }
 
 template <typename T>
 std::size_t holder<T>::size() const {
-    return this->raw().size();
+    return this->value().size();
 }
 
 template <typename T>
@@ -153,7 +153,7 @@ void holder<T>::receive_value(vector::event const &event) {
 
 template <typename T>
 void holder<T>::fetch_for(any_joint const &joint) const {
-    this->send_value_to_target(make_fetched_event(this->raw()), joint.identifier());
+    this->send_value_to_target(make_fetched_event(this->value()), joint.identifier());
 }
 
 template <typename T>

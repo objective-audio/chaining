@@ -68,8 +68,8 @@ struct holder final : sender<event>, receiver<event> {
     using vector_t = std::vector<T>;
     using chain_t = chain<event, event, true>;
 
-    [[nodiscard]] vector_t const &raw() const;
-    [[nodiscard]] vector_t &raw();
+    [[nodiscard]] vector_t const &value() const;
+    [[nodiscard]] vector_t &value();
     [[nodiscard]] T const &at(std::size_t const) const;
     [[nodiscard]] std::size_t size() const;
 
