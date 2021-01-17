@@ -56,12 +56,12 @@ using namespace yas::chaining;
     auto holder = map::holder<int, std::string>::make_shared({{0, "10"}, {1, "11"}});
 
     XCTAssertEqual(holder->size(), 2);
-    XCTAssertEqual(holder->raw(), (std::map<int, std::string>{{0, "10"}, {1, "11"}}));
+    XCTAssertEqual(holder->value(), (std::map<int, std::string>{{0, "10"}, {1, "11"}}));
 
     holder->replace_all({{2, "12"}});
 
     XCTAssertEqual(holder->size(), 1);
-    XCTAssertEqual(holder->raw(), (std::map<int, std::string>{{2, "12"}}));
+    XCTAssertEqual(holder->value(), (std::map<int, std::string>{{2, "12"}}));
 }
 
 - (void)test_replace_by_insert_or_replace {
@@ -70,31 +70,31 @@ using namespace yas::chaining;
     holder->insert_or_replace(0, "100");
 
     XCTAssertEqual(holder->size(), 2);
-    XCTAssertEqual(holder->raw(), (std::map<int, std::string>{{0, "100"}, {1, "11"}}));
+    XCTAssertEqual(holder->value(), (std::map<int, std::string>{{0, "100"}, {1, "11"}}));
 }
 
 - (void)test_insert_by_insert_or_replace {
     auto holder = map::holder<int, std::string>::make_shared({{0, "10"}, {2, "12"}});
 
     XCTAssertEqual(holder->size(), 2);
-    XCTAssertEqual(holder->raw(), (std::map<int, std::string>{{0, "10"}, {2, "12"}}));
+    XCTAssertEqual(holder->value(), (std::map<int, std::string>{{0, "10"}, {2, "12"}}));
 
     holder->insert_or_replace(1, "11");
 
     XCTAssertEqual(holder->size(), 3);
-    XCTAssertEqual(holder->raw(), (std::map<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));
+    XCTAssertEqual(holder->value(), (std::map<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));
 }
 
 - (void)test_insert_map {
     auto holder = map::holder<int, std::string>::make_shared({{1, "11"}});
 
     XCTAssertEqual(holder->size(), 1);
-    XCTAssertEqual(holder->raw(), (std::map<int, std::string>{{1, "11"}}));
+    XCTAssertEqual(holder->value(), (std::map<int, std::string>{{1, "11"}}));
 
     holder->insert(std::map<int, std::string>{{{0, "10"}, {2, "12"}}});
 
     XCTAssertEqual(holder->size(), 3);
-    XCTAssertEqual(holder->raw(), (std::map<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));
+    XCTAssertEqual(holder->value(), (std::map<int, std::string>{{0, "10"}, {1, "11"}, {2, "12"}}));
 }
 
 - (void)test_erase_if {

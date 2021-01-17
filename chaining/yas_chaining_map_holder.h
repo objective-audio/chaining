@@ -69,8 +69,8 @@ struct holder final : sender<event>, receiver<event> {
 
     ~holder();
 
-    [[nodiscard]] std::map<Key, Value> const &raw() const;
-    [[nodiscard]] std::map<Key, Value> &raw();
+    [[nodiscard]] std::map<Key, Value> const &value() const;
+    [[nodiscard]] std::map<Key, Value> &value();
 
     [[nodiscard]] bool has_value(Key const &) const;
     [[nodiscard]] Value const &at(Key const &) const;
