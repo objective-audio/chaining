@@ -29,12 +29,12 @@ void holder<T>::set_value(T const &value) {
 }
 
 template <typename T>
-[[nodiscard]] T const &holder<T>::raw() const {
+[[nodiscard]] T const &holder<T>::value() const {
     return this->_value;
 }
 
 template <typename T>
-[[nodiscard]] T &holder<T>::raw() {
+[[nodiscard]] T &holder<T>::value() {
     return this->_value;
 }
 
@@ -50,7 +50,7 @@ void holder<T>::receive_value(T const &value) {
 
 template <typename T>
 void holder<T>::fetch_for(any_joint const &joint) const {
-    this->send_value_to_target(this->raw(), joint.identifier());
+    this->send_value_to_target(this->value(), joint.identifier());
 }
 
 template <typename T>
