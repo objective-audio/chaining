@@ -14,3 +14,4 @@
 #include <chaining/yas_chaining_utils.h>
 #include <chaining/yas_chaining_value_holder.h>
 #include <chaining/yas_chaining_vector_holder.h>
+#include <chaining/yas_observing_umbrella.h>

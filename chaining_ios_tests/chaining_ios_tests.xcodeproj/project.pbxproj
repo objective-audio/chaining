@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		B6570DF825695B1700C1E424 /* yas_handler_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6570DF725695B1600C1E424 /* yas_handler_tests.mm */; };
+		B6C0CECF25B7263300F9E25D /* yas_observing_caller_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6C0CECB25B7263300F9E25D /* yas_observing_caller_tests.mm */; };
+		B6C0CED025B7263300F9E25D /* yas_observing_value_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6C0CECC25B7263300F9E25D /* yas_observing_value_holder_tests.mm */; };
+		B6C0CED125B7263300F9E25D /* yas_observing_canceller_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6C0CECD25B7263300F9E25D /* yas_observing_canceller_tests.mm */; };
+		B6C0CED225B7263300F9E25D /* yas_observing_notifier_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6C0CECE25B7263300F9E25D /* yas_observing_notifier_tests.mm */; };
 		B6DE364F21E7854700E49BCB /* yas_map_holder_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DE363E21E7854700E49BCB /* yas_map_holder_chain_tests.mm */; };
 		B6DE365021E7854700E49BCB /* yas_observer_pool_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DE363F21E7854700E49BCB /* yas_observer_pool_tests.mm */; };
 		B6DE365121E7854700E49BCB /* yas_chaining_utils_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DE364021E7854700E49BCB /* yas_chaining_utils_tests.mm */; };
@@ -31,6 +35,10 @@
 
 /* Begin PBXFileReference section */
 		B6570DF725695B1600C1E424 /* yas_handler_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_handler_tests.mm; sourceTree = "<group>"; };
+		B6C0CECB25B7263300F9E25D /* yas_observing_caller_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observing_caller_tests.mm; sourceTree = "<group>"; };
+		B6C0CECC25B7263300F9E25D /* yas_observing_value_holder_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observing_value_holder_tests.mm; sourceTree = "<group>"; };
+		B6C0CECD25B7263300F9E25D /* yas_observing_canceller_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observing_canceller_tests.mm; sourceTree = "<group>"; };
+		B6C0CECE25B7263300F9E25D /* yas_observing_notifier_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observing_notifier_tests.mm; sourceTree = "<group>"; };
 		B6DE363421E7850D00E49BCB /* chaining_ios_tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chaining_ios_tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6DE363921E7850E00E49BCB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B6DE363E21E7854700E49BCB /* yas_map_holder_chain_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_map_holder_chain_tests.mm; sourceTree = "<group>"; };
@@ -114,6 +122,10 @@
 				B6DE364D21E7854700E49BCB /* yas_multimap_holder_chain_tests.mm */,
 				B6DE364E21E7854700E49BCB /* yas_fetcher_tests.mm */,
 				B6570DF725695B1600C1E424 /* yas_handler_tests.mm */,
+				B6C0CECB25B7263300F9E25D /* yas_observing_caller_tests.mm */,
+				B6C0CECD25B7263300F9E25D /* yas_observing_canceller_tests.mm */,
+				B6C0CECE25B7263300F9E25D /* yas_observing_notifier_tests.mm */,
+				B6C0CECC25B7263300F9E25D /* yas_observing_value_holder_tests.mm */,
 			);
 			name = chaining_test;
 			path = ../../chaining_test;
@@ -226,7 +238,11 @@
 				B6570DF825695B1700C1E424 /* yas_handler_tests.mm in Sources */,
 				B6DE365221E7854700E49BCB /* yas_map_holder_tests.mm in Sources */,
 				B6DE365321E7854700E49BCB /* yas_vector_holder_chain_tests.mm in Sources */,
+				B6C0CED225B7263300F9E25D /* yas_observing_notifier_tests.mm in Sources */,
+				B6C0CECF25B7263300F9E25D /* yas_observing_caller_tests.mm in Sources */,
 				B6DE365C21E7854700E49BCB /* yas_value_holder_tests.mm in Sources */,
+				B6C0CED125B7263300F9E25D /* yas_observing_canceller_tests.mm in Sources */,
+				B6C0CED025B7263300F9E25D /* yas_observing_value_holder_tests.mm in Sources */,
 				B6DE365121E7854700E49BCB /* yas_chaining_utils_tests.mm in Sources */,
 				B6DE365521E7854700E49BCB /* yas_chain_tests.mm in Sources */,
 				B6DE365821E7854700E49BCB /* yas_vector_event_tests.mm in Sources */,
