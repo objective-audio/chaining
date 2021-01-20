@@ -12,6 +12,7 @@
 		B653AFC725B5C29D00FB1D88 /* yas_observing_caller_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B653AFC625B5C29D00FB1D88 /* yas_observing_caller_tests.mm */; };
 		B6570DD425692B9A00C1E424 /* yas_handler_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6570DD325692B9A00C1E424 /* yas_handler_tests.mm */; };
 		B68F4E6325B710DE00A223C6 /* yas_observing_value_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B68F4E6225B710DE00A223C6 /* yas_observing_value_holder_tests.mm */; };
+		B6C0CEF325B7305300F9E25D /* yas_observing_canceller_pool_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6C0CEF225B7305300F9E25D /* yas_observing_canceller_pool_tests.mm */; };
 		B6D2C0FC231907C500067968 /* yas_sender_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6D2C0FB231907C500067968 /* yas_sender_tests.mm */; };
 		B6D4C60F21EDC96D004A95A8 /* yas_vector_holder_chain_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DE360321E7843800E49BCB /* yas_vector_holder_chain_tests.mm */; };
 		B6D4C61221EDDF37004A95A8 /* yas_vector_event_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6DE360821E7843800E49BCB /* yas_vector_event_tests.mm */; };
@@ -41,6 +42,7 @@
 		B653AFC625B5C29D00FB1D88 /* yas_observing_caller_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observing_caller_tests.mm; sourceTree = "<group>"; };
 		B6570DD325692B9A00C1E424 /* yas_handler_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_handler_tests.mm; sourceTree = "<group>"; };
 		B68F4E6225B710DE00A223C6 /* yas_observing_value_holder_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observing_value_holder_tests.mm; sourceTree = "<group>"; };
+		B6C0CEF225B7305300F9E25D /* yas_observing_canceller_pool_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observing_canceller_pool_tests.mm; sourceTree = "<group>"; };
 		B6D2C0FB231907C500067968 /* yas_sender_tests.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_sender_tests.mm; sourceTree = "<group>"; };
 		B6DE35F521E783E100E49BCB /* chaining_mac_tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = chaining_mac_tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6DE35FA21E783E100E49BCB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -112,7 +114,8 @@
 				B6DE360521E7843800E49BCB /* yas_chain_tests.mm */,
 				B6DE360121E7843800E49BCB /* yas_chaining_utils_tests.mm */,
 				B6DE360F21E7843800E49BCB /* yas_fetcher_tests.mm */,
-				B6DE360C21E7843800E49BCB /* yas_value_holder_tests.mm */,
+				B6570DD325692B9A00C1E424 /* yas_handler_tests.mm */,
+				B6FBAF6223B6F7400080DAF1 /* yas_invalidatable_tests.mm */,
 				B6DE35FF21E7843800E49BCB /* yas_map_holder_chain_tests.mm */,
 				B6DE360221E7843800E49BCB /* yas_map_holder_tests.mm */,
 				B6DE360E21E7843800E49BCB /* yas_multimap_holder_chain_tests.mm */,
@@ -120,19 +123,19 @@
 				B6DE360A21E7843800E49BCB /* yas_notifier_tests.mm */,
 				B6DE360021E7843800E49BCB /* yas_observer_pool_tests.mm */,
 				B6DE360B21E7843800E49BCB /* yas_observer_tests.mm */,
+				B653AFC625B5C29D00FB1D88 /* yas_observing_caller_tests.mm */,
+				B6C0CEF225B7305300F9E25D /* yas_observing_canceller_pool_tests.mm */,
+				B646F3B525B5B11200CDB9DD /* yas_observing_canceller_tests.mm */,
+				B62F1A6E25B7016800583110 /* yas_observing_notifier_tests.mm */,
+				B68F4E6225B710DE00A223C6 /* yas_observing_value_holder_tests.mm */,
 				B6DE360721E7843800E49BCB /* yas_receiver_tests.mm */,
+				B6D2C0FB231907C500067968 /* yas_sender_tests.mm */,
 				B6DE360921E7843800E49BCB /* yas_sync_tests.mm */,
 				B6DE360621E7843800E49BCB /* yas_to_tests.mm */,
+				B6DE360C21E7843800E49BCB /* yas_value_holder_tests.mm */,
 				B6DE360821E7843800E49BCB /* yas_vector_event_tests.mm */,
 				B6DE360321E7843800E49BCB /* yas_vector_holder_chain_tests.mm */,
 				B6DE360421E7843800E49BCB /* yas_vector_holder_tests.mm */,
-				B6D2C0FB231907C500067968 /* yas_sender_tests.mm */,
-				B6FBAF6223B6F7400080DAF1 /* yas_invalidatable_tests.mm */,
-				B6570DD325692B9A00C1E424 /* yas_handler_tests.mm */,
-				B646F3B525B5B11200CDB9DD /* yas_observing_canceller_tests.mm */,
-				B653AFC625B5C29D00FB1D88 /* yas_observing_caller_tests.mm */,
-				B62F1A6E25B7016800583110 /* yas_observing_notifier_tests.mm */,
-				B68F4E6225B710DE00A223C6 /* yas_observing_value_holder_tests.mm */,
 			);
 			name = chaining_test;
 			path = ../../chaining_test;
@@ -242,6 +245,7 @@
 				B6DE361821E7843800E49BCB /* yas_receiver_tests.mm in Sources */,
 				B6DE361721E7843800E49BCB /* yas_to_tests.mm in Sources */,
 				B646F3B625B5B11200CDB9DD /* yas_observing_canceller_tests.mm in Sources */,
+				B6C0CEF325B7305300F9E25D /* yas_observing_canceller_pool_tests.mm in Sources */,
 				B6DE361A21E7843800E49BCB /* yas_sync_tests.mm in Sources */,
 				B6DE361B21E7843800E49BCB /* yas_notifier_tests.mm in Sources */,
 				B6FBAF6323B6F7400080DAF1 /* yas_invalidatable_tests.mm in Sources */,
