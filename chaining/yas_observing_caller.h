@@ -20,8 +20,13 @@ struct caller {
     void call(T const &);
 
    private:
+    struct handler_container {
+        bool enabled = true;
+        handler_f handler;
+    };
+
     uint32_t _next_idx = 0;
-    std::map<uint32_t, handler_f> _handlers;
+    std::map<uint32_t, handler_container> _handlers;
     std::vector<canceller_wptr> _cancellers;
 };
 }  // namespace yas::observing
