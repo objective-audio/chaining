@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B6317F7925BB277900E5541C /* yas_observing_fetcher_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6317F7825BB277900E5541C /* yas_observing_fetcher_tests.mm */; };
 		B6570DF825695B1700C1E424 /* yas_handler_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6570DF725695B1600C1E424 /* yas_handler_tests.mm */; };
 		B6C0CECF25B7263300F9E25D /* yas_observing_caller_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6C0CECB25B7263300F9E25D /* yas_observing_caller_tests.mm */; };
 		B6C0CED025B7263300F9E25D /* yas_observing_value_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6C0CECC25B7263300F9E25D /* yas_observing_value_holder_tests.mm */; };
@@ -35,6 +36,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B6317F7825BB277900E5541C /* yas_observing_fetcher_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observing_fetcher_tests.mm; sourceTree = "<group>"; };
 		B6570DF725695B1600C1E424 /* yas_handler_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_handler_tests.mm; sourceTree = "<group>"; };
 		B6C0CECB25B7263300F9E25D /* yas_observing_caller_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observing_caller_tests.mm; sourceTree = "<group>"; };
 		B6C0CECC25B7263300F9E25D /* yas_observing_value_holder_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observing_value_holder_tests.mm; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 				B6C0CECB25B7263300F9E25D /* yas_observing_caller_tests.mm */,
 				B6C0CEF625B7309400F9E25D /* yas_observing_canceller_pool_tests.mm */,
 				B6C0CECD25B7263300F9E25D /* yas_observing_canceller_tests.mm */,
+				B6317F7825BB277900E5541C /* yas_observing_fetcher_tests.mm */,
 				B6C0CECE25B7263300F9E25D /* yas_observing_notifier_tests.mm */,
 				B6C0CECC25B7263300F9E25D /* yas_observing_value_holder_tests.mm */,
 				B6DE364621E7854700E49BCB /* yas_receiver_tests.mm */,
@@ -233,6 +236,7 @@
 				B6DE365E21E7854700E49BCB /* yas_multimap_holder_chain_tests.mm in Sources */,
 				B6DE365D21E7854700E49BCB /* yas_multimap_holder_tests.mm in Sources */,
 				B6DE365721E7854700E49BCB /* yas_receiver_tests.mm in Sources */,
+				B6317F7925BB277900E5541C /* yas_observing_fetcher_tests.mm in Sources */,
 				B6DE365621E7854700E49BCB /* yas_to_tests.mm in Sources */,
 				B6DE365921E7854700E49BCB /* yas_sync_tests.mm in Sources */,
 				B6DE365A21E7854700E49BCB /* yas_notifier_tests.mm in Sources */,
