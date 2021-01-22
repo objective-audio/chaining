@@ -31,8 +31,8 @@ template <typename T>
 }
 
 template <typename T>
-[[nodiscard]] canceller_ptr holder<T>::observe(typename caller<T>::handler_f &&handler, bool const bind) {
-    if (bind) {
+[[nodiscard]] canceller_ptr holder<T>::observe(typename caller<T>::handler_f &&handler, bool const sync) {
+    if (sync) {
         handler(this->_value);
     }
     return this->_caller.add(std::move(handler));
