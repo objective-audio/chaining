@@ -20,7 +20,7 @@ struct holder final {
 
     [[nodiscard]] T const &value() const;
 
-    [[nodiscard]] canceller_ptr observe(typename caller<T>::handler_f &&, bool const bind = true);
+    [[nodiscard]] canceller_ptr observe(typename caller<T>::handler_f &&, bool const sync = true);
 
     [[nodiscard]] static holder_ptr<T> make_shared(T const &);
     [[nodiscard]] static holder_ptr<T> make_shared(T &&);

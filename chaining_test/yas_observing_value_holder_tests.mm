@@ -71,7 +71,7 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 2);
 }
 
-- (void)test_observe_without_bind {
+- (void)test_observe_without_sync {
     auto const holder = value::holder<int>::make_shared(200);
 
     std::vector<int> called;
