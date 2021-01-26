@@ -20,14 +20,14 @@ struct invalidator_pool : invalidatable {
 
     ~invalidator_pool();
 
-    void add_invalidator(canceller_ptr);
+    void add_invalidator(invalidatable_ptr);
 
     void invalidate() override;
 
     [[nodiscard]] static invalidator_pool_ptr make_shared();
 
    private:
-    std::vector<canceller_ptr> _cancellers;
+    std::vector<invalidatable_ptr> _invalidators;
 
     invalidator_pool(invalidator_pool const &) = delete;
     invalidator_pool &operator=(invalidator_pool const &) = delete;

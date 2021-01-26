@@ -11,15 +11,15 @@ invalidator_pool::~invalidator_pool() {
     this->invalidate();
 }
 
-void invalidator_pool::add_invalidator(canceller_ptr canceller) {
-    this->_cancellers.emplace_back(std::move(canceller));
+void invalidator_pool::add_invalidator(invalidatable_ptr canceller) {
+    this->_invalidators.emplace_back(std::move(canceller));
 }
 
 void invalidator_pool::invalidate() {
-    for (auto const &canceller : this->_cancellers) {
-        canceller->invalidate();
+    for (auto const &invalidator : this->_invalidators) {
+        invalidator->invalidate();
     }
-    this->_cancellers.clear();
+    this->_invalidators.clear();
 }
 
 invalidator_pool_ptr invalidator_pool::make_shared() {
