@@ -63,4 +63,21 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 0);
 }
 
+- (void)test_set_to {
+    std::vector<uint32_t> called;
+
+    {
+        invalidatable_ptr invalidator = nullptr;
+        {
+            auto remover = [&called](uint32_t const identifier) { called.emplace_back(identifier); };
+
+            canceller::make_shared(1, std::move(remover))->set_to(invalidator);
+
+            XCTAssertEqual(called.size(), 0);
+        }
+        XCTAssertEqual(called.size(), 0);
+    }
+    XCTAssertEqual(called.size(), 1);
+}
+
 @end
