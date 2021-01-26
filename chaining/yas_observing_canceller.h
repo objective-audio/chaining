@@ -11,7 +11,7 @@
 #include <memory>
 
 namespace yas::observing {
-class canceller_pool;
+class invalidator_pool;
 class canceller;
 using canceller_ptr = std::shared_ptr<canceller>;
 using canceller_wptr = std::weak_ptr<canceller>;
@@ -27,7 +27,7 @@ struct canceller final : invalidatable {
 
     void invalidate() override;
     void ignore();
-    void add_to(canceller_pool &pool);
+    void add_to(invalidator_pool &pool);
 
     [[nodiscard]] static canceller_ptr make_shared(uint32_t const identifier, remover_f &&);
 

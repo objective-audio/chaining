@@ -4,7 +4,7 @@
 
 #include "yas_observing_canceller.h"
 
-#include "yas_observing_canceller_pool.h"
+#include "yas_observing_invalidator_pool.h"
 
 using namespace yas;
 using namespace yas::observing;
@@ -30,7 +30,7 @@ void canceller::ignore() {
     this->_invalidated = true;
 }
 
-void canceller::add_to(canceller_pool &pool) {
+void canceller::add_to(invalidator_pool &pool) {
     pool.add_canceller(this->_weak_canceller.lock());
 }
 

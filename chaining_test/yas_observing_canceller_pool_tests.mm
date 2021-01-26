@@ -1,5 +1,5 @@
 //
-//  yas_observing_canceller_pool_tests.mm
+//  yas_observing_invalidator_pool_tests.mm
 //
 
 #import <XCTest/XCTest.h>
@@ -8,11 +8,11 @@
 using namespace yas;
 using namespace yas::observing;
 
-@interface yas_observing_canceller_pool_tests : XCTestCase
+@interface yas_observing_invalidator_pool_tests : XCTestCase
 
 @end
 
-@implementation yas_observing_canceller_pool_tests
+@implementation yas_observing_invalidator_pool_tests
 
 - (void)test_destructor {
     std::vector<int> called;
@@ -20,7 +20,7 @@ using namespace yas::observing;
     auto const notifier = observing::notifier<int>::make_shared();
 
     {
-        canceller_pool pool;
+        invalidator_pool pool;
 
         notifier->observe([&called](int const &value) { called.emplace_back(value); })->add_to(pool);
 
@@ -42,7 +42,7 @@ using namespace yas::observing;
 
     auto const notifier = observing::notifier<int>::make_shared();
 
-    canceller_pool pool;
+    invalidator_pool pool;
 
     notifier->observe([&called](int const &value) { called.emplace_back(value); })->add_to(pool);
 
