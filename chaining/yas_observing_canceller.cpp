@@ -34,6 +34,10 @@ void canceller::add_to(invalidator_pool &pool) {
     pool.add_invalidator(this->_weak_canceller.lock());
 }
 
+void canceller::set_to(invalidatable_ptr &invalidator) {
+    invalidator = this->_weak_canceller.lock();
+}
+
 std::shared_ptr<canceller> canceller::make_shared(uint32_t const identifier, remover_f &&handler) {
     auto shared = canceller_ptr(new canceller{identifier, std::move(handler)});
     shared->_weak_canceller = shared;
