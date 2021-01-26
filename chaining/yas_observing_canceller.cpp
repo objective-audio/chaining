@@ -31,7 +31,7 @@ void canceller::ignore() {
 }
 
 void canceller::add_to(invalidator_pool &pool) {
-    pool.add_canceller(this->_weak_canceller.lock());
+    pool.add_invalidator(this->_weak_canceller.lock());
 }
 
 std::shared_ptr<canceller> canceller::make_shared(uint32_t const identifier, remover_f &&handler) {

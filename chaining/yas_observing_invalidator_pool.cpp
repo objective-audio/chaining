@@ -11,7 +11,7 @@ invalidator_pool::~invalidator_pool() {
     this->invalidate();
 }
 
-void invalidator_pool::add_canceller(canceller_ptr canceller) {
+void invalidator_pool::add_invalidator(canceller_ptr canceller) {
     this->_cancellers.emplace_back(std::move(canceller));
 }
 

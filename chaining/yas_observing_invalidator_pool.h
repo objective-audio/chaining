@@ -20,7 +20,7 @@ struct invalidator_pool : invalidatable {
 
     ~invalidator_pool();
 
-    void add_canceller(canceller_ptr);
+    void add_invalidator(canceller_ptr);
 
     void invalidate() override;
 
