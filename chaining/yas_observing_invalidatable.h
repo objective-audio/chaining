@@ -11,6 +11,7 @@ class invalidator_pool;
 
 struct invalidatable : chaining::invalidatable {
     virtual void add_to(invalidator_pool &) = 0;
+    virtual void set_to(std::shared_ptr<invalidatable> &) = 0;
 };
 
 using invalidatable_ptr = std::shared_ptr<invalidatable>;

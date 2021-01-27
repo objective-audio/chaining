@@ -26,7 +26,7 @@ struct canceller final : invalidatable {
     void invalidate() override;
     void ignore();
     void add_to(invalidator_pool &) override;
-    void set_to(invalidatable_ptr &);
+    void set_to(invalidatable_ptr &) override;
 
     [[nodiscard]] static canceller_ptr make_shared(uint32_t const identifier, remover_f &&);
 

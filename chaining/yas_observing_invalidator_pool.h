@@ -25,6 +25,7 @@ struct invalidator_pool : invalidatable {
     void invalidate() override;
 
     void add_to(invalidator_pool &) override;
+    void set_to(invalidatable_ptr &) override;
 
     [[nodiscard]] static invalidator_pool_ptr make_shared();
 
