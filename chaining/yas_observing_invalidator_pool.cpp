@@ -12,6 +12,7 @@ invalidator_pool::~invalidator_pool() {
 }
 
 void invalidator_pool::add_invalidator(invalidatable_ptr canceller) {
+    assert(this != canceller.get());
     this->_invalidators.emplace_back(std::move(canceller));
 }
 
@@ -22,6 +23,16 @@ void invalidator_pool::invalidate() {
     this->_invalidators.clear();
 }
 
+void invalidator_pool::add_to(invalidator_pool &pool) {
+    pool.add_invalidator(this->_weak_pool.lock());
+}
+
+void invalidator_pool::set_to(invalidatable_ptr &invalidator) {
+    invalidator = this->_weak_pool.lock();
+}
+
 invalidator_pool_ptr invalidator_pool::make_shared() {
-    return std::make_shared<invalidator_pool>();
+    auto shared = std::make_shared<invalidator_pool>();
+    shared->_weak_pool = shared;
+    return shared;
 }

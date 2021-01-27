@@ -24,9 +24,13 @@ struct invalidator_pool : invalidatable {
 
     void invalidate() override;
 
+    void add_to(invalidator_pool &) override;
+    void set_to(invalidatable_ptr &) override;
+
     [[nodiscard]] static invalidator_pool_ptr make_shared();
 
    private:
+    std::weak_ptr<invalidator_pool> _weak_pool;
     std::vector<invalidatable_ptr> _invalidators;
 
     invalidator_pool(invalidator_pool const &) = delete;

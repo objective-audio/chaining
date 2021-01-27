@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <chaining/yas_chaining_invalidatable.h>
+#include <chaining/yas_observing_invalidatable.h>
 
 #include <cstdint>
 #include <functional>
@@ -15,8 +15,6 @@ class invalidator_pool;
 class canceller;
 using canceller_ptr = std::shared_ptr<canceller>;
 using canceller_wptr = std::weak_ptr<canceller>;
-using invalidatable = chaining::invalidatable;
-using invalidatable_ptr = std::shared_ptr<invalidatable>;
 
 struct canceller final : invalidatable {
     using remover_f = std::function<void(uint32_t const)>;
@@ -27,8 +25,8 @@ struct canceller final : invalidatable {
 
     void invalidate() override;
     void ignore();
-    void add_to(invalidator_pool &);
-    void set_to(invalidatable_ptr &);
+    void add_to(invalidator_pool &) override;
+    void set_to(invalidatable_ptr &) override;
 
     [[nodiscard]] static canceller_ptr make_shared(uint32_t const identifier, remover_f &&);
 
