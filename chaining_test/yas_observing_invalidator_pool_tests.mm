@@ -71,7 +71,7 @@ using namespace yas::observing;
 
     canceller_pool pool2;
 
-    pool2.add_invalidator(pool1);
+    pool2.add_canceller(pool1);
 
     XCTAssertEqual(called.size(), 0);
 

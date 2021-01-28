@@ -20,7 +20,7 @@ struct canceller_pool : cancellable {
 
     ~canceller_pool();
 
-    void add_invalidator(cancellable_ptr);
+    void add_canceller(cancellable_ptr);
 
     void invalidate() override;
 
