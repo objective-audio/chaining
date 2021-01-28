@@ -1,5 +1,5 @@
 //
-//  yas_observing_invalidator_pool.h
+//  yas_observing_canceller_pool.h
 //
 
 #pragma once
@@ -9,31 +9,31 @@
 #include <vector>
 
 namespace yas::observing {
-class invalidator_pool;
-using invalidator_pool_ptr = std::shared_ptr<invalidator_pool>;
+class canceller_pool;
+using canceller_pool_ptr = std::shared_ptr<canceller_pool>;
 
-struct invalidator_pool : cancellable {
-    invalidator_pool() = default;
+struct canceller_pool : cancellable {
+    canceller_pool() = default;
 
-    invalidator_pool(invalidator_pool &&) = default;
-    invalidator_pool &operator=(invalidator_pool &&) = default;
+    canceller_pool(canceller_pool &&) = default;
+    canceller_pool &operator=(canceller_pool &&) = default;
 
-    ~invalidator_pool();
+    ~canceller_pool();
 
     void add_invalidator(cancellable_ptr);
 
     void invalidate() override;
 
-    void add_to(invalidator_pool &) override;
+    void add_to(canceller_pool &) override;
     void set_to(cancellable_ptr &) override;
 
-    [[nodiscard]] static invalidator_pool_ptr make_shared();
+    [[nodiscard]] static canceller_pool_ptr make_shared();
 
    private:
-    std::weak_ptr<invalidator_pool> _weak_pool;
+    std::weak_ptr<canceller_pool> _weak_pool;
     std::vector<cancellable_ptr> _invalidators;
 
-    invalidator_pool(invalidator_pool const &) = delete;
-    invalidator_pool &operator=(invalidator_pool const &) = delete;
+    canceller_pool(canceller_pool const &) = delete;
+    canceller_pool &operator=(canceller_pool const &) = delete;
 };
 }  // namespace yas::observing

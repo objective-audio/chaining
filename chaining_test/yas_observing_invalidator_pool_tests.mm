@@ -1,5 +1,5 @@
 //
-//  yas_observing_invalidator_pool_tests.mm
+//  yas_observing_canceller_pool_tests.mm
 //
 
 #import <XCTest/XCTest.h>
@@ -8,11 +8,11 @@
 using namespace yas;
 using namespace yas::observing;
 
-@interface yas_observing_invalidator_pool_tests : XCTestCase
+@interface yas_observing_canceller_pool_tests : XCTestCase
 
 @end
 
-@implementation yas_observing_invalidator_pool_tests
+@implementation yas_observing_canceller_pool_tests
 
 - (void)test_destructor {
     std::vector<int> called;
@@ -20,7 +20,7 @@ using namespace yas::observing;
     auto const notifier = observing::notifier<int>::make_shared();
 
     {
-        invalidator_pool pool;
+        canceller_pool pool;
 
         notifier->observe([&called](int const &value) { called.emplace_back(value); })->add_to(pool);
 
@@ -42,7 +42,7 @@ using namespace yas::observing;
 
     auto const notifier = observing::notifier<int>::make_shared();
 
-    invalidator_pool pool;
+    canceller_pool pool;
 
     notifier->observe([&called](int const &value) { called.emplace_back(value); })->add_to(pool);
 
@@ -65,11 +65,11 @@ using namespace yas::observing;
 
     auto const notifier = observing::notifier<int>::make_shared();
 
-    auto pool1 = invalidator_pool::make_shared();
+    auto pool1 = canceller_pool::make_shared();
 
     notifier->observe([&called](int const &value) { called.emplace_back(value); })->add_to(*pool1);
 
-    invalidator_pool pool2;
+    canceller_pool pool2;
 
     pool2.add_invalidator(pool1);
 
@@ -92,8 +92,8 @@ using namespace yas::observing;
 
     auto const notifier = observing::notifier<int>::make_shared();
 
-    auto pool1 = invalidator_pool::make_shared();
-    invalidator_pool pool2;
+    auto pool1 = canceller_pool::make_shared();
+    canceller_pool pool2;
 
     notifier->observe([&called](int const &value) { called.emplace_back(value); })->add_to(*pool1);
 
@@ -118,7 +118,7 @@ using namespace yas::observing;
 
     auto const notifier = observing::notifier<int>::make_shared();
 
-    auto pool = invalidator_pool::make_shared();
+    auto pool = canceller_pool::make_shared();
     cancellable_ptr invalidator = nullptr;
 
     notifier->observe([&called](int const &value) { called.emplace_back(value); })->add_to(*pool);

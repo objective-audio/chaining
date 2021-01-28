@@ -30,7 +30,7 @@ void canceller::ignore() {
     this->_invalidated = true;
 }
 
-void canceller::add_to(invalidator_pool &pool) {
+void canceller::add_to(canceller_pool &pool) {
     pool.add_invalidator(this->_weak_canceller.lock());
 }
 
