@@ -16,7 +16,7 @@ class canceller;
 using canceller_ptr = std::shared_ptr<canceller>;
 using canceller_wptr = std::weak_ptr<canceller>;
 
-struct canceller final : invalidatable {
+struct canceller final : cancellable {
     using remover_f = std::function<void(uint32_t const)>;
 
     uint32_t const identifier;
@@ -26,7 +26,7 @@ struct canceller final : invalidatable {
     void invalidate() override;
     void ignore();
     void add_to(invalidator_pool &) override;
-    void set_to(invalidatable_ptr &) override;
+    void set_to(cancellable_ptr &) override;
 
     [[nodiscard]] static canceller_ptr make_shared(uint32_t const identifier, remover_f &&);
 

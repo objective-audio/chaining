@@ -34,7 +34,7 @@ void canceller::add_to(invalidator_pool &pool) {
     pool.add_invalidator(this->_weak_canceller.lock());
 }
 
-void canceller::set_to(invalidatable_ptr &invalidator) {
+void canceller::set_to(cancellable_ptr &invalidator) {
     invalidator = this->_weak_canceller.lock();
 }
 

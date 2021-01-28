@@ -9,10 +9,10 @@
 namespace yas::observing {
 class invalidator_pool;
 
-struct invalidatable : chaining::invalidatable {
+struct cancellable : chaining::invalidatable {
     virtual void add_to(invalidator_pool &) = 0;
-    virtual void set_to(std::shared_ptr<invalidatable> &) = 0;
+    virtual void set_to(std::shared_ptr<cancellable> &) = 0;
 };
 
-using invalidatable_ptr = std::shared_ptr<invalidatable>;
+using cancellable_ptr = std::shared_ptr<cancellable>;
 }  // namespace yas::observing

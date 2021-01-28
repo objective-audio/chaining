@@ -11,7 +11,7 @@ invalidator_pool::~invalidator_pool() {
     this->invalidate();
 }
 
-void invalidator_pool::add_invalidator(invalidatable_ptr canceller) {
+void invalidator_pool::add_invalidator(cancellable_ptr canceller) {
     assert(this != canceller.get());
     this->_invalidators.emplace_back(std::move(canceller));
 }
@@ -27,7 +27,7 @@ void invalidator_pool::add_to(invalidator_pool &pool) {
     pool.add_invalidator(this->_weak_pool.lock());
 }
 
-void invalidator_pool::set_to(invalidatable_ptr &invalidator) {
+void invalidator_pool::set_to(cancellable_ptr &invalidator) {
     invalidator = this->_weak_pool.lock();
 }
 

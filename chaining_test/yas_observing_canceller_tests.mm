@@ -67,7 +67,7 @@ using namespace yas::observing;
     std::vector<uint32_t> called;
 
     {
-        invalidatable_ptr invalidator = nullptr;
+        cancellable_ptr invalidator = nullptr;
         {
             auto remover = [&called](uint32_t const identifier) { called.emplace_back(identifier); };
 

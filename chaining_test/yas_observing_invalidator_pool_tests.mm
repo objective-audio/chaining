@@ -119,7 +119,7 @@ using namespace yas::observing;
     auto const notifier = observing::notifier<int>::make_shared();
 
     auto pool = invalidator_pool::make_shared();
-    invalidatable_ptr invalidator = nullptr;
+    cancellable_ptr invalidator = nullptr;
 
     notifier->observe([&called](int const &value) { called.emplace_back(value); })->add_to(*pool);
 
