@@ -31,7 +31,7 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
 }
 
-- (void)test_invalidate {
+- (void)test_cancel {
     std::vector<uint32_t> called;
 
     {
@@ -39,7 +39,7 @@ using namespace yas::observing;
 
         auto const canceller = canceller::make_shared(1, std::move(remover));
 
-        canceller->invalidate();
+        canceller->cancel();
 
         XCTAssertEqual(called.size(), 1);
     }
@@ -67,11 +67,11 @@ using namespace yas::observing;
     std::vector<uint32_t> called;
 
     {
-        invalidatable_ptr invalidator = nullptr;
+        cancellable_ptr canceller = nullptr;
         {
             auto remover = [&called](uint32_t const identifier) { called.emplace_back(identifier); };
 
-            canceller::make_shared(1, std::move(remover))->set_to(invalidator);
+            canceller::make_shared(1, std::move(remover))->set_to(canceller);
 
             XCTAssertEqual(called.size(), 0);
         }

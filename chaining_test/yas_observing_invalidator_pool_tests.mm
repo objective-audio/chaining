@@ -1,5 +1,5 @@
 //
-//  yas_observing_invalidator_pool_tests.mm
+//  yas_observing_canceller_pool_tests.mm
 //
 
 #import <XCTest/XCTest.h>
@@ -8,11 +8,11 @@
 using namespace yas;
 using namespace yas::observing;
 
-@interface yas_observing_invalidator_pool_tests : XCTestCase
+@interface yas_observing_canceller_pool_tests : XCTestCase
 
 @end
 
-@implementation yas_observing_invalidator_pool_tests
+@implementation yas_observing_canceller_pool_tests
 
 - (void)test_destructor {
     std::vector<int> called;
@@ -20,7 +20,7 @@ using namespace yas::observing;
     auto const notifier = observing::notifier<int>::make_shared();
 
     {
-        invalidator_pool pool;
+        canceller_pool pool;
 
         notifier->observe([&called](int const &value) { called.emplace_back(value); })->add_to(pool);
 
@@ -37,12 +37,12 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
 }
 
-- (void)test_invalidate {
+- (void)test_cancel {
     std::vector<int> called;
 
     auto const notifier = observing::notifier<int>::make_shared();
 
-    invalidator_pool pool;
+    canceller_pool pool;
 
     notifier->observe([&called](int const &value) { called.emplace_back(value); })->add_to(pool);
 
@@ -53,7 +53,7 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), 1);
 
-    pool.invalidate();
+    pool.cancel();
 
     notifier->notify(2);
 
@@ -65,13 +65,13 @@ using namespace yas::observing;
 
     auto const notifier = observing::notifier<int>::make_shared();
 
-    auto pool1 = invalidator_pool::make_shared();
+    auto pool1 = canceller_pool::make_shared();
 
     notifier->observe([&called](int const &value) { called.emplace_back(value); })->add_to(*pool1);
 
-    invalidator_pool pool2;
+    canceller_pool pool2;
 
-    pool2.add_invalidator(pool1);
+    pool2.add_canceller(pool1);
 
     XCTAssertEqual(called.size(), 0);
 
@@ -80,7 +80,7 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), 3);
 
-    pool2.invalidate();
+    pool2.cancel();
 
     notifier->notify(4);
 
@@ -92,8 +92,8 @@ using namespace yas::observing;
 
     auto const notifier = observing::notifier<int>::make_shared();
 
-    auto pool1 = invalidator_pool::make_shared();
-    invalidator_pool pool2;
+    auto pool1 = canceller_pool::make_shared();
+    canceller_pool pool2;
 
     notifier->observe([&called](int const &value) { called.emplace_back(value); })->add_to(*pool1);
 
@@ -106,7 +106,7 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), 3);
 
-    pool2.invalidate();
+    pool2.cancel();
 
     notifier->notify(4);
 
@@ -118,12 +118,12 @@ using namespace yas::observing;
 
     auto const notifier = observing::notifier<int>::make_shared();
 
-    auto pool = invalidator_pool::make_shared();
-    invalidatable_ptr invalidator = nullptr;
+    auto pool = canceller_pool::make_shared();
+    cancellable_ptr canceller = nullptr;
 
     notifier->observe([&called](int const &value) { called.emplace_back(value); })->add_to(*pool);
 
-    pool->set_to(invalidator);
+    pool->set_to(canceller);
 
     XCTAssertEqual(called.size(), 0);
 
@@ -132,7 +132,7 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), 3);
 
-    invalidator->invalidate();
+    canceller->cancel();
 
     notifier->notify(4);
 

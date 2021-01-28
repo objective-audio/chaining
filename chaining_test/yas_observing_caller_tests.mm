@@ -33,7 +33,7 @@ using namespace yas::observing;
     XCTAssertEqual(called2.size(), 1);
     XCTAssertEqual(called2.at(0), 1);
 
-    canceller1->invalidate();
+    canceller1->cancel();
 
     caller.call(2);
 

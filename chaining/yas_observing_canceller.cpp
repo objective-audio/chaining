@@ -4,7 +4,7 @@
 
 #include "yas_observing_canceller.h"
 
-#include "yas_observing_invalidator_pool.h"
+#include "yas_observing_canceller_pool.h"
 
 using namespace yas;
 using namespace yas::observing;
@@ -30,12 +30,12 @@ void canceller::ignore() {
     this->_invalidated = true;
 }
 
-void canceller::add_to(invalidator_pool &pool) {
-    pool.add_invalidator(this->_weak_canceller.lock());
+void canceller::add_to(canceller_pool &pool) {
+    pool.add_canceller(this->_weak_canceller.lock());
 }
 
-void canceller::set_to(invalidatable_ptr &invalidator) {
-    invalidator = this->_weak_canceller.lock();
+void canceller::set_to(cancellable_ptr &canceller) {
+    canceller = this->_weak_canceller.lock();
 }
 
 std::shared_ptr<canceller> canceller::make_shared(uint32_t const identifier, remover_f &&handler) {
