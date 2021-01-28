@@ -46,12 +46,12 @@ using namespace yas::observing;
     XCTAssertEqual(holder->value(), 2);
 }
 
-- (void)test_observe {
+- (void)test_observe_with_sync {
     auto const holder = value::holder<int>::make_shared(100);
 
     std::vector<int> called;
 
-    auto canceller = holder->observe([&called](int const &value) { called.emplace_back(value); });
+    auto canceller = holder->observe([&called](int const &value) { called.emplace_back(value); }, true);
 
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), 100);

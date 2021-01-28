@@ -20,7 +20,7 @@ struct fetcher final {
     void push();
     void push(T const &value);
 
-    [[nodiscard]] canceller_ptr observe(typename caller<T>::handler_f &&, bool const sync = true);
+    [[nodiscard]] canceller_ptr observe(typename caller<T>::handler_f &&, bool const sync);
 
     [[nodiscard]] static fetcher_ptr<T> make_shared(std::function<std::optional<T>(void)>);
 
