@@ -27,8 +27,8 @@ void canceller_pool::add_to(canceller_pool &pool) {
     pool.add_canceller(this->_weak_pool.lock());
 }
 
-void canceller_pool::set_to(cancellable_ptr &invalidator) {
-    invalidator = this->_weak_pool.lock();
+void canceller_pool::set_to(cancellable_ptr &canceller) {
+    canceller = this->_weak_pool.lock();
 }
 
 canceller_pool_ptr canceller_pool::make_shared() {
