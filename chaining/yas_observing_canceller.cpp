@@ -4,7 +4,7 @@
 
 #include "yas_observing_canceller.h"
 
-#include "yas_observing_invalidator_pool.h"
+#include "yas_observing_canceller_pool.h"
 
 using namespace yas;
 using namespace yas::observing;

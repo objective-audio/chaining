@@ -57,8 +57,8 @@
 		B68F4E5A25B70D9800A223C6 /* yas_observing_value_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B68F4E5925B70D9500A223C6 /* yas_observing_value_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B68F4E5E25B70DAD00A223C6 /* yas_observing_value_holder_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B68F4E5D25B70DAD00A223C6 /* yas_observing_value_holder_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B69FCF5C25C168F90005B07F /* yas_observing_cancellable.h in Headers */ = {isa = PBXBuildFile; fileRef = B69FCF5B25C168F90005B07F /* yas_observing_cancellable.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		B6C0CEE425B72CF000F9E25D /* yas_observing_invalidator_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6C0CEE225B72CF000F9E25D /* yas_observing_invalidator_pool.cpp */; };
-		B6C0CEE525B72CF000F9E25D /* yas_observing_invalidator_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = B6C0CEE325B72CF000F9E25D /* yas_observing_invalidator_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B6C0CEE425B72CF000F9E25D /* yas_observing_canceller_pool.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6C0CEE225B72CF000F9E25D /* yas_observing_canceller_pool.cpp */; };
+		B6C0CEE525B72CF000F9E25D /* yas_observing_canceller_pool.h in Headers */ = {isa = PBXBuildFile; fileRef = B6C0CEE325B72CF000F9E25D /* yas_observing_canceller_pool.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6F8437222B4C11700A90717 /* yas_chaining_receiver.h in Headers */ = {isa = PBXBuildFile; fileRef = B6F8437122B4C07F00A90717 /* yas_chaining_receiver.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6FBAF6123B6F4E20080DAF1 /* yas_chaining_invalidatable.h in Headers */ = {isa = PBXBuildFile; fileRef = B6FBAF5F23B6F4E20080DAF1 /* yas_chaining_invalidatable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
@@ -119,8 +119,8 @@
 		B68F4E5925B70D9500A223C6 /* yas_observing_value_holder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_observing_value_holder.h; sourceTree = "<group>"; };
 		B68F4E5D25B70DAD00A223C6 /* yas_observing_value_holder_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_observing_value_holder_private.h; sourceTree = "<group>"; };
 		B69FCF5B25C168F90005B07F /* yas_observing_cancellable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_observing_cancellable.h; sourceTree = "<group>"; };
-		B6C0CEE225B72CF000F9E25D /* yas_observing_invalidator_pool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = yas_observing_invalidator_pool.cpp; sourceTree = "<group>"; };
-		B6C0CEE325B72CF000F9E25D /* yas_observing_invalidator_pool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_observing_invalidator_pool.h; sourceTree = "<group>"; };
+		B6C0CEE225B72CF000F9E25D /* yas_observing_canceller_pool.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = yas_observing_canceller_pool.cpp; sourceTree = "<group>"; };
+		B6C0CEE325B72CF000F9E25D /* yas_observing_canceller_pool.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_observing_canceller_pool.h; sourceTree = "<group>"; };
 		B6F8437122B4C07F00A90717 /* yas_chaining_receiver.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_receiver.h; sourceTree = "<group>"; };
 		B6FBAF5F23B6F4E20080DAF1 /* yas_chaining_invalidatable.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_invalidatable.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -212,8 +212,8 @@
 				B646F3AF25B5AC9200CDB9DD /* yas_observing_canceller.h */,
 				B6317F6825BB267A00E5541C /* yas_observing_fetcher_private.h */,
 				B6317F6725BB266F00E5541C /* yas_observing_fetcher.h */,
-				B6C0CEE225B72CF000F9E25D /* yas_observing_invalidator_pool.cpp */,
-				B6C0CEE325B72CF000F9E25D /* yas_observing_invalidator_pool.h */,
+				B6C0CEE225B72CF000F9E25D /* yas_observing_canceller_pool.cpp */,
+				B6C0CEE325B72CF000F9E25D /* yas_observing_canceller_pool.h */,
 				B62F1A6825B6FE4500583110 /* yas_observing_notifier_private.h */,
 				B62F1A6525B6FE3800583110 /* yas_observing_notifier.h */,
 				B646F3B925B5B13300CDB9DD /* yas_observing_umbrella.h */,
@@ -257,7 +257,7 @@
 				B68F4E5A25B70D9800A223C6 /* yas_observing_value_holder.h in Headers */,
 				B68AE95621EF6353004E2983 /* yas_chaining_event_private.h in Headers */,
 				B623BA4421DC4D7000D16037 /* yas_chaining_multimap_holder.h in Headers */,
-				B6C0CEE525B72CF000F9E25D /* yas_observing_invalidator_pool.h in Headers */,
+				B6C0CEE525B72CF000F9E25D /* yas_observing_canceller_pool.h in Headers */,
 				B623BA4321DC4D7000D16037 /* yas_chaining_sender_private.h in Headers */,
 				B6570DD825693D1E00C1E424 /* yas_chaining_handler_private.h in Headers */,
 				B623BA3D21DC4D7000D16037 /* yas_chaining_multimap_holder_private.h in Headers */,
@@ -359,7 +359,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				B68AE95321EF61A4004E2983 /* yas_chaining_event.cpp in Sources */,
-				B6C0CEE425B72CF000F9E25D /* yas_observing_invalidator_pool.cpp in Sources */,
+				B6C0CEE425B72CF000F9E25D /* yas_observing_canceller_pool.cpp in Sources */,
 				B623BA3421DC4D7000D16037 /* yas_chaining_observer_pool.cpp in Sources */,
 				B6570DCD256929F900C1E424 /* yas_chaining_handler.cpp in Sources */,
 				B646F3B025B5AC9200CDB9DD /* yas_observing_canceller.cpp in Sources */,

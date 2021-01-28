@@ -37,7 +37,7 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
 }
 
-- (void)test_invalidate {
+- (void)test_cancel {
     std::vector<int> called;
 
     auto const notifier = observing::notifier<int>::make_shared();

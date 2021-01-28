@@ -31,7 +31,7 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
 }
 
-- (void)test_invalidate {
+- (void)test_cancel {
     std::vector<uint32_t> called;
 
     {
