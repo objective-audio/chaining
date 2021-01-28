@@ -65,7 +65,7 @@ using namespace yas::observing;
 
     XCTAssertEqual(called.size(), 2);
 
-    canceller->invalidate();
+    canceller->cancel();
     holder->set_value(102);
 
     XCTAssertEqual(called.size(), 2);

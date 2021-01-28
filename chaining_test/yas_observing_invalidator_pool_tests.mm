@@ -53,7 +53,7 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), 1);
 
-    pool.invalidate();
+    pool.cancel();
 
     notifier->notify(2);
 
@@ -80,7 +80,7 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), 3);
 
-    pool2.invalidate();
+    pool2.cancel();
 
     notifier->notify(4);
 
@@ -106,7 +106,7 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), 3);
 
-    pool2.invalidate();
+    pool2.cancel();
 
     notifier->notify(4);
 
@@ -132,7 +132,7 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), 3);
 
-    invalidator->invalidate();
+    invalidator->cancel();
 
     notifier->notify(4);
 

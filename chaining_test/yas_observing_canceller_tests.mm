@@ -39,7 +39,7 @@ using namespace yas::observing;
 
         auto const canceller = canceller::make_shared(1, std::move(remover));
 
-        canceller->invalidate();
+        canceller->cancel();
 
         XCTAssertEqual(called.size(), 1);
     }
