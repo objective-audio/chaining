@@ -1,5 +1,5 @@
 //
-//  yas_observing_invalidatable.h
+//  yas_observing_cancellable.h
 //
 
 #pragma once
