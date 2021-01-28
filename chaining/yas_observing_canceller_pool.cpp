@@ -17,8 +17,8 @@ void canceller_pool::add_canceller(cancellable_ptr canceller) {
 }
 
 void canceller_pool::invalidate() {
-    for (auto const &invalidator : this->_cancellers) {
-        invalidator->invalidate();
+    for (auto const &canceller : this->_cancellers) {
+        canceller->cancel();
     }
     this->_cancellers.clear();
 }

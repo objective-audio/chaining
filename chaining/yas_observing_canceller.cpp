@@ -34,8 +34,8 @@ void canceller::add_to(canceller_pool &pool) {
     pool.add_canceller(this->_weak_canceller.lock());
 }
 
-void canceller::set_to(cancellable_ptr &invalidator) {
-    invalidator = this->_weak_canceller.lock();
+void canceller::set_to(cancellable_ptr &canceller) {
+    canceller = this->_weak_canceller.lock();
 }
 
 std::shared_ptr<canceller> canceller::make_shared(uint32_t const identifier, remover_f &&handler) {
