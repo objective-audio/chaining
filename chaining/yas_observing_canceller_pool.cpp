@@ -13,14 +13,14 @@ canceller_pool::~canceller_pool() {
 
 void canceller_pool::add_canceller(cancellable_ptr canceller) {
     assert(this != canceller.get());
-    this->_invalidators.emplace_back(std::move(canceller));
+    this->_cancellers.emplace_back(std::move(canceller));
 }
 
 void canceller_pool::invalidate() {
-    for (auto const &invalidator : this->_invalidators) {
+    for (auto const &invalidator : this->_cancellers) {
         invalidator->invalidate();
     }
-    this->_invalidators.clear();
+    this->_cancellers.clear();
 }
 
 void canceller_pool::add_to(canceller_pool &pool) {

@@ -31,7 +31,7 @@ struct canceller_pool : cancellable {
 
    private:
     std::weak_ptr<canceller_pool> _weak_pool;
-    std::vector<cancellable_ptr> _invalidators;
+    std::vector<cancellable_ptr> _cancellers;
 
     canceller_pool(canceller_pool const &) = delete;
     canceller_pool &operator=(canceller_pool const &) = delete;
