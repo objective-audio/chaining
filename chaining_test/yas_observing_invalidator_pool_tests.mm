@@ -119,11 +119,11 @@ using namespace yas::observing;
     auto const notifier = observing::notifier<int>::make_shared();
 
     auto pool = canceller_pool::make_shared();
-    cancellable_ptr invalidator = nullptr;
+    cancellable_ptr canceller = nullptr;
 
     notifier->observe([&called](int const &value) { called.emplace_back(value); })->add_to(*pool);
 
-    pool->set_to(invalidator);
+    pool->set_to(canceller);
 
     XCTAssertEqual(called.size(), 0);
 
@@ -132,7 +132,7 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
     XCTAssertEqual(called.at(0), 3);
 
-    invalidator->cancel();
+    canceller->cancel();
 
     notifier->notify(4);
 
