@@ -4,7 +4,7 @@
 
 #pragma once
 
-#include <chaining/yas_observing_invalidatable.h>
+#include <chaining/yas_observing_cancellable.h>
 
 #include <cstdint>
 #include <functional>
