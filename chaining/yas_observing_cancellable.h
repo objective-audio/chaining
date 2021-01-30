@@ -14,6 +14,7 @@ struct cancellable : chaining::invalidatable {
         this->invalidate();
     }
 
+    virtual bool has_cancellable() const = 0;
     virtual void add_to(canceller_pool &) = 0;
     virtual void set_to(std::shared_ptr<cancellable> &) = 0;
 };
