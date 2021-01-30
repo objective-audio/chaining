@@ -104,4 +104,19 @@ using namespace yas::observing;
     XCTAssertEqual(called1.size(), 1);
 }
 
+- (void)test_ignore_recursive_call {
+    observing::caller<int> caller;
+
+    int called_count = 0;
+
+    auto canceller = caller.add([&caller, &called_count](int const &value) {
+        ++called_count;
+        caller.call(value);
+    });
+
+    caller.call(0);
+
+    XCTAssertEqual(called_count, 1);
+}
+
 @end
