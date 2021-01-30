@@ -28,6 +28,7 @@ struct caller {
     uint32_t _next_idx = 0;
     std::map<uint32_t, handler_container> _handlers;
     std::vector<canceller_wptr> _cancellers;
+    bool _calling = false;
 };
 }  // namespace yas::observing
 

@@ -24,6 +24,8 @@ struct canceller_pool : cancellable {
 
     void invalidate() override;
 
+    bool has_cancellable() const override;
+
     void add_to(canceller_pool &) override;
     void set_to(cancellable_ptr &) override;
 

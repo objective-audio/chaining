@@ -80,4 +80,14 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
 }
 
+- (void)test_has_cancellable {
+    auto const canceller = canceller::make_shared(1, [](uint32_t const identifier) {});
+
+    XCTAssertTrue(canceller->has_cancellable());
+
+    canceller->invalidate();
+
+    XCTAssertFalse(canceller->has_cancellable());
+}
+
 @end

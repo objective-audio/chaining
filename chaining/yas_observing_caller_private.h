@@ -26,10 +26,14 @@ canceller_ptr caller<T>::add(handler_f &&handler) {
 
 template <typename T>
 void caller<T>::call(T const &value) {
-    for (auto const &pair : this->_handlers) {
-        if (pair.second.enabled) {
-            pair.second.handler(value);
+    if (!this->_calling) {
+        this->_calling = true;
+        for (auto const &pair : this->_handlers) {
+            if (pair.second.enabled) {
+                pair.second.handler(value);
+            }
         }
+        this->_calling = false;
     }
 }
 }  // namespace yas::observing

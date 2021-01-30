@@ -30,6 +30,10 @@ void canceller::ignore() {
     this->_invalidated = true;
 }
 
+bool canceller::has_cancellable() const {
+    return !this->_invalidated;
+}
+
 void canceller::add_to(canceller_pool &pool) {
     pool.add_canceller(this->_weak_canceller.lock());
 }
