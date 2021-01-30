@@ -139,4 +139,40 @@ using namespace yas::observing;
     XCTAssertEqual(called.size(), 1);
 }
 
+- (void)test_has_cancellable {
+    auto const notifier = observing::notifier<int>::make_shared();
+
+    canceller_pool pool;
+
+    XCTAssertFalse(pool.has_cancellable());
+
+    auto canceller1 = notifier->observe([](int const &) {});
+
+    pool.add_canceller(canceller1);
+
+    XCTAssertTrue(pool.has_cancellable());
+
+    auto canceller2 = notifier->observe([](int const &) {});
+
+    pool.add_canceller(canceller2);
+
+    XCTAssertTrue(pool.has_cancellable());
+
+    canceller1->cancel();
+
+    XCTAssertTrue(pool.has_cancellable());
+
+    canceller2->cancel();
+
+    XCTAssertFalse(pool.has_cancellable());
+
+    notifier->observe([](int const &) {})->add_to(pool);
+
+    XCTAssertTrue(pool.has_cancellable());
+
+    pool.cancel();
+
+    XCTAssertFalse(pool.has_cancellable());
+}
+
 @end
