@@ -22,7 +22,7 @@ struct canceller_pool : cancellable {
 
     void add_canceller(cancellable_ptr);
 
-    void invalidate() override;
+    void cancel() override;
 
     bool has_cancellable() const override;
 

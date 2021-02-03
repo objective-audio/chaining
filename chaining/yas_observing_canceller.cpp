@@ -14,24 +14,24 @@ canceller::canceller(uint32_t const identifier, remover_f &&handler)
 }
 
 canceller::~canceller() {
-    if (!this->_invalidated) {
+    if (!this->_cancelled) {
         this->_handler(this->identifier);
     }
 }
 
-void canceller::invalidate() {
-    if (!this->_invalidated) {
+void canceller::cancel() {
+    if (!this->_cancelled) {
         this->_handler(this->identifier);
-        this->_invalidated = true;
+        this->_cancelled = true;
     }
 }
 
 void canceller::ignore() {
-    this->_invalidated = true;
+    this->_cancelled = true;
 }
 
 bool canceller::has_cancellable() const {
-    return !this->_invalidated;
+    return !this->_cancelled;
 }
 
 void canceller::add_to(canceller_pool &pool) {

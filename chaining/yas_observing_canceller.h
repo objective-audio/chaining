@@ -23,7 +23,7 @@ struct canceller final : cancellable {
 
     ~canceller();
 
-    void invalidate() override;
+    void cancel() override;
     void ignore();
     bool has_cancellable() const override;
     void add_to(canceller_pool &) override;
@@ -36,6 +36,6 @@ struct canceller final : cancellable {
 
     std::weak_ptr<canceller> _weak_canceller;
     std::function<void(uint32_t const)> _handler;
-    bool _invalidated = false;
+    bool _cancelled = false;
 };
 }  // namespace yas::observing

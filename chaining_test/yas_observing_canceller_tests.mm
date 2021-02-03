@@ -85,7 +85,7 @@ using namespace yas::observing;
 
     XCTAssertTrue(canceller->has_cancellable());
 
-    canceller->invalidate();
+    canceller->cancel();
 
     XCTAssertFalse(canceller->has_cancellable());
 }
