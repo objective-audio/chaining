@@ -19,7 +19,7 @@ canceller::~canceller() {
     }
 }
 
-void canceller::invalidate() {
+void canceller::cancel() {
     if (!this->_invalidated) {
         this->_handler(this->identifier);
         this->_invalidated = true;

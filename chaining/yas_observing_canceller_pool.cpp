@@ -8,7 +8,7 @@ using namespace yas;
 using namespace yas::observing;
 
 canceller_pool::~canceller_pool() {
-    this->invalidate();
+    this->cancel();
 }
 
 void canceller_pool::add_canceller(cancellable_ptr canceller) {
@@ -16,7 +16,7 @@ void canceller_pool::add_canceller(cancellable_ptr canceller) {
     this->_cancellers.emplace_back(std::move(canceller));
 }
 
-void canceller_pool::invalidate() {
+void canceller_pool::cancel() {
     for (auto const &canceller : this->_cancellers) {
         canceller->cancel();
     }

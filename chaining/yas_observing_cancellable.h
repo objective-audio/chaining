@@ -4,16 +4,15 @@
 
 #pragma once
 
-#include <chaining/yas_chaining_invalidatable.h>
+#include <memory>
 
 namespace yas::observing {
 class canceller_pool;
 
-struct cancellable : chaining::invalidatable {
-    void cancel() {
-        this->invalidate();
-    }
+struct cancellable {
+    virtual ~cancellable() = default;
 
+    virtual void cancel() = 0;
     virtual bool has_cancellable() const = 0;
     virtual void add_to(canceller_pool &) = 0;
     virtual void set_to(std::shared_ptr<cancellable> &) = 0;

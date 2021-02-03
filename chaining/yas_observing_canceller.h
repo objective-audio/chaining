@@ -23,7 +23,7 @@ struct canceller final : cancellable {
 
     ~canceller();
 
-    void invalidate() override;
+    void cancel() override;
     void ignore();
     bool has_cancellable() const override;
     void add_to(canceller_pool &) override;
