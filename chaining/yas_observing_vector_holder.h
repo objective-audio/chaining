@@ -29,8 +29,8 @@ struct holder final {
     struct event {
         event_type type;
         std::vector<T> const &elements;
-        T const *element = nullptr;
-        std::optional<std::size_t> index = std::nullopt;
+        T const *element = nullptr;                       // replaced, inserted, erased
+        std::optional<std::size_t> index = std::nullopt;  // replaced, inserted, erased
     };
 
     [[nodiscard]] vector_t const &value() const;
