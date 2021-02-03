@@ -36,6 +36,6 @@ struct canceller final : cancellable {
 
     std::weak_ptr<canceller> _weak_canceller;
     std::function<void(uint32_t const)> _handler;
-    bool _invalidated = false;
+    bool _cancelled = false;
 };
 }  // namespace yas::observing
