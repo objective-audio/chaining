@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		B6317F7925BB277900E5541C /* yas_observing_fetcher_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6317F7825BB277900E5541C /* yas_observing_fetcher_tests.mm */; };
+		B63CE02C25C96E4A00420046 /* yas_observing_vector_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B63CE02B25C96E4A00420046 /* yas_observing_vector_holder_tests.mm */; };
 		B6570DF825695B1700C1E424 /* yas_handler_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6570DF725695B1600C1E424 /* yas_handler_tests.mm */; };
 		B6C0CECF25B7263300F9E25D /* yas_observing_caller_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6C0CECB25B7263300F9E25D /* yas_observing_caller_tests.mm */; };
 		B6C0CED025B7263300F9E25D /* yas_observing_value_holder_tests.mm in Sources */ = {isa = PBXBuildFile; fileRef = B6C0CECC25B7263300F9E25D /* yas_observing_value_holder_tests.mm */; };
@@ -37,6 +38,7 @@
 
 /* Begin PBXFileReference section */
 		B6317F7825BB277900E5541C /* yas_observing_fetcher_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observing_fetcher_tests.mm; sourceTree = "<group>"; };
+		B63CE02B25C96E4A00420046 /* yas_observing_vector_holder_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observing_vector_holder_tests.mm; sourceTree = "<group>"; };
 		B6570DF725695B1600C1E424 /* yas_handler_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_handler_tests.mm; sourceTree = "<group>"; };
 		B6C0CECB25B7263300F9E25D /* yas_observing_caller_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observing_caller_tests.mm; sourceTree = "<group>"; };
 		B6C0CECC25B7263300F9E25D /* yas_observing_value_holder_tests.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = yas_observing_value_holder_tests.mm; sourceTree = "<group>"; };
@@ -120,11 +122,12 @@
 				B6DE363F21E7854700E49BCB /* yas_observer_pool_tests.mm */,
 				B6DE364A21E7854700E49BCB /* yas_observer_tests.mm */,
 				B6C0CECB25B7263300F9E25D /* yas_observing_caller_tests.mm */,
-				B6C0CEF625B7309400F9E25D /* yas_observing_invalidator_pool_tests.mm */,
 				B6C0CECD25B7263300F9E25D /* yas_observing_canceller_tests.mm */,
 				B6317F7825BB277900E5541C /* yas_observing_fetcher_tests.mm */,
+				B6C0CEF625B7309400F9E25D /* yas_observing_invalidator_pool_tests.mm */,
 				B6C0CECE25B7263300F9E25D /* yas_observing_notifier_tests.mm */,
 				B6C0CECC25B7263300F9E25D /* yas_observing_value_holder_tests.mm */,
+				B63CE02B25C96E4A00420046 /* yas_observing_vector_holder_tests.mm */,
 				B6DE364621E7854700E49BCB /* yas_receiver_tests.mm */,
 				B6DE364821E7854700E49BCB /* yas_sync_tests.mm */,
 				B6DE364521E7854700E49BCB /* yas_to_tests.mm */,
@@ -246,6 +249,7 @@
 				B6570DF825695B1700C1E424 /* yas_handler_tests.mm in Sources */,
 				B6DE365221E7854700E49BCB /* yas_map_holder_tests.mm in Sources */,
 				B6DE365321E7854700E49BCB /* yas_vector_holder_chain_tests.mm in Sources */,
+				B63CE02C25C96E4A00420046 /* yas_observing_vector_holder_tests.mm in Sources */,
 				B6C0CED225B7263300F9E25D /* yas_observing_notifier_tests.mm in Sources */,
 				B6C0CECF25B7263300F9E25D /* yas_observing_caller_tests.mm in Sources */,
 				B6DE365C21E7854700E49BCB /* yas_value_holder_tests.mm in Sources */,
