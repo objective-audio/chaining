@@ -17,8 +17,6 @@ using holder_ptr = std::shared_ptr<holder<T>>;
 
 template <typename T>
 struct holder final {
-    using vector_t = std::vector<T>;
-
     enum class event_type {
         any,
         replaced,
@@ -33,12 +31,12 @@ struct holder final {
         std::optional<std::size_t> index = std::nullopt;  // replaced, inserted, erased
     };
 
-    [[nodiscard]] vector_t const &value() const;
+    [[nodiscard]] std::vector<T> const &value() const;
     [[nodiscard]] T const &at(std::size_t const) const;
     [[nodiscard]] std::size_t size() const;
 
-    void replace(vector_t const &);
-    void replace(vector_t &&);
+    void replace(std::vector<T> const &);
+    void replace(std::vector<T> &&);
     void replace(T const &, std::size_t const);
     void replace(T &&, std::size_t const);
     void push_back(T const &);
@@ -51,15 +49,15 @@ struct holder final {
     [[nodiscard]] canceller_ptr observe(typename caller<event>::handler_f &&, bool const sync);
 
     [[nodiscard]] static holder_ptr<T> make_shared();
-    [[nodiscard]] static holder_ptr<T> make_shared(vector_t &&);
-    [[nodiscard]] static holder_ptr<T> make_shared(vector_t const &);
+    [[nodiscard]] static holder_ptr<T> make_shared(std::vector<T> &&);
+    [[nodiscard]] static holder_ptr<T> make_shared(std::vector<T> const &);
 
    private:
     std::vector<T> _raw;
     caller<event> _caller;
 
-    holder(vector_t const &);
-    holder(vector_t &&);
+    holder(std::vector<T> const &);
+    holder(std::vector<T> &&);
 
     void _call_any();
     void _call_replaced(std::size_t const idx);

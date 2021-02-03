@@ -8,15 +8,15 @@
 
 namespace yas::observing::vector {
 template <typename T>
-holder<T>::holder(vector_t const &value) : _raw(value) {
+holder<T>::holder(std::vector<T> const &value) : _raw(value) {
 }
 
 template <typename T>
-holder<T>::holder(vector_t &&value) : _raw(std::move(value)) {
+holder<T>::holder(std::vector<T> &&value) : _raw(std::move(value)) {
 }
 
 template <typename T>
-typename holder<T>::vector_t const &holder<T>::value() const {
+std::vector<T> const &holder<T>::value() const {
     return this->_raw;
 }
 
@@ -31,13 +31,13 @@ std::size_t holder<T>::size() const {
 }
 
 template <typename T>
-void holder<T>::replace(vector_t const &value) {
+void holder<T>::replace(std::vector<T> const &value) {
     this->_raw = value;
     this->_call_any();
 }
 
 template <typename T>
-void holder<T>::replace(vector_t &&value) {
+void holder<T>::replace(std::vector<T> &&value) {
     this->_raw = std::move(value);
     this->_call_any();
 }
@@ -130,12 +130,12 @@ holder_ptr<T> holder<T>::make_shared() {
 }
 
 template <typename T>
-holder_ptr<T> holder<T>::make_shared(vector_t &&value) {
+holder_ptr<T> holder<T>::make_shared(std::vector<T> &&value) {
     return holder_ptr<T>(new holder<T>{std::move(value)});
 }
 
 template <typename T>
-holder_ptr<T> holder<T>::make_shared(vector_t const &value) {
+holder_ptr<T> holder<T>::make_shared(std::vector<T> const &value) {
     return holder_ptr<T>(new holder<T>{value});
 }
 }  // namespace yas::observing::vector
