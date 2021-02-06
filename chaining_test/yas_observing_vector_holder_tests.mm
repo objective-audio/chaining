@@ -145,43 +145,43 @@ using namespace yas::observing;
 - (void)test_observe {
     auto const holder = vector::holder<int>::make_shared({200, 201});
 
-    std::vector<vector::holder<int>::event_type> called_event_types;
+    std::vector<vector::event_type> called_event_types;
 
     auto canceller = holder->observe(
         [&called_event_types](auto const &event) { called_event_types.emplace_back(event.type); }, true);
 
     XCTAssertEqual(called_event_types.size(), 1);
-    XCTAssertEqual(called_event_types.at(0), vector::holder<int>::event_type::any);
+    XCTAssertEqual(called_event_types.at(0), vector::event_type::any);
 
     holder->replace(std::vector<int>{210, 211, 212});
 
     XCTAssertEqual(called_event_types.size(), 2);
-    XCTAssertEqual(called_event_types.at(1), vector::holder<int>::event_type::any);
+    XCTAssertEqual(called_event_types.at(1), vector::event_type::any);
 
     holder->replace(220, 1);
 
     XCTAssertEqual(called_event_types.size(), 3);
-    XCTAssertEqual(called_event_types.at(2), vector::holder<int>::event_type::replaced);
+    XCTAssertEqual(called_event_types.at(2), vector::event_type::replaced);
 
     holder->push_back(221);
 
     XCTAssertEqual(called_event_types.size(), 4);
-    XCTAssertEqual(called_event_types.at(3), vector::holder<int>::event_type::inserted);
+    XCTAssertEqual(called_event_types.at(3), vector::event_type::inserted);
 
     holder->insert(222, 0);
 
     XCTAssertEqual(called_event_types.size(), 5);
-    XCTAssertEqual(called_event_types.at(4), vector::holder<int>::event_type::inserted);
+    XCTAssertEqual(called_event_types.at(4), vector::event_type::inserted);
 
     holder->erase(1);
 
     XCTAssertEqual(called_event_types.size(), 6);
-    XCTAssertEqual(called_event_types.at(5), vector::holder<int>::event_type::erased);
+    XCTAssertEqual(called_event_types.at(5), vector::event_type::erased);
 
     holder->clear();
 
     XCTAssertEqual(called_event_types.size(), 7);
-    XCTAssertEqual(called_event_types.at(6), vector::holder<int>::event_type::any);
+    XCTAssertEqual(called_event_types.at(6), vector::event_type::any);
 
     holder->clear();
     XCTAssertEqual(called_event_types.size(), 7);

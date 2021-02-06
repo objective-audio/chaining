@@ -15,15 +15,15 @@ class holder;
 template <typename T>
 using holder_ptr = std::shared_ptr<holder<T>>;
 
+enum class event_type {
+    any,
+    replaced,
+    inserted,
+    erased,
+};
+
 template <typename T>
 struct holder final {
-    enum class event_type {
-        any,
-        replaced,
-        inserted,
-        erased,
-    };
-
     struct event {
         event_type type;
         std::vector<T> const &elements;
