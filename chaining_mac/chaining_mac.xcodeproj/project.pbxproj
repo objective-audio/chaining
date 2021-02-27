@@ -52,6 +52,8 @@
 		B6570DCD256929F900C1E424 /* yas_chaining_handler.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B6570DCB256929F900C1E424 /* yas_chaining_handler.cpp */; };
 		B6570DCE256929F900C1E424 /* yas_chaining_handler.h in Headers */ = {isa = PBXBuildFile; fileRef = B6570DCC256929F900C1E424 /* yas_chaining_handler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B6570DD825693D1E00C1E424 /* yas_chaining_handler_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B6570DD125692A6200C1E424 /* yas_chaining_handler_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B65B3F0225E9F6570008BE20 /* yas_observing_map_holder.h in Headers */ = {isa = PBXBuildFile; fileRef = B65B3F0125E9F6570008BE20 /* yas_observing_map_holder.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		B65B3F0525E9F6620008BE20 /* yas_observing_map_holder_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B65B3F0425E9F6620008BE20 /* yas_observing_map_holder_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B67C180925B7070A007EE56C /* yas_observing_caller_private.h in Headers */ = {isa = PBXBuildFile; fileRef = B67C180725B70623007EE56C /* yas_observing_caller_private.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		B68AE95321EF61A4004E2983 /* yas_chaining_event.cpp in Sources */ = {isa = PBXBuildFile; fileRef = B68AE95121EF61A4004E2983 /* yas_chaining_event.cpp */; };
 		B68AE95421EF61A4004E2983 /* yas_chaining_event.h in Headers */ = {isa = PBXBuildFile; fileRef = B68AE95221EF61A4004E2983 /* yas_chaining_event.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -116,6 +118,8 @@
 		B6570DCB256929F900C1E424 /* yas_chaining_handler.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_handler.cpp; sourceTree = "<group>"; };
 		B6570DCC256929F900C1E424 /* yas_chaining_handler.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_handler.h; sourceTree = "<group>"; };
 		B6570DD125692A6200C1E424 /* yas_chaining_handler_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_handler_private.h; sourceTree = "<group>"; };
+		B65B3F0125E9F6570008BE20 /* yas_observing_map_holder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_observing_map_holder.h; sourceTree = "<group>"; };
+		B65B3F0425E9F6620008BE20 /* yas_observing_map_holder_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_observing_map_holder_private.h; sourceTree = "<group>"; };
 		B67C180725B70623007EE56C /* yas_observing_caller_private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_observing_caller_private.h; sourceTree = "<group>"; };
 		B68AE95121EF61A4004E2983 /* yas_chaining_event.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = yas_chaining_event.cpp; sourceTree = "<group>"; };
 		B68AE95221EF61A4004E2983 /* yas_chaining_event.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = yas_chaining_event.h; sourceTree = "<group>"; };
@@ -218,6 +222,8 @@
 				B646F3AF25B5AC9200CDB9DD /* yas_observing_canceller.h */,
 				B6317F6825BB267A00E5541C /* yas_observing_fetcher_private.h */,
 				B6317F6725BB266F00E5541C /* yas_observing_fetcher.h */,
+				B65B3F0425E9F6620008BE20 /* yas_observing_map_holder_private.h */,
+				B65B3F0125E9F6570008BE20 /* yas_observing_map_holder.h */,
 				B62F1A6825B6FE4500583110 /* yas_observing_notifier_private.h */,
 				B62F1A6525B6FE3800583110 /* yas_observing_notifier.h */,
 				B646F3B925B5B13300CDB9DD /* yas_observing_umbrella.h */,
@@ -285,6 +291,8 @@
 				B623BA2F21DC4D7000D16037 /* yas_chaining_utils.h in Headers */,
 				B623BA3521DC4D7000D16037 /* yas_chaining_observer_private.h in Headers */,
 				B623BA2421DC4D7000D16037 /* yas_chaining_value_holder.h in Headers */,
+				B65B3F0525E9F6620008BE20 /* yas_observing_map_holder_private.h in Headers */,
+				B65B3F0225E9F6570008BE20 /* yas_observing_map_holder.h in Headers */,
 				B623BA3321DC4D7000D16037 /* yas_chaining_value_holder_private.h in Headers */,
 				B623B9ED21DC4D1100D16037 /* chaining.h in Headers */,
 				B623BA3E21DC4D7000D16037 /* yas_chaining_vector_holder_private.h in Headers */,
